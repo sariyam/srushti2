@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600;700&family=NTR&family=Ramabhadra&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", "Noto Sans Devanagari", "Noto Sans Telugu", "Noto Sans Tamil", "Noto Sans Bengali", "Noto Sans Kannada", "NTR", "Ramabhadra", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+}
+
+:root {
+  --bg-primary: #ebeaea;
+  --bg-secondary: #e5e5e5;
+  --text-primary: #353535;
+  --text-secondary: #333333;
+  --text-emphasis: #303030;
+  
+  --shadow-light: #ffffff;
+  --shadow-dark: #b8b7b7;
+  
+  --color-accent: #32cf11; /* Visible neon green for light mode */
+  --color-accent-hover: #25a40a;
+}
+
+.dark {
+  --bg-primary: #303030;
+  --bg-secondary: #353535;
+  --text-primary: #ebeaea;
+  --text-secondary: #e5e5e5;
+  --text-emphasis: #ffffff;
+  
+  --shadow-light: #3e3e3e;
+  --shadow-dark: #1e1e1e;
+  
+  --color-accent: #39FF14; /* True neon green #39FF14 for dark mode */
+  --color-accent-hover: #32e60f;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  letter-spacing: -0.01em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Enhanced legibility optimization for small sizes & labels (ideal for older users) */
+button, input, select, textarea {
+  font-family: var(--font-sans);
+}
+
+/* Slightly open tracking for small fonts to maintain crisp readability */
+.text-\[8px\], .text-\[8\.5px\], .text-\[9px\], .text-\[9\.5px\], .text-\[10px\], .text-\[10\.5px\], .text-xs {
+  letter-spacing: 0.015em;
+}
+
+/* Custom Neumorphic Soft-UI shadow helper classes */
+
+.nm-outset {
+  background-color: var(--bg-secondary);
+  box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nm-inset {
+  background-color: var(--bg-secondary);
+  box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nm-outset-sm {
+  background-color: var(--bg-secondary);
+  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nm-inset-sm {
+  background-color: var(--bg-secondary);
+  box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nm-outset-lg {
+  background-color: var(--bg-secondary);
+  box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nm-inset-lg {
+  background-color: var(--bg-secondary);
+  box-shadow: inset 10px 10px 20px var(--shadow-dark), inset -10px -10px 20px var(--shadow-light);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base surface version for elements rendered on the primary background */
+.nm-outset-bg-primary {
+  background-color: var(--bg-primary);
+  box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nm-inset-bg-primary {
+  background-color: var(--bg-primary);
+  box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nm-outset-bg-primary-sm {
+  background-color: var(--bg-primary);
+  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nm-inset-bg-primary-sm {
+  background-color: var(--bg-primary);
+  box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom interactive animations for neumorphic elements */
+.nm-btn-active:active, .nm-btn-active-pressed {
+  box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light) !important;
+}
+
+.nm-card-active {
+  box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light) !important;
+}
+
+/* Custom light glowing shadow & border-ring for selected UI elements (glowing neon-green or rose accents) */
+.text-accent.nm-inset-sm,
+.text-accent.nm-inset,
+.text-accent.nm-outset-sm,
+.text-accent.nm-outset,
+.text-accent.shadow-md,
+.border-accent,
+.border-rose-500\/30 {
+  box-shadow: 0 0 0 1.5px var(--color-accent), 0 0 12px rgba(50, 207, 17, 0.45) !important;
+  border-color: var(--color-accent) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .text-accent.nm-inset-sm,
+.dark .text-accent.nm-inset,
+.dark .text-accent.nm-outset-sm,
+.dark .text-accent.nm-outset,
+.dark .text-accent.shadow-md,
+.dark .border-accent,
+.dark .border-rose-500\/30 {
+  box-shadow: 0 0 0 1.5px var(--color-accent), 0 0 16px rgba(57, 255, 20, 0.6) !important;
+  border-color: var(--color-accent) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Specific glowing shadow for rose selection buttons (such as model face selection) */
+.border-rose-500\/30 {
+  box-shadow: 0 0 0 1.5px rgb(244, 63, 94), 0 0 12px rgba(244, 63, 94, 0.45) !important;
+  border-color: rgb(244, 63, 94) !important;
+}
+
+.dark .border-rose-500\/30 {
+  box-shadow: 0 0 0 1.5px rgb(244, 63, 94), 0 0 16px rgba(244, 63, 94, 0.6) !important;
+  border-color: rgb(244, 63, 94) !important;
+}
+
+/* Custom hide scrollbars but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Color Picker Styles (react-colorful) */
+.custom-color-picker-container .react-colorful {
+  width: 100% !important;
+  max-width: 220px;
+  height: 150px !important;
+  border-radius: 12px;
+}
+.custom-color-picker-container .react-colorful__saturation {
+  border-radius: 10px 10px 0 0;
+}
+.custom-color-picker-container .react-colorful__hue {
+  height: 14px;
+  border-radius: 0 0 10px 10px;
+  margin-top: 6px;
+}
+.custom-color-picker-container .react-colorful__pointer {
+  width: 18px;
+  height: 18px;
+  border-width: 2px;
+}
+

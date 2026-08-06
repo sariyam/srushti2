@@ -1,0 +1,978 @@
+import { PROMPT_FRAGMENTS } from "./types";
+import { getGarmentCategoryLabel, getJewelryCategoryLabel } from "./utils/optionMapping";
+
+// High quality themed mockups of Indian garments and jewelry
+// These guarantee a stunning presentation even if no API key is set yet
+export const SIMULATED_MOCKUPS = {
+  garment: {
+    saree: {
+      model: {
+        female: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800",
+        male: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800" // Traditional drape/fabric focus
+      },
+      mannequin: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
+      hanger: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
+      ghost: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800"
+    },
+    tshirt: {
+      model: {
+        male: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=800",
+        female: "https://images.unsplash.com/photo-1554568218-0f1715e72254?auto=format&fit=crop&q=80&w=800"
+      },
+      mannequin: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
+      hanger: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
+      ghost: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800"
+    },
+    jeans: {
+      model: {
+        male: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=800",
+        female: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=800"
+      },
+      mannequin: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800",
+      hanger: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800",
+      ghost: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800"
+    },
+    shirt: {
+      model: {
+        male: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&q=80&w=800",
+        female: "https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=800"
+      },
+      mannequin: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
+      hanger: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
+      ghost: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800"
+    },
+    western_wear: {
+      model: {
+        male: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=800",
+        female: "https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?auto=format&fit=crop&q=80&w=800"
+      },
+      mannequin: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800",
+      hanger: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800",
+      ghost: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800"
+    },
+    kurta: {
+      model: {
+        male: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800",
+        female: "https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800"
+      },
+      mannequin: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
+      hanger: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
+      ghost: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800"
+    },
+    suit: {
+      model: {
+        male: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800",
+        female: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800"
+      },
+      mannequin: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800",
+      hanger: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800",
+      ghost: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800"
+    },
+    salwar: {
+      model: {
+        male: "https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800",
+        female: "https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800"
+      },
+      mannequin: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
+      hanger: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
+      ghost: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800"
+    }
+  },
+  jewelry: {
+    earrings: {
+      model: {
+        female: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800",
+        male: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=800"
+      },
+      bust: {
+        head: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=800",
+        neck: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=800",
+        wrist: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=800"
+      }
+    },
+    necklace: {
+      model: {
+        female: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
+        male: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800"
+      },
+      bust: {
+        head: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
+        neck: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
+        wrist: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800"
+      }
+    },
+    chain: {
+      model: {
+        female: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
+        male: "https://images.unsplash.com/photo-1611085583191-a3b1a3a35d61?auto=format&fit=crop&q=80&w=800"
+      },
+      bust: {
+        head: "https://images.unsplash.com/photo-1611085583191-a3b1a3a35d61?auto=format&fit=crop&q=80&w=800",
+        neck: "https://images.unsplash.com/photo-1611085583191-a3b1a3a35d61?auto=format&fit=crop&q=80&w=800",
+        wrist: "https://images.unsplash.com/photo-1611085583191-a3b1a3a35d61?auto=format&fit=crop&q=80&w=800"
+      }
+    },
+    ring: {
+      model: {
+        female: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800",
+        male: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800"
+      },
+      bust: {
+        head: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800",
+        neck: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800",
+        wrist: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800"
+      }
+    },
+    bracelet: {
+      model: {
+        female: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800",
+        male: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800"
+      },
+      bust: {
+        head: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800",
+        neck: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800",
+        wrist: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800"
+      }
+    },
+    watch: {
+      model: {
+        female: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&q=80&w=800",
+        male: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=800"
+      },
+      bust: {
+        head: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=800",
+        neck: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=800",
+        wrist: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=800"
+      }
+    }
+  }
+};
+
+// Colors for plain background choice
+export const PRESET_COLORS = [
+  { name: "Cream White", hex: "#fdfbf7" },
+  { name: "Soft Charcoal", hex: "#2b2b2b" },
+  { name: "Sage Green", hex: "#d1d9cf" },
+  { name: "Royal Gold", hex: "#f0dfbd" },
+  { name: "Powder Blue", hex: "#d5e2eb" },
+  { name: "Blush Pink", hex: "#f2e1e4" },
+  { name: "Terracotta", hex: "#dfc0b5" }
+];
+
+export function getColorHexByName(name: string): string {
+  const found = PRESET_COLORS.find(c => c.name.toLowerCase() === name.toLowerCase());
+  return found ? found.hex : name;
+}
+
+export function getPoseFaceVisibilityRule(poseKey: string, category: "garment" | "jewelry"): {
+  visibility: "FULL_FACE_SHOWN" | "PARTIALLY_SHOWN_FACE" | "CROPPED_LOWER_BODY";
+  description: string;
+} {
+  const fullFacePoses = new Set([
+    // Garment Poses
+    "standing_front", "standing_side", "standing_three_quarter", "walking_candid",
+    "sitting_chair", "sitting_casual", "top_upper_portrait", "top_standing_mid",
+    "top_three_quarter", "top_shoulder_profile", "top_casual_cross", "top_front_direct",
+    // Jewelry Poses
+    "neck_chest_portrait", "neck_3q_shoulder", "neck_royal_gaze", "neck_front_direct",
+    "ear_head_tilt", "ear_3q_face", "ear_front_balanced", "wrist_cross_arms",
+    "wrist_hand_chest", "hip_royal_standing", "hip_hands_on_waist", "hip_saree_drape",
+    "nose_front_portrait", "nose_3q_headturn", "nose_soft_smile", "finger_chin_rest",
+    "finger_hands_clasped", "forehead_tikka_center", "forehead_mathapatti_frame",
+    "forehead_3q_headturn", "forehead_front_portrait", "acc_forehead_tikka",
+    "acc_front_direct", "acc_3q_gaze", "hand_face_gesture", "three_quarter_gaze",
+    "front_direct_portrait"
+  ]);
+
+  const feetOrAnkletPoses = new Set([
+    "anklet_floor_cross_legged", "anklet_floor_legs_extended", "anklet_floor_kneeling_mehendi",
+    "anklet_ankle_close", "anklet_step_forward", "anklet_seated_foot",
+    "anklet_side_foot", "anklet_both_feet", "anklet_toering_focus"
+  ]);
+
+  if (feetOrAnkletPoses.has(poseKey)) {
+    return {
+      visibility: "CROPPED_LOWER_BODY",
+      description: "PARTIALLY SHOWN / LOWER BODY CROP: Focus is strictly on lower leg, ankle, and feet. Human model face is cropped out of frame or not visible in lower body focus."
+    };
+  }
+
+  if (fullFacePoses.has(poseKey)) {
+    return {
+      visibility: "FULL_FACE_SHOWN",
+      description: "FULL FACE SHOWN: Human model face is fully visible in frame with complete facial features, clear expression, and full head framing according to selected pose perspective."
+    };
+  }
+
+  return {
+    visibility: "PARTIALLY_SHOWN_FACE",
+    description: "PARTIALLY SHOWN FACE: Human model face is partially shown (e.g., cropped cleanly near chin/lips, side profile angle, veiled frame, or softly blurred/background focus) to prioritize product placement and close-up detail."
+  };
+}
+
+export function getCameraFramingAndAngle(poseKey: string, itemType: string, category: "garment" | "jewelry"): string {
+  const framingMap: Record<string, string> = {
+    // Garment - Full Wear
+    standing_front: "Full-length catalog shot, direct frontal camera framing capturing head to toe (face fully shown in clean catalog alignment)",
+    standing_side: "Full-body three-quarter side profile angle showcasing side silhouette and outfit fall (face fully shown in 3/4 side profile view)",
+    standing_three_quarter: "Three-quarter camera perspective balancing full outfit drape and model posture (face fully shown in studio gaze)",
+    walking_candid: "Dynamic full-body street-style candid shot with forward stride motion (face fully shown in natural movement)",
+    sitting_chair: "Full-body seated studio composition framing outfit drapes on chair (face fully shown in poised sitting posture)",
+    sitting_casual: "Relaxed full-length seated lounge framing showcasing fabric folds (face fully shown)",
+
+    // Garment - Top Wear
+    top_upper_portrait: "Upper torso portrait framing shoulders, collarline, chest, and face (face fully shown centered in frame)",
+    top_standing_mid: "Mid-length camera framing from head down to hips, highlighting waistline and upper fit (face fully shown)",
+    top_three_quarter: "Three-quarter angle upper body portrait framing chest, shoulders, and sleeve length (face fully shown in 3/4 turn)",
+    top_shoulder_profile: "Side shoulder profile shot showcasing neckline cut, armholes, and back detail (face fully shown in side profile view)",
+    top_casual_cross: "Frontal mid-shot framing crossed arms over chest and garment structure (face fully shown facing camera)",
+    top_front_direct: "Symmetrical frontal upper-body shot highlighting chest pattern and collar geometry (face fully shown in direct symmetry)",
+
+    // Garment - Bottom Wear
+    bottom_full_leg: "Lower body shot framing waist to ankles, prioritizing pant drape and leg silhouette (face partially shown or cropped above waist depending on framing height)",
+    bottom_walking_step: "Dynamic lower-body walking stride shot framing legs and hemline motion (face partially shown or cropped above waist)",
+    bottom_side_leg: "Side leg profile shot highlighting waistline, side seams, and pocket detailing (face partially shown / lower body focus)",
+    bottom_seated_cross: "Seated leg showcase framing crossed knees, fabric stretch, and hem finish (face partially or fully shown in relaxed seating)",
+    bottom_3q_lower: "Three-quarter lower body catalog framing centered on hips and trousers (face partially shown or cropped near chest)",
+    bottom_front_stance: "Wide stance lower-body shot displaying fabric fall across thighs and legs (face partially or fully shown depending on vertical crop)",
+
+    // Jewelry - Neckwear
+    neck_collarbone: "Intimate macro close-up framing upper chest, collarbone, and neck (face partially shown — cropped cleanly from chin/lower lip to chest, emphasizing necklace drape)",
+    neck_chest_portrait: "High chest beauty portrait framing neckwear over collarbone and upper chest (face fully shown or lower face framed cleanly above necklace)",
+    neck_3q_shoulder: "Three-quarter shoulder turn highlighting neckwear angle and shoulder drape (face fully shown in 3/4 beauty angle)",
+    neck_royal_gaze: "Regal portrait angle with model looking slightly upward, framing neckwear and facial poise (face fully shown with serene gaze)",
+    neck_front_direct: "Direct frontal close-up framing symmetrical necklace and collarbone structure (face fully shown or lower face framed in direct symmetry)",
+    neck_side_drape: "Side profile neck drape angle showcasing clasp, side chainwork, and jawline (face partially shown in side profile focusing on neck and jawline)",
+
+    // Jewelry - Earwear
+    side_ear_profile: "Side profile beauty camera angle focusing on earlobe, cheekbone, and jawline (face partially shown in side profile, focusing on ear and cheekbone)",
+    ear_hair_tuck: "Side angle close-up with hair tucked behind ear, framing dangling earring details (face fully or partially shown in side profile angle)",
+    ear_head_tilt: "Gentle head tilt angle showcasing earring drop length and sparkling reflections (face fully shown with graceful head angle)",
+    ear_3q_face: "Three-quarter beauty portrait framing earring drop against cheek contour (face fully shown in 3/4 beauty gaze)",
+    ear_front_balanced: "Direct frontal symmetry framing both dangling earrings equally alongside facial features (face fully shown centered in frame)",
+    ear_over_shoulder: "Over-the-shoulder glance framing ear profile, jawline, and back hair drape (face partially shown in over-the-shoulder view)",
+
+    // Jewelry - Wrist & Rings
+    wrist_hand_display: "Close-up hand and wrist gesture shot, framing watch dials, bangles, or bracelets (face partially shown — softly blurred or cropped above chest, prioritizing wrist accessories)",
+    wrist_resting_lap: "Lower torso camera framing with hands resting gracefully on lap showcasing wristwear (face partially shown / lower torso frame)",
+    wrist_cross_arms: "Mid-shot framing crossed arms showcasing wrist accessories over apparel sleeves (face fully or partially shown in confident pose)",
+    wrist_hand_chest: "Upper chest framing bringing manicured wrist and rings near neckline (face fully shown with hand touching chest)",
+    wrist_side_arm: "Side arm extension close-up focusing on forearm, wrist stack, and bangles (face partially shown / focused on forearm and wrist)",
+    wrist_gesture: "Mid-motion hand gesture framing wristwear against soft studio background (face fully or partially shown in background)",
+
+    // Jewelry - Hip & Waist
+    hip_waist_mid: "Midsection waist close-up framing hip chain or kamarbandh over apparel drapes (face partially shown — cropped near lower ribs or chin, prioritizing waistline)",
+    hip_hands_on_waist: "Hands-on-waist three-quarter shot framing waistline ornament and hip curve (face fully or partially shown)",
+    hip_royal_standing: "Tall standing posture framing full waistline and royal hip ornament (face fully shown with tall posture)",
+    hip_side_turn: "Side hip curve angle accentuating waist belt drapes and side clasp (face partially or fully shown in side angle)",
+    hip_saree_drape: "Traditional saree drape shot centering waistband motif against pleated silk (face fully or partially shown)",
+    hip_front_direct: "Direct frontal midsection alignment highlighting symmetrical waist ornament (face partially shown / lower torso focus)",
+
+    // Jewelry - Nose
+    nose_close_profile: "Macro nostril profile camera shot highlighting delicate nath loop and pearl drop (face partially shown — close macro focus on nose, lips, and cheek)",
+    nose_front_portrait: "Direct frontal beauty portrait framing nose ring and lips in high fashion symmetry (face fully shown in direct symmetry)",
+    nose_3q_headturn: "Three-quarter head turn angle capturing nath chain connecting to hair (face fully shown in 3/4 turn)",
+    nose_bridal_veil: "Bridal veil side angle with sheer dupatta framing nose ring, eyes, and cheek (face partially shown / softly veiled)",
+    nose_soft_smile: "Subtle smile close-up accentuating nose pin shimmer near lips (face fully shown with gentle expression)",
+    nose_macro_focus: "Ultra macro beauty close-up centering the nose ornament and skin texture (face partially shown — tight macro crop on nose and cheek)",
+
+    // Jewelry - Finger
+    finger_hand_gesture: "Close-up hand gesture shot displaying rings on manicured fingers (face partially shown — softly blurred or cropped above chest)",
+    finger_chin_rest: "Beauty close-up with hand resting softly near chin/cheek, framing finger ring near facial features (face fully shown with hand touching chin)",
+    finger_hands_clasped: "Mid-shot framing clasped hands in front of chest showcasing multiple rings (face fully or partially shown)",
+    finger_holding_prop: "Close-up hand framing holding silk fabric showcasing ring facets (face partially shown / focus on hand and ring)",
+    finger_macro_ring: "Ultra macro focus centering solitaire diamond ring on finger (face partially shown / macro focus on hand)",
+    finger_side_hand: "Side profile hand placement highlighting ring band and setting depth (face partially shown / focus on hand profile)",
+
+    // Jewelry - Anklet & Toe (Floor Sitting Poses)
+    anklet_floor_cross_legged: "Seated cross-legged posture on smooth floor/carpet framing ankles, payal, and toe rings gracefully (lower body/feet focus)",
+    anklet_floor_legs_extended: "Seated floor posture with legs extended forward, ankles and feet resting side by side highlighting payal and toe rings (lower body focus)",
+    anklet_floor_kneeling_mehendi: "Kneeling posture on decorative floor/carpet, top-down angle showcasing payal bells, heel drapes, and toe ornaments (lower body focus)",
+    anklet_ankle_close: "Lower leg macro close-up framing ankle, payal, and ghungroo bells (face partially shown — strictly lower leg focus, face cropped out of frame)",
+    anklet_step_forward: "Dynamic forward step stride framing anklet drape on foot and heel (face partially shown — lower body/feet focus, face cropped out of frame)",
+    anklet_seated_foot: "Seated foot framing with foot resting on cushion showcasing anklet links (face partially shown — feet and lower leg focus)",
+    anklet_side_foot: "Side angle heel and ankle profile close-up (face partially shown — foot and ankle focus)",
+    anklet_both_feet: "Camera framing both feet draped together displaying pair of payals (face partially shown — feet focus)",
+    anklet_toering_focus: "Intimate toe ring and foot arch close-up (face partially shown — feet and toes focus)",
+
+    // Jewelry - Forehead
+    forehead_tikka_center: "Close-up forehead and hairline camera angle centering maang tikka or borla (face fully shown — centered on upper face, eyes, and forehead)",
+    forehead_mathapatti_frame: "Frontal beauty portrait framing full forehead and hairline with matha patti (face fully shown in frontal beauty portrait)",
+    forehead_3q_headturn: "Three-quarter head turn angle showcasing forehead ornament and temple detailing (face fully shown in 3/4 angle)",
+    forehead_bridal_veil: "Side angle bridal portrait with sheer dupatta framing forehead ornament and eyes (face partially shown / veiled face with eyes and forehead clear)",
+    forehead_side_passa: "Side profile head angle highlighting passa / jhumar draped over temple and hair (face partially shown in side profile focusing on temple and hair)",
+    forehead_front_portrait: "Direct front-facing beauty portrait centering forehead jewelry, eyes, and regal poise (face fully shown in regal symmetry)",
+
+    // Jewelry - Accessories
+    acc_forehead_tikka: "Forehead ornament close-up camera framing centered on forehead and eyes (face fully shown)",
+    acc_front_direct: "Direct frontal accessory beauty portrait with symmetrical framing (face fully shown)",
+    acc_3q_gaze: "Three-quarter angle camera framing accessory and facial features (face fully shown)",
+    acc_side_profile: "Side profile camera angle accentuating accessory placement on head or body (face partially or fully shown in side profile)",
+
+    // Legacy/Fallback poses
+    hand_face_gesture: "Hand-to-face beauty gesture shot, manicured fingers touching cheek/chin, framing rings and bracelets alongside facial poise (face fully shown)",
+    three_quarter_gaze: "Three-quarter elegance portrait, subtle head tilt and studio gaze, capturing harmonized necklace and earring brilliance (face fully shown)",
+    front_direct_portrait: "Direct frontal close-up beauty portrait, framing face, neckline, and shoulders with high-fashion symmetry (face fully shown)"
+  };
+
+  return framingMap[poseKey] || `${category === "garment" ? "Catalog camera framing" : "Jewelry studio camera framing"} tailored for ${poseKey}`;
+}
+
+// Helper to compile state selections into a rich, structured JSON prompt invisible to the user
+export function compilePrompt(state: {
+  workspace: "garment" | "jewelry";
+  garmentType: string;
+  garmentPresentation: string;
+  garmentModelGender: string;
+  garmentModelPose: string;
+  garmentBackground: string;
+  garmentBgColor: string;
+  jewelryType: string;
+  jewelryPresentation: string;
+  jewelryModelGender: string;
+  jewelryModelPose: string;
+  jewelryBustRegion: string;
+  jewelryBackground: string;
+  jewelryBgColor: string;
+  garmentModelFacePrompt?: string;
+  jewelryModelFacePrompt?: string;
+  hasFaceRef?: boolean;
+  photoStyle: "editorial" | "campaign";
+  aspectRatio?: string;
+  resolution?: string;
+}): string {
+  const activeAspect = state.aspectRatio || "1:1";
+  const activeRes = state.resolution || "1k";
+  const isSquare = activeAspect === "1:1";
+  const isPortrait = activeAspect === "3:4" || activeAspect === "9:16" || activeAspect === "2:3";
+
+  const orientationLabel = isSquare ? "Square (1:1)" : isPortrait ? "Portrait Vertical" : "Landscape Horizontal";
+  const framingGuide = isSquare
+    ? "Framed precisely for 1:1 square canvas ratio. Maintain balanced centered orientation with equal padding on top, bottom, and side margins."
+    : isPortrait
+    ? "Framed for vertical portrait ratio. Maintain elegant vertical alignment from shoulder/head to lower hem line or macro pose."
+    : "Framed for horizontal landscape ratio. Maintain wide studio composition highlighting background ambiance and subject context.";
+
+  const exportSpecs = {
+    canvas_aspect_ratio: activeAspect,
+    composition_orientation: orientationLabel,
+    export_resolution_tier: activeRes,
+    framing_and_cropping_guide: framingGuide
+  };
+
+  if (state.workspace === "garment") {
+    const garmentFrag = PROMPT_FRAGMENTS.garment.types[state.garmentType as keyof typeof PROMPT_FRAGMENTS.garment.types] || state.garmentType;
+    const isHumanModel = state.garmentPresentation === "model";
+    
+    let presentationFrag = "";
+    let defaultFaceDescription = "";
+    let poseDescription = "";
+    
+    if (isHumanModel) {
+      poseDescription = (PROMPT_FRAGMENTS.garment as any).poses[state.garmentModelPose] || getCameraFramingAndAngle(state.garmentModelPose, state.garmentType, "garment");
+      const isFemale = state.garmentModelGender === "female";
+      const expression = state.photoStyle === "campaign" 
+        ? "warm, confident commercial expression" 
+        : "neutral high-fashion expression, never smiling";
+      
+      if (isFemale) {
+        defaultFaceDescription = `worn gracefully by a beautiful, professional young Indian female fashion model with a ${expression}`;
+      } else {
+        defaultFaceDescription = `worn elegantly by a handsome, professional young Indian male fashion model with a ${expression}`;
+      }
+
+      const faceDescription = state.garmentModelFacePrompt || defaultFaceDescription;
+      let finalFaceDescription = faceDescription;
+      if (state.photoStyle === "campaign") {
+        finalFaceDescription = faceDescription
+          .replace(/neutral high-fashion expression, never smiling/gi, "warm, confident commercial expression")
+          .replace(/perfectly neutral facial expression/gi, "warm, confident commercial expression")
+          .replace(/neutral facial expression/gi, "warm, confident commercial expression");
+      } else {
+        finalFaceDescription = faceDescription
+          .replace(/warm, confident commercial expression/gi, "neutral high-fashion expression, never smiling");
+      }
+      
+      presentationFrag = `${finalFaceDescription}, ${poseDescription}`;
+    } else if (state.garmentPresentation === "mannequin") {
+      presentationFrag = (PROMPT_FRAGMENTS.garment.presentations.mannequin as any)[state.garmentModelGender as "female" | "male"] || "";
+    } else {
+      presentationFrag = (PROMPT_FRAGMENTS.garment.presentations as any)[state.garmentPresentation] || state.garmentPresentation;
+    }
+
+    let bgFrag = "";
+    if (state.garmentBackground === "plain") {
+      bgFrag = PROMPT_FRAGMENTS.garment.backgrounds.plain(state.garmentBgColor);
+    } else {
+      bgFrag = (PROMPT_FRAGMENTS.garment.backgrounds as any)[state.garmentBackground] || state.garmentBackground;
+    }
+
+    let placementDirective = "";
+    const gCategory = getGarmentCategoryLabel(state.garmentType);
+    if (isHumanModel) {
+      if (state.garmentType === "western_wear") {
+        placementDirective = `The Western Wear ensemble fits and drapes seamlessly as a complete full-body outfit (chic dress, jumpsuit, or contemporary co-ord set). It covers the torso down to the hemline or trousers with modern tailored lines, crisp fabric structure, clean seams, and elegant urban silhouette on the model's body in the ${state.garmentBackground} setting.`;
+      } else if (gCategory === "Full wear") {
+        placementDirective = `The full-length garment drapes, wraps, or fits continuously from the shoulders/waist down to the ankles or feet, fully covering the body's main silhouette. It hangs naturally with authentic fabric weight, showing all pleats, folds, and embroidery symmetrically on the model's body in the ${state.garmentBackground} setting.`;
+      } else if (gCategory === "Top wear") {
+        placementDirective = `The top-wear garment fits cleanly over the upper torso, shoulders, chest, and arms. It drapes naturally, resting precisely at the waistline or hips, displaying realistic fabric tension around the collar, shoulders, sleeves, and chest of the model in the ${state.garmentBackground} environment.`;
+      } else if (gCategory === "Bottom wear") {
+        placementDirective = `The bottom-wear garment fits the waist, hips, and legs perfectly. It sits cleanly on the waistline, draping naturally down to the thighs, knees, or ankles, showcasing authentic seams, waistband detailing, pockets, and hem structure on the lower body of the model within the ${state.garmentBackground} background.`;
+      }
+    } else {
+      placementDirective = `The garment is presented on a ${state.garmentPresentation} display setup without any human model present. It displays authentic fabric drape, crisp seams, pattern integrity, and clean structural silhouette on the ${state.garmentPresentation} within the ${state.garmentBackground} environment. Strictly no human model or skin in frame.`;
+    }
+
+    const faceVisibilityInfo = getPoseFaceVisibilityRule(state.garmentModelPose, "garment");
+
+    const jsonPrompt = {
+      category: "garment",
+      export_specifications: exportSpecs,
+      product_info: {
+        item_type: gCategory,
+        type: state.garmentType,
+        detailed_clothing_description: garmentFrag,
+        item_placement_and_fit: placementDirective
+      },
+      presentation_setup: {
+        mode: state.garmentPresentation,
+        visual_presentation_style: presentationFrag,
+        ...(isHumanModel ? {
+          model_details: {
+            gender: state.garmentModelGender,
+            pose_type: state.garmentModelPose,
+            pose_details: poseDescription,
+            camera_framing_and_angle: getCameraFramingAndAngle(state.garmentModelPose, state.garmentType, "garment"),
+            face_visibility_directive: faceVisibilityInfo.description,
+            face_description: state.garmentModelFacePrompt || null,
+            default_gender_look: defaultFaceDescription,
+            face_reference_purpose_note: "Reference image of human model is for face reference purpose only. Same face identity preserved, but head rotation, body pose, camera angle, and expression are altered according to item type and selected Model Pose / Camera Angle. The model face can be fully shown or partially shown (e.g. cropped at lower face/chin, side profile, or lower body focus) according to the chosen Model Pose / Camera Angle."
+          }
+        } : {
+          human_presence: "STRICTLY NONE - NON-HUMAN PRODUCT DISPLAY MODE",
+          no_human_directive: `DO NOT GENERATE ANY HUMAN MODEL, PERSON, FACE, BODY PARTS, OR SKIN. Output ONLY the product on its ${state.garmentPresentation} display mount.`
+        })
+      },
+      scene_environment: {
+        background_style: state.garmentBackground,
+        background_description: bgFrag,
+        background_color_hex: state.garmentBackground === "plain" ? getColorHexByName(state.garmentBgColor) : null,
+        background_color_name: state.garmentBackground === "plain" ? state.garmentBgColor : null,
+        lighting: state.photoStyle === "campaign"
+          ? "high-end luxury fashion photography studio, professional softbox three-point lighting, bright even illumination, minimal shadows, clean commercial look"
+          : "high-end luxury fashion photography studio, professional softbox three-point lighting, subtle shadows, volumetric styling"
+      },
+      artistic_style: {
+        theme: state.photoStyle === "editorial" ? "Editorial fashion and product photography" : "Commercial campaign and advertising photography",
+        photography_style: state.photoStyle,
+        style_attributes: state.photoStyle === "editorial" 
+          ? "High-fashion narrative, storytelling creative compositions, dramatic soft-focused elements, vogue-style artistic elegance, professional editorial spread aesthetic"
+          : "Bold commercial appeal, vibrant brand promotional campaign, crisp studio look, highly optimized for catalog advertisement, premium billboard styling",
+        quality_level: isHumanModel
+          ? "authentic high-end professional fashion photography, shot on Hasselblad H6D-100c medium format camera, Carl Zeiss prime lens, natural skin texture, exquisite fabric details, perfectly preserved organic look, high fashion magazine feature, neutral color grading, international modeling agency comp card quality, shot on professional full-frame camera, 85mm f/1.4 lens, tack-sharp focus, crisp micro-detail on skin and fabric texture, color-accurate, magazine cover quality, no motion blur, no noise, no artifacts, no CGI plastic look"
+          : "authentic high-end professional fashion product photography, shot on Hasselblad H6D-100c medium format camera, Carl Zeiss prime lens, exquisite fabric details, perfectly preserved organic look, high fashion product catalog feature, neutral color grading, shot on professional full-frame camera, 85mm f/1.4 lens, tack-sharp focus, crisp micro-detail on fabric texture, color-accurate, pristine product showcase quality, no human figure, no model, no skin, no motion blur, no noise, no artifacts, no CGI plastic look"
+      },
+      fidelity_directives: {
+        highest_priority_rule: "EXACT REPLICATION OF INPUT PRODUCT DESIGN, PATTERNS, LENGTH, AND SIZE REQUIRED",
+        core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (garment) shown in the reference image. The design, artwork, patterns, fabric motifs, exact length, physical size, proportions, and visual features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
+        input_image_guideline: "The input image is the authentic reference of the garment product. Replicate this exact product design, pattern layout, garment length (full-length, knee-length, cropped, short, long-sleeve, 3/4-sleeve), and size proportions precisely.",
+        mandatory_replications: [
+          "Exact product design, artwork, motifs, prints, embroidery, and weave patterns replicated 1:1 in scale and position",
+          "Exact garment length and cut (e.g., full length, ankle-length, knee-length, waist-length, cropped, floor-length drape)",
+          "Exact sleeve length, armhole cut, and shoulder fit (e.g., full sleeves, 3/4 sleeves, half sleeves, cap sleeves, sleeveless)",
+          "Exact collar, neckline, and lapel depth, shape, and structure",
+          "Exact borders, edge trimmings, lace, piping, zardosi, sequin work, and hem details",
+          "Exact fabric material, texture, weight, fall, drape, and surface luster",
+          "Exact color shades, palette, gradients, and contrasting accents",
+          "Exact proportions, silhouette, fit, and overall physical size of the garment",
+          "Buttons, zippers, pockets, drawstrings, pleats, and functional hardware in exact counts and positions"
+        ]
+      },
+      exclusion_directives: {
+        highest_priority_exclusion_rule: "STRICTLY NO PRICE TAGS, HANGTAGS, BRAND TAGS, COMPANY LOGOS, OR TEXT OVERLAYS",
+        instruction: "The output image must be a clean, pristine studio fashion photograph completely FREE of price tags, store price stickers, barcode tags, paper hangtags, security tags, brand labels, company logos, store tags, watermarks, text labels, sale badges, or graphic overlays anywhere on the garment, display mount, or background. If the input reference image has any visible price tag, hanging paper tag, barcode sticker, or brand label attached to the product, digitally remove and omit it entirely, rendering the item clean and pristine.",
+        ...(!isHumanModel && {
+          strict_no_human_rule: "STRICTLY NO HUMAN MODEL, NO PERSON, NO HUMAN FACE, NO BODY PARTS, NO HANDS, NO SKIN",
+          strict_no_human_instruction: `CRITICAL: This is a NON-HUMAN product display presentation mode (${state.garmentPresentation}). There must be STRICTLY NO HUMAN BEING, NO LIVE MODEL, NO PERSON, NO HUMAN FACE, NO HEAD, NO EYES, NO NECK, NO HANDS, NO LEGS, NO SKIN anywhere in the final output image. Render ONLY the product displayed on its non-human setup (${state.garmentPresentation}). The entire image MUST be 100% human-free.`
+        })
+      },
+      ...(isHumanModel && {
+        model_expression_directive: state.photoStyle === "campaign" ? {
+          highest_priority_expression_rule: "COMMERCIAL CAMPAIGN CONFIDENT EXPRESSION",
+          instruction: "The model must have a warm, confident, approachable commercial expression suitable for advertising campaigns — a soft smile or gentle closed-mouth smile, poised and polished, like an international modeling agency campaign face. Avoid overly serious, cold, or moody editorial expressions."
+        } : {
+          highest_priority_expression_rule: "HIGH-FASHION EDITORIAL NEUTRAL EXPRESSION",
+          instruction: "The model must have a neutral, serious, high-fashion editorial expression. Never smiling. Calm, poised, intense gaze, like international runway/editorial models."
+        }
+      }),
+      ...(isHumanModel && state.hasFaceRef && {
+        face_matching_directive: {
+          highest_priority_rule: "HUMAN FACE IDENTITY REFERENCE ONLY - DYNAMIC POSE, ANGLE & HEAD ROTATION ALLOWED",
+          instruction: "CRITICAL FACE REFERENCE DIRECTIVE: The reference image of the human model (second uploaded image) is for FACE IDENTITY REFERENCE PURPOSE ONLY. You MUST maintain the exact same face identity, facial features, facial structure, skin tone, eye shape, nose shape, hairstyle, and ethnic identity from the face reference image. However, the human head rotation, head turn angle, body pose, camera perspective, and expression CAN and SHOULD be altered/adapted dynamically according to the item type, framing, and selected Model Pose / Camera Angle."
+        }
+      })
+    };
+
+    return JSON.stringify(jsonPrompt, null, 2);
+  } else {
+    const rawType = state.jewelryType;
+    const normalizedType = (rawType === "noise" || rawType === "nose") ? "nose_ring" : rawType === "finger" ? "ring" : rawType;
+    const jewelryFrag = PROMPT_FRAGMENTS.jewelry.types[rawType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
+      || PROMPT_FRAGMENTS.jewelry.types[normalizedType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
+      || state.jewelryType;
+    const isHumanModel = state.jewelryPresentation === "model";
+
+    let presentationFrag = "";
+    let defaultFaceDescription = "";
+    let poseDescription = "";
+
+    if (isHumanModel) {
+      poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || "";
+      const rawDefault = PROMPT_FRAGMENTS.jewelry.presentations.model[state.jewelryModelGender as "female" | "male"] || "";
+      if (state.photoStyle === "campaign") {
+        defaultFaceDescription = rawDefault.replace("neutral high-fashion expression, never smiling", "warm, confident commercial expression");
+      } else {
+        defaultFaceDescription = rawDefault;
+      }
+      const faceDescription = state.jewelryModelFacePrompt || defaultFaceDescription;
+      presentationFrag = `${faceDescription}, ${poseDescription}`;
+    } else {
+      presentationFrag = PROMPT_FRAGMENTS.jewelry.presentations.bust[state.jewelryBustRegion as keyof typeof PROMPT_FRAGMENTS.jewelry.presentations.bust] || state.jewelryBustRegion;
+    }
+
+    const effectiveJewelryBg = (isHumanModel && !["plain", "studio"].includes(state.jewelryBackground))
+      ? "plain"
+      : state.jewelryBackground;
+
+    let bgFrag = "";
+    if (effectiveJewelryBg === "plain") {
+      bgFrag = PROMPT_FRAGMENTS.jewelry.backgrounds.plain(state.jewelryBgColor);
+    } else {
+      bgFrag = (PROMPT_FRAGMENTS.jewelry.backgrounds as any)[effectiveJewelryBg] || effectiveJewelryBg;
+    }
+
+    let placementDirective = "";
+    const jCategory = getJewelryCategoryLabel(normalizedType);
+    if (isHumanModel) {
+      if (jCategory === "Hip & Waist Jewellery" || rawType === "waistband" || rawType === "hip_chain" || rawType === "kamarbandh") {
+        placementDirective = `The waist ornament (kamarbandh / hip chain / waistband) is wrapped gracefully around the model's waist or hips over ethnic apparel, displaying elaborate Kundan craftsmanship, gold link draping, and sparkling gemstone drops in a flattering midsection pose in the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded waist ornament and strictly NO other jewelry or accessories on their body, neck, ears, wrists, fingers, nose, or head.`;
+      } else if (jCategory === "Nose Jewellery (Nath)" || normalizedType === "nose_ring" || rawType === "nose_pin" || rawType === "nath" || rawType === "noise" || rawType === "nose") {
+        placementDirective = `The traditional nose pin or nose ring (nath) is delicately positioned on the side of the nose or nostril of the model, perfectly aligned with the facial profile and skin texture, casting a soft realistic contact shadow and gleaming softly under studio portrait lighting in the ${effectiveJewelryBg} environment. The model wears ONLY this uploaded nose ornament and strictly NO other jewelry or accessories on their body, neck, ears, wrists, fingers, or head.`;
+      } else if (jCategory === "Leg Jewellery (Anklets & Toe Rings)" && (normalizedType === "toe" || rawType === "toe_ring")) {
+        placementDirective = `The toe ring (bichhiya / toe ornament) is fitted gracefully on the second toe or foot of the model, displaying intricate silver or gold filigree, tiny gemstone facets, and delicate metal bands draped against smooth foot skin in an intimate toe and foot close-up beauty pose inside the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded toe ornament and strictly NO other anklets, rings, or body accessories.`;
+      } else if ((jCategory === "Leg Jewellery (Anklets & Toe Rings)" || jCategory === "Anklets (Payal)") && (normalizedType === "anklet" || rawType === "payal")) {
+        placementDirective = `The anklet (payal) is wrapped gracefully around the model's ankle, displaying delicate silver or gold links, tiny ghungroo bells, and pearl drops draped against smooth skin in an intimate lower-leg close-up beauty pose inside the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded anklet and strictly NO other toe rings, jewelry, or accessories.`;
+      } else if (jCategory === "Finger Rings" || normalizedType === "finger" || normalizedType === "ring" || rawType === "finger_ring" || rawType === "thumb_ring" || rawType === "solitaire") {
+        placementDirective = `The finger ring fits snugly on the finger of the model's hand, displaying exquisite metal band craft, prong-set gemstone facets, and brilliant light reflections in an intimate close-up hand gesture within the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded ring and strictly NO other rings, bangles, necklaces, earrings, or accessories.`;
+      } else if (jCategory === "Neckwear") {
+        placementDirective = `The neckwear rests elegantly around the base of the neck or collarbone. It drapes symmetrically over the chest or skin with natural gravitational hang, reflecting light beautifully on the metal links and gemstones on the model's collarbone in the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded neckwear and strictly NO other jewelry, earrings, nose rings, bangles, or headpieces.`;
+      } else if (jCategory === "Earwear") {
+        placementDirective = `The earwear hangs or sits snugly on the earlobes. It is framed cleanly by the face or jawline, dangling or resting with natural weight, alignment, and three-dimensional depth relative to the ears of the model in the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded earwear and strictly NO other necklaces, nose rings, bangles, or head ornaments.`;
+      } else if (jCategory === "Wristwear & Bangles") {
+        placementDirective = `The wristwear or bangles fit snugly around the wrist or forearm. It is positioned organically on the hand, wrist, or arm, showcasing pristine metal surfaces and gemstone brilliance with realistic anatomical scaling and lighting in the ${effectiveJewelryBg} environment. The model wears ONLY this uploaded wristwear and strictly NO other rings, necklaces, earrings, or body jewelry.`;
+      } else if (jCategory === "Forehead & Head Jewellery" || rawType === "maang_tikka" || rawType === "matha_patti" || rawType === "borla" || rawType === "passa" || rawType === "headband") {
+        placementDirective = `The forehead headpiece (maang tikka / matha patti / borla / passa / headband) rests gracefully along the model's hairline or forehead center, draped symmetrically with intricate gold filigree, pearls, and gemstone drops, framed beautifully with hair styling in the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded head ornament and strictly NO other necklaces, earrings, or nose rings.`;
+      } else {
+        placementDirective = `The accessory is positioned precisely on its designated body region (e.g., forehead, nose, ankle, or clothing lapel), aligning seamlessly with the natural curves and scale of the model inside the ${effectiveJewelryBg} environment. The model wears ONLY this uploaded accessory and strictly NO other jewelry or ornaments.`;
+      }
+    } else {
+      if (state.jewelryBustRegion === "naturally") {
+        placementDirective = `The ${state.jewelryType} is placed naturally, organically, and flat directly within the ${state.jewelryBackground} environment, resting seamlessly on the natural surface and adjacent background elements (such as marble, sand, silk drapes, wood, or granite) without any artificial display stands or mounts. The product MUST seamlessly integrate with ambient background lighting, casting physical soft contact shadows, producing natural metallic and gemstone surface reflections from surrounding props, matching the scene's color temperature, and fitting naturally into the background composition. The image MUST feature ONLY this single uploaded product and strictly NO other unrequested jewelry pieces.`;
+      } else if (jCategory === "Hip & Waist Jewellery" || rawType === "waistband" || rawType === "hip_chain" || rawType === "kamarbandh") {
+        placementDirective = `The waist ornament (kamarbandh / hip chain / waistband) is displayed gracefully on a waist display stand or laid in elegant fluid curves flat on the ${state.jewelryBackground} background surface without any human present. Features ONLY this single uploaded item and NO other jewelry.`;
+      } else if (jCategory === "Nose Jewellery (Nath)" || normalizedType === "nose_ring" || rawType === "nose_pin" || rawType === "nath" || rawType === "noise" || rawType === "nose") {
+        placementDirective = `The nose pin or nose ring (nath) is presented on a specialized jewelry holder or resting flat and naturally on the ${state.jewelryBackground} surface without any live human face present, showcasing fine gold wirework, dangling pearl drop accents, and brilliant craftsmanship. Features ONLY this single uploaded item and NO other jewelry.`;
+      } else if (jCategory === "Leg Jewellery (Anklets & Toe Rings)" && (normalizedType === "toe" || rawType === "toe_ring")) {
+        placementDirective = `The toe ring (bichhiya / toe ornament) is displayed gracefully on a foot display cushion or laid flat naturally on the ${state.jewelryBackground} surface with pristine contact shadows and metal filigree details. Features ONLY this single uploaded toe ring and NO other jewelry.`;
+      } else if ((jCategory === "Leg Jewellery (Anklets & Toe Rings)" || jCategory === "Anklets (Payal)") && (normalizedType === "anklet" || rawType === "payal")) {
+        placementDirective = `The anklet (payal) is displayed gracefully on an ankle display mount or laid naturally in soft fluid curves directly on the ${state.jewelryBackground} background surface, highlighting every pearl, ghungroo bell, and metallic link cleanly without any human model. Features ONLY this single uploaded item and NO other jewelry.`;
+      } else if (jCategory === "Finger Rings" || normalizedType === "finger" || normalizedType === "ring" || rawType === "finger_ring" || rawType === "thumb_ring" || rawType === "solitaire") {
+        if (state.jewelryBustRegion === "hand") {
+          placementDirective = `The uploaded finger ring is worn and perfectly fitted directly onto the finger of the elegant female porcelain or mannequin hand display sculpture, displaying exquisite metal band craft, prong-set gemstone facets, and brilliant light reflections on the hand display stand inside the ${state.jewelryBackground} scene. Features ONLY this single uploaded item and NO other jewelry.`;
+        } else if (state.jewelryBustRegion === "finger") {
+          placementDirective = `The finger ring is mounted snugly and perfectly fitted onto a luxury ring cone holder or finger display stand with pristine contact shadows and gemstone brilliance in the ${state.jewelryBackground} scene. Features ONLY this single uploaded item and NO other jewelry.`;
+        } else {
+          placementDirective = `The finger ring is mounted on a luxury ring cone display stand or laid flat naturally on the ${state.jewelryBackground} surface with pristine contact shadows and gemstone brilliance. Features ONLY this single uploaded item and NO other jewelry.`;
+        }
+      } else if (jCategory === "Neckwear") {
+        placementDirective = `The neckwear rests elegantly around the display bust mount. It drapes symmetrically over the smooth display stand surface without any human present, reflecting light beautifully on the metal links and gemstones on the display bust in the ${state.jewelryBackground} scene. Features ONLY this single uploaded neckwear and NO other jewelry.`;
+      } else if (jCategory === "Earwear") {
+        placementDirective = `The earwear hangs or sits snugly on the ear profile or display stand mount. It is framed cleanly on the non-human display stand without any live human face, dangling or resting with natural weight and three-dimensional depth on the display stand in the ${state.jewelryBackground} scene. Features ONLY this single uploaded earwear and NO other jewelry.`;
+      } else if (jCategory === "Wristwear & Bangles") {
+        placementDirective = `The wristwear or bangles fit snugly on the display stand, watch cushion, ring cone holder, or hand display sculpture. It is positioned elegantly on the display mount without any live human present, showcasing pristine metal surfaces and gemstone brilliance in the ${state.jewelryBackground} environment. Features ONLY this single uploaded wristwear and NO other jewelry.`;
+      } else if (jCategory === "Forehead & Head Jewellery" || rawType === "maang_tikka" || rawType === "matha_patti" || rawType === "borla" || rawType === "passa" || rawType === "headband") {
+        placementDirective = `The forehead headpiece (maang tikka / matha patti / borla / passa / headband) is displayed gracefully on a velvet or ceramic mannequin head mount or laid in fluid curves flat on the ${state.jewelryBackground} background surface without any live human present, showcasing intricate gold pearls and gemstone drops. Features ONLY this single uploaded headpiece and NO other jewelry.`;
+      } else {
+        placementDirective = `The accessory is positioned precisely on its designated display mount (e.g., display stand, tray, or holder), aligning seamlessly with the structure of the display mount inside the ${state.jewelryBackground} environment without any human model or person. Features ONLY this single uploaded accessory and NO other jewelry.`;
+      }
+    }
+
+    const faceVisibilityInfo = getPoseFaceVisibilityRule(state.jewelryModelPose, "jewelry");
+
+    const jsonPrompt = {
+      category: "jewelry",
+      export_specifications: exportSpecs,
+      product_info: {
+        item_type: jCategory,
+        type: state.jewelryType,
+        detailed_jewelry_description: jewelryFrag,
+        item_placement_and_fit: placementDirective
+      },
+      presentation_setup: {
+        mode: state.jewelryPresentation,
+        visual_presentation_style: presentationFrag,
+        ...(isHumanModel ? {
+          model_details: {
+            gender: state.jewelryModelGender,
+            pose_type: state.jewelryModelPose,
+            pose_details: poseDescription,
+            camera_framing_and_angle: getCameraFramingAndAngle(state.jewelryModelPose, state.jewelryType, "jewelry"),
+            face_visibility_directive: faceVisibilityInfo.description,
+            face_description: state.jewelryModelFacePrompt || null,
+            default_gender_look: defaultFaceDescription,
+            face_reference_purpose_note: "Reference image of human model is for face reference purpose only. Same face identity preserved, but head rotation, body pose, camera angle, and expression are altered according to item type and selected Model Pose / Camera Angle. The model face can be fully shown or partially shown (e.g. cropped at lower face/chin, side profile, or lower body focus) according to the chosen Model Pose / Camera Angle."
+          }
+        } : {
+          bust_details: {
+            display_mount_region: state.jewelryBustRegion,
+            ...(state.jewelryBustRegion === "naturally" && {
+              natural_environmental_fit: "The jewelry item is placed naturally inside the background scene. It rests directly on background elements, absorbs natural ambient light, casts realistic contact shadows, and reflects surrounding environmental colors, surfaces, and textures."
+            })
+          },
+          human_presence: "STRICTLY NONE - NON-HUMAN PRODUCT DISPLAY MODE",
+          no_human_directive: "DO NOT GENERATE ANY HUMAN MODEL, PERSON, FACE, BODY PARTS, OR SKIN. Output ONLY the jewelry placed on its background surface or display mount."
+        })
+      },
+      scene_environment: {
+        background_style: effectiveJewelryBg,
+        background_description: bgFrag,
+        background_color_hex: effectiveJewelryBg === "plain" ? getColorHexByName(state.jewelryBgColor) : null,
+        background_color_name: effectiveJewelryBg === "plain" ? state.jewelryBgColor : null,
+        lighting: state.jewelryBustRegion === "naturally"
+          ? "natural ambient environmental lighting harmonized with the scene, soft directional contact shadows on the background surface, physical color bounce, realistic metallic luster matching background highlights"
+          : "crisp professional macro jewelry studio lighting, high contrast reflections, flawless metallic sparkle, luxury dark marble highlights"
+      },
+      artistic_style: {
+        theme: state.photoStyle === "editorial" ? "Editorial macro jewelry photography" : "Commercial campaign and advertising jewelry photography",
+        photography_style: state.photoStyle,
+        style_attributes: isHumanModel
+          ? (state.photoStyle === "editorial" 
+            ? "Creative storytelling layout, artistic high-fashion model/bust interactions, dramatic close-up focal plays, luxurious vogue editorial framing"
+            : "Clean high-contrast promotional campaign lighting, commercial catalog focus, bold showcase of metal luster and gem brilliance, pristine studio look")
+          : "Creative storytelling product layout, high-end display stand presentation, dramatic close-up focal plays, luxurious vogue editorial framing",
+        quality_level: isHumanModel
+          ? "authentic high-jewelry studio photography, intricate sparkling reflections, razor-sharp focus on gemstones, flawless polished metal texture, shot on Hasselblad H6D-100c medium format camera, high-end macro lens, razor-sharp depth of field, natural metal and gemstone lustre, authentic fine details, high-end editorial spread, crisp color-accurate, no artificial CGI glow, no plastic texture, international modeling agency comp card quality, shot on professional full-frame camera, 85mm f/1.4 lens, tack-sharp focus, crisp micro-detail on skin and fabric texture, color-accurate, magazine cover quality, no motion blur, no noise, no artifacts"
+          : "authentic high-jewelry studio product photography, intricate sparkling reflections, razor-sharp focus on gemstones, flawless polished metal texture, shot on Hasselblad H6D-100c medium format camera, high-end macro lens, razor-sharp depth of field, natural metal and gemstone lustre, authentic fine details, high-end product editorial spread, crisp color-accurate, no artificial CGI glow, no plastic texture, shot on professional full-frame camera, 85mm f/1.4 lens, tack-sharp focus, crisp micro-detail on jewelry craftsmanship, color-accurate, magazine cover quality, no human model, no skin, no motion blur, no noise, no artifacts"
+      },
+      fidelity_directives: {
+        highest_priority_rule: "EXACT REPLICATION OF INPUT PRODUCT DESIGN, PATTERNS, LENGTH, AND SIZE REQUIRED",
+        single_item_isolation_rule: "STRICTLY NO OTHER JEWELRY ITEMS GENERATED EXCEPT UPLOADED INPUT ITEM",
+        single_item_instruction: `CRITICAL SINGLE ITEM DIRECTIVE: The final generated image MUST ONLY feature the exact uploaded input jewelry item (${jCategory} / ${state.jewelryType}). DO NOT generate, add, or synthesize ANY other jewelry items, ornaments, or accessories that were NOT present in the input reference image. For example, if the user uploaded a necklace, DO NOT add unrequested earrings, nose rings, bangles, rings, or maang tikka to the model or display; if the user uploaded earrings, DO NOT add an unrequested necklace or head ornaments; if the user uploaded a ring, DO NOT add unrequested bracelets or necklaces. The model's skin, ears, neck, wrists, fingers, nose, forehead, hair, and clothing must remain COMPLETELY BARE and devoid of any secondary or unuploaded jewelry.`,
+        core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (jewelry) shown in the reference image. The design, gemstone settings, intricate patterns, chain length, piece dimensions, physical size, and craftsmanship features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
+        input_image_guideline: "The input image is the authentic reference of the jewelry product. Replicate this exact product design, pattern details, chain/necklace length, gemstone sizes, and overall dimensions precisely.",
+        mandatory_replications: [
+          "Strict 1:1 single-item focus: generate ONLY the uploaded input jewelry item (or exact pair if uploaded as a pair of earrings/bangles). Absolutely NO additional or unrequested jewelry items (no extra necklaces, earrings, rings, nose pins, waist chains, or headpieces) on the model or display stand",
+          "Exact product design, motif work, filigree, engraving, and intricate metal/stone patterns replicated 1:1",
+          "Exact length, drop length, thickness, and dimensions of the jewelry piece (e.g., choker vs long haram necklace, drop earring length)",
+          "Exact gemstone, diamond, and pearl size, count, cut, arrangement, color, and setting style",
+          "Exact metal type, color, finish (matte, high-polish, antique gold, rhodium, platinum) and reflective shine",
+          "Exact chain link pattern, clasp, hooks, hanging pearls, beads, or charm drops",
+          "Exact scale, proportions, thickness, and physical size relative to the body or display bust",
+          "Facets, light reflection, luster, and authentic raw material craftsmanship details"
+        ]
+      },
+      exclusion_directives: {
+        highest_priority_exclusion_rule: "STRICTLY NO PRICE TAGS, HANGTAGS, BRAND TAGS, COMPANY LOGOS, OR TEXT OVERLAYS",
+        strict_no_extra_jewelry_rule: "STRICTLY PROHIBIT GENERATING UNREQUESTED SECONDARY JEWELRY",
+        strict_no_extra_jewelry_instruction: "DO NOT add any extra jewelry pieces, accessories, or complementary ornaments. Only render the single uploaded product (or pair). The model's skin, ears, neck, wrists, fingers, nose, forehead, hair, and clothing must remain completely bare and free of any other unrequested jewelry or accessories.",
+        instruction: "The output image must be a clean, pristine studio jewelry photograph completely FREE of price tags, store price stickers, barcode tags, paper hangtags, security tags, brand labels, company logos, store tags, watermarks, text labels, sale badges, or graphic overlays anywhere on the jewelry, display mount, or background. If the input reference image has any visible price tag, hanging paper tag, barcode sticker, or brand label attached to the product, digitally remove and omit it entirely, rendering the item clean and pristine.",
+        ...(!isHumanModel && {
+          strict_no_human_rule: "STRICTLY NO LIVE HUMAN MODEL, NO PERSON, NO HUMAN FACE, NO LIVE SKIN",
+          strict_no_human_instruction: `CRITICAL: This is a NON-HUMAN product display presentation mode (${state.jewelryPresentation} / ${state.jewelryBustRegion}). There must be STRICTLY NO LIVE HUMAN BEING, NO LIVE MODEL, NO PERSON, NO HUMAN FACE, NO HEAD, NO EYES, NO EAR, NO NECK, NO LIVE HANDS, NO LEGS, NO LIVE SKIN anywhere in the final output image. Render ONLY the jewelry item placed naturally or mounted on its display stand / surface / mannequin holder (such as a porcelain or velvet mannequin hand, neck bust, or stand). The background and scene must be 100% live-human-free.`
+        })
+      },
+      ...(isHumanModel && {
+        model_expression_directive: state.photoStyle === "campaign" ? {
+          highest_priority_expression_rule: "COMMERCIAL CAMPAIGN CONFIDENT EXPRESSION",
+          instruction: "The model must have a warm, confident, approachable commercial expression suitable for advertising campaigns — a soft smile or gentle closed-mouth smile, poised and polished, like an international modeling agency campaign face. Avoid overly serious, cold, or moody editorial expressions."
+        } : {
+          highest_priority_expression_rule: "HIGH-FASHION EDITORIAL NEUTRAL EXPRESSION",
+          instruction: "The model must have a neutral, serious, high-fashion editorial expression. Never smiling. Calm, poised, intense gaze, like international runway/editorial models."
+        }
+      }),
+      ...(isHumanModel && state.hasFaceRef && {
+        face_matching_directive: {
+          highest_priority_rule: "HUMAN FACE IDENTITY REFERENCE ONLY - DYNAMIC POSE, ANGLE & HEAD ROTATION ALLOWED",
+          instruction: "CRITICAL FACE REFERENCE DIRECTIVE: The reference image of the human model (second uploaded image) is for FACE IDENTITY REFERENCE PURPOSE ONLY. You MUST maintain the exact same face identity, facial features, facial structure, skin tone, eye shape, nose shape, hairstyle, and ethnic identity from the face reference image. However, the human head rotation, head turn angle, body pose, camera perspective, and expression CAN and SHOULD be altered/adapted dynamically according to the item type, framing, and selected Model Pose / Camera Angle."
+        }
+      })
+    };
+
+    return JSON.stringify(jsonPrompt, null, 2);
+  }
+}
+
+// Pricing reference table rows
+export interface PricingRow {
+  model: string;
+  resolution: string;
+  price: string;
+}
+
+export const PRICING_DATA: PricingRow[] = [
+  {
+    model: "OpenAI GPTImage-2 (gptimage-2) ✨",
+    resolution: "1024x1024 | 1024x1536 | 1536x1024 (Low / Medium / High Quality)",
+    price: "$0.005 - $0.211 per image"
+  },
+  {
+    model: "Gemini 3.1 Flash Image (Nano Banana 2) 🍌",
+    resolution: "0.5K ($0.045) | 1K ($0.067) | 2K ($0.101) | 4K ($0.151)",
+    price: "$0.067 per 1K image"
+  },
+  {
+    model: "Gemini 3.1 Flash Lite Image (Nano Banana 2 Lite) 🍌",
+    resolution: "1024 x 1024 px (1K Only)",
+    price: "$0.0336 per 1K image"
+  },
+  {
+    model: "Gemini 3 Pro Image (Nano Banana Pro) 🍌",
+    resolution: "1K/2K ($0.134) | 4K ($0.24)",
+    price: "$0.134 per 1K/2K image"
+  },
+  {
+    model: "Gemini 2.5 Flash Image (Nano Banana) 🍌",
+    resolution: "0.5K ($0.022) | 1K ($0.039)",
+    price: "$0.039 per 1K image"
+  },
+  {
+    model: "OpenAI Sora 2 (sora-2) 🎬",
+    resolution: "720p ($0.10/sec)",
+    price: "$0.10 per second"
+  },
+  {
+    model: "OpenAI Sora 2 Pro (sora-2-pro) 🎬",
+    resolution: "720p ($0.30) | 1024p ($0.50) | 1080p ($0.70)",
+    price: "$0.30 - $0.70 per second"
+  },
+  {
+    model: "Veo 3.1 Standard (veo-3.1-generate-preview)",
+    resolution: "720p/1080p & 4K (Standard)",
+    price: "$0.40 & $0.60 per second"
+  },
+  {
+    model: "Veo 3.1 Fast (veo-3.1-fast-generate-preview)",
+    resolution: "720p/1080p & 4K (Fast)",
+    price: "$0.10, $0.12, $0.30 per second"
+  },
+  {
+    model: "Veo 3.1 Lite (veo-3.1-lite-generate-preview)",
+    resolution: "720p & 1080p (Lite)",
+    price: "$0.05 & $0.08 per second"
+  }
+];
+
+export const IMAGE_MODELS = [
+  { id: "gptimage_2", provider: "openai", name: "OpenAI GPTImage-2 (gptimage-2)", price: 0.08, unit: "image", desc: "OpenAI next-gen image synthesis model with superior prompt adherence & studio photorealism" },
+  { id: "gemini31_flash_image", provider: "google", name: "Google Gemini 3.1 Flash Image (Nano Banana 2)", price: 0.067, unit: "image", desc: "Standard high-fidelity studio model photography and backgrounds" },
+  { id: "gemini31_flash_lite_image", provider: "google", name: "Google Gemini 3.1 Flash Lite Image (Nano Banana 2 Lite)", price: 0.0336, unit: "image", desc: "Fast-speed low-cost conceptual product placement and drafts (1K Resolution Only)" },
+  { id: "gemini3_pro_image", provider: "google", name: "Google Gemini 3 Pro Image (Nano Banana Pro)", price: 0.134, unit: "image", desc: "Ultra-premium razor-sharp resolution and highly detailed jewelry/gems (1K/2K/4K Support)" },
+  { id: "gemini25_flash_image", provider: "google", name: "Google Gemini 2.5 Flash Image (Nano Banana)", price: 0.039, unit: "image", desc: "Standard legacy model for general garment staging (0.5K/1K Support)" },
+];
+
+export const VIDEO_MODELS = [
+  { id: "sora_2", provider: "openai", name: "OpenAI Sora 2 (sora-2)", price: 0.10, unit: "second", desc: "OpenAI Sora 2 standard generation (720p: $0.10/sec)" },
+  { id: "sora_2_pro", provider: "openai", name: "OpenAI Sora 2 Pro (sora-2-pro)", price: 0.30, unit: "second", desc: "OpenAI Sora 2 Pro high-definition model (720p: $0.30, 1024p: $0.50, 1080p: $0.70/sec)" },
+  { id: "veo31_generate_preview", provider: "google", name: "Google Veo 3.1 Standard (veo-3.1-generate-preview)", price: 0.40, unit: "second", desc: "Premium cinema-grade 1080p video generation and commercial draping" },
+  { id: "veo31_fast_generate_preview", provider: "google", name: "Google Veo 3.1 Fast (veo-3.1-fast-generate-preview)", price: 0.12, unit: "second", desc: "High-speed interactive video generation with fast turnaround" },
+  { id: "veo31_lite_generate_preview", provider: "google", name: "Google Veo 3.1 Lite (veo-3.1-lite-generate-preview)", price: 0.08, unit: "second", desc: "Super budget-friendly lightweight fluid drape and motion simulations" },
+];
+
+export const IMAGE_RESOLUTIONS = [
+  { id: "512k", name: "512 x 512 px (Low Res/Draft)", multiplier: 0.4, labelEn: "512 x 512 px (Low Res/Draft)", labelTe: "512 x 512 పిక్సెల్స్ (తక్కువ క్వాలిటీ)" },
+  { id: "1k", name: "1024 x 1024 px (Standard HD)", multiplier: 1.0, labelEn: "1024 x 1024 px (Standard HD)", labelTe: "1024 x 1024 పిక్సెల్స్ (స్టాండర్డ్ HD)" },
+  { id: "2k", name: "2048 x 2048 px (Ultra HD / 2K)", multiplier: 1.6, labelEn: "2048 x 2048 px (Ultra HD / 2K)", labelTe: "2048 x 2048 పిక్సెల్స్ (అల్ట్రా HD / 2K)" },
+  { id: "4k", name: "4096 x 4096 px (Super Resolution / 4K)", multiplier: 2.6, labelEn: "4096 x 4096 px (Super Resolution / 4K)", labelTe: "4096 x 4096 పిక్సెల్స్ (సూపర్ రెజల్యూషన్ / 4K)" },
+];
+
+export const GPTIMAGE2_RESOLUTIONS = [
+  { id: "1024x1024", name: "1024 x 1024 px (1K Square)", multiplier: 1.0, labelEn: "1024 x 1024 px (1K Square)", labelTe: "1024 x 1024 పిక్సెల్స్ (1K స్క్వేర్)" },
+  { id: "1536x1024", name: "1536 x 1024 px (1K Landscape)", multiplier: 1.0, labelEn: "1536 x 1024 px (1K Landscape)", labelTe: "1536 x 1024 పిక్సెల్స్ (1K ల్యాండ్‌స్కేప్)" },
+  { id: "1024x1536", name: "1024 x 1536 px (1K Portrait)", multiplier: 1.0, labelEn: "1024 x 1536 px (1K Portrait)", labelTe: "1024 x 1536 పిక్సెల్స్ (1K పోర్ట్రెయిట్)" },
+  { id: "2048x2048", name: "2048 x 2048 px (2K Square)", multiplier: 2.0, labelEn: "2048 x 2048 px (2K Square)", labelTe: "2048 x 2048 పిక్సెల్స్ (2K స్క్వేర్)" },
+  { id: "2048x1152", name: "2048 x 1152 px (2K Landscape)", multiplier: 2.0, labelEn: "2048 x 1152 px (2K Landscape)", labelTe: "2048 x 1152 పిక్సెల్స్ (2K ల్యాండ్‌స్కేప్)" },
+  { id: "1152x2048", name: "1152 x 2048 px (2K Portrait)", multiplier: 2.0, labelEn: "1152 x 2048 px (2K Portrait)", labelTe: "1152 x 2048 పిక్సెల్స్ (2K పోర్ట్రెయిట్)" },
+  { id: "3840x2160", name: "3840 x 2160 px (4K Landscape)", multiplier: 4.0, labelEn: "3840 x 2160 px (4K Landscape)", labelTe: "3840 x 2160 పిక్సెల్స్ (4K ల్యాండ్‌స్కేప్)" },
+  { id: "2160x3840", name: "2160 x 3840 px (4K Portrait)", multiplier: 4.0, labelEn: "2160 x 3840 px (4K Portrait)", labelTe: "2160 x 3840 పిక్సెల్స్ (4K పోర్ట్రెయిట్)" },
+  { id: "3840x3840", name: "3840 x 3840 px (4K Square)", multiplier: 4.0, labelEn: "3840 x 3840 px (4K Square)", labelTe: "3840 x 3840 పిక్సెల్స్ (4K స్క్వేర్)" },
+];
+
+export const GPTIMAGE2_PRICING_MATRIX = {
+  low: {
+    "1024x1024": 0.006,
+    "1024x1536": 0.005,
+    "1536x1024": 0.005,
+  },
+  medium: {
+    "1024x1024": 0.053,
+    "1024x1536": 0.041,
+    "1536x1024": 0.041,
+  },
+  high: {
+    "1024x1024": 0.211,
+    "1024x1536": 0.165,
+    "1536x1024": 0.165,
+  }
+};
+
+export const getGptImage2SizeString = (resolutionId: string, aspectRatio: string = "1:1"): string => {
+  if (
+    resolutionId === "1024x1024" || resolutionId === "1536x1024" || resolutionId === "1024x1536" ||
+    resolutionId === "2048x2048" || resolutionId === "2048x1152" || resolutionId === "1152x2048" ||
+    resolutionId === "3840x2160" || resolutionId === "2160x3840" || resolutionId === "3840x3840"
+  ) {
+    return resolutionId;
+  }
+
+  const isPortrait = aspectRatio === "3:4" || aspectRatio === "9:16" || aspectRatio === "2:3";
+  const isLandscape = aspectRatio === "4:3" || aspectRatio === "16:9" || aspectRatio === "3:2";
+
+  if (resolutionId === "2k") {
+    if (isPortrait) return "1152x2048";
+    if (isLandscape) return "2048x1152";
+    return "2048x2048";
+  }
+  if (resolutionId === "4k") {
+    if (isPortrait) return "2160x3840";
+    if (isLandscape) return "3840x2160";
+    return "3840x3840";
+  }
+  // Default 1k
+  if (isPortrait) return "1024x1536";
+  if (isLandscape) return "1536x1024";
+  return "1024x1024";
+};
+
+export const getImagePrice = (
+  modelId: string, 
+  resolutionId: string, 
+  quality: string = "medium",
+  aspectRatio: string = "1:1"
+): number => {
+  // Disable 4K export resolution for 1:1 image orientation across all models
+  if (aspectRatio === "1:1" && (resolutionId === "4k" || resolutionId === "3840x3840" || resolutionId === "4096px")) {
+    return 0;
+  }
+
+  if (modelId === "gptimage_2") {
+    let multiplier = 1;
+
+    if (resolutionId === "2k" || resolutionId === "2048x2048" || resolutionId === "2048x1152" || resolutionId === "1152x2048") {
+      multiplier = 2;
+    } else if (resolutionId === "4k" || resolutionId === "3840x2160" || resolutionId === "2160x3840" || resolutionId === "3840x3840") {
+      multiplier = 4;
+    } else if (resolutionId === "512k") {
+      return 0; // 512k not supported for GPTImage-2
+    }
+
+    let dimKey: "1024x1024" | "1024x1536" | "1536x1024" = "1024x1024";
+
+    if (resolutionId === "1024x1536" || resolutionId === "1152x2048" || resolutionId === "2160x3840") {
+      dimKey = "1024x1536";
+    } else if (resolutionId === "1536x1024" || resolutionId === "2048x1152" || resolutionId === "3840x2160") {
+      dimKey = "1536x1024";
+    } else if (resolutionId === "1024x1024" || resolutionId === "2048x2048" || resolutionId === "3840x3840") {
+      dimKey = "1024x1024";
+    } else {
+      if (aspectRatio === "3:4" || aspectRatio === "9:16" || aspectRatio === "2:3") dimKey = "1024x1536";
+      else if (aspectRatio === "4:3" || aspectRatio === "16:9" || aspectRatio === "3:2") dimKey = "1536x1024";
+      else dimKey = "1024x1024";
+    }
+
+    const q = (quality === "low" || quality === "high") ? quality : "medium";
+    const base1kPrice = GPTIMAGE2_PRICING_MATRIX[q][dimKey];
+    return base1kPrice * multiplier;
+  }
+
+  if (modelId === "gemini31_flash_image") {
+    switch (resolutionId) {
+      case "512k":
+        return 0.045;
+      case "1k":
+        return 0.067;
+      case "2k":
+        return 0.101;
+      case "4k":
+        return 0.151;
+      default:
+        return 0.067;
+    }
+  }
+
+  if (modelId === "gemini31_flash_lite_image") {
+    return resolutionId === "1k" ? 0.0336 : 0;
+  }
+
+  if (modelId === "gemini3_pro_image") {
+    switch (resolutionId) {
+      case "512k":
+        return 0; // Not supported
+      case "1k":
+        return 0.134;
+      case "2k":
+        return 0.134;
+      case "4k":
+        return 0.24;
+      default:
+        return 0.134;
+    }
+  }
+
+  if (modelId === "gemini25_flash_image") {
+    switch (resolutionId) {
+      case "512k":
+        return 0.022;
+      case "1k":
+        return 0.039;
+      case "2k":
+      case "4k":
+      default:
+        return 0; // Not supported
+    }
+  }
+
+  // Fallback to base model price * resolution multiplier
+  const modelObj = IMAGE_MODELS.find(m => m.id === modelId) || IMAGE_MODELS[0];
+  const resObj = IMAGE_RESOLUTIONS.find(r => r.id === resolutionId) || IMAGE_RESOLUTIONS[1];
+  return modelObj.price * resObj.multiplier;
+};
+
+export const VIDEO_RESOLUTIONS = [
+  { id: "720p", name: "720p HD (720x1280 / 1280x720)", multiplier: 1.0, labelEn: "720p HD (720x1280)", labelTe: "720p HD" },
+  { id: "1024p", name: "1024p HD (1024x1792 / 1792x1024)", multiplier: 1.0, labelEn: "1024p HD (1024x1792)", labelTe: "1024p HD" },
+  { id: "1080p", name: "1080p Full HD (1080x1920 / 1920x1080)", multiplier: 1.0, labelEn: "1080p Full HD (1080x1920)", labelTe: "1080p Full HD" },
+  { id: "4K", name: "4K Ultra HD (Cinema)", multiplier: 1.5, labelEn: "4K Ultra HD", labelTe: "4K అల్ట్రా HD" },
+];
+
+export function formatPrice(
+  amountInUSD: number,
+  currency: string = "USD",
+  usdToInrRate: number = 83.5,
+  decimals?: number
+): string {
+  if (amountInUSD === 0 || isNaN(amountInUSD)) return "N/A";
+  if (currency === "INR") {
+    const inrValue = amountInUSD * usdToInrRate;
+    let dec = decimals;
+    if (dec === undefined) {
+      dec = inrValue < 1 ? 2 : inrValue < 100 ? 2 : 2;
+    }
+    return `₹${inrValue.toFixed(dec)}`;
+  } else {
+    let dec = decimals;
+    if (dec === undefined) {
+      dec = amountInUSD < 0.01 ? 4 : amountInUSD < 0.1 ? 3 : 2;
+    }
+    return `$${amountInUSD.toFixed(dec)}`;
+  }
+}

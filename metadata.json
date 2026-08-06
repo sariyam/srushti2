@@ -1,0 +1,6 @@
+{
+  "name": "Srushti AI",
+  "description": "Business to Brand - AI-powered product photography tool designed for small business owners, weavers, and jewelers. Simple, visual, and multi-lingual.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
