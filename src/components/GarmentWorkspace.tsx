@@ -357,7 +357,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                     else if (orient === "portrait") setGarmentAspectRatio("3:4");
                     else if (orient === "landscape") setGarmentAspectRatio("4:3");
                   }}
-                  className={`py-2 px-2.5 rounded-2xl text-[10.5px] font-extrabold flex flex-row items-center justify-center gap-1.5 transition-all w-full cursor-pointer ${
+                  className={`py-2.5 px-2 rounded-2xl text-[10.5px] font-extrabold flex flex-col items-center justify-center gap-1 transition-all w-full cursor-pointer ${
                     garmentOrientation === orient ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
                   }`}
                 >
