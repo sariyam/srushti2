@@ -53,8 +53,8 @@ export default function App() {
   const [workspace, setWorkspace] = useState<Workspace>("garment");
   
   // Tab states within Workspace panels
-  const [garmentTab, setGarmentTab] = useState<"setup" | "model" | "background">("setup");
-  const [jewelryTab, setJewelryTab] = useState<"setup" | "model" | "background">("setup");
+  const [garmentTab, setGarmentTab] = useState<"setup" | "studio" | "background">("setup");
+  const [jewelryTab, setJewelryTab] = useState<"setup" | "studio" | "background">("setup");
 
   // Export Settings
   const [garmentOrientation, setGarmentOrientation] = useState<"square" | "portrait" | "landscape">("square");

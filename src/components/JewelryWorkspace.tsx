@@ -52,8 +52,8 @@ function isDarkColor(hex: string): boolean {
 }
 
 interface JewelryWorkspaceProps {
-  jewelryTab: "setup" | "model" | "background";
-  setJewelryTab: (tab: "setup" | "model" | "background") => void;
+  jewelryTab: "setup" | "studio" | "background";
+  setJewelryTab: (tab: "setup" | "studio" | "background") => void;
   jewelryType: "earrings" | "necklace" | "chain" | "ring" | "finger" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
   setJewelryType: (type: any) => void;
   jewelryPresentation: "model" | "bust";
@@ -229,14 +229,14 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
           <span className="break-words">{lang === "en" ? "Setup" : "సెటప్"}</span>
         </button>
         <button
-          id="tab-jewelry-model"
-          onClick={() => setJewelryTab("model")}
+          id="tab-jewelry-studio"
+          onClick={() => setJewelryTab("studio")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            jewelryTab === "model" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
+            jewelryTab === "studio" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
           }`}
         >
           <User className="w-3.5 h-3.5 flex-shrink-0" />
-          <span className="break-words">{lang === "en" ? "Mount" : "స్టాండ్"}</span>
+          <span className="break-words">{lang === "en" ? "Studio" : "స్టూడియో"}</span>
         </button>
         <button
           id="tab-jewelry-background"
@@ -476,12 +476,12 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
         </motion.div>
       )}
 
-      {/* Tab 2 Content: Face or Bust display selection */}
-      {jewelryTab === "model" && (
+      {/* Tab 2 Content: Studio / Face or Bust display selection */}
+      {jewelryTab === "studio" && (
         <motion.div 
           initial={{ opacity: 0, y: 5 }} 
           animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-3 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 min-h-0 flex flex-col justify-between overflow-hidden"
+          className="nm-outset rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
           {/* Presentation Options */}
           <div className="space-y-1.5">

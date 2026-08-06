@@ -51,8 +51,8 @@ function isDarkColor(hex: string): boolean {
 }
 
 interface GarmentWorkspaceProps {
-  garmentTab: "setup" | "model" | "background";
-  setGarmentTab: (tab: "setup" | "model" | "background") => void;
+  garmentTab: "setup" | "studio" | "background";
+  setGarmentTab: (tab: "setup" | "studio" | "background") => void;
   garmentType: "saree" | "tshirt" | "jeans" | "shirt" | "western_wear" | "kurta" | "suit" | "salwar" | "lehenga" | "gown" | "skirt" | "crop_top" | "blouse" | "sherwani" | "dhoti" | "blazer" | "tracksuit" | "hoodie";
   setGarmentType: (type: any) => void;
   garmentPresentation: "model" | "mannequin" | "hanger" | "ghost" | "flat_lay" | "folded" | "shelf" | "shopwindow";
@@ -236,14 +236,14 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
           <span className="break-words">{lang === "en" ? "Setup" : "సెటప్"}</span>
         </button>
         <button
-          id="tab-garment-model"
-          onClick={() => setGarmentTab("model")}
+          id="tab-garment-studio"
+          onClick={() => setGarmentTab("studio")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            garmentTab === "model" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
+            garmentTab === "studio" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
           }`}
         >
           <User className="w-3.5 h-3.5 flex-shrink-0" />
-          <span className="break-words">{lang === "en" ? "Model" : "మోడల్"}</span>
+          <span className="break-words">{lang === "en" ? "Studio" : "స్టూడియో"}</span>
         </button>
         <button
           id="tab-garment-background"
@@ -483,12 +483,12 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
         </motion.div>
       )}
 
-      {/* Tab 2 Content: Human Model Options */}
-      {garmentTab === "model" && (
+      {/* Tab 2 Content: Studio / Human Model Options */}
+      {garmentTab === "studio" && (
         <motion.div 
           initial={{ opacity: 0, y: 5 }} 
           animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-3 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 min-h-0 flex flex-col justify-between overflow-hidden"
+          className="nm-outset rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
           {/* Presentation Options */}
           <div className="space-y-1.5">

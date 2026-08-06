@@ -930,7 +930,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
   };
 
   return (
-    <div className="space-y-1.5 border-t border-black/5 dark:border-white/5 pt-1.5 flex-1 min-h-0 flex flex-col justify-between">
+    <div className="space-y-2.5 border-t border-black/5 dark:border-white/5 pt-2 flex-1">
       {/* Title & Tabs Container */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -990,8 +990,8 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
 
       {/* Faces Display Grid - Directly visible */}
       {filteredFaces.length > 0 ? (
-        <div className="space-y-1 flex-1 min-h-0 flex flex-col justify-center my-0.5">
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 w-full py-1 overflow-y-auto max-h-[220px] scrollbar-thin p-0.5">
+        <div className="space-y-1 flex-1 my-0.5">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 w-full py-1 p-0.5">
             {filteredFaces.map((face) => {
               const isSelected = selectedFaceId === face.id;
               return (
