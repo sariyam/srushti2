@@ -298,12 +298,12 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
               <Camera className="w-3.5 h-3.5 text-accent" />
               {lang === "en" ? "Photography Style" : "ఫోటోగ్రఫీ శైలి"}
             </label>
-            <HorizontalSliderTrack>
+            <div className="grid grid-cols-2 gap-2 w-full pt-1">
               <button
                 id="btn-photo-style-editorial"
                 type="button"
                 onClick={() => setJewelryPhotoStyle("editorial")}
-                className={`p-2.5 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-0.5 transition-all flex-1 min-w-[110px] cursor-pointer ${
+                className={`p-2.5 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-0.5 transition-all w-full cursor-pointer ${
                   jewelryPhotoStyle === "editorial" ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
                 }`}
               >
@@ -318,7 +318,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 id="btn-photo-style-campaign"
                 type="button"
                 onClick={() => setJewelryPhotoStyle("campaign")}
-                className={`p-2.5 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-0.5 transition-all flex-1 min-w-[110px] cursor-pointer ${
+                className={`p-2.5 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-0.5 transition-all w-full cursor-pointer ${
                   jewelryPhotoStyle === "campaign" ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
                 }`}
               >
@@ -329,7 +329,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                   {lang === "en" ? "Commercial promotional shine" : "వాణిజ్య ప్రచార ప్రకాశం"}
                 </span>
               </button>
-            </HorizontalSliderTrack>
+            </div>
           </div>
 
           {/* Orientation selection */}
@@ -338,7 +338,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
               <LuMonitorIcon className="w-3.5 h-3.5 text-accent shrink-0" />
               {t.orientationLabel}
             </label>
-            <HorizontalSliderTrack>
+            <div className="grid grid-cols-3 gap-2 w-full pt-1">
               {(["square", "portrait", "landscape"] as const).map((orient) => (
                 <button
                   key={orient}
@@ -350,7 +350,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     else if (orient === "portrait") setJewelryAspectRatio("3:4");
                     else if (orient === "landscape") setJewelryAspectRatio("4:3");
                   }}
-                  className={`py-2 px-3 rounded-2xl text-[10.5px] font-extrabold flex flex-row items-center justify-center gap-1.5 transition-all flex-1 min-w-[90px] cursor-pointer ${
+                  className={`py-2 px-2.5 rounded-2xl text-[10.5px] font-extrabold flex flex-row items-center justify-center gap-1.5 transition-all w-full cursor-pointer ${
                     jewelryOrientation === orient ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
                   }`}
                 >
@@ -362,7 +362,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                   <span className="truncate">{t[orient]}</span>
                 </button>
               ))}
-            </HorizontalSliderTrack>
+            </div>
           </div>
 
           {/* Render Quality Selector (if gptimage_2) */}
@@ -377,7 +377,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                   {lang === "en" ? "Quality Level" : "క్వాలిటీ స్థాయి"}
                 </span>
               </div>
-              <HorizontalSliderTrack>
+              <div className="grid grid-cols-3 gap-2 w-full pt-1">
                 {(["low", "medium", "high"] as const).map((qual) => {
                   const isSelected = gptImageQuality === qual;
                   const price = getImagePrice("gptimage_2", jewelryResolution, qual, jewelryAspectRatio);
@@ -387,7 +387,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                       type="button"
                       id={`btn-jewelry-quality-${qual}`}
                       onClick={() => setGptImageQuality?.(qual)}
-                      className={`py-2 px-3 rounded-xl flex flex-col items-center justify-center text-center transition-all flex-1 min-w-[80px] cursor-pointer ${
+                      className={`py-2 px-2 rounded-xl flex flex-col items-center justify-center text-center transition-all w-full cursor-pointer ${
                         isSelected
                           ? "nm-inset-sm text-accent scale-[0.98] border-2 border-accent/30 font-black"
                           : "nm-outset-sm opacity-80 hover:opacity-100"
@@ -398,7 +398,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     </button>
                   );
                 })}
-              </HorizontalSliderTrack>
+              </div>
             </div>
           )}
 
@@ -413,7 +413,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 {currency === "INR" ? `₹ INR (@ ₹${usdToInrRate.toFixed(2)}/USD)` : "$ USD"}
               </span>
             </div>
-            <HorizontalSliderTrack>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full pt-1">
               {(["512k", "1k", "2k", "4k"] as const).map((res) => {
                 const finalPrice = getImagePrice(selectedImageModel, res, gptImageQuality, jewelryAspectRatio);
                 const isSelected = jewelryResolution === res;
@@ -425,7 +425,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     id={`btn-jewelry-res-${res}`}
                     onClick={() => !isDisabled && setJewelryResolution(res)}
                     disabled={isDisabled}
-                    className={`p-2 rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-200 flex-1 min-w-[70px] cursor-pointer ${
+                    className={`p-2 rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-200 w-full cursor-pointer ${
                       isDisabled
                         ? "opacity-40 cursor-not-allowed nm-inset-sm bg-black/5 dark:bg-white/5"
                         : isSelected 
@@ -471,7 +471,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                   </button>
                 );
               })}
-            </HorizontalSliderTrack>
+            </div>
           </div>
         </motion.div>
       )}
