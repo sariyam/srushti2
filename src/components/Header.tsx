@@ -612,7 +612,7 @@ export const Header: React.FC<HeaderProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-5 sm:p-6 max-w-lg w-full border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 h-[70vh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col space-y-4"
+              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-5 sm:p-6 max-w-lg w-full border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 h-[70vh] sm:h-[80vh] lg:h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col space-y-4"
             >
               {/* Header inside the popup card */}
               <div className="flex items-center justify-between gap-2 pb-2 border-b border-black/5 dark:border-white/5">
