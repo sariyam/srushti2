@@ -238,16 +238,16 @@ export default function App() {
 
   // Garment Selections
   const [garmentType, setGarmentType] = useState<"saree" | "tshirt" | "jeans" | "shirt" | "western_wear" | "kurta" | "suit" | "salwar" | "lehenga" | "gown" | "skirt" | "crop_top" | "blouse" | "sherwani" | "dhoti" | "blazer" | "tracksuit" | "hoodie">("saree");
-  const [garmentPresentation, setGarmentPresentation] = useState<"model" | "mannequin" | "hanger" | "ghost" | "flat_lay" | "folded" | "shelf" | "shopwindow">("model");
+  const [garmentPresentation, setGarmentPresentation] = useState<"model" | "partial_face" | "no_face" | "mannequin" | "hanger" | "ghost" | "flat_lay" | "folded" | "shelf" | "shopwindow">("model");
   const [garmentModelGender, setGarmentModelGender] = useState<"female" | "male">("female");
-  const [garmentModelPose, setGarmentModelPose] = useState<"standing_front" | "standing_side" | "standing_three_quarter" | "walking_candid" | "sitting_chair" | "sitting_casual">("standing_front");
+  const [garmentModelPose, setGarmentModelPose] = useState<string>("standing_front");
   const [garmentBackground, setGarmentBackground] = useState<"plain" | "studio" | "traditional" | "festival" | "luxury" | "royal" | "urban" | "vintage" | "modern_office">("traditional");
   const [garmentBgColor, setGarmentBgColor] = useState("cream white");
   const [garmentPhotoStyle, setGarmentPhotoStyle] = useState<"editorial" | "campaign">("editorial");
 
   // Jewelry Selections
-  const [jewelryType, setJewelryType] = useState<"earrings" | "necklace" | "chain" | "ring" | "finger" | "bracelet" | "watch" | "anklet" | "payal" | "toe_ring" | "toe" | "nose_ring" | "nose_pin" | "nath" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "waistband" | "hip_chain" | "kamarbandh" | "finger_ring" | "thumb_ring" | "solitaire" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband">("necklace");
-  const [jewelryPresentation, setJewelryPresentation] = useState<"model" | "bust">("model");
+  const [jewelryType, setJewelryType] = useState<"earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "payal" | "toe_ring" | "toe" | "nose_ring" | "nose_pin" | "nath" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "waistband" | "hip_chain" | "kamarbandh" | "finger_ring" | "thumb_ring" | "solitaire" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband">("necklace");
+  const [jewelryPresentation, setJewelryPresentation] = useState<"model" | "bust" | "partial_face" | "no_face">("model");
   const [jewelryModelGender, setJewelryModelGender] = useState<"female" | "male">("female");
   const [jewelryModelPose, setJewelryModelPose] = useState<"neck_collarbone" | "side_ear_profile" | "hand_face_gesture" | "three_quarter_gaze" | "wrist_hand_display" | "front_direct_portrait">("neck_collarbone");
   const [jewelryBustRegion, setJewelryBustRegion] = useState<"head" | "neck" | "wrist" | "ankle" | "finger" | "hand" | "naturally" | "ear">("neck");
@@ -517,7 +517,7 @@ export default function App() {
       // Find the face reference image URL
       const activeFaceId = workspace === "garment" ? selectedGarmentFaceId : selectedJewelryFaceId;
       const activeFace = [...customFaces, ...PRESET_FACES].find(f => f.id === activeFaceId);
-      const isModelPresentation = workspace === "garment" ? garmentPresentation === "model" : jewelryPresentation === "model";
+      const isModelPresentation = workspace === "garment" ? (garmentPresentation === "model" || garmentPresentation === "partial_face" || garmentPresentation === "no_face") : (jewelryPresentation === "model" || jewelryPresentation === "partial_face" || jewelryPresentation === "no_face");
       const activeFaceUrl = isModelPresentation && activeFace ? activeFace.url : null;
 
       const activePrompt = compilePrompt({
@@ -570,11 +570,11 @@ export default function App() {
       }
 
       // If a face reference image is provided, convert it to base64
+      let cleanFaceBase64 = "";
+      let faceMime = "image/jpeg";
+
       if (activeFaceUrl) {
         try {
-          let cleanFaceBase64 = "";
-          let faceMime = "image/jpeg";
-
           if (activeFaceUrl.startsWith("data:")) {
             const match = activeFaceUrl.match(/^data:(image\/\w+);base64,(.+)$/);
             if (match) {
@@ -670,7 +670,7 @@ export default function App() {
         aspectRatio: workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio,
         resolution: resolution,
         productBase64Preview: originalImage ? `${originalImage.substring(0, 60)}... (${Math.round(originalImage.length / 1024)} KB)` : null,
-        faceUrlPreview: activeFaceUrl ? `${activeFaceUrl.substring(0, 60)}...` : null,
+        faceBase64Preview: cleanFaceBase64 ? `data:${faceMime};base64,${cleanFaceBase64.substring(0, 50)}... (${Math.round(cleanFaceBase64.length / 1024)} KB)` : null,
         promptJSON: JSON.parse(promptWithFace),
         rawPayloadStructure: selectedImageModel === "gptimage_2" ? null : restPayload
       };

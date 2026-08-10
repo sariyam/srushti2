@@ -10,6 +10,7 @@ import { HorizontalSliderTrack } from "./HorizontalSliderTrack";
 
 const Gem = (props: any) => <Icon icon="lucide:gem" {...props} />;
 const User = (props: any) => <Icon icon="lucide:user" {...props} />;
+const ScanFace = (props: any) => <Icon icon="lucide:scan-face" {...props} />;
 const Palette = (props: any) => <Icon icon="lucide:palette" {...props} />;
 const Crown = (props: any) => <Icon icon="lucide:crown" {...props} />;
 const UserRound = (props: any) => <Icon icon="lucide:user-round" {...props} />;
@@ -21,6 +22,7 @@ const Flower = (props: any) => <Icon icon="lucide:flower" {...props} />;
 const Layers = (props: any) => <Icon icon="lucide:layers" {...props} />;
 const LuAccessibilityIcon = (props: any) => <Icon icon="lucide:accessibility" {...props} />;
 const LuSmileIcon = (props: any) => <Icon icon="lucide:smile" {...props} />;
+const UserX = (props: any) => <Icon icon="lucide:user-x" {...props} />;
 const LuRefreshCcwIcon = (props: any) => <Icon icon="lucide:refresh-ccw" {...props} />;
 const LuSparklesIcon = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 const LuArmchairIcon = (props: any) => <Icon icon="lucide:armchair" {...props} />;
@@ -54,10 +56,10 @@ function isDarkColor(hex: string): boolean {
 interface JewelryWorkspaceProps {
   jewelryTab: "setup" | "studio" | "background";
   setJewelryTab: (tab: "setup" | "studio" | "background") => void;
-  jewelryType: "earrings" | "necklace" | "chain" | "ring" | "finger" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
+  jewelryType: "earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
   setJewelryType: (type: any) => void;
-  jewelryPresentation: "model" | "bust";
-  setJewelryPresentation: (mode: "model" | "bust") => void;
+  jewelryPresentation: "model" | "bust" | "partial_face" | "no_face";
+  setJewelryPresentation: (mode: "model" | "bust" | "partial_face" | "no_face") => void;
   jewelryModelGender: "female" | "male";
   setJewelryModelGender: (gender: "female" | "male") => void;
   jewelryModelPose: "neck_collarbone" | "side_ear_profile" | "hand_face_gesture" | "three_quarter_gaze" | "wrist_hand_display" | "front_direct_portrait";
@@ -141,7 +143,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
   const [bgCategory, setBgCategory] = React.useState<"indoor" | "outdoor">(() => {
     return (["beach"].includes(jewelryBackground)) ? "outdoor" : "indoor";
   });
-  const [jewelryCategoryFilter, setJewelryCategoryFilter] = React.useState<"neck_ear" | "ear_wear" | "wrist_ring" | "hip" | "nose" | "finger" | "leg" | "forehead" | "accessories">("neck_ear");
+  const [jewelryCategoryFilter, setJewelryCategoryFilter] = React.useState<"neck_ear" | "ear_wear" | "wrist_ring" | "hip" | "nose" | "leg" | "forehead" | "accessories">("neck_ear");
   const [showColorPicker, setShowColorPicker] = React.useState(false);
 
   const [isMobile, setIsMobile] = React.useState(() => {
@@ -159,18 +161,26 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Keep model pose valid when jewelryType changes
+  // Keep model pose valid when jewelryType or jewelryPresentation changes
   React.useEffect(() => {
-    const allowed = getJewelryPoses(jewelryType);
+    const allowed = getJewelryPoses(jewelryType, jewelryPresentation);
     if (!allowed.includes(jewelryModelPose)) {
       setJewelryModelPose(allowed[0]);
     }
-  }, [jewelryType]);
+  }, [jewelryType, jewelryPresentation]);
 
   // Define background compatibility per jewelry presentation mode
   const JEWELRY_BG_COMPATIBILITY: Record<string, { indoor: string[]; outdoor: string[] }> = {
     model: {
       indoor: ["plain", "studio"],
+      outdoor: []
+    },
+    partial_face: {
+      indoor: ["plain", "studio", "luxury", "silk", "mirror"],
+      outdoor: []
+    },
+    no_face: {
+      indoor: ["plain", "studio", "luxury", "silk", "mirror"],
       outdoor: []
     },
     bust: {
@@ -497,18 +507,28 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                   icon: <User className="w-4 h-4 text-accent" />,
                 },
                 {
+                  id: "partial_face" as const,
+                  label: (t as any).partialFace || "Human Model(Partial Face)",
+                  icon: <ScanFace className="w-4 h-4 text-accent" />,
+                },
+                {
+                  id: "no_face" as const,
+                  label: (t as any).noFace || "Human Model (No Face)",
+                  icon: <UserX className="w-4 h-4 text-accent" />,
+                },
+                {
                   id: "bust" as const,
                   label: t.bust,
                   icon: <UserRound className="w-4 h-4 text-accent" />,
                 },
               ]}
               selectedId={jewelryPresentation}
-              onSelect={(mode) => setJewelryPresentation(mode)}
+              onSelect={(mode) => setJewelryPresentation(mode as any)}
             />
           </div>
 
-          {/* 1. If Human Model Mode */}
-          {jewelryPresentation === "model" ? (
+          {/* 1. If Human Model, Partial Face or No Face Mode */}
+          {jewelryPresentation === "model" || jewelryPresentation === "partial_face" || jewelryPresentation === "no_face" ? (
             <FaceGenerator
               gender={jewelryModelGender}
               selectedFaceId={selectedFaceId}
@@ -764,22 +784,24 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
           )}
 
           {/* Model Pose / Angle (Moved to Bg tab) */}
-          {jewelryPresentation === "model" && (
+          {(jewelryPresentation === "model" || jewelryPresentation === "partial_face" || jewelryPresentation === "no_face") && (
             <div className="space-y-2 border-t border-black/5 dark:border-white/5 pt-2">
               <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
                   <LuAccessibilityIcon className="w-3.5 h-3.5 text-accent" />
                   {t.poseLabel}
                 </span>
-                <span className="text-[10px] text-accent/80 font-normal">({getJewelryPoses(jewelryType).length} Options)</span>
+                <span className="text-[10px] text-accent/80 font-normal">({getJewelryPoses(jewelryType, jewelryPresentation).length} Options)</span>
               </label>
               <PresentationSlider
-                items={getJewelryPoses(jewelryType).map((pose) => ({
+                items={getJewelryPoses(jewelryType, jewelryPresentation).map((pose) => ({
                   id: pose,
                   label: t[pose] || pose,
-                  icon: pose.includes("neck") || pose.includes("chest") || pose.includes("collarbone") ? <Gem className="w-3.5 h-3.5 text-accent" /> :
+                  icon: pose.includes("no_face") ? <UserX className="w-3.5 h-3.5 text-accent" /> :
+                        pose.includes("partial_face") || pose.includes("partial_skin") || pose.includes("macro") || pose.includes("lips") || pose.includes("chin") ? <ScanFace className="w-3.5 h-3.5 text-accent" /> :
+                        pose.includes("neck") || pose.includes("chest") || pose.includes("collarbone") ? <Gem className="w-3.5 h-3.5 text-accent" /> :
                         pose.includes("ear") || pose.includes("profile") || pose.includes("tilt") ? <LuRefreshCcwIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("hand") || pose.includes("gesture") || pose.includes("finger") || pose.includes("chin") ? <LuSmileIcon className="w-3.5 h-3.5 text-accent" /> :
+                        pose.includes("hand") || pose.includes("gesture") || pose.includes("finger") ? <LuSmileIcon className="w-3.5 h-3.5 text-accent" /> :
                         pose.includes("wrist") || pose.includes("arm") || pose.includes("cross") ? <Watch className="w-3.5 h-3.5 text-accent" /> :
                         pose.includes("hip") || pose.includes("waist") ? <UserRound className="w-3.5 h-3.5 text-accent" /> :
                         pose.includes("nose") || pose.includes("veil") || pose.includes("nostril") ? <LuSparklesIcon className="w-3.5 h-3.5 text-accent" /> :

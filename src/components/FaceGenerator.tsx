@@ -111,7 +111,7 @@ export const FALLBACK_UNSPLASH_MAP: Record<string, string> = {
 };
 
 // Highly curated studio human model closeup headshots loaded directly from embedded Base64 strings or high quality studio photos
-export const PRESET_FACES: ModelFace[] = [
+const RAW_PRESET_FACES: Omit<ModelFace, "url">[] = [
   // --- INDIAN FEMALE (6 Faces) ---
   {
     id: "indian_f",
@@ -119,8 +119,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "అనన్య",
     gender: "female",
     category: "indian",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a beautiful Indian female model with a soft, warm commercial smile, bright expressive dark eyes, glowing smooth skin, looking directly at the camera, solid neutral light studio background, face fully visible with no hair or accessories covering facial features",
-    url: "/faces/indian_f.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a beautiful Indian female model with a soft, warm commercial smile, bright expressive dark eyes, glowing smooth skin, looking directly at the camera, solid neutral light studio background, face fully visible with no hair or accessories covering facial features"
   },
   {
     id: "indian_f2",
@@ -128,8 +127,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ప్రియా",
     gender: "female",
     category: "indian",
-    prompt: "a professional, ultra-high-resolution studio portrait headshot of an elegant South Indian female model with regal features, soft natural expression, radiant complexion, looking directly at camera with clear eye contact, neutral clean background, face unobscured",
-    url: "/faces/indian_f2.jpg"
+    prompt: "a professional, ultra-high-resolution studio portrait headshot of an elegant South Indian female model with regal features, soft natural expression, radiant complexion, looking directly at camera with clear eye contact, neutral clean background, face unobscured"
   },
   {
     id: "editorial_f",
@@ -137,8 +135,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "మీరా",
     gender: "female",
     category: "indian",
-    prompt: "an ultra-high-resolution close-up high-fashion editorial studio portrait of a striking Indian female model with intense gaze, razor-sharp jawline, glowing flawless skin, elegant facial symmetry, soft studio rim light, minimalist grey backdrop",
-    url: "/faces/editorial_f.jpg"
+    prompt: "an ultra-high-resolution close-up high-fashion editorial studio portrait of a striking Indian female model with intense gaze, razor-sharp jawline, glowing flawless skin, elegant facial symmetry, soft studio rim light, minimalist grey backdrop"
   },
   {
     id: "indian_f4",
@@ -146,8 +143,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "కావ్య",
     gender: "female",
     category: "indian",
-    prompt: "a professional ultra-high-resolution close-up studio headshot of a charming North Indian female model with gentle smile, expressive eyes, warm skin tone, clean studio backdrop",
-    url: "/faces/indian_f4.jpg"
+    prompt: "a professional ultra-high-resolution close-up studio headshot of a charming North Indian female model with gentle smile, expressive eyes, warm skin tone, clean studio backdrop"
   },
   {
     id: "indian_f5",
@@ -155,8 +151,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "దియా",
     gender: "female",
     category: "indian",
-    prompt: "a studio portrait of a glamorous Indian female fashion model with radiant smile, glossy hair, flawless complexion, professional rim lighting, neutral studio background",
-    url: "/faces/indian_f5.jpg"
+    prompt: "a studio portrait of a glamorous Indian female fashion model with radiant smile, glossy hair, flawless complexion, professional rim lighting, neutral studio background"
   },
   {
     id: "indian_f6",
@@ -164,8 +159,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "పూజ",
     gender: "female",
     category: "indian",
-    prompt: "a close-up headshot of a confident modern Indian female model, soft natural studio lighting, direct eye contact, clean solid backdrop",
-    url: "/faces/indian_f6.jpg"
+    prompt: "a close-up headshot of a confident modern Indian female model, soft natural studio lighting, direct eye contact, clean solid backdrop"
   },
 
   // --- INDIAN MALE (6 Faces) ---
@@ -175,8 +169,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "రోహన్",
     gender: "male",
     category: "indian",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a handsome Indian male model, looking directly at the camera with a confident, friendly expression, neatly groomed stubble, sharp features, even studio lighting, solid neutral background",
-    url: "/faces/indian_m.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a handsome Indian male model, looking directly at the camera with a confident, friendly expression, neatly groomed stubble, sharp features, even studio lighting, solid neutral background"
   },
   {
     id: "indian_m2",
@@ -184,8 +177,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "అర్జున్",
     gender: "male",
     category: "indian",
-    prompt: "a professional, ultra-high-resolution studio headshot of a charming South Asian male model, clear eye contact, gentle confident expression, sharp jawline, clean professional lighting, solid grey studio background",
-    url: "/faces/indian_m2.jpg"
+    prompt: "a professional, ultra-high-resolution studio headshot of a charming South Asian male model, clear eye contact, gentle confident expression, sharp jawline, clean professional lighting, solid grey studio background"
   },
   {
     id: "editorial_m",
@@ -193,8 +185,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "విక్రమ్",
     gender: "male",
     category: "indian",
-    prompt: "an ultra-high-resolution close-up studio headshot of a sharp male fashion model, sculpted jawline, intense focused gaze, subtle beard, crisp lighting contrast, high-end commercial model portfolio photo",
-    url: "/faces/editorial_m.jpg"
+    prompt: "an ultra-high-resolution close-up studio headshot of a sharp male fashion model, sculpted jawline, intense focused gaze, subtle beard, crisp lighting contrast, high-end commercial model portfolio photo"
   },
   {
     id: "indian_m4",
@@ -202,8 +193,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఆదిత్య",
     gender: "male",
     category: "indian",
-    prompt: "a studio headshot of a handsome young Indian male model with well-defined jawline, confident warm smile, studio softbox lighting, clean grey backdrop",
-    url: "/faces/indian_m4.jpg"
+    prompt: "a studio headshot of a handsome young Indian male model with well-defined jawline, confident warm smile, studio softbox lighting, clean grey backdrop"
   },
   {
     id: "indian_m5",
@@ -211,8 +201,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "కబీర్",
     gender: "male",
     category: "indian",
-    prompt: "a close-up portrait of an attractive South Indian male model, groomed facial hair, warm expression, direct gaze, neutral studio setting",
-    url: "/faces/indian_m5.jpg"
+    prompt: "a close-up portrait of an attractive South Indian male model, groomed facial hair, warm expression, direct gaze, neutral studio setting"
   },
   {
     id: "indian_m6",
@@ -220,8 +209,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "సురేష్",
     gender: "male",
     category: "indian",
-    prompt: "a commercial portrait headshot of a South Indian male model with charismatic smile, sharp clear features, studio portrait illumination",
-    url: "/faces/indian_m6.jpg"
+    prompt: "a commercial portrait headshot of a South Indian male model with charismatic smile, sharp clear features, studio portrait illumination"
   },
 
   // --- AFRICAN FEMALE (6 Faces) ---
@@ -231,8 +219,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "అమరా",
     gender: "female",
     category: "african",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a stunning African female model with smooth clear dark skin, radiant warm smile, sharp high cheekbones, looking directly at camera, soft studio lighting, clean background, face unobscured",
-    url: "/faces/african_f.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a stunning African female model with smooth clear dark skin, radiant warm smile, sharp high cheekbones, looking directly at camera, soft studio lighting, clean background, face unobscured"
   },
   {
     id: "african_f2",
@@ -240,8 +227,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "జూరి",
     gender: "female",
     category: "african",
-    prompt: "an editorial fashion studio portrait of a regal African female model with glowing melanin skin, intense expressive eyes, elegant posture, soft key lighting, minimal grey backdrop",
-    url: "/faces/african_f2.jpg"
+    prompt: "an editorial fashion studio portrait of a regal African female model with glowing melanin skin, intense expressive eyes, elegant posture, soft key lighting, minimal grey backdrop"
   },
   {
     id: "african_f3",
@@ -249,8 +235,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "నియా",
     gender: "female",
     category: "african",
-    prompt: "a close-up studio portrait of a beautiful West African female model with natural smile, flawless dark skin tone, clear gaze, balanced key light",
-    url: "/faces/african_f3.jpg"
+    prompt: "a close-up studio portrait of a beautiful West African female model with natural smile, flawless dark skin tone, clear gaze, balanced key light"
   },
   {
     id: "african_f4",
@@ -258,8 +243,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఆలియా",
     gender: "female",
     category: "african",
-    prompt: "a high-resolution studio face portrait of a glamorous African female model, bright confident eyes, smooth skin tone, professional studio flash",
-    url: "/faces/african_f4.jpg"
+    prompt: "a high-resolution studio face portrait of a glamorous African female model, bright confident eyes, smooth skin tone, professional studio flash"
   },
   {
     id: "african_f5",
@@ -267,8 +251,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఫాతుమాతా",
     gender: "female",
     category: "african",
-    prompt: "a studio headshot of an African fashion model with vibrant smile, delicate features, clean neutral backdrop, soft studio fill",
-    url: "/faces/african_f5.jpg"
+    prompt: "a studio headshot of an African fashion model with vibrant smile, delicate features, clean neutral backdrop, soft studio fill"
   },
   {
     id: "african_f6",
@@ -276,8 +259,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "బింటా",
     gender: "female",
     category: "african",
-    prompt: "a close-up commercial studio face shot of an East African female model with warm smile, radiant skin, looking straight into lens",
-    url: "/faces/african_f6.jpg"
+    prompt: "a close-up commercial studio face shot of an East African female model with warm smile, radiant skin, looking straight into lens"
   },
 
   // --- AFRICAN MALE (6 Faces) ---
@@ -287,8 +269,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "క్వామే",
     gender: "male",
     category: "african",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a handsome African male model, looking directly at camera with a warm confident expression, smooth dark skin, sharp features, even studio lighting, solid neutral background",
-    url: "/faces/african_m.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a handsome African male model, looking directly at camera with a warm confident expression, smooth dark skin, sharp features, even studio lighting, solid neutral background"
   },
   {
     id: "african_m2",
@@ -296,8 +277,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "మాలిక్",
     gender: "male",
     category: "african",
-    prompt: "an editorial fashion studio headshot of a handsome African male model with sculpted jawline, intense eyes, subtle stubble, clean studio rim light",
-    url: "/faces/african_m2.jpg"
+    prompt: "an editorial fashion studio headshot of a handsome African male model with sculpted jawline, intense eyes, subtle stubble, clean studio rim light"
   },
   {
     id: "african_m3",
@@ -305,8 +285,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "జైన్",
     gender: "male",
     category: "african",
-    prompt: "a close-up portrait shot of an attractive Black male model with friendly smile, warm dark skin tone, direct gaze, solid grey studio setting",
-    url: "/faces/african_m3.jpg"
+    prompt: "a close-up portrait shot of an attractive Black male model with friendly smile, warm dark skin tone, direct gaze, solid grey studio setting"
   },
   {
     id: "african_m4",
@@ -314,8 +293,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "తారిఖ్",
     gender: "male",
     category: "african",
-    prompt: "a studio commercial headshot of a Black male model with confident expression, clean shave, sharp facial symmetry, professional key light",
-    url: "/faces/african_m4.jpg"
+    prompt: "a studio commercial headshot of a Black male model with confident expression, clean shave, sharp facial symmetry, professional key light"
   },
   {
     id: "african_m5",
@@ -323,8 +301,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "కోఫీ",
     gender: "male",
     category: "african",
-    prompt: "a close-up portrait of an African male fashion model, charming smile, sharp cheekbones, studio illumination, clean neutral background",
-    url: "/faces/african_m5.jpg"
+    prompt: "a close-up portrait of an African male fashion model, charming smile, sharp cheekbones, studio illumination, clean neutral background"
   },
   {
     id: "african_m6",
@@ -332,8 +309,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఒమర్",
     gender: "male",
     category: "african",
-    prompt: "a studio headshot of a strong Black male model with focused gaze, clean facial features, soft directional key lighting",
-    url: "/faces/african_m6.jpg"
+    prompt: "a studio headshot of a strong Black male model with focused gaze, clean facial features, soft directional key lighting"
   },
 
   // --- EAST ASIAN FEMALE (6 Faces) ---
@@ -343,8 +319,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "సూ-జిన్",
     gender: "female",
     category: "asian",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Korean female model with flawless glass skin, looking directly at camera with a polite soft smile, sharp clean features, even studio lighting, solid light neutral background",
-    url: "/faces/korean_f.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Korean female model with flawless glass skin, looking directly at camera with a polite soft smile, sharp clean features, even studio lighting, solid light neutral background"
   },
   {
     id: "asian_f2",
@@ -352,8 +327,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "మేయ్-లింగ్",
     gender: "female",
     category: "asian",
-    prompt: "an editorial studio portrait of a Chinese female fashion model with razor-sharp cheekbones, intense gaze, flawless Porcelain complexion, minimal backdrop",
-    url: "/faces/asian_f2.jpg"
+    prompt: "an editorial studio portrait of a Chinese female fashion model with razor-sharp cheekbones, intense gaze, flawless Porcelain complexion, minimal backdrop"
   },
   {
     id: "asian_f3",
@@ -361,8 +335,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "యోకో",
     gender: "female",
     category: "asian",
-    prompt: "a studio face portrait of a Japanese female model with gentle serene smile, smooth skin, clear dark eyes, soft studio illumination",
-    url: "/faces/asian_f3.jpg"
+    prompt: "a studio face portrait of a Japanese female model with gentle serene smile, smooth skin, clear dark eyes, soft studio illumination"
   },
   {
     id: "asian_f4",
@@ -370,8 +343,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "లిన్",
     gender: "female",
     category: "asian",
-    prompt: "a close-up studio headshot of a Vietnamese female model with radiant complexion, confident open smile, softbox lighting, clean grey setting",
-    url: "/faces/asian_f4.jpg"
+    prompt: "a close-up studio headshot of a Vietnamese female model with radiant complexion, confident open smile, softbox lighting, clean grey setting"
   },
   {
     id: "asian_f5",
@@ -379,8 +351,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "జి-ఇయున్",
     gender: "female",
     category: "asian",
-    prompt: "a commercial face shot of a young East Asian female model with luminous skin, subtle makeup, direct camera contact, even studio light",
-    url: "/faces/asian_f5.jpg"
+    prompt: "a commercial face shot of a young East Asian female model with luminous skin, subtle makeup, direct camera contact, even studio light"
   },
   {
     id: "asian_f6",
@@ -388,8 +359,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "చెన్",
     gender: "female",
     category: "asian",
-    prompt: "a high-fashion close-up headshot of an East Asian model with delicate features, elegant pose, clean studio key illumination",
-    url: "/faces/asian_f6.jpg"
+    prompt: "a high-fashion close-up headshot of an East Asian model with delicate features, elegant pose, clean studio key illumination"
   },
 
   // --- EAST ASIAN MALE (6 Faces) ---
@@ -399,8 +369,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "మిన్-హో",
     gender: "male",
     category: "asian",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a handsome Korean male model, looking directly at camera with a clean confident expression, sharp features, even studio lighting, solid neutral background",
-    url: "/faces/korean_m.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a handsome Korean male model, looking directly at camera with a clean confident expression, sharp features, even studio lighting, solid neutral background"
   },
   {
     id: "asian_m2",
@@ -408,8 +377,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "కెంజి",
     gender: "male",
     category: "asian",
-    prompt: "an editorial fashion studio headshot of a Japanese male model with sharp jawline, stylish hairstyle, focused gaze, subtle rim lighting",
-    url: "/faces/asian_m2.jpg"
+    prompt: "an editorial fashion studio headshot of a Japanese male model with sharp jawline, stylish hairstyle, focused gaze, subtle rim lighting"
   },
   {
     id: "asian_m3",
@@ -417,8 +385,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "వేయ్",
     gender: "male",
     category: "asian",
-    prompt: "a studio face portrait of a handsome East Asian male model with clear skin, polite confident smile, balanced key studio lighting",
-    url: "/faces/asian_m3.jpg"
+    prompt: "a studio face portrait of a handsome East Asian male model with clear skin, polite confident smile, balanced key studio lighting"
   },
   {
     id: "asian_m4",
@@ -426,8 +393,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "సాంగ్-వూ",
     gender: "male",
     category: "asian",
-    prompt: "a close-up portrait of a Korean male fashion model with sleek hairstyle, sharp eye contact, minimalist grey studio background",
-    url: "/faces/asian_m4.jpg"
+    prompt: "a close-up portrait of a Korean male fashion model with sleek hairstyle, sharp eye contact, minimalist grey studio background"
   },
   {
     id: "asian_m5",
@@ -435,8 +401,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "హిరోషి",
     gender: "male",
     category: "asian",
-    prompt: "a commercial face headshot of an East Asian male model with warm expression, sharp jawline, professional flash illumination",
-    url: "/faces/asian_m5.jpg"
+    prompt: "a commercial face headshot of an East Asian male model with warm expression, sharp jawline, professional flash illumination"
   },
   {
     id: "asian_m6",
@@ -444,8 +409,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "బావో",
     gender: "male",
     category: "asian",
-    prompt: "a close-up studio face photo of a young East Asian male model with clean flawless features, looking directly into lens",
-    url: "/faces/asian_m6.jpg"
+    prompt: "a close-up studio face photo of a young East Asian male model with clean flawless features, looking directly into lens"
   },
 
   // --- WESTERN / EU FEMALE (6 Faces) ---
@@ -455,8 +419,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "సోఫియా",
     gender: "female",
     category: "western",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Caucasian female model with natural friendly expression, bright sharp eyes, soft even commercial lighting, solid light grey background, face fully visible with clear features",
-    url: "/faces/usa_f.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Caucasian female model with natural friendly expression, bright sharp eyes, soft even commercial lighting, solid light grey background, face fully visible with clear features"
   },
   {
     id: "nordic_f",
@@ -464,8 +427,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఫ్రెజా",
     gender: "female",
     category: "western",
-    prompt: "a professional ultra-high-resolution close-up studio headshot of a fair European female model with serene expression, clear blue eyes, delicate features, clean balanced studio light, neutral backdrop",
-    url: "/faces/nordic_f.jpg"
+    prompt: "a professional ultra-high-resolution close-up studio headshot of a fair European female model with serene expression, clear blue eyes, delicate features, clean balanced studio light, neutral backdrop"
   },
   {
     id: "western_f3",
@@ -473,8 +435,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఎమ్మా",
     gender: "female",
     category: "western",
-    prompt: "a high-fashion editorial studio headshot of a European female model with radiant blonde hair, bright blue eyes, soft studio illumination",
-    url: "/faces/western_f3.jpg"
+    prompt: "a high-fashion editorial studio headshot of a European female model with radiant blonde hair, bright blue eyes, soft studio illumination"
   },
   {
     id: "western_f4",
@@ -482,8 +443,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "షార్లెట్",
     gender: "female",
     category: "western",
-    prompt: "a studio commercial portrait of an attractive Western female model with warm smile, hazel eyes, smooth skin tone, clean backdrop",
-    url: "/faces/western_f4.jpg"
+    prompt: "a studio commercial portrait of an attractive Western female model with warm smile, hazel eyes, smooth skin tone, clean backdrop"
   },
   {
     id: "western_f5",
@@ -491,8 +451,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "క్లోయి",
     gender: "female",
     category: "western",
-    prompt: "a close-up fashion portrait of a Caucasian female model with sculpted jawline, intense clear gaze, soft directional light",
-    url: "/faces/western_f5.jpg"
+    prompt: "a close-up fashion portrait of a Caucasian female model with sculpted jawline, intense clear gaze, soft directional light"
   },
   {
     id: "western_f6",
@@ -500,8 +459,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "హన్నా",
     gender: "female",
     category: "western",
-    prompt: "a commercial face shot of a young Western female model with charismatic smile, bright eyes, professional studio flash",
-    url: "/faces/western_f6.jpg"
+    prompt: "a commercial face shot of a young Western female model with charismatic smile, bright eyes, professional studio flash"
   },
 
   // --- WESTERN / EU MALE (6 Faces) ---
@@ -511,8 +469,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఈథన్",
     gender: "male",
     category: "western",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Caucasian male model, looking directly at camera with a friendly approachable expression, sharp eyes, even professional lighting, solid neutral background",
-    url: "/faces/usa_m.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Caucasian male model, looking directly at camera with a friendly approachable expression, sharp eyes, even professional lighting, solid neutral background"
   },
   {
     id: "nordic_m",
@@ -520,8 +477,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "లూకాస్",
     gender: "male",
     category: "western",
-    prompt: "a professional ultra-high-resolution close-up studio headshot of a fair European male model, direct gaze into camera, clean natural look, soft studio key light, neutral solid background",
-    url: "/faces/nordic_m.jpg"
+    prompt: "a professional ultra-high-resolution close-up studio headshot of a fair European male model, direct gaze into camera, clean natural look, soft studio key light, neutral solid background"
   },
   {
     id: "western_m3",
@@ -529,8 +485,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "అలెక్సాండర్",
     gender: "male",
     category: "western",
-    prompt: "an editorial fashion studio headshot of a Caucasian male model with strong jawline, blue eyes, groomed hair, clean grey backdrop",
-    url: "/faces/western_m3.jpg"
+    prompt: "an editorial fashion studio headshot of a Caucasian male model with strong jawline, blue eyes, groomed hair, clean grey backdrop"
   },
   {
     id: "western_m4",
@@ -538,8 +493,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "లియామ్",
     gender: "male",
     category: "western",
-    prompt: "a close-up portrait of an attractive Western male model with confident smile, sharp facial features, studio flash lighting",
-    url: "/faces/western_m4.jpg"
+    prompt: "a close-up portrait of an attractive Western male model with confident smile, sharp facial features, studio flash lighting"
   },
   {
     id: "western_m5",
@@ -547,8 +501,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఓలివర్",
     gender: "male",
     category: "western",
-    prompt: "a studio commercial headshot of a European male model with light stubble, focused direct gaze, soft key light",
-    url: "/faces/western_m5.jpg"
+    prompt: "a studio commercial headshot of a European male model with light stubble, focused direct gaze, soft key light"
   },
   {
     id: "western_m6",
@@ -556,8 +509,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "డానియెల్",
     gender: "male",
     category: "western",
-    prompt: "a close-up studio portrait of a young Caucasian male model with friendly approachable gaze, clear skin, neutral background",
-    url: "/faces/western_m6.jpg"
+    prompt: "a close-up studio portrait of a young Caucasian male model with friendly approachable gaze, clear skin, neutral background"
   },
 
   // --- MIDDLE EAST FEMALE (6 Faces) ---
@@ -567,8 +519,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "లైలా",
     gender: "female",
     category: "mideast",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Middle Eastern female model with big dark expressive eyes, warm gentle expression, clear studio lighting, solid background, unobscured face",
-    url: "/faces/mideast_f.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Middle Eastern female model with big dark expressive eyes, warm gentle expression, clear studio lighting, solid background, unobscured face"
   },
   {
     id: "mideast_f2",
@@ -576,8 +527,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "నూర్",
     gender: "female",
     category: "mideast",
-    prompt: "an editorial studio portrait of a regal Middle Eastern female model with captivating dark eyes, olive complexion, elegant facial symmetry",
-    url: "/faces/mideast_f2.jpg"
+    prompt: "an editorial studio portrait of a regal Middle Eastern female model with captivating dark eyes, olive complexion, elegant facial symmetry"
   },
   {
     id: "mideast_f3",
@@ -585,8 +535,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "యాస్మిన్",
     gender: "female",
     category: "mideast",
-    prompt: "a studio face portrait of a beautiful Arab female model with soft warm smile, expressive dark eyes, flawless smooth skin, studio key light",
-    url: "/faces/mideast_f3.jpg"
+    prompt: "a studio face portrait of a beautiful Arab female model with soft warm smile, expressive dark eyes, flawless smooth skin, studio key light"
   },
   {
     id: "mideast_f4",
@@ -594,8 +543,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఫరా",
     gender: "female",
     category: "mideast",
-    prompt: "a close-up studio headshot of a glamorous Middle Eastern female model with luminous complexion, soft rim light, clean grey setting",
-    url: "/faces/mideast_f4.jpg"
+    prompt: "a close-up studio headshot of a glamorous Middle Eastern female model with luminous complexion, soft rim light, clean grey setting"
   },
   {
     id: "mideast_f5",
@@ -603,8 +551,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "మరియం",
     gender: "female",
     category: "mideast",
-    prompt: "a commercial face shot of a young Middle Eastern female model with gentle smile, clear eye contact, studio flash illumination",
-    url: "/faces/mideast_f5.jpg"
+    prompt: "a commercial face shot of a young Middle Eastern female model with gentle smile, clear eye contact, studio flash illumination"
   },
   {
     id: "mideast_f6",
@@ -612,8 +559,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "జైనా",
     gender: "female",
     category: "mideast",
-    prompt: "a close-up portrait headshot of an Arab model with striking facial features, elegant posture, balanced studio flash",
-    url: "/faces/mideast_f6.jpg"
+    prompt: "a close-up portrait headshot of an Arab model with striking facial features, elegant posture, balanced studio flash"
   },
 
   // --- MIDDLE EAST MALE (6 Faces) ---
@@ -623,8 +569,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "తారిఖ్",
     gender: "male",
     category: "mideast",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Middle Eastern male model, looking directly at camera with a confident expression, neat beard, sharp eyes, even lighting, solid background",
-    url: "/faces/mideast_m.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Middle Eastern male model, looking directly at camera with a confident expression, neat beard, sharp eyes, even lighting, solid background"
   },
   {
     id: "mideast_m2",
@@ -632,8 +577,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఒమర్",
     gender: "male",
     category: "mideast",
-    prompt: "an editorial studio headshot of a handsome Middle Eastern male model with neatly groomed beard, intense gaze, sculpted jawline, grey backdrop",
-    url: "/faces/mideast_m2.jpg"
+    prompt: "an editorial studio headshot of a handsome Middle Eastern male model with neatly groomed beard, intense gaze, sculpted jawline, grey backdrop"
   },
   {
     id: "mideast_m3",
@@ -641,8 +585,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "జైద్",
     gender: "male",
     category: "mideast",
-    prompt: "a close-up face portrait of an Arab male fashion model with polite smile, warm skin tone, sharp eye contact, studio setting",
-    url: "/faces/mideast_m3.jpg"
+    prompt: "a close-up face portrait of an Arab male fashion model with polite smile, warm skin tone, sharp eye contact, studio setting"
   },
   {
     id: "mideast_m4",
@@ -650,8 +593,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "అమీర్",
     gender: "male",
     category: "mideast",
-    prompt: "a commercial headshot of a Middle Eastern male model with confident pose, groomed facial hair, professional key illumination",
-    url: "/faces/mideast_m4.jpg"
+    prompt: "a commercial headshot of a Middle Eastern male model with confident pose, groomed facial hair, professional key illumination"
   },
   {
     id: "mideast_m5",
@@ -659,8 +601,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "హసన్",
     gender: "male",
     category: "mideast",
-    prompt: "a close-up studio headshot of an attractive Middle Eastern male model with charming smile, sharp jawline, directional softbox flash",
-    url: "/faces/mideast_m5.jpg"
+    prompt: "a close-up studio headshot of an attractive Middle Eastern male model with charming smile, sharp jawline, directional softbox flash"
   },
   {
     id: "mideast_m6",
@@ -668,8 +609,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "యూసఫ్",
     gender: "male",
     category: "mideast",
-    prompt: "a studio portrait of a young Arab male model with clear skin, natural posture, looking directly into camera lens",
-    url: "/faces/mideast_m6.jpg"
+    prompt: "a studio portrait of a young Arab male model with clear skin, natural posture, looking directly into camera lens"
   },
 
   // --- LATINA FEMALE (6 Faces) ---
@@ -679,8 +619,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఇసబెల్లా",
     gender: "female",
     category: "latina",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Latina female model with warm golden skin tone, confident friendly expression, clear dark eyes, soft studio illumination, clean backdrop",
-    url: "/faces/latina_f.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Latina female model with warm golden skin tone, confident friendly expression, clear dark eyes, soft studio illumination, clean backdrop"
   },
   {
     id: "latina_f2",
@@ -688,8 +627,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "కామిలా",
     gender: "female",
     category: "latina",
-    prompt: "an editorial fashion portrait of a stunning Latina female model with glowing bronzed skin, bright dark eyes, radiant smile, studio flash",
-    url: "/faces/latina_f2.jpg"
+    prompt: "an editorial fashion portrait of a stunning Latina female model with glowing bronzed skin, bright dark eyes, radiant smile, studio flash"
   },
   {
     id: "latina_f3",
@@ -697,8 +635,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "సోఫియా",
     gender: "female",
     category: "latina",
-    prompt: "a close-up studio headshot of a Hispanic female model with razor-sharp cheekbones, intense gaze, smooth complexion, minimal backdrop",
-    url: "/faces/latina_f3.jpg"
+    prompt: "a close-up studio headshot of a Hispanic female model with razor-sharp cheekbones, intense gaze, smooth complexion, minimal backdrop"
   },
   {
     id: "latina_f4",
@@ -706,8 +643,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "వాలెంటినా",
     gender: "female",
     category: "latina",
-    prompt: "a commercial face shot of a young Latina female model with charismatic smile, golden skin tone, professional softbox illumination",
-    url: "/faces/latina_f4.jpg"
+    prompt: "a commercial face shot of a young Latina female model with charismatic smile, golden skin tone, professional softbox illumination"
   },
   {
     id: "latina_f5",
@@ -715,8 +651,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "ఎలెనా",
     gender: "female",
     category: "latina",
-    prompt: "a studio portrait face photo of a Latin American female model with warm friendly expression, clear dark gaze, soft fill light",
-    url: "/faces/latina_f5.jpg"
+    prompt: "a studio portrait face photo of a Latin American female model with warm friendly expression, clear dark gaze, soft fill light"
   },
   {
     id: "latina_f6",
@@ -724,8 +659,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "లూసియా",
     gender: "female",
     category: "latina",
-    prompt: "a close-up headshot of a Latina fashion model with delicate facial features, elegant pose, clean studio key light",
-    url: "/faces/latina_f6.jpg"
+    prompt: "a close-up headshot of a Latina fashion model with delicate facial features, elegant pose, clean studio key light"
   },
 
   // --- LATINO MALE (6 Faces) ---
@@ -735,8 +669,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "మాటియో",
     gender: "male",
     category: "latina",
-    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Latino male model with warm tan complexion, friendly open smile, sharp clear features, studio lighting, plain background",
-    url: "/faces/latino_m.jpg"
+    prompt: "a professional, ultra-high-resolution close-up studio headshot of a Latino male model with warm tan complexion, friendly open smile, sharp clear features, studio lighting, plain background"
   },
   {
     id: "latina_m2",
@@ -744,8 +677,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "సాంటియాగో",
     gender: "male",
     category: "latina",
-    prompt: "an editorial fashion studio headshot of a Latino male model with sculpted jawline, dark hair, confident direct gaze, grey setting",
-    url: "/faces/latina_m2.jpg"
+    prompt: "an editorial fashion studio headshot of a Latino male model with sculpted jawline, dark hair, confident direct gaze, grey setting"
   },
   {
     id: "latina_m3",
@@ -753,8 +685,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "డియాగో",
     gender: "male",
     category: "latina",
-    prompt: "a close-up face portrait of an attractive Hispanic male model with warm open smile, tan skin tone, studio key illumination",
-    url: "/faces/latina_m3.jpg"
+    prompt: "a close-up face portrait of an attractive Hispanic male model with warm open smile, tan skin tone, studio key illumination"
   },
   {
     id: "latina_m4",
@@ -762,8 +693,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "కార్లోస్",
     gender: "male",
     category: "latina",
-    prompt: "a studio commercial headshot of a Latino male model with light stubble, focused eyes, professional softbox flash",
-    url: "/faces/latina_m4.jpg"
+    prompt: "a studio commercial headshot of a Latino male model with light stubble, focused eyes, professional softbox flash"
   },
   {
     id: "latina_m5",
@@ -771,8 +701,7 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "అలెహాండ్రో",
     gender: "male",
     category: "latina",
-    prompt: "a close-up studio portrait of a young Latino male model with well-defined jawline, charming smile, neutral grey backdrop",
-    url: "/faces/latina_m5.jpg"
+    prompt: "a close-up studio portrait of a young Latino male model with well-defined jawline, charming smile, neutral grey backdrop"
   },
   {
     id: "latina_m6",
@@ -780,10 +709,14 @@ export const PRESET_FACES: ModelFace[] = [
     nameTe: "గాబ్రియెల్",
     gender: "male",
     category: "latina",
-    prompt: "a studio face shot of a Hispanic male model with natural gaze, smooth skin tone, clear directional studio flash",
-    url: "/faces/latina_m6.jpg"
+    prompt: "a studio face shot of a Hispanic male model with natural gaze, smooth skin tone, clear directional studio flash"
   }
 ];
+
+export const PRESET_FACES: ModelFace[] = RAW_PRESET_FACES.map(face => ({
+  ...face,
+  url: FALLBACK_UNSPLASH_MAP[face.id] || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
+}));
 
 export type FaceSubtab = "indian" | "african" | "asian" | "western" | "mideast" | "latina" | "custom";
 
@@ -1009,7 +942,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
                 >
                   <div className="relative w-full aspect-square rounded-xl overflow-hidden nm-inset-xs bg-[var(--bg-secondary)] flex items-center justify-center shrink-0">
                     <img 
-                      src={face.url || `/faces/${face.id}.jpg`} 
+                      src={face.url} 
                       alt={face.nameEn}
                       className="w-full h-full object-cover pointer-events-none"
                       onError={(e) => {

@@ -168,6 +168,13 @@ export function getPoseFaceVisibilityRule(poseKey: string, category: "garment" |
   visibility: "FULL_FACE_SHOWN" | "PARTIALLY_SHOWN_FACE" | "CROPPED_LOWER_BODY";
   description: string;
 } {
+  if (poseKey.startsWith("no_face_")) {
+    return {
+      visibility: "CROPPED_LOWER_BODY",
+      description: "NO FACE SHOWN: Primary macro camera focus on garment item texture, fabric drape, and fit with human face strictly cropped out, turned away, or headless (showing NO human eyes, nose, lips, or facial features)."
+    };
+  }
+
   const fullFacePoses = new Set([
     // Garment Poses
     "standing_front", "standing_side", "standing_three_quarter", "walking_candid",
@@ -309,6 +316,79 @@ export function getCameraFramingAndAngle(poseKey: string, itemType: string, cate
     acc_3q_gaze: "Three-quarter angle camera framing accessory and facial features (face fully shown)",
     acc_side_profile: "Side profile camera angle accentuating accessory placement on head or body (face partially or fully shown in side profile)",
 
+    // Jewelry - Partial Face & Body Skin Macro Poses
+    partial_face_lips_collarbone: "Macro close-up crop from lower lips down to collarbone and upper chest, showcasing human skin texture and necklace/pendant drape (eyes cropped out)",
+    partial_face_chin_neck_drape: "Macro beauty framing centered on chin, neck, and collarbone, highlighting human skin sheen and neckline jewelry (upper face cropped)",
+    partial_face_jawline_decollete: "Macro camera framing focusing on jawline, lower chin, collarbone, and décolletage with human skin texture (eyes cropped out)",
+    partial_face_neck_side_throat: "Tight side angle closeup framing the curve of the neck, side throat, and shoulder line against smooth human skin",
+
+    partial_face_cheek_ear_close: "Tight macro partial face profile framing cheekbone, earlobe, and jawline, displaying skin texture and earring brilliance (full head cropped)",
+    partial_face_jawline_macro: "Intimate macro partial face camera angle focusing on human skin, jawline, and earlobe profile (eyes and top of head cropped out of frame)",
+    partial_face_ear_neck_profile: "Macro profile shot capturing earlobe, side jawline, and neck transition on authentic human skin",
+    partial_face_hairline_ear_crop: "Close-up side framing highlighting temple, hairline, and earlobe with natural skin pores and studio lighting",
+
+    partial_face_nose_lips_profile: "Close-up partial face profile shot focusing on nose, lips, and nostril ornament against smooth human skin (eyes and forehead cropped)",
+    partial_face_nostril_cheek_macro: "Intimate macro profile angle focusing on nostril, cheekbone, and lip curve on clean human skin",
+    partial_face_lips_nose_front: "Lower face macro framing from nostrils down to lips and chin, displaying facial jewelry on real skin",
+
+    partial_face_forehead_brows_crop: "Close-up partial face framing focusing on forehead, eyebrow line, and upper bridge with head ornament (chin and lower face cropped out)",
+    partial_face_hairline_temple_macro: "Macro camera angle focusing on upper forehead, hairline, and temple area with authentic skin texture",
+    partial_face_upper_bridge_forehead: "Macro close-up framing forehead, eyebrow ridge, and upper nose bridge with head ornament",
+
+    partial_skin_wrist_pulse_macro: "Intimate macro camera angle focused on wrist pulse point and forearm skin texture",
+    partial_skin_forearm_wrist_drape: "Close-up camera angle showcasing forearm skin and wrist joint with bracelet or bangle drape",
+    partial_skin_hand_wrist_profile: "Macro profile shot of hand back, wrist, and manicured knuckles against smooth human skin",
+
+    partial_skin_finger_knuckle_macro: "Tight macro close-up framing manicured fingers, knuckles, and ring on real skin",
+    partial_skin_hand_resting_skin: "Macro shot of hand resting gently on skin, displaying finger rings and hand jewelry",
+    partial_skin_interlocked_fingers: "Macro camera framing focusing on interlocked manicured fingers and ring settings",
+
+    partial_skin_waist_hip_curve_macro: "Intimate macro camera angle framing waist curve and hip bone against soft human skin",
+    partial_skin_navel_hip_drape: "Close-up macro shot centering midriff, navel area, and hip curve with waist jewelry",
+    partial_skin_lower_waist_profile: "Side angle macro camera framing lower waist and hip contour on smooth skin",
+
+    partial_skin_ankle_foot_macro: "Macro close-up camera angle focusing on ankle bone joint and instep skin",
+    partial_skin_toes_instep_close: "Tight macro shot showcasing manicured toes, instep, and foot skin texture",
+    partial_skin_heel_anklet_profile: "Side profile macro angle framing heel, ankle curve, and anklet drape on real skin",
+
+    partial_skin_chest_lapel_macro: "Macro close-up framing collarbone, upper chest, and shoulder skin texture",
+    partial_skin_wrist_cuff_close: "Tight macro camera angle focusing on wrist joint, cuff, and skin texture",
+
+    // Jewelry - No Face Poses (Headless / Face Turned Away / Face Cropped) - Micro Focus on Item (Neck, Ear, Wrist, Finger, etc.)
+    no_face_neck_collarbone_drape: "Micro focus on necklace item drape, pendant setting, and gemstone facet luster against smooth neck and collarbone skin (headless, strictly no face)",
+    no_face_decollete_torso: "Micro focus on necklace item sparkle, chain links, and pendant detailing on upper chest and décolletage neck skin (headless, strictly no face)",
+    no_face_shoulder_back_neck: "Micro focus on rear necklace drop item and chainwork detail against the nape of neck and shoulder skin (headless, no face visible)",
+    no_face_throat_collarbone_macro: "Extreme micro close-up focused directly on necklace item clasp, fit, and gemstone brilliance against throat and neck skin (eyes and face strictly cropped out)",
+
+    no_face_side_neck_ear_macro: "Micro focus on earring item drop, metal luster, and stone setting at the earlobe against smooth side neck skin (face turned away, strictly no face)",
+    no_face_ear_nape_profile: "Micro profile focus on earring item dangle, gemstone cut, and setting finish on earlobe and neck skin (no facial features visible)",
+    no_face_shoulder_ear_line: "Micro focus on earring item piece and dangle brilliance along the ear and neck skin line (headless, strictly no face)",
+
+    no_face_wrist_hand_waist: "Micro focus on wrist item (bracelet or watch bezel, dial details, clasp) against smooth wrist and hand skin (headless, strictly no face)",
+    no_face_forearm_cross_body: "Micro close-up focus on bangles/bracelet item stack, highlighting metal sheen against forearm wrist skin (headless, strictly no face)",
+    no_face_hand_lap_drape: "Micro camera focus on bracelet or wristwear item details against hand and wrist skin (headless, strictly no face)",
+
+    no_face_finger_touching_hip: "Micro focus on ring item setting, gemstone cut, and band brilliance on manicured finger skin (headless, strictly no face)",
+    no_face_interlocked_hands_chest: "Micro focus on ring item band, solitaire setting, and stone brilliance on interlocked finger skin (headless, strictly no face)",
+    no_face_finger_ring_lap: "Micro framing centered tightly on finger ring items, solitaire facets, and metal finish against manicured finger skin (headless, strictly no face)",
+
+    no_face_waist_midriff_front: "Micro focus on kamarbandh waist chain item pattern and gem accents against smooth waist skin (headless, strictly no face)",
+    no_face_hip_curve_side: "Micro focus on waist chain item link drapes and ornament luster along hip curve skin (headless, strictly no face)",
+    no_face_back_waist_drape: "Micro focus on waistband item ornament and back chainwork against lower back skin (headless, strictly no face)",
+
+    no_face_anklet_stepping: "Micro focus on anklet item links and metal luster on ankle and foot skin (strictly no face)",
+    no_face_seated_feet_drape: "Micro focus on anklet and foot jewelry item details against smooth ankle/foot skin (headless, no face visible)",
+    no_face_toe_ring_step: "Micro close-up focused on toe ring item settings and gemstone details on toe and instep skin (feet close-up, strictly no face)",
+
+    no_face_side_nostril_neck: "Micro focus on nose pin or ring item design, gemstone sparkle, and metalwork against nostril and neck skin (upper face and eyes cropped out)",
+    no_face_chin_lips_nose: "Micro camera focus on nose ornament item craftsmanship and luster against nose, lips, and chin skin (forehead and eyes cropped out)",
+
+    no_face_forehead_hairline_only: "Micro focus on forehead ornament item, maang tikka pendant, and gemstone drop against upper forehead skin (eyes and lower face cropped out)",
+    no_face_top_crown_hair: "Micro focus on headband or crown ornament item details against forehead and hairline skin (no face visible)",
+
+    no_face_chest_shoulder_accessory: "Micro focus on chest and shoulder accessory item details against upper chest and shoulder skin (headless, strictly no face)",
+    no_face_arm_wrist_cuff: "Micro focus on arm cuff or armlet item details and surface texture against upper arm skin (headless, strictly no face)",
+
     // Legacy/Fallback poses
     hand_face_gesture: "Hand-to-face beauty gesture shot, manicured fingers touching cheek/chin, framing rings and bracelets alongside facial poise (face fully shown)",
     three_quarter_gaze: "Three-quarter elegance portrait, subtle head tilt and studio gaze, capturing harmonized necklace and earring brilliance (face fully shown)",
@@ -362,7 +442,7 @@ export function compilePrompt(state: {
 
   if (state.workspace === "garment") {
     const garmentFrag = PROMPT_FRAGMENTS.garment.types[state.garmentType as keyof typeof PROMPT_FRAGMENTS.garment.types] || state.garmentType;
-    const isHumanModel = state.garmentPresentation === "model";
+    const isHumanModel = state.garmentPresentation === "model" || state.garmentPresentation === "partial_face" || state.garmentPresentation === "no_face";
     
     let presentationFrag = "";
     let defaultFaceDescription = "";
@@ -375,20 +455,26 @@ export function compilePrompt(state: {
         ? "warm, confident commercial expression" 
         : "neutral high-fashion expression, never smiling";
       
-      if (isFemale) {
-        defaultFaceDescription = `worn gracefully by a beautiful, professional young Indian female fashion model with a ${expression}`;
+      if (state.garmentPresentation === "no_face") {
+        defaultFaceDescription = `NO FACE SHOWN: Worn gracefully by an elegant young Indian ${state.garmentModelGender} model with human face strictly cropped out, turned away, or headless (showing NO human eyes, nose, lips, or facial features)`;
+      } else if (state.garmentPresentation === "partial_face") {
+        defaultFaceDescription = `PARTIAL FACE SHOWN: Worn elegantly by a stylish young Indian ${state.garmentModelGender} model with a partial face composition (lips, jawline, neck, or cheek softly framed, eyes/forehead cropped out or obscured)`;
       } else {
-        defaultFaceDescription = `worn elegantly by a handsome, professional young Indian male fashion model with a ${expression}`;
+        if (isFemale) {
+          defaultFaceDescription = `worn gracefully by a beautiful, professional young Indian female fashion model with a ${expression}`;
+        } else {
+          defaultFaceDescription = `worn elegantly by a handsome, professional young Indian male fashion model with a ${expression}`;
+        }
       }
 
       const faceDescription = state.garmentModelFacePrompt || defaultFaceDescription;
       let finalFaceDescription = faceDescription;
-      if (state.photoStyle === "campaign") {
+      if (state.photoStyle === "campaign" && state.garmentPresentation === "model") {
         finalFaceDescription = faceDescription
           .replace(/neutral high-fashion expression, never smiling/gi, "warm, confident commercial expression")
           .replace(/perfectly neutral facial expression/gi, "warm, confident commercial expression")
           .replace(/neutral facial expression/gi, "warm, confident commercial expression");
-      } else {
+      } else if (state.garmentPresentation === "model") {
         finalFaceDescription = faceDescription
           .replace(/warm, confident commercial expression/gi, "neutral high-fashion expression, never smiling");
       }
@@ -420,7 +506,11 @@ export function compilePrompt(state: {
         placementDirective = `The bottom-wear garment fits the waist, hips, and legs perfectly. It sits cleanly on the waistline, draping naturally down to the thighs, knees, or ankles, showcasing authentic seams, waistband detailing, pockets, and hem structure on the lower body of the model within the ${state.garmentBackground} background.`;
       }
     } else {
-      placementDirective = `The garment is presented on a ${state.garmentPresentation} display setup without any human model present. It displays authentic fabric drape, crisp seams, pattern integrity, and clean structural silhouette on the ${state.garmentPresentation} within the ${state.garmentBackground} environment. Strictly no human model or skin in frame.`;
+      if (state.garmentPresentation === "folded") {
+        placementDirective = `The garment is neatly and immaculately folded in a crisp square shape on a clean flat surface in high-end retail boutique display style. The main signature part of the garment (such as the pallu for sarees, chest/collar embroidery motif for kurtas/shirts/t-shirts, or primary design feature) is prominently displayed right on top of the folded square, facing directly up towards the camera. Strictly no human model or skin in frame.`;
+      } else {
+        placementDirective = `The garment is presented on a ${state.garmentPresentation} display setup without any human model present. It displays authentic fabric drape, crisp seams, pattern integrity, and clean structural silhouette on the ${state.garmentPresentation} within the ${state.garmentBackground} environment. Strictly no human model or skin in frame.`;
+      }
     }
 
     const faceVisibilityInfo = getPoseFaceVisibilityRule(state.garmentModelPose, "garment");
@@ -494,6 +584,10 @@ export function compilePrompt(state: {
         ...(!isHumanModel && {
           strict_no_human_rule: "STRICTLY NO HUMAN MODEL, NO PERSON, NO HUMAN FACE, NO BODY PARTS, NO HANDS, NO SKIN",
           strict_no_human_instruction: `CRITICAL: This is a NON-HUMAN product display presentation mode (${state.garmentPresentation}). There must be STRICTLY NO HUMAN BEING, NO LIVE MODEL, NO PERSON, NO HUMAN FACE, NO HEAD, NO EYES, NO NECK, NO HANDS, NO LEGS, NO SKIN anywhere in the final output image. Render ONLY the product displayed on its non-human setup (${state.garmentPresentation}). The entire image MUST be 100% human-free.`
+        }),
+        ...(state.garmentPresentation === "no_face" && {
+          strict_no_human_face_rule: "STRICTLY NO HUMAN FACE, NO EYES, NO NOSE, NO LIPS, NO FACIAL FEATURES SHOWN",
+          strict_no_human_face_instruction: "CRITICAL: This presentation mode requires NO FACE SHOWN. Frame the garment on the model with head strictly cropped out above neck/jawline, or model turned away. Absolutely ZERO human eyes, nose, lips, or facial features in frame."
         })
       },
       ...(isHumanModel && {
@@ -516,17 +610,27 @@ export function compilePrompt(state: {
     return JSON.stringify(jsonPrompt, null, 2);
   } else {
     const rawType = state.jewelryType;
-    const normalizedType = (rawType === "noise" || rawType === "nose") ? "nose_ring" : rawType === "finger" ? "ring" : rawType;
+    const normalizedType = (rawType === "noise" || rawType === "nose") ? "nose_ring" : rawType;
     const jewelryFrag = PROMPT_FRAGMENTS.jewelry.types[rawType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
       || PROMPT_FRAGMENTS.jewelry.types[normalizedType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
       || state.jewelryType;
-    const isHumanModel = state.jewelryPresentation === "model";
+    const isHumanModel = state.jewelryPresentation === "model" || state.jewelryPresentation === "partial_face" || state.jewelryPresentation === "no_face";
 
     let presentationFrag = "";
     let defaultFaceDescription = "";
     let poseDescription = "";
 
-    if (isHumanModel) {
+    if (state.jewelryPresentation === "no_face") {
+      poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || getCameraFramingAndAngle(state.jewelryModelPose, normalizedType, "jewelry");
+      const noFaceBase = "worn on an authentic live human model skin backdrop, with primary macro camera focus and razor-sharp depth-of-field centered strictly on the jewelry item product details, metal luster, and gemstone brilliance, while the human face is strictly cropped out of frame, turned away, or headless (showing NO human eyes, nose, lips, or face)";
+      const skinDescription = state.jewelryModelFacePrompt ? `human model skin tone and body features (${state.jewelryModelFacePrompt})` : "young female human model body with smooth skin tone";
+      presentationFrag = `${noFaceBase}, ${skinDescription}, ${poseDescription}`;
+    } else if (state.jewelryPresentation === "partial_face") {
+      poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || getCameraFramingAndAngle(state.jewelryModelPose, normalizedType, "jewelry");
+      const partialFaceBase = "worn on authentic human skin with a human skin partial face macro close-up framing, showing clean skin texture, natural pores, and soft studio lighting while cropping full facial identity";
+      const faceDescription = state.jewelryModelFacePrompt ? `human model with features (${state.jewelryModelFacePrompt})` : "young female human model with smooth flawless skin tone";
+      presentationFrag = `${partialFaceBase}, ${faceDescription}, ${poseDescription}`;
+    } else if (isHumanModel) {
       poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || "";
       const rawDefault = PROMPT_FRAGMENTS.jewelry.presentations.model[state.jewelryModelGender as "female" | "male"] || "";
       if (state.photoStyle === "campaign") {
@@ -562,7 +666,7 @@ export function compilePrompt(state: {
         placementDirective = `The toe ring (bichhiya / toe ornament) is fitted gracefully on the second toe or foot of the model, displaying intricate silver or gold filigree, tiny gemstone facets, and delicate metal bands draped against smooth foot skin in an intimate toe and foot close-up beauty pose inside the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded toe ornament and strictly NO other anklets, rings, or body accessories.`;
       } else if ((jCategory === "Leg Jewellery (Anklets & Toe Rings)" || jCategory === "Anklets (Payal)") && (normalizedType === "anklet" || rawType === "payal")) {
         placementDirective = `The anklet (payal) is wrapped gracefully around the model's ankle, displaying delicate silver or gold links, tiny ghungroo bells, and pearl drops draped against smooth skin in an intimate lower-leg close-up beauty pose inside the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded anklet and strictly NO other toe rings, jewelry, or accessories.`;
-      } else if (jCategory === "Finger Rings" || normalizedType === "finger" || normalizedType === "ring" || rawType === "finger_ring" || rawType === "thumb_ring" || rawType === "solitaire") {
+      } else if (jCategory === "Finger Rings" || normalizedType === "ring" || rawType === "finger_ring" || rawType === "thumb_ring" || rawType === "solitaire") {
         placementDirective = `The finger ring fits snugly on the finger of the model's hand, displaying exquisite metal band craft, prong-set gemstone facets, and brilliant light reflections in an intimate close-up hand gesture within the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded ring and strictly NO other rings, bangles, necklaces, earrings, or accessories.`;
       } else if (jCategory === "Neckwear") {
         placementDirective = `The neckwear rests elegantly around the base of the neck or collarbone. It drapes symmetrically over the chest or skin with natural gravitational hang, reflecting light beautifully on the metal links and gemstones on the model's collarbone in the ${effectiveJewelryBg} scene. The model wears ONLY this uploaded neckwear and strictly NO other jewelry, earrings, nose rings, bangles, or headpieces.`;
@@ -586,7 +690,7 @@ export function compilePrompt(state: {
         placementDirective = `The toe ring (bichhiya / toe ornament) is displayed gracefully on a foot display cushion or laid flat naturally on the ${state.jewelryBackground} surface with pristine contact shadows and metal filigree details. Features ONLY this single uploaded toe ring and NO other jewelry.`;
       } else if ((jCategory === "Leg Jewellery (Anklets & Toe Rings)" || jCategory === "Anklets (Payal)") && (normalizedType === "anklet" || rawType === "payal")) {
         placementDirective = `The anklet (payal) is displayed gracefully on an ankle display mount or laid naturally in soft fluid curves directly on the ${state.jewelryBackground} background surface, highlighting every pearl, ghungroo bell, and metallic link cleanly without any human model. Features ONLY this single uploaded item and NO other jewelry.`;
-      } else if (jCategory === "Finger Rings" || normalizedType === "finger" || normalizedType === "ring" || rawType === "finger_ring" || rawType === "thumb_ring" || rawType === "solitaire") {
+      } else if (jCategory === "Finger Rings" || normalizedType === "ring" || rawType === "finger_ring" || rawType === "thumb_ring" || rawType === "solitaire") {
         if (state.jewelryBustRegion === "hand") {
           placementDirective = `The uploaded finger ring is worn and perfectly fitted directly onto the finger of the elegant female porcelain or mannequin hand display sculpture, displaying exquisite metal band craft, prong-set gemstone facets, and brilliant light reflections on the hand display stand inside the ${state.jewelryBackground} scene. Features ONLY this single uploaded item and NO other jewelry.`;
         } else if (state.jewelryBustRegion === "finger") {
@@ -667,10 +771,12 @@ export function compilePrompt(state: {
       fidelity_directives: {
         highest_priority_rule: "EXACT REPLICATION OF INPUT PRODUCT DESIGN, PATTERNS, LENGTH, AND SIZE REQUIRED",
         single_item_isolation_rule: "STRICTLY NO OTHER JEWELRY ITEMS GENERATED EXCEPT UPLOADED INPUT ITEM",
+        jewelry_open_closed_loop_rule: "Observe the jewelry first and determine whether it is closed or intentionally open. Keep the original design: do not close an open jewelry loop or open a closed one",
         single_item_instruction: `CRITICAL SINGLE ITEM DIRECTIVE: The final generated image MUST ONLY feature the exact uploaded input jewelry item (${jCategory} / ${state.jewelryType}). DO NOT generate, add, or synthesize ANY other jewelry items, ornaments, or accessories that were NOT present in the input reference image. For example, if the user uploaded a necklace, DO NOT add unrequested earrings, nose rings, bangles, rings, or maang tikka to the model or display; if the user uploaded earrings, DO NOT add an unrequested necklace or head ornaments; if the user uploaded a ring, DO NOT add unrequested bracelets or necklaces. The model's skin, ears, neck, wrists, fingers, nose, forehead, hair, and clothing must remain COMPLETELY BARE and devoid of any secondary or unuploaded jewelry.`,
         core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (jewelry) shown in the reference image. The design, gemstone settings, intricate patterns, chain length, piece dimensions, physical size, and craftsmanship features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
         input_image_guideline: "The input image is the authentic reference of the jewelry product. Replicate this exact product design, pattern details, chain/necklace length, gemstone sizes, and overall dimensions precisely.",
         mandatory_replications: [
+          "Observe the jewelry first and determine whether it is closed or intentionally open. Keep the original design: do not close an open jewelry loop or open a closed one",
           "Strict 1:1 single-item focus: generate ONLY the uploaded input jewelry item (or exact pair if uploaded as a pair of earrings/bangles). Absolutely NO additional or unrequested jewelry items (no extra necklaces, earrings, rings, nose pins, waist chains, or headpieces) on the model or display stand",
           "Exact product design, motif work, filigree, engraving, and intricate metal/stone patterns replicated 1:1",
           "Exact length, drop length, thickness, and dimensions of the jewelry piece (e.g., choker vs long haram necklace, drop earring length)",
@@ -686,6 +792,10 @@ export function compilePrompt(state: {
         strict_no_extra_jewelry_rule: "STRICTLY PROHIBIT GENERATING UNREQUESTED SECONDARY JEWELRY",
         strict_no_extra_jewelry_instruction: "DO NOT add any extra jewelry pieces, accessories, or complementary ornaments. Only render the single uploaded product (or pair). The model's skin, ears, neck, wrists, fingers, nose, forehead, hair, and clothing must remain completely bare and free of any other unrequested jewelry or accessories.",
         instruction: "The output image must be a clean, pristine studio jewelry photograph completely FREE of price tags, store price stickers, barcode tags, paper hangtags, security tags, brand labels, company logos, store tags, watermarks, text labels, sale badges, or graphic overlays anywhere on the jewelry, display mount, or background. If the input reference image has any visible price tag, hanging paper tag, barcode sticker, or brand label attached to the product, digitally remove and omit it entirely, rendering the item clean and pristine.",
+        ...(state.jewelryPresentation === "no_face" && {
+          strict_no_face_rule: "STRICTLY NO HUMAN FACE FEATURES AND PRIMARY FOCUS ON JEWELRY ITEM",
+          strict_no_face_instruction: "CRITICAL: This is a Human Model (No Face) presentation mode. The camera MUST BE TIGHTLY FOCUSED ON THE JEWELRY ITEM ITSELF as the primary hero subject, with razor-sharp macro detail on the product. The human model body/skin serves only as a natural background canvas. The human face MUST BE STRICTLY CROPPED OUT of the frame, turned completely away, or headless. DO NOT generate human eyes, nose, lips, or full facial features."
+        }),
         ...(!isHumanModel && {
           strict_no_human_rule: "STRICTLY NO LIVE HUMAN MODEL, NO PERSON, NO HUMAN FACE, NO LIVE SKIN",
           strict_no_human_instruction: `CRITICAL: This is a NON-HUMAN product display presentation mode (${state.jewelryPresentation} / ${state.jewelryBustRegion}). There must be STRICTLY NO LIVE HUMAN BEING, NO LIVE MODEL, NO PERSON, NO HUMAN FACE, NO HEAD, NO EYES, NO EAR, NO NECK, NO LIVE HANDS, NO LEGS, NO LIVE SKIN anywhere in the final output image. Render ONLY the jewelry item placed naturally or mounted on its display stand / surface / mannequin holder (such as a porcelain or velvet mannequin hand, neck bust, or stand). The background and scene must be 100% live-human-free.`
@@ -799,12 +909,12 @@ export const GPTIMAGE2_RESOLUTIONS = [
   { id: "1024x1024", name: "1024 x 1024 px (1K Square)", multiplier: 1.0, labelEn: "1024 x 1024 px (1K Square)", labelTe: "1024 x 1024 పిక్సెల్స్ (1K స్క్వేర్)" },
   { id: "1536x1024", name: "1536 x 1024 px (1K Landscape)", multiplier: 1.0, labelEn: "1536 x 1024 px (1K Landscape)", labelTe: "1536 x 1024 పిక్సెల్స్ (1K ల్యాండ్‌స్కేప్)" },
   { id: "1024x1536", name: "1024 x 1536 px (1K Portrait)", multiplier: 1.0, labelEn: "1024 x 1536 px (1K Portrait)", labelTe: "1024 x 1536 పిక్సెల్స్ (1K పోర్ట్రెయిట్)" },
-  { id: "2048x2048", name: "2048 x 2048 px (2K Square)", multiplier: 2.0, labelEn: "2048 x 2048 px (2K Square)", labelTe: "2048 x 2048 పిక్సెల్స్ (2K స్క్వేర్)" },
-  { id: "2048x1152", name: "2048 x 1152 px (2K Landscape)", multiplier: 2.0, labelEn: "2048 x 1152 px (2K Landscape)", labelTe: "2048 x 1152 పిక్సెల్స్ (2K ల్యాండ్‌స్కేప్)" },
-  { id: "1152x2048", name: "1152 x 2048 px (2K Portrait)", multiplier: 2.0, labelEn: "1152 x 2048 px (2K Portrait)", labelTe: "1152 x 2048 పిక్సెల్స్ (2K పోర్ట్రెయిట్)" },
-  { id: "3840x2160", name: "3840 x 2160 px (4K Landscape)", multiplier: 4.0, labelEn: "3840 x 2160 px (4K Landscape)", labelTe: "3840 x 2160 పిక్సెల్స్ (4K ల్యాండ్‌స్కేప్)" },
-  { id: "2160x3840", name: "2160 x 3840 px (4K Portrait)", multiplier: 4.0, labelEn: "2160 x 3840 px (4K Portrait)", labelTe: "2160 x 3840 పిక్సెల్స్ (4K పోర్ట్రెయిట్)" },
-  { id: "3840x3840", name: "3840 x 3840 px (4K Square)", multiplier: 4.0, labelEn: "3840 x 3840 px (4K Square)", labelTe: "3840 x 3840 పిక్సెల్స్ (4K స్క్వేర్)" },
+  { id: "2048x2048", name: "2048 x 2048 px (2K Square)", multiplier: 1.5, labelEn: "2048 x 2048 px (2K Square)", labelTe: "2048 x 2048 పిక్సెల్స్ (2K స్క్వేర్)" },
+  { id: "2048x1152", name: "2048 x 1152 px (2K Landscape)", multiplier: 1.5, labelEn: "2048 x 1152 px (2K Landscape)", labelTe: "2048 x 1152 పిక్సెల్స్ (2K ల్యాండ్‌స్కేప్)" },
+  { id: "1152x2048", name: "1152 x 2048 px (2K Portrait)", multiplier: 1.5, labelEn: "1152 x 2048 px (2K Portrait)", labelTe: "1152 x 2048 పిక్సెల్స్ (2K పోర్ట్రెయిట్)" },
+  { id: "3840x2160", name: "3840 x 2160 px (4K Landscape)", multiplier: 2.0, labelEn: "3840 x 2160 px (4K Landscape)", labelTe: "3840 x 2160 పిక్సెల్స్ (4K ల్యాండ్‌స్కేప్)" },
+  { id: "2160x3840", name: "2160 x 3840 px (4K Portrait)", multiplier: 2.0, labelEn: "2160 x 3840 px (4K Portrait)", labelTe: "2160 x 3840 పిక్సెల్స్ (4K పోర్ట్రెయిట్)" },
+  { id: "3840x3840", name: "3840 x 3840 px (4K Square)", multiplier: 2.0, labelEn: "3840 x 3840 px (4K Square)", labelTe: "3840 x 3840 పిక్సెల్స్ (4K స్క్వేర్)" },
 ];
 
 export const GPTIMAGE2_PRICING_MATRIX = {
@@ -868,9 +978,9 @@ export const getImagePrice = (
     let multiplier = 1;
 
     if (resolutionId === "2k" || resolutionId === "2048x2048" || resolutionId === "2048x1152" || resolutionId === "1152x2048") {
-      multiplier = 2;
+      multiplier = 1.5;
     } else if (resolutionId === "4k" || resolutionId === "3840x2160" || resolutionId === "2160x3840" || resolutionId === "3840x3840") {
-      multiplier = 4;
+      multiplier = 2;
     } else if (resolutionId === "512k") {
       return 0; // 512k not supported for GPTImage-2
     }

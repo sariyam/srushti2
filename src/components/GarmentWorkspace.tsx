@@ -18,6 +18,8 @@ const LuTagIcon = (props: any) => <Icon icon="lucide:tag" {...props} />;
 const LuGhostIcon = (props: any) => <Icon icon="lucide:ghost" {...props} />;
 const LuCircleIcon = (props: any) => <Icon icon="lucide:circle" {...props} />;
 const LuCameraIcon = (props: any) => <Icon icon="lucide:camera" {...props} />;
+const ScanFace = (props: any) => <Icon icon="lucide:scan-face" {...props} />;
+const UserX = (props: any) => <Icon icon="lucide:user-x" {...props} />;
 const LuFlowerIcon = (props: any) => <Icon icon="lucide:flower" {...props} />;
 const LuFlameIcon = (props: any) => <Icon icon="lucide:flame" {...props} />;
 const LuGemIcon = (props: any) => <Icon icon="lucide:gem" {...props} />;
@@ -55,11 +57,11 @@ interface GarmentWorkspaceProps {
   setGarmentTab: (tab: "setup" | "studio" | "background") => void;
   garmentType: "saree" | "tshirt" | "jeans" | "shirt" | "western_wear" | "kurta" | "suit" | "salwar" | "lehenga" | "gown" | "skirt" | "crop_top" | "blouse" | "sherwani" | "dhoti" | "blazer" | "tracksuit" | "hoodie";
   setGarmentType: (type: any) => void;
-  garmentPresentation: "model" | "mannequin" | "hanger" | "ghost" | "flat_lay" | "folded" | "shelf" | "shopwindow";
+  garmentPresentation: "model" | "partial_face" | "no_face" | "mannequin" | "hanger" | "ghost" | "flat_lay" | "folded" | "shelf" | "shopwindow";
   setGarmentPresentation: (mode: any) => void;
   garmentModelGender: "female" | "male";
   setGarmentModelGender: (gender: "female" | "male") => void;
-  garmentModelPose: "standing_front" | "standing_side" | "standing_three_quarter" | "walking_candid" | "sitting_chair" | "sitting_casual";
+  garmentModelPose: string;
   setGarmentModelPose: (pose: any) => void;
   garmentBackground: "plain" | "studio" | "traditional" | "festival" | "luxury" | "royal" | "urban" | "vintage" | "modern_office";
   setGarmentBackground: (bg: any) => void;
@@ -154,17 +156,25 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Keep model pose valid when garmentType changes
+  // Keep model pose valid when garmentType or garmentPresentation changes
   React.useEffect(() => {
-    const allowed = getGarmentPoses(garmentType);
+    const allowed = getGarmentPoses(garmentType, garmentPresentation);
     if (!allowed.includes(garmentModelPose)) {
       setGarmentModelPose(allowed[0]);
     }
-  }, [garmentType]);
+  }, [garmentType, garmentPresentation]);
 
   // Define background compatibility per presentation mode
   const GARMENT_BG_COMPATIBILITY: Record<string, { indoor: string[]; outdoor: string[] }> = {
     model: {
+      indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
+      outdoor: ["traditional", "royal", "urban"]
+    },
+    partial_face: {
+      indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
+      outdoor: ["traditional", "royal", "urban"]
+    },
+    no_face: {
       indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
       outdoor: ["traditional", "royal", "urban"]
     },
@@ -497,12 +507,14 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
               {t.presentationMode}
             </label>
             <PresentationSlider
-              items={(["model", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const).map((mode) => ({
+              items={(["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const).map((mode) => ({
                 id: mode,
-                label: t[mode] || mode,
+                label: (t as any)[mode] || (mode === "partial_face" ? ((t as any).partialFace || "Human Model(Partial Face)") : mode === "no_face" ? ((t as any).noFace || "Human Model (No Face)") : mode),
                 icon: (
                   <>
                     {mode === "model" && <User className="w-4 h-4 text-accent" />}
+                    {mode === "partial_face" && <ScanFace className="w-4 h-4 text-accent" />}
+                    {mode === "no_face" && <UserX className="w-4 h-4 text-accent" />}
                     {mode === "mannequin" && <LuUserRoundIcon className="w-4 h-4 text-accent" />}
                     {mode === "hanger" && <Icon icon="ph:coat-hanger-bold" className="w-4 h-4 text-accent" />}
                     {mode === "ghost" && <LuGhostIcon className="w-4 h-4 text-accent" />}
@@ -518,7 +530,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
             />
           </div>
 
-          {garmentPresentation === "model" && (
+          {(garmentPresentation === "model" || garmentPresentation === "partial_face" || garmentPresentation === "no_face") && (
             <FaceGenerator
               gender={garmentModelGender}
               selectedFaceId={selectedFaceId}
@@ -745,24 +757,24 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
           )}
 
           {/* Model Pose / Angle (Moved to Bg tab) */}
-          {garmentPresentation === "model" && (
+          {(garmentPresentation === "model" || garmentPresentation === "partial_face" || garmentPresentation === "no_face") && (
             <div className="space-y-2 border-t border-black/5 dark:border-white/5 pt-2">
               <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
                   <LuAccessibilityIcon className="w-3.5 h-3.5 text-accent" />
                   {t.poseLabel}
                 </span>
-                <span className="text-[10px] text-accent/80 font-normal">({getGarmentPoses(garmentType).length} Options)</span>
+                <span className="text-[10px] text-accent/80 font-normal">({getGarmentPoses(garmentType, garmentPresentation).length} Options)</span>
               </label>
               <PresentationSlider
-                items={getGarmentPoses(garmentType).map((pose) => ({
+                items={getGarmentPoses(garmentType, garmentPresentation).map((pose) => ({
                   id: pose,
-                  label: t[pose] || pose,
+                  label: (t as any)[pose] || pose,
                   icon: pose.includes("front") || pose.includes("portrait") ? <LuSmileIcon className="w-3.5 h-3.5 text-accent" /> :
                         pose.includes("side") || pose.includes("profile") ? <LuRefreshCcwIcon className="w-3.5 h-3.5 text-accent" /> :
                         pose.includes("three_quarter") || pose.includes("3q") ? <LuSparklesIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("walk") || pose.includes("step") || pose.includes("stance") ? <LuFootprintsIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("chair") || pose.includes("seated") ? <LuArmchairIcon className="w-3.5 h-3.5 text-accent" /> :
+                        pose.includes("walk") || pose.includes("step") || pose.includes("stance") || pose.includes("stride") ? <LuFootprintsIcon className="w-3.5 h-3.5 text-accent" /> :
+                        pose.includes("chair") || pose.includes("seated") || pose.includes("lap") ? <LuArmchairIcon className="w-3.5 h-3.5 text-accent" /> :
                         <LuCameraIcon className="w-3.5 h-3.5 text-accent" />
                 }))}
                 selectedId={garmentModelPose}

@@ -102,7 +102,6 @@ const JEWELRY_ICONS: Record<string, React.ReactNode> = {
   necklace: <NecklaceIcon />,
   chain: <Icon icon="lucide:link" className="w-4 h-4 text-accent" />,
   ring: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
-  finger: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
   finger_ring: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
   thumb_ring: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
   solitaire: <Gem className="w-4 h-4 text-accent" />,
@@ -375,7 +374,7 @@ interface HeaderProps {
   // Moved item selections props
   garmentType: "saree" | "tshirt" | "jeans" | "shirt" | "western_wear" | "kurta" | "suit" | "salwar" | "lehenga" | "gown" | "skirt" | "crop_top" | "blouse" | "sherwani" | "dhoti" | "blazer" | "tracksuit" | "hoodie";
   setGarmentType: (val: any) => void;
-  jewelryType: "earrings" | "necklace" | "chain" | "ring" | "finger" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
+  jewelryType: "earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
   setJewelryType: (val: any) => void;
 }
 
@@ -497,7 +496,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [tempGarmentType, setTempGarmentType] = useState<any>(garmentType);
   const [tempJewelryType, setTempJewelryType] = useState<any>(jewelryType);
   const [tempGarmentCategoryFilter, setTempGarmentCategoryFilter] = useState<"full_wear" | "top_wear" | "bottom_wear">("full_wear");
-  const [tempJewelryCategoryFilter, setTempJewelryCategoryFilter] = useState<"neck_ear" | "ear_wear" | "wrist_ring" | "hip" | "nose" | "finger" | "leg" | "forehead" | "accessories">("neck_ear");
+  const [tempJewelryCategoryFilter, setTempJewelryCategoryFilter] = useState<"neck_ear" | "ear_wear" | "wrist_ring" | "hip" | "nose" | "leg" | "forehead" | "accessories">("neck_ear");
 
   const handleOpenModal = () => {
     setTempWorkspace((workspace === "garment" || workspace === "jewelry") ? workspace : "garment");
@@ -811,7 +810,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <div className="space-y-2.5">
                     {/* Temp Category Filter */}
                     <div className="flex flex-wrap gap-1 p-1.5 rounded-xl nm-inset-sm max-w-full">
-                      {(["neck_ear", "ear_wear", "wrist_ring", "hip", "nose", "finger", "leg", "forehead", "accessories"] as const).map((cat) => (
+                      {(["neck_ear", "ear_wear", "wrist_ring", "hip", "nose", "leg", "forehead", "accessories"] as const).map((cat) => (
                         <button
                           key={cat}
                           type="button"
@@ -827,7 +826,6 @@ export const Header: React.FC<HeaderProps> = ({
                           {cat === "wrist_ring" && (isEn ? "Wrist" : "రిస్ట్")}
                           {cat === "hip" && (isEn ? "Hip" : "వడ్డాణం")}
                           {cat === "nose" && (isEn ? "Nose" : "ముక్కు")}
-                          {cat === "finger" && (isEn ? "Finger" : "వేలు")}
                           {cat === "leg" && (isEn ? "Leg" : "కాలు / పట్టీలు")}
                           {cat === "forehead" && (isEn ? "Forehead" : "పాపిడి బిళ్ళ")}
                           {cat === "accessories" && (isEn ? "Other" : "ఇతర")}
