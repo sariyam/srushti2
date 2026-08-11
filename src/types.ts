@@ -25,7 +25,7 @@ export interface AppState {
 
   // Jewelry photographic selections
   jewelryType: "earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
-  jewelryPresentation: "model" | "bust" | "partial_face" | "no_face";
+  jewelryPresentation: "model" | "bust" | "partial_face" | "no_face" | "body_part";
   jewelryModelGender: "female" | "male";
   jewelryModelPose: string;
   jewelryBustRegion: "head" | "neck" | "wrist" | "ankle" | "finger" | "hand" | "naturally" | "ear";
@@ -315,6 +315,8 @@ export const TRANSLATIONS = {
     partial_face: "Human Model(Partial Face)",
     noFace: "Human Model (No Face)",
     no_face: "Human Model (No Face)",
+    bodyPart: "Body Part Close-Up",
+    body_part: "Body Part Close-Up",
     mannequin: "Mannequin Doll",
     hanger: "Hanger",
     ghost: "Ghost Mannequin",
@@ -665,6 +667,8 @@ export const TRANSLATIONS = {
     partial_face: "మానవ మోడల్ (పాక్షిక ముఖం)",
     noFace: "మానవ మోడల్ (ముఖం లేకుండా)",
     no_face: "మానవ మోడల్ (ముఖం లేకుండా)",
+    bodyPart: "శరీర భాగం (క్లోజప్ షాట్)",
+    body_part: "శరీర భాగం (క్లోజప్ షాట్)",
     mannequin: "బొమ్మ (మెనకిన్)",
     hanger: "హ్యాంగర్ స్టాండ్",
     ghost: "అదృశ్య బొమ్మ",

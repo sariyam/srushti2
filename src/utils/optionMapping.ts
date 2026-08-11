@@ -453,7 +453,7 @@ export function getGarmentPoses(garmentType: string, presentationMode?: string):
 }
 
 export function getJewelryPoses(jewelryType: string, presentationMode?: string): readonly string[] {
-  if (presentationMode === "no_face") {
+  if (presentationMode === "no_face" || presentationMode === "body_part") {
     if ((JEWELRY_CATEGORY_MAPPING.ear_wear as readonly string[]).includes(jewelryType)) {
       return JEWELRY_POSES_BY_CATEGORY.no_face_ear;
     }

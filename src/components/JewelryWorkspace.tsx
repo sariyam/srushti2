@@ -58,8 +58,8 @@ interface JewelryWorkspaceProps {
   setJewelryTab: (tab: "setup" | "studio" | "background") => void;
   jewelryType: "earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
   setJewelryType: (type: any) => void;
-  jewelryPresentation: "model" | "bust" | "partial_face" | "no_face";
-  setJewelryPresentation: (mode: "model" | "bust" | "partial_face" | "no_face") => void;
+  jewelryPresentation: "model" | "bust" | "partial_face" | "no_face" | "body_part";
+  setJewelryPresentation: (mode: "model" | "bust" | "partial_face" | "no_face" | "body_part") => void;
   jewelryModelGender: "female" | "male";
   setJewelryModelGender: (gender: "female" | "male") => void;
   jewelryModelPose: "neck_collarbone" | "side_ear_profile" | "hand_face_gesture" | "three_quarter_gaze" | "wrist_hand_display" | "front_direct_portrait";
@@ -511,6 +511,11 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                   icon: <ScanFace className="w-4 h-4 text-accent" />,
                 },
                 {
+                  id: "body_part" as const,
+                  label: (t as any).bodyPart || "Body Part Close-Up",
+                  icon: <ScanFace className="w-4 h-4 text-accent" />,
+                },
+                {
                   id: "no_face" as const,
                   label: (t as any).noFace || "Human Model (No Face)",
                   icon: <UserX className="w-4 h-4 text-accent" />,
@@ -526,8 +531,8 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
             />
           </div>
 
-          {/* 1. If Human Model, Partial Face or No Face Mode */}
-          {jewelryPresentation === "model" || jewelryPresentation === "partial_face" || jewelryPresentation === "no_face" ? (
+          {/* 1. If Human Model or Partial Face Mode (requires face model reference) */}
+          {jewelryPresentation === "model" || jewelryPresentation === "partial_face" ? (
             <FaceGenerator
               gender={jewelryModelGender}
               selectedFaceId={selectedFaceId}
@@ -539,7 +544,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
               apiKey={apiKey}
               lang={lang}
             />
-          ) : (
+          ) : jewelryPresentation === "bust" ? (
             // 2. If Mount Bust display mode
             <div className="space-y-2">
               <label className="text-xs font-bold text-[var(--text-emphasis)]">{t.bustDisplay}</label>
@@ -567,7 +572,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 ))}
               </div>
             </div>
-          )}
+          ) : null}
         </motion.div>
       )}
 
@@ -783,7 +788,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
           )}
 
           {/* Model Pose / Angle (Moved to Bg tab) */}
-          {(jewelryPresentation === "model" || jewelryPresentation === "partial_face" || jewelryPresentation === "no_face") && (
+          {(jewelryPresentation === "model" || jewelryPresentation === "partial_face" || jewelryPresentation === "no_face" || jewelryPresentation === "body_part") && (
             <div className="space-y-2 border-t border-black/5 dark:border-white/5 pt-2">
               <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center justify-between">
                 <span className="flex items-center gap-1.5">

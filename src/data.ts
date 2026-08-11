@@ -563,10 +563,12 @@ export function compilePrompt(state: {
           : "authentic high-end professional fashion product photography, shot on Hasselblad H6D-100c medium format camera, Carl Zeiss prime lens, exquisite fabric details, perfectly preserved organic look, high fashion product catalog feature, neutral color grading, shot on professional full-frame camera, 85mm f/1.4 lens, tack-sharp focus, crisp micro-detail on fabric texture, color-accurate, pristine product showcase quality, no human figure, no model, no skin, no motion blur, no noise, no artifacts, no CGI plastic look"
       },
       fidelity_directives: {
-        highest_priority_rule: "EXACT REPLICATION OF INPUT PRODUCT DESIGN, PATTERNS, LENGTH, AND SIZE REQUIRED",
-        core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (garment) shown in the reference image. The design, artwork, patterns, fabric motifs, exact length, physical size, proportions, and visual features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
-        input_image_guideline: "The input image is the authentic reference of the garment product. Replicate this exact product design, pattern layout, garment length (full-length, knee-length, cropped, short, long-sleeve, 3/4-sleeve), and size proportions precisely.",
+        highest_priority_rule: "EXACT REPLICATION OF INPUT PRODUCT DESIGN, FABRIC/MATERIAL, PATTERNS, LENGTH, AND SIZE REQUIRED",
+        auto_detect_material_and_fabric_properties: "AUTOMATIC MATERIAL & FABRIC DETECTION: Automatically analyze and detect the fabric and material properties of the uploaded product reference image (such as silk, cotton, denim, velvet, chiffon, satin, leather, linen, wool, jacquard, organza, georgette, lace, embroidery thread, sequin finish, or knitwear), including its weave structure, thread count, thickness, weight, drape, surface sheen, and light reflectance, and apply the exact same material and fabric properties to the generated output product.",
+        core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (garment) shown in the reference image. Automatically detect and analyze the item's exact material and fabric properties, applying the same fabric characteristics to the generated output. The design, artwork, patterns, fabric motifs, exact length, physical size, proportions, and visual features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
+        input_image_guideline: "The input image is the authentic reference of the garment product. Automatically detect and replicate its exact material/fabric properties, design layout, pattern layout, garment length (full-length, knee-length, cropped, short, long-sleeve, 3/4-sleeve), and size proportions precisely.",
         mandatory_replications: [
+          "Automatic detection and 1:1 application of the uploaded product's exact fabric and material properties (fabric composition, weave density, surface texture, weight, fall/drape, stiffness or fluidity, matte vs lustrous sheen)",
           "Exact product design, artwork, motifs, prints, embroidery, and weave patterns replicated 1:1 in scale and position",
           "Exact garment length and cut (e.g., full length, ankle-length, knee-length, waist-length, cropped, floor-length drape)",
           "Exact sleeve length, armhole cut, and shoulder fit (e.g., full sleeves, 3/4 sleeves, half sleeves, cap sleeves, sleeveless)",
@@ -614,13 +616,17 @@ export function compilePrompt(state: {
     const jewelryFrag = PROMPT_FRAGMENTS.jewelry.types[rawType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
       || PROMPT_FRAGMENTS.jewelry.types[normalizedType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
       || state.jewelryType;
-    const isHumanModel = state.jewelryPresentation === "model" || state.jewelryPresentation === "partial_face" || state.jewelryPresentation === "no_face";
+    const isHumanModel = state.jewelryPresentation === "model" || state.jewelryPresentation === "partial_face" || state.jewelryPresentation === "no_face" || state.jewelryPresentation === "body_part";
 
     let presentationFrag = "";
     let defaultFaceDescription = "";
     let poseDescription = "";
 
-    if (state.jewelryPresentation === "no_face") {
+    if (state.jewelryPresentation === "body_part") {
+      poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || getCameraFramingAndAngle(state.jewelryModelPose, normalizedType, "jewelry");
+      const bodyPartBase = "macro close-up shot focused on the jewelry item placed cleanly and naturally on a real human body part (such as neck, ear, wrist, finger, waist, nose, or ankle depending on item type) with smooth authentic skin texture and natural pores. This mode strictly uses NO face reference and does NOT generate any face identity, head, eyes, nose, or lips";
+      presentationFrag = `${bodyPartBase}, ${poseDescription}`;
+    } else if (state.jewelryPresentation === "no_face") {
       poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || getCameraFramingAndAngle(state.jewelryModelPose, normalizedType, "jewelry");
       const noFaceBase = "worn on an authentic live human model skin backdrop, with primary macro camera focus and razor-sharp depth-of-field centered strictly on the jewelry item product details, metal luster, and gemstone brilliance, while the human face is strictly cropped out of frame, turned away, or headless (showing NO human eyes, nose, lips, or face)";
       const skinDescription = state.jewelryModelFacePrompt ? `human model skin tone and body features (${state.jewelryModelFacePrompt})` : "young female human model body with smooth skin tone";
@@ -769,13 +775,15 @@ export function compilePrompt(state: {
           : "authentic high-jewelry studio product photography, intricate sparkling reflections, razor-sharp focus on gemstones, flawless polished metal texture, shot on Hasselblad H6D-100c medium format camera, high-end macro lens, razor-sharp depth of field, natural metal and gemstone lustre, authentic fine details, high-end product editorial spread, crisp color-accurate, no artificial CGI glow, no plastic texture, shot on professional full-frame camera, 85mm f/1.4 lens, tack-sharp focus, crisp micro-detail on jewelry craftsmanship, color-accurate, magazine cover quality, no human model, no skin, no motion blur, no noise, no artifacts"
       },
       fidelity_directives: {
-        highest_priority_rule: "EXACT REPLICATION OF INPUT PRODUCT DESIGN, PATTERNS, LENGTH, AND SIZE REQUIRED",
+        highest_priority_rule: "EXACT REPLICATION OF INPUT PRODUCT DESIGN, MATERIAL, PATTERNS, LENGTH, AND SIZE REQUIRED",
+        auto_detect_material_and_metal_properties: "AUTOMATIC MATERIAL & METAL DETECTION: Automatically analyze and detect the material, metal type, surface finish, and gemstone properties of the uploaded product reference image (such as 22K/18K yellow gold, rose gold, antique matte gold, oxidized silver, sterling silver, platinum, rhodium, Kundan, Meenakari enamel, diamonds, pearls, rubies, emeralds, or glass beads), including its metallic luster, surface texture, opacity, and gemstone brilliance, and apply the exact same material properties to the generated output product.",
         single_item_isolation_rule: "STRICTLY NO OTHER JEWELRY ITEMS GENERATED EXCEPT UPLOADED INPUT ITEM",
         jewelry_open_closed_loop_rule: "Observe the jewelry first and determine whether it is closed or intentionally open. Keep the original design: do not close an open jewelry loop or open a closed one",
         single_item_instruction: `CRITICAL SINGLE ITEM DIRECTIVE: The final generated image MUST ONLY feature the exact uploaded input jewelry item (${jCategory} / ${state.jewelryType}). DO NOT generate, add, or synthesize ANY other jewelry items, ornaments, or accessories that were NOT present in the input reference image. For example, if the user uploaded a necklace, DO NOT add unrequested earrings, nose rings, bangles, rings, or maang tikka to the model or display; if the user uploaded earrings, DO NOT add an unrequested necklace or head ornaments; if the user uploaded a ring, DO NOT add unrequested bracelets or necklaces. The model's skin, ears, neck, wrists, fingers, nose, forehead, hair, and clothing must remain COMPLETELY BARE and devoid of any secondary or unuploaded jewelry.`,
-        core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (jewelry) shown in the reference image. The design, gemstone settings, intricate patterns, chain length, piece dimensions, physical size, and craftsmanship features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
-        input_image_guideline: "The input image is the authentic reference of the jewelry product. Replicate this exact product design, pattern details, chain/necklace length, gemstone sizes, and overall dimensions precisely.",
+        core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (jewelry) shown in the reference image. Automatically detect and analyze the item's exact material, metal composition, polish, and gemstone properties, applying the same material characteristics to the generated output. The design, gemstone settings, intricate patterns, chain length, piece dimensions, physical size, and craftsmanship features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
+        input_image_guideline: "The input image is the authentic reference of the jewelry product. Automatically detect and replicate its exact material/metal properties, design, pattern details, chain/necklace length, gemstone sizes, and overall dimensions precisely.",
         mandatory_replications: [
+          "Automatic detection and 1:1 application of the uploaded product's exact material/metal/gemstone properties (metal type, polish, surface texture, finish, metallic luster, gemstone brilliance, and transparency)",
           "Observe the jewelry first and determine whether it is closed or intentionally open. Keep the original design: do not close an open jewelry loop or open a closed one",
           "Strict 1:1 single-item focus: generate ONLY the uploaded input jewelry item (or exact pair if uploaded as a pair of earrings/bangles). Absolutely NO additional or unrequested jewelry items (no extra necklaces, earrings, rings, nose pins, waist chains, or headpieces) on the model or display stand",
           "Exact product design, motif work, filigree, engraving, and intricate metal/stone patterns replicated 1:1",
@@ -795,6 +803,10 @@ export function compilePrompt(state: {
         ...(state.jewelryPresentation === "no_face" && {
           strict_no_face_rule: "STRICTLY NO HUMAN FACE FEATURES AND PRIMARY FOCUS ON JEWELRY ITEM",
           strict_no_face_instruction: "CRITICAL: This is a Human Model (No Face) presentation mode. The camera MUST BE TIGHTLY FOCUSED ON THE JEWELRY ITEM ITSELF as the primary hero subject, with razor-sharp macro detail on the product. The human model body/skin serves only as a natural background canvas. The human face MUST BE STRICTLY CROPPED OUT of the frame, turned completely away, or headless. DO NOT generate human eyes, nose, lips, or full facial features."
+        }),
+        ...(state.jewelryPresentation === "body_part" && {
+          strict_no_face_rule: "BODY PART CLOSE-UP MODE - NO HUMAN FACE OR FACE REFERENCE",
+          strict_no_face_instruction: "CRITICAL: This is a Body Part Close-Up presentation mode. Focus the image strictly as a close-up shot of the jewelry item placed on the human body part (e.g. neck, earlobe, wrist, finger, waist, nose, or ankle according to selected pose). DO NOT generate any human face, facial features, head, or face reference. The body part skin serves purely as an organic natural backdrop for the jewelry item."
         }),
         ...(!isHumanModel && {
           strict_no_human_rule: "STRICTLY NO LIVE HUMAN MODEL, NO PERSON, NO HUMAN FACE, NO LIVE SKIN",

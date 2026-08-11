@@ -428,7 +428,7 @@ export default function App() {
       // Find the face reference image URL
       const activeFaceId = workspace === "garment" ? selectedGarmentFaceId : selectedJewelryFaceId;
       const activeFace = [...customFaces, ...PRESET_FACES].find(f => f.id === activeFaceId);
-      const isModelPresentation = workspace === "garment" ? (garmentPresentation === "model" || garmentPresentation === "partial_face" || garmentPresentation === "no_face") : (jewelryPresentation === "model" || jewelryPresentation === "partial_face" || jewelryPresentation === "no_face");
+      const isModelPresentation = workspace === "garment" ? (garmentPresentation === "model" || garmentPresentation === "partial_face" || garmentPresentation === "no_face") : (jewelryPresentation === "model" || jewelryPresentation === "partial_face");
       const activeFaceUrl = isModelPresentation && activeFace ? activeFace.url : null;
 
       const activePrompt = compilePrompt({
