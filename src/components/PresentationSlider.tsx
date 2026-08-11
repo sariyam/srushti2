@@ -20,8 +20,8 @@ export const PresentationSlider = <T extends string>({
   if (items.length === 0) return null;
 
   return (
-    <div className="w-full max-w-full overflow-hidden">
-      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 py-1 px-0.5 w-full max-w-full min-w-0">
+    <div className="w-full">
+      <div className="flex flex-wrap items-center gap-2 py-1 px-0.5 w-full">
         {items.map((item) => {
           const isSelected = selectedId === item.id;
           return (
@@ -30,7 +30,7 @@ export const PresentationSlider = <T extends string>({
               id={`btn-presentation-${item.id}`}
               type="button"
               onClick={() => onSelect(item.id)}
-              className={`px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-2xl text-[10px] sm:text-[11px] font-extrabold flex flex-row items-center justify-center gap-1.5 transition-all cursor-pointer min-w-0 max-w-full ${
+              className={`px-3 py-2 rounded-2xl text-[10px] sm:text-[11px] font-extrabold flex flex-row items-center justify-center gap-1.5 transition-all cursor-pointer ${
                 isSelected
                   ? "nm-inset-sm text-accent scale-[0.98] ring-1 ring-accent/30 font-black"
                   : "nm-outset-sm hover:scale-[1.02]"
@@ -39,7 +39,7 @@ export const PresentationSlider = <T extends string>({
               <span className="flex items-center justify-center shrink-0">
                 {item.icon}
               </span>
-              <span className="text-[10px] sm:text-[11px] font-bold text-left leading-tight truncate max-w-[150px] sm:max-w-none">
+              <span className="text-[10px] sm:text-[11px] font-bold text-left leading-tight whitespace-nowrap">
                 {item.label}
               </span>
             </button>

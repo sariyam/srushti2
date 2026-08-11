@@ -73,43 +73,26 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
 }) => {
   const [showKey, setShowKey] = useState(false);
 
-  // Automatically take active provider key type directly from Admin Panel settings
-  const isOpenAiSelected = 
-    selectedProvider === "openai" || 
-    (selectedProvider === "all" && (selectedImageModel === "gptimage_2" || selectedVideoModel === "sora_2" || selectedVideoModel === "sora_2_pro"));
+  // Default provider is OpenAI
+  const isOpenAiSelected = true;
+  const isGemini = false;
+  const activeKeyType: "gemini" | "openai" = "openai";
 
-  const isGemini = !isOpenAiSelected;
-  const activeKeyType: "gemini" | "openai" = isGemini ? "gemini" : "openai";
-
-  // Determine current field values based on active key type from Admin Panel
-  const currentInputVal = isGemini 
-    ? (geminiApiInput !== undefined ? geminiApiInput : apiInput) 
-    : (openaiApiInput !== undefined ? openaiApiInput : apiInput);
+  // Determine current field values for OpenAI
+  const currentInputVal = openaiApiInput !== undefined ? openaiApiInput : apiInput;
 
   const handleInputChange = (val: string) => {
-    if (isGemini) {
-      if (setGeminiApiInput) setGeminiApiInput(val);
-      else setApiInput(val);
-    } else {
-      if (setOpenaiApiInput) setOpenaiApiInput(val);
-      else setApiInput(val);
-    }
+    if (setOpenaiApiInput) setOpenaiApiInput(val);
+    else setApiInput(val);
     if (setKeyValidationError) setKeyValidationError(null);
   };
 
   const handleSaveCurrentKey = () => {
-    if (isGemini) {
-      if (onSaveGeminiApiKey) onSaveGeminiApiKey(currentInputVal);
-      else onSaveApiKey("gemini");
-    } else {
-      if (onSaveOpenaiApiKey) onSaveOpenaiApiKey(currentInputVal);
-      else onSaveApiKey("openai");
-    }
+    if (onSaveOpenaiApiKey) onSaveOpenaiApiKey(currentInputVal);
+    else onSaveApiKey("openai");
   };
 
-  const currentSavedKey = isGemini
-    ? (geminiApiKey !== undefined ? geminiApiKey : apiKey)
-    : (openaiApiKey !== undefined ? openaiApiKey : (apiKey.startsWith("sk-") ? apiKey : ""));
+  const currentSavedKey = openaiApiKey !== undefined ? openaiApiKey : (apiKey.startsWith("sk-") ? apiKey : "");
 
   return (
     <motion.section 

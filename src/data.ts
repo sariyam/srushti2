@@ -836,26 +836,6 @@ export const PRICING_DATA: PricingRow[] = [
     price: "$0.005 - $0.211 per image"
   },
   {
-    model: "Gemini 3.1 Flash Image (Nano Banana 2) 🍌",
-    resolution: "0.5K ($0.045) | 1K ($0.067) | 2K ($0.101) | 4K ($0.151)",
-    price: "$0.067 per 1K image"
-  },
-  {
-    model: "Gemini 3.1 Flash Lite Image (Nano Banana 2 Lite) 🍌",
-    resolution: "1024 x 1024 px (1K Only)",
-    price: "$0.0336 per 1K image"
-  },
-  {
-    model: "Gemini 3 Pro Image (Nano Banana Pro) 🍌",
-    resolution: "1K/2K ($0.134) | 4K ($0.24)",
-    price: "$0.134 per 1K/2K image"
-  },
-  {
-    model: "Gemini 2.5 Flash Image (Nano Banana) 🍌",
-    resolution: "0.5K ($0.022) | 1K ($0.039)",
-    price: "$0.039 per 1K image"
-  },
-  {
     model: "OpenAI Sora 2 (sora-2) 🎬",
     resolution: "720p ($0.10/sec)",
     price: "$0.10 per second"
@@ -864,42 +844,19 @@ export const PRICING_DATA: PricingRow[] = [
     model: "OpenAI Sora 2 Pro (sora-2-pro) 🎬",
     resolution: "720p ($0.30) | 1024p ($0.50) | 1080p ($0.70)",
     price: "$0.30 - $0.70 per second"
-  },
-  {
-    model: "Veo 3.1 Standard (veo-3.1-generate-preview)",
-    resolution: "720p/1080p & 4K (Standard)",
-    price: "$0.40 & $0.60 per second"
-  },
-  {
-    model: "Veo 3.1 Fast (veo-3.1-fast-generate-preview)",
-    resolution: "720p/1080p & 4K (Fast)",
-    price: "$0.10, $0.12, $0.30 per second"
-  },
-  {
-    model: "Veo 3.1 Lite (veo-3.1-lite-generate-preview)",
-    resolution: "720p & 1080p (Lite)",
-    price: "$0.05 & $0.08 per second"
   }
 ];
 
 export const IMAGE_MODELS = [
-  { id: "gptimage_2", provider: "openai", name: "OpenAI GPTImage-2 (gptimage-2)", price: 0.08, unit: "image", desc: "OpenAI next-gen image synthesis model with superior prompt adherence & studio photorealism" },
-  { id: "gemini31_flash_image", provider: "google", name: "Google Gemini 3.1 Flash Image (Nano Banana 2)", price: 0.067, unit: "image", desc: "Standard high-fidelity studio model photography and backgrounds" },
-  { id: "gemini31_flash_lite_image", provider: "google", name: "Google Gemini 3.1 Flash Lite Image (Nano Banana 2 Lite)", price: 0.0336, unit: "image", desc: "Fast-speed low-cost conceptual product placement and drafts (1K Resolution Only)" },
-  { id: "gemini3_pro_image", provider: "google", name: "Google Gemini 3 Pro Image (Nano Banana Pro)", price: 0.134, unit: "image", desc: "Ultra-premium razor-sharp resolution and highly detailed jewelry/gems (1K/2K/4K Support)" },
-  { id: "gemini25_flash_image", provider: "google", name: "Google Gemini 2.5 Flash Image (Nano Banana)", price: 0.039, unit: "image", desc: "Standard legacy model for general garment staging (0.5K/1K Support)" },
+  { id: "gptimage_2", provider: "openai", name: "OpenAI GPTImage-2 (gptimage-2)", price: 0.08, unit: "image", desc: "OpenAI next-gen image synthesis model with superior prompt adherence & studio photorealism" }
 ];
 
 export const VIDEO_MODELS = [
   { id: "sora_2", provider: "openai", name: "OpenAI Sora 2 (sora-2)", price: 0.10, unit: "second", desc: "OpenAI Sora 2 standard generation (720p: $0.10/sec)" },
-  { id: "sora_2_pro", provider: "openai", name: "OpenAI Sora 2 Pro (sora-2-pro)", price: 0.30, unit: "second", desc: "OpenAI Sora 2 Pro high-definition model (720p: $0.30, 1024p: $0.50, 1080p: $0.70/sec)" },
-  { id: "veo31_generate_preview", provider: "google", name: "Google Veo 3.1 Standard (veo-3.1-generate-preview)", price: 0.40, unit: "second", desc: "Premium cinema-grade 1080p video generation and commercial draping" },
-  { id: "veo31_fast_generate_preview", provider: "google", name: "Google Veo 3.1 Fast (veo-3.1-fast-generate-preview)", price: 0.12, unit: "second", desc: "High-speed interactive video generation with fast turnaround" },
-  { id: "veo31_lite_generate_preview", provider: "google", name: "Google Veo 3.1 Lite (veo-3.1-lite-generate-preview)", price: 0.08, unit: "second", desc: "Super budget-friendly lightweight fluid drape and motion simulations" },
+  { id: "sora_2_pro", provider: "openai", name: "OpenAI Sora 2 Pro (sora-2-pro)", price: 0.30, unit: "second", desc: "OpenAI Sora 2 Pro high-definition model (720p: $0.30, 1024p: $0.50, 1080p: $0.70/sec)" }
 ];
 
 export const IMAGE_RESOLUTIONS = [
-  { id: "512k", name: "512 x 512 px (Low Res/Draft)", multiplier: 0.4, labelEn: "512 x 512 px (Low Res/Draft)", labelTe: "512 x 512 పిక్సెల్స్ (తక్కువ క్వాలిటీ)" },
   { id: "1k", name: "1024 x 1024 px (Standard HD)", multiplier: 1.0, labelEn: "1024 x 1024 px (Standard HD)", labelTe: "1024 x 1024 పిక్సెల్స్ (స్టాండర్డ్ HD)" },
   { id: "2k", name: "2048 x 2048 px (Ultra HD / 2K)", multiplier: 1.6, labelEn: "2048 x 2048 px (Ultra HD / 2K)", labelTe: "2048 x 2048 పిక్సెల్స్ (అల్ట్రా HD / 2K)" },
   { id: "4k", name: "4096 x 4096 px (Super Resolution / 4K)", multiplier: 2.6, labelEn: "4096 x 4096 px (Super Resolution / 4K)", labelTe: "4096 x 4096 పిక్సెల్స్ (సూపర్ రెజల్యూషన్ / 4K)" },
@@ -981,8 +938,6 @@ export const getImagePrice = (
       multiplier = 1.5;
     } else if (resolutionId === "4k" || resolutionId === "3840x2160" || resolutionId === "2160x3840" || resolutionId === "3840x3840") {
       multiplier = 2;
-    } else if (resolutionId === "512k") {
-      return 0; // 512k not supported for GPTImage-2
     }
 
     let dimKey: "1024x1024" | "1024x1536" | "1536x1024" = "1024x1024";
@@ -1002,53 +957,6 @@ export const getImagePrice = (
     const q = (quality === "low" || quality === "high") ? quality : "medium";
     const base1kPrice = GPTIMAGE2_PRICING_MATRIX[q][dimKey];
     return base1kPrice * multiplier;
-  }
-
-  if (modelId === "gemini31_flash_image") {
-    switch (resolutionId) {
-      case "512k":
-        return 0.045;
-      case "1k":
-        return 0.067;
-      case "2k":
-        return 0.101;
-      case "4k":
-        return 0.151;
-      default:
-        return 0.067;
-    }
-  }
-
-  if (modelId === "gemini31_flash_lite_image") {
-    return resolutionId === "1k" ? 0.0336 : 0;
-  }
-
-  if (modelId === "gemini3_pro_image") {
-    switch (resolutionId) {
-      case "512k":
-        return 0; // Not supported
-      case "1k":
-        return 0.134;
-      case "2k":
-        return 0.134;
-      case "4k":
-        return 0.24;
-      default:
-        return 0.134;
-    }
-  }
-
-  if (modelId === "gemini25_flash_image") {
-    switch (resolutionId) {
-      case "512k":
-        return 0.022;
-      case "1k":
-        return 0.039;
-      case "2k":
-      case "4k":
-      default:
-        return 0; // Not supported
-    }
   }
 
   // Fallback to base model price * resolution multiplier

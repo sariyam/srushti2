@@ -210,19 +210,9 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
 
   // Enforce resolution limits
   useEffect(() => {
-    if (selectedImageModel === "gemini31_flash_lite_image") {
-      setSelectedImageRes("1k");
-    } else if (selectedImageModel === "gemini25_flash_image") {
-      if (selectedImageRes === "2k" || selectedImageRes === "4k") {
-        setSelectedImageRes("1k");
-      }
-    } else if (selectedImageModel === "gptimage_2") {
+    if (selectedImageModel === "gptimage_2") {
       if (selectedImageRes !== "1024x1024" && selectedImageRes !== "1024x1536" && selectedImageRes !== "1536x1024") {
         setSelectedImageRes("1024x1024");
-      }
-    } else {
-      if (selectedImageRes === "1024x1024" || selectedImageRes === "1024x1536" || selectedImageRes === "1536x1024") {
-        setSelectedImageRes("1k");
       }
     }
   }, [selectedImageModel, selectedImageRes]);
@@ -413,21 +403,19 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
               </h3>
               <p className="text-[9px] opacity-75">
                 {lang === "en" 
-                  ? "Filter image & video models by provider (OpenAI / Google)" 
-                  : "ఓపెన్ AI మరియు గూగుల్ ప్రొవైడర్ ఆధారంగా మోడల్స్‌ను ఎంచుకోండి"}
+                  ? "Standard high-performance OpenAI suite (GPTImage-2 & Sora 2)" 
+                  : "ప్రామాణిక ఓపెన్ AI మోడల్స్ (GPTImage-2 మరియు సోరా 2)"}
               </p>
             </div>
           </div>
           <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 uppercase self-start sm:self-auto">
-            {activeProvider === "all" ? (lang === "en" ? "All Providers" : "అన్ని ప్రొవైడర్లు") : activeProvider}
+            OpenAI
           </span>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 pt-1">
+        <div className="grid grid-cols-1 gap-2 pt-1">
           {[
-            { id: "all", labelEn: "All Providers", labelTe: "అన్ని ప్రొవైడర్లు", badge: "OpenAI & Google" },
-            { id: "openai", labelEn: "OpenAI", labelTe: "ఓపెన్ AI", badge: "GPTImage-2 & Sora" },
-            { id: "google", labelEn: "Google", labelTe: "గూగుల్", badge: "Gemini & Veo 3.1" },
+            { id: "openai", labelEn: "OpenAI AI Suite", labelTe: "ఓపెన్ AI స్వీట్", badge: "GPTImage-2 & Sora 2" }
           ].map((prov) => (
             <button
               key={prov.id}
@@ -834,9 +822,6 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
                         {lang === "en" ? "Model Name" : "మోడల్ పేరు"}
                       </th>
                       <th className="py-2 px-1 text-[8.5px] font-black uppercase tracking-wider text-accent text-right">
-                        0.5k <span className="opacity-60 font-normal">(512px)</span>
-                      </th>
-                      <th className="py-2 px-1 text-[8.5px] font-black uppercase tracking-wider text-accent text-right">
                         1k <span className="opacity-60 font-normal">(1024px)</span>
                       </th>
                       <th className="py-2 px-1 text-[8.5px] font-black uppercase tracking-wider text-accent text-right">
@@ -857,9 +842,6 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
                               {m.provider}
                             </span>
                           </div>
-                        </td>
-                        <td className="py-2 px-1 text-right font-mono text-[var(--text-primary)]">
-                          {getImagePrice(m.id, "512k", gptImageQuality) === 0 ? "N/A" : formatPrice(getImagePrice(m.id, "512k", gptImageQuality), currency, usdToInrRate)}
                         </td>
                         <td className="py-2 px-1 text-right font-mono text-[var(--text-primary)]">
                           {getImagePrice(m.id, "1k", gptImageQuality) === 0 ? "N/A" : formatPrice(getImagePrice(m.id, "1k", gptImageQuality), currency, usdToInrRate)}

@@ -58,11 +58,11 @@ export default function App() {
 
   // Export Settings
   const [garmentOrientation, setGarmentOrientation] = useState<"square" | "portrait" | "landscape">("square");
-  const [garmentResolution, setGarmentResolution] = useState<"512k" | "1k" | "2k" | "4k">("1k");
+  const [garmentResolution, setGarmentResolution] = useState<"1k" | "2k" | "4k">("1k");
   const [garmentAspectRatio, setGarmentAspectRatio] = useState<"1:1" | "4:3" | "16:9" | "3:4" | "9:16">("1:1");
 
   const [jewelryOrientation, setJewelryOrientation] = useState<"square" | "portrait" | "landscape">("square");
-  const [jewelryResolution, setJewelryResolution] = useState<"512k" | "1k" | "2k" | "4k">("1k");
+  const [jewelryResolution, setJewelryResolution] = useState<"1k" | "2k" | "4k">("1k");
   const [jewelryAspectRatio, setJewelryAspectRatio] = useState<"1:1" | "4:3" | "16:9" | "3:4" | "9:16">("1:1");
 
   // Currency & Exchange Rate State
@@ -126,7 +126,7 @@ export default function App() {
     return localStorage.getItem("srushti_selected_image_model") || "gptimage_2";
   });
   const [selectedVideoModel, setSelectedVideoModel] = useState<string>(() => {
-    return localStorage.getItem("srushti_selected_video_model") || "veo31_generate_preview";
+    return localStorage.getItem("srushti_selected_video_model") || "sora_2";
   });
   const [gptImageQuality, setGptImageQuality] = useState<"low" | "medium" | "high">(
     () => (localStorage.getItem("srushti_gpt_image_quality") as "low" | "medium" | "high") || "medium"
@@ -135,20 +135,7 @@ export default function App() {
   // Persist selected models & quality
   useEffect(() => {
     localStorage.setItem("srushti_selected_image_model", selectedImageModel);
-    if (selectedImageModel === "gemini31_flash_lite_image") {
-      setGarmentResolution("1k");
-      setJewelryResolution("1k");
-    } else if (selectedImageModel === "gemini3_pro_image") {
-      if (garmentResolution === "512k") setGarmentResolution("1k");
-      if (jewelryResolution === "512k") setJewelryResolution("1k");
-    } else if (selectedImageModel === "gemini25_flash_image") {
-      if (garmentResolution === "2k" || garmentResolution === "4k") setGarmentResolution("1k");
-      if (jewelryResolution === "2k" || jewelryResolution === "4k") setJewelryResolution("1k");
-    } else if (selectedImageModel === "gptimage_2") {
-      if (garmentResolution === "512k") setGarmentResolution("1k");
-      if (jewelryResolution === "512k") setJewelryResolution("1k");
-    }
-  }, [selectedImageModel, garmentResolution, jewelryResolution]);
+  }, [selectedImageModel]);
 
   // Enforce 1:1 aspect ratio resolution restriction (4K disabled for 1:1)
   useEffect(() => {
@@ -171,54 +158,33 @@ export default function App() {
     localStorage.setItem("srushti_selected_video_model", selectedVideoModel);
   }, [selectedVideoModel]);
 
-  // Provider Selection state
-  const [selectedProvider, setSelectedProvider] = useState<"all" | "openai" | "google">(() => {
-    return (localStorage.getItem("srushti_selected_provider") as any) || "openai";
-  });
-
-  // Gemini API Key state
-  const [rawGeminiApiKey, setRawGeminiApiKey] = useState<string>(() => {
-    return localStorage.getItem("srushti_gemini_api_key") || localStorage.getItem("srushti_api_key") || "";
-  });
-  const [geminiApiKey, setGeminiApiKey] = useState<string>(() => {
-    const saved = localStorage.getItem("srushti_gemini_api_key") || localStorage.getItem("srushti_api_key") || "";
-    if (saved) {
-      return saved.length > 10 ? `${saved.substring(0, 6)}...${saved.substring(saved.length - 4)}` : "AIzaSy...xxxx";
-    }
-    return "";
-  });
-  const [geminiApiInput, setGeminiApiInput] = useState<string>(() => {
-    return localStorage.getItem("srushti_gemini_api_key") || localStorage.getItem("srushti_api_key") || "";
-  });
+  // Provider Selection state (default to OpenAI)
+  const [selectedProvider, setSelectedProvider] = useState<"all" | "openai" | "google">("openai");
 
   // OpenAI API Key state
   const [rawOpenaiApiKey, setRawOpenaiApiKey] = useState<string>(() => {
-    return localStorage.getItem("srushti_openai_api_key") || "";
+    return localStorage.getItem("srushti_openai_api_key") || localStorage.getItem("srushti_api_key") || "";
   });
   const [openaiApiKey, setOpenaiApiKey] = useState<string>(() => {
-    const saved = localStorage.getItem("srushti_openai_api_key") || "";
+    const saved = localStorage.getItem("srushti_openai_api_key") || localStorage.getItem("srushti_api_key") || "";
     if (saved) {
       return saved.length > 10 ? `${saved.substring(0, 6)}...${saved.substring(saved.length - 4)}` : "sk-proj...xxxx";
     }
     return "";
   });
   const [openaiApiInput, setOpenaiApiInput] = useState<string>(() => {
-    return localStorage.getItem("srushti_openai_api_key") || "";
+    return localStorage.getItem("srushti_openai_api_key") || localStorage.getItem("srushti_api_key") || "";
   });
 
   // Active Key resolver for legacy compatibility
-  const isOpenAiSelected = selectedImageModel === "gptimage_2" || selectedVideoModel === "sora_2" || selectedVideoModel === "sora_2_pro" || selectedProvider === "openai";
+  const isOpenAiSelected = true;
   
-  const rawApiKey = isOpenAiSelected ? (rawOpenaiApiKey || rawGeminiApiKey) : (rawGeminiApiKey || rawOpenaiApiKey);
-  const apiKey = isOpenAiSelected ? (openaiApiKey || geminiApiKey) : (geminiApiKey || openaiApiKey);
-  const apiInput = isOpenAiSelected ? openaiApiInput : geminiApiInput;
+  const rawApiKey = rawOpenaiApiKey;
+  const apiKey = openaiApiKey;
+  const apiInput = openaiApiInput;
 
   const setApiInput = (val: string) => {
-    if (isOpenAiSelected) {
-      setOpenaiApiInput(val);
-    } else {
-      setGeminiApiInput(val);
-    }
+    setOpenaiApiInput(val);
   };
 
   const [showKeySavedToast, setShowKeySavedToast] = useState(false);
@@ -367,52 +333,6 @@ export default function App() {
     }
   };
 
-  // Save Gemini Key
-  const handleSaveGeminiApiKey = async (inputVal?: string) => {
-    const targetVal = inputVal !== undefined ? inputVal : geminiApiInput;
-    let trimmed = targetVal.trim();
-    if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
-      trimmed = trimmed.substring(1, trimmed.length - 1).trim();
-    }
-    setKeyValidationError(null);
-
-    if (trimmed === "") {
-      setRawGeminiApiKey("");
-      setGeminiApiKey("");
-      setGeminiApiInput("");
-      localStorage.removeItem("srushti_gemini_api_key");
-      localStorage.removeItem("srushti_api_key");
-      setShowKeySavedToast(true);
-      setTimeout(() => setShowKeySavedToast(false), 3000);
-      return;
-    }
-
-    const isValidFormat = trimmed.startsWith("AIza") || trimmed.startsWith("AIzaSy") || trimmed.length >= 15;
-    if (!isValidFormat) {
-      setKeyValidationError(lang === "en" 
-        ? "Invalid Gemini API Key structure. Standard Gemini keys start with 'AIza'."
-        : "జెమిని API కీ నిర్మాణం సరికాదు. 'AIza' తో ప్రారంభమయ్యే కీని ఉపయోగించండి.");
-      return;
-    }
-
-    setIsValidatingKey(true);
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    setRawGeminiApiKey(trimmed);
-    localStorage.setItem("srushti_gemini_api_key", trimmed);
-    localStorage.setItem("srushti_api_key", trimmed);
-
-    const masked = trimmed.length > 10 
-      ? `${trimmed.substring(0, 6)}...${trimmed.substring(trimmed.length - 4)}` 
-      : "AIzaSy...xxxx";
-    setGeminiApiKey(masked);
-    setGeminiApiInput(trimmed);
-    
-    setIsValidatingKey(false);
-    setShowKeySavedToast(true);
-    setTimeout(() => setShowKeySavedToast(false), 3500);
-  };
-
   // Save OpenAI Key
   const handleSaveOpenaiApiKey = async (inputVal?: string) => {
     const targetVal = inputVal !== undefined ? inputVal : openaiApiInput;
@@ -427,6 +347,7 @@ export default function App() {
       setOpenaiApiKey("");
       setOpenaiApiInput("");
       localStorage.removeItem("srushti_openai_api_key");
+      localStorage.removeItem("srushti_api_key");
       setShowKeySavedToast(true);
       setTimeout(() => setShowKeySavedToast(false), 3000);
       return;
@@ -445,6 +366,7 @@ export default function App() {
 
     setRawOpenaiApiKey(trimmed);
     localStorage.setItem("srushti_openai_api_key", trimmed);
+    localStorage.setItem("srushti_api_key", trimmed);
 
     const masked = trimmed.length > 10 
       ? `${trimmed.substring(0, 6)}...${trimmed.substring(trimmed.length - 4)}` 
@@ -458,25 +380,17 @@ export default function App() {
   };
 
   // Unified save dispatcher
-  const handleSaveApiKey = async (keyType?: "gemini" | "openai") => {
-    if (keyType === "openai" || (keyType === undefined && isOpenAiSelected)) {
-      await handleSaveOpenaiApiKey();
-    } else {
-      await handleSaveGeminiApiKey();
-    }
+  const handleSaveApiKey = async () => {
+    await handleSaveOpenaiApiKey();
   };
 
   // Cost calculation based on selected parameters
   const getEstimatedCost = () => {
-    const modelObj = IMAGE_MODELS.find(m => m.id === selectedImageModel) || IMAGE_MODELS[0];
     const resId = workspace === "garment" ? garmentResolution : jewelryResolution;
     const activeAspectRatio = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
     const finalCost = getImagePrice(selectedImageModel, resId, gptImageQuality, activeAspectRatio);
     const formatted = formatPrice(finalCost, currency, usdToInrRate);
-    if (selectedImageModel === "gptimage_2") {
-      return `${formatted} (GPTImage-2 @ ${gptImageQuality.toUpperCase()} Quality)`;
-    }
-    return `${formatted} (${modelObj.name.split(" (")[0]} @ ${resId.toUpperCase()})`;
+    return `${formatted} (GPTImage-2 @ ${gptImageQuality.toUpperCase()} Quality)`;
   };
 
   // Creative Photo Generation Trigger
@@ -488,13 +402,10 @@ export default function App() {
       return;
     }
 
-    const isCurrentModelOpenAi = selectedImageModel === "gptimage_2";
-    const activeRequiredKey = isCurrentModelOpenAi ? rawOpenaiApiKey : rawGeminiApiKey;
-
-    if (!activeRequiredKey) {
+    if (!rawOpenaiApiKey) {
       setGenerationError(lang === "en" 
-        ? `Please enter and save your ${isCurrentModelOpenAi ? "OpenAI API Key (starting with sk-)" : "Google Gemini API Key (starting with AIza)"} in Application Settings or Admin Panel.` 
-        : `దయచేసి సెట్టింగ్‌లలో మీ ${isCurrentModelOpenAi ? "ఓపెన్ AI" : "గూగుల్ జెమిని"} API కీని నమోదు చేయండి.`);
+        ? "Please enter and save your OpenAI API Key (starting with sk-) in Application Settings or Admin Panel." 
+        : "దయచేసి సెట్టింగ్‌లలో మీ ఓపెన్ AI API కీని నమోదు చేయండి.");
       setDebugPayload(null);
       setDebugPrompt(null);
       return;
@@ -545,292 +456,130 @@ export default function App() {
 
       const promptWithFace = activePrompt;
 
-      // Map user-selected model identifier to the actual Gemini/OpenAI Model name
-      const modelMap: Record<string, string> = {
-        "gptimage_2": "gptimage-2",
-        "gemini31_flash_image": "gemini-2.5-flash",
-        "gemini31_flash_lite_image": "gemini-2.5-flash",
-        "gemini3_pro_image": "gemini-2.5-flash",
-        "gemini25_flash_image": "gemini-2.5-flash"
-      };
-      const modelName = modelMap[selectedImageModel] || "gemini-2.5-flash";
+      const openAiKeyToUse = rawOpenaiApiKey;
+      const resolution = workspace === "garment" ? garmentResolution : jewelryResolution;
 
-      const parts: any[] = [];
-
-      // If a transparent/masked product image is provided, pass it as reference
-      if (originalImage) {
-        const cleanBase64 = originalImage.replace(/^data:image\/\w+;base64,/, "");
-        const mimeType = originalImage.includes("image/png") ? "image/png" : "image/jpeg";
-        parts.push({
-          inlineData: {
-            data: cleanBase64,
-            mimeType,
-          },
-        });
-      }
-
-      // If a face reference image is provided, convert it to base64
       let cleanFaceBase64 = "";
       let faceMime = "image/jpeg";
-
-      if (activeFaceUrl) {
-        try {
-          if (activeFaceUrl.startsWith("data:")) {
-            const match = activeFaceUrl.match(/^data:(image\/\w+);base64,(.+)$/);
-            if (match) {
-              faceMime = match[1];
-              cleanFaceBase64 = match[2];
-            }
-          }
-
-          if (!cleanFaceBase64) {
-            console.log("Fetching face reference image on client:", activeFaceUrl);
-            const faceRes = await fetch(activeFaceUrl);
-            if (faceRes.ok) {
-              const blob = await faceRes.blob();
-              const base64String = await new Promise<string>((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result as string);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-              });
-              cleanFaceBase64 = base64String.replace(/^data:image\/\w+;base64,/, "");
-              faceMime = activeFaceUrl.includes(".png") ? "image/png" : "image/jpeg";
-            }
-          }
-
-          if (cleanFaceBase64) {
-            parts.push({
-              inlineData: {
-                data: cleanFaceBase64,
-                mimeType: faceMime,
-              },
-            });
-          }
-        } catch (fetchErr) {
-          console.log("Could not process face reference image:", fetchErr);
+      if (activeFaceUrl && activeFaceUrl.startsWith("data:")) {
+        const match = activeFaceUrl.match(/^data:(image\/\w+);base64,(.+)$/);
+        if (match) {
+          faceMime = match[1];
+          cleanFaceBase64 = match[2];
         }
       }
-
-      // Compile the final textual prompt context
-      let promptText = "";
-      try {
-        const parsedObj = JSON.parse(promptWithFace);
-        promptText = `You are an expert commercial product photographer. Generate high-fidelity studio product photography containing the items shown. CRITICAL REQUIREMENT: You MUST EXACTLY REPLICATE and reproduce the input product's original design, artwork, patterns, exact length, physical size, proportions, and craftsmanship details from the input reference image into the output image. Do NOT alter, redesign, or re-imagine the product design, patterns, length, or size. Do NOT render any price tags, price stickers, brand tags, company logos, store tags, barcodes, watermarks, or text overlays in the output image:\n\n${JSON.stringify(parsedObj, null, 2)}`;
-      } catch (e) {
-        promptText = promptWithFace;
-      }
-
-      parts.push({
-        text: promptText,
-      });
-
-      // Map resolution to imageSize if supported by the model
-      const resolution = workspace === "garment" ? garmentResolution : jewelryResolution;
-      let imageSize: string | undefined = undefined;
-      if (resolution) {
-        const sizeMap: Record<string, string> = {
-          "512k": "512px",
-          "1k": "1K",
-          "2k": "2K",
-          "4k": "4K"
-        };
-        imageSize = sizeMap[resolution];
-      }
-
-      const imageConfig: any = {
-        aspectRatio: workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio
-      };
-      if (imageSize) {
-        imageConfig.imageSize = imageSize;
-      }
-
-      const restPayload = {
-        contents: [
-          {
-            parts
-          }
-        ],
-        generationConfig: {
-          imageConfig
-        }
-      };
-
-      // Effective keys for each provider
-      const googleKeyToUse = rawGeminiApiKey || rawApiKey;
-      const openAiKeyToUse = rawOpenaiApiKey || rawApiKey;
 
       // Construct a clean, safe representation of the payload to print in the UI debug block
       const debugPayloadObj = {
-        provider: selectedImageModel === "gptimage_2" ? "OpenAI" : "Google Gemini",
-        endpoint: selectedImageModel === "gptimage_2" 
-          ? "https://api.openai.com/v1/images/generations" 
-          : `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`,
-        model: modelName,
+        provider: "OpenAI",
+        endpoint: "https://api.openai.com/v1/images/edits",
+        model: "gpt-image-2",
         aspectRatio: workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio,
         resolution: resolution,
         productBase64Preview: originalImage ? `${originalImage.substring(0, 60)}... (${Math.round(originalImage.length / 1024)} KB)` : null,
         faceBase64Preview: cleanFaceBase64 ? `data:${faceMime};base64,${cleanFaceBase64.substring(0, 50)}... (${Math.round(cleanFaceBase64.length / 1024)} KB)` : null,
         promptJSON: JSON.parse(promptWithFace),
-        rawPayloadStructure: selectedImageModel === "gptimage_2" ? null : restPayload
+        rawPayloadStructure: null
       };
 
       setDebugPrompt(promptWithFace);
       setDebugPayload(debugPayloadObj);
 
-      // --- OPENAI API IMAGE GENERATION BRANCH ---
-      if (selectedImageModel === "gptimage_2") {
-        const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
-        const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
-        const sizeString = getGptImage2SizeString(activeRes, activeAspect);
+      // --- OPENAI API IMAGE GENERATION ---
+      const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
+      const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
+      const sizeString = getGptImage2SizeString(activeRes, activeAspect);
 
-        const openAiQuality = gptImageQuality === "low" || gptImageQuality === "medium" || gptImageQuality === "auto"
-          ? gptImageQuality 
-          : "high";
-        const openAiEndpoint = "https://api.openai.com/v1/images/edits";
+      const openAiQuality = gptImageQuality === "low" || gptImageQuality === "medium" || gptImageQuality === "auto"
+        ? gptImageQuality 
+        : "high";
+      const openAiEndpoint = "https://api.openai.com/v1/images/edits";
 
-        const formData = new FormData();
-        formData.append("model", "gpt-image-2");
-        formData.append("prompt", promptWithFace);
-        formData.append("size", sizeString);
-        formData.append("quality", openAiQuality);
-        formData.append("n", "1");
+      const formData = new FormData();
+      formData.append("model", "gpt-image-2");
+      formData.append("prompt", promptWithFace);
+      formData.append("size", sizeString);
+      formData.append("quality", openAiQuality);
+      formData.append("n", "1");
 
-        // Helper to convert data URL or http URL to Blob
-        const urlToBlob = async (url: string): Promise<Blob> => {
-          if (url.startsWith("data:")) {
-            const parts = url.split(",");
-            const mime = parts[0].match(/:(.*?);/)?.[1] || "image/jpeg";
-            const bstr = atob(parts[1]);
-            let n = bstr.length;
-            const u8arr = new Uint8Array(n);
-            while (n--) {
-              u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new Blob([u8arr], { type: mime });
+      // Helper to convert data URL or http URL to Blob
+      const urlToBlob = async (url: string): Promise<Blob> => {
+        if (url.startsWith("data:")) {
+          const parts = url.split(",");
+          const mime = parts[0].match(/:(.*?);/)?.[1] || "image/jpeg";
+          const bstr = atob(parts[1]);
+          let n = bstr.length;
+          const u8arr = new Uint8Array(n);
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
           }
-          const fetchRes = await fetch(url);
-          return await fetchRes.blob();
-        };
-
-        const imagePreviewsForDebug: string[] = [];
-
-        if (originalImage) {
-          try {
-            const productBlob = await urlToBlob(originalImage);
-            formData.append("image[]", productBlob, "product_image.png");
-            imagePreviewsForDebug.push(`<product image bytes (~${Math.round(productBlob.size / 1024)} KB)>`);
-          } catch (blobErr) {
-            console.error("Error converting original product image to Blob:", blobErr);
-          }
+          return new Blob([u8arr], { type: mime });
         }
+        const fetchRes = await fetch(url);
+        return await fetchRes.blob();
+      };
 
-        if (activeFaceUrl) {
-          try {
-            const faceBlob = await urlToBlob(activeFaceUrl);
-            formData.append("image[]", faceBlob, "face_reference.png");
-            imagePreviewsForDebug.push(`<face reference image bytes (~${Math.round(faceBlob.size / 1024)} KB)>`);
-          } catch (blobErr) {
-            console.error("Error converting face reference image to Blob:", blobErr);
-          }
-        }
+      const imagePreviewsForDebug: string[] = [];
 
-        const openAiDebugObj = {
-          ...debugPayloadObj,
-          endpoint: openAiEndpoint,
-          model: "gpt-image-2",
-          contentType: "multipart/form-data",
-          quality: openAiQuality,
-          calculatedSize: sizeString,
-          rawPayloadFields: {
-            model: "gpt-image-2",
-            "image[]": imagePreviewsForDebug,
-            prompt: promptWithFace,
-            size: sizeString,
-            quality: openAiQuality,
-            n: "1"
-          }
-        };
-
-        setDebugPayload(openAiDebugObj);
-
-        let res = await fetch(openAiEndpoint, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${openAiKeyToUse}`
-          },
-          body: formData
-        });
-
-        if (!res.ok) {
-          const errJson = await res.json().catch(() => ({}));
-          const errMsg = errJson?.error?.message || `OpenAI API Error (${res.status}): ${res.statusText}`;
-          throw new Error(errMsg);
-        }
-
-        const data = await res.json();
-        let generatedImageUrl: string | null = null;
-        if (data.data?.[0]?.b64_json) {
-          generatedImageUrl = `data:image/png;base64,${data.data[0].b64_json}`;
-        } else if (data.data?.[0]?.url) {
-          generatedImageUrl = data.data[0].url;
-        }
-
-        if (stepInterval) {
-          clearInterval(stepInterval);
-          stepInterval = null;
-        }
-
-        if (generatedImageUrl) {
-          setGeneratedImage(generatedImageUrl);
-          setActivePreviewTab("generated");
-          setShowSuccessToast(true);
-          setTimeout(() => setShowSuccessToast(false), 4000);
-          try {
-            downloadImage(generatedImageUrl, `srushti_${workspace}_photography.png`);
-          } catch (downloadErr) {
-            console.log("Auto download status info:", downloadErr);
-          }
-          return;
-        } else {
-          throw new Error(t.errGenFailed);
+      if (originalImage) {
+        try {
+          const productBlob = await urlToBlob(originalImage);
+          formData.append("image[]", productBlob, "product_image.png");
+          imagePreviewsForDebug.push(`<product image bytes (~${Math.round(productBlob.size / 1024)} KB)>`);
+        } catch (blobErr) {
+          console.error("Error converting original product image to Blob:", blobErr);
         }
       }
 
-      // --- GOOGLE GEMINI API IMAGE GENERATION BRANCH ---
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${googleKeyToUse}`, {
+      if (activeFaceUrl) {
+        try {
+          const faceBlob = await urlToBlob(activeFaceUrl);
+          formData.append("image[]", faceBlob, "face_reference.png");
+          imagePreviewsForDebug.push(`<face reference image bytes (~${Math.round(faceBlob.size / 1024)} KB)>`);
+        } catch (blobErr) {
+          console.error("Error converting face reference image to Blob:", blobErr);
+        }
+      }
+
+      const openAiDebugObj = {
+        ...debugPayloadObj,
+        endpoint: openAiEndpoint,
+        model: "gpt-image-2",
+        contentType: "multipart/form-data",
+        quality: openAiQuality,
+        calculatedSize: sizeString,
+        rawPayloadFields: {
+          model: "gpt-image-2",
+          "image[]": imagePreviewsForDebug,
+          prompt: promptWithFace,
+          size: sizeString,
+          quality: openAiQuality,
+          n: "1"
+        }
+      };
+
+      setDebugPayload(openAiDebugObj);
+
+      let res = await fetch(openAiEndpoint, {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json"
+        headers: {
+          "Authorization": `Bearer ${openAiKeyToUse}`
         },
-        body: JSON.stringify(restPayload)
+        body: formData
       });
 
       if (!res.ok) {
         const errJson = await res.json().catch(() => ({}));
-        const errMsg = errJson?.error?.message || `Google API Error (${res.status}): ${res.statusText}`;
+        const errMsg = errJson?.error?.message || `OpenAI API Error (${res.status}): ${res.statusText}`;
         throw new Error(errMsg);
       }
 
       const data = await res.json();
-
       let generatedImageUrl: string | null = null;
-      let textResponse = "";
-
-      // Check Gemini candidates format
-      if (data.candidates?.[0]?.content?.parts) {
-        for (const part of data.candidates[0].content.parts) {
-          if (part.inlineData?.data) {
-            const mime = part.inlineData.mimeType || "image/png";
-            generatedImageUrl = `data:${mime};base64,${part.inlineData.data}`;
-          } else if (part.text) {
-            textResponse += part.text;
-          }
-        }
-      } 
-      // Check Imagen prediction format fallback
-      else if (data.predictions?.[0]?.bytesBase64Encoded) {
-        generatedImageUrl = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
+      if (data.data?.[0]?.b64_json) {
+        generatedImageUrl = `data:image/png;base64,${data.data[0].b64_json}`;
+      } else if (data.data?.[0]?.url) {
+        generatedImageUrl = data.data[0].url;
       }
 
       if (stepInterval) {
@@ -843,15 +592,14 @@ export default function App() {
         setActivePreviewTab("generated");
         setShowSuccessToast(true);
         setTimeout(() => setShowSuccessToast(false), 4000);
-        
-        // Auto download the generated image
         try {
           downloadImage(generatedImageUrl, `srushti_${workspace}_photography.png`);
         } catch (downloadErr) {
           console.log("Auto download status info:", downloadErr);
         }
+        return;
       } else {
-        throw new Error(textResponse || t.errGenFailed);
+        throw new Error(t.errGenFailed);
       }
     } catch (err: any) {
       console.log("AI Photo Generation status info:", err?.message || err);
@@ -929,10 +677,6 @@ export default function App() {
         setJewelryType={setJewelryType}
         selectedProvider={selectedProvider}
         setSelectedProvider={setSelectedProvider}
-        geminiApiKey={geminiApiKey}
-        geminiApiInput={geminiApiInput}
-        setGeminiApiInput={setGeminiApiInput}
-        onSaveGeminiApiKey={handleSaveGeminiApiKey}
         openaiApiKey={openaiApiKey}
         openaiApiInput={openaiApiInput}
         setOpenaiApiInput={setOpenaiApiInput}
@@ -943,8 +687,8 @@ export default function App() {
       />
 
       {/* --- MAIN PAGE CORE STAGE --- */}
-      <main className="px-4 max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto flex-1 min-h-0 flex flex-col space-y-3 pb-3 lg:pb-6 lg:space-y-6 w-full lg:px-6 overflow-x-hidden max-w-full">
-        <div className="flex-1 min-h-0 flex flex-col gap-4 landscape:grid landscape:grid-cols-12 landscape:gap-4 lg:grid lg:grid-cols-12 lg:gap-8 lg:items-stretch w-full max-w-full overflow-hidden">
+      <main className="px-4 max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto flex-1 min-h-0 flex flex-col space-y-3 pb-3 lg:pb-6 lg:space-y-6 w-full lg:px-6">
+        <div className="flex-1 min-h-0 flex flex-col gap-4 landscape:grid landscape:grid-cols-12 landscape:gap-4 lg:grid lg:grid-cols-12 lg:gap-8 lg:items-stretch">
           
           {/* LEFT COLUMN: CANVAS & PREVIEW AREA */}
           <PreviewStage 
@@ -974,7 +718,7 @@ export default function App() {
           />
 
           {/* RIGHT COLUMN: WORKSPACE DETAILS */}
-          <div className="h-1/2 min-h-0 flex flex-col space-y-2 lg:space-y-4 w-full max-w-full overflow-hidden landscape:h-full landscape:min-h-0 landscape:col-span-7 lg:h-full lg:min-h-0 lg:col-span-7 xl:col-span-7">
+          <div className="h-1/2 min-h-0 flex flex-col space-y-2 lg:space-y-4 w-full landscape:h-full landscape:min-h-0 landscape:col-span-7 lg:h-full lg:min-h-0 lg:col-span-7 xl:col-span-7">
             
             {/* WORKSPACE PANELS */}
             {workspace === "garment" && (
