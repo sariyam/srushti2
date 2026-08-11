@@ -357,7 +357,6 @@ export function getCameraFramingAndAngle(poseKey: string, itemType: string, cate
     // Jewelry - No Face Poses (Headless / Face Turned Away / Face Cropped) - Micro Focus on Item (Neck, Ear, Wrist, Finger, etc.)
     no_face_neck_collarbone_drape: "Micro focus on necklace item drape, pendant setting, and gemstone facet luster against smooth neck and collarbone skin (headless, strictly no face)",
     no_face_decollete_torso: "Micro focus on necklace item sparkle, chain links, and pendant detailing on upper chest and décolletage neck skin (headless, strictly no face)",
-    no_face_shoulder_back_neck: "Micro focus on rear necklace drop item and chainwork detail against the nape of neck and shoulder skin (headless, no face visible)",
     no_face_throat_collarbone_macro: "Extreme micro close-up focused directly on necklace item clasp, fit, and gemstone brilliance against throat and neck skin (eyes and face strictly cropped out)",
 
     no_face_side_neck_ear_macro: "Micro focus on earring item drop, metal luster, and stone setting at the earlobe against smooth side neck skin (face turned away, strictly no face)",

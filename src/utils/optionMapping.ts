@@ -307,7 +307,6 @@ export const JEWELRY_POSES_BY_CATEGORY = {
   no_face_neck: [
     "no_face_neck_collarbone_drape",
     "no_face_decollete_torso",
-    "no_face_shoulder_back_neck",
     "no_face_throat_collarbone_macro"
   ],
   no_face_ear: [
