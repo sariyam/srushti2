@@ -943,8 +943,8 @@ export default function App() {
       />
 
       {/* --- MAIN PAGE CORE STAGE --- */}
-      <main className="px-4 max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto flex-1 min-h-0 flex flex-col space-y-3 pb-3 lg:pb-6 lg:space-y-6 w-full lg:px-6">
-        <div className="flex-1 min-h-0 flex flex-col gap-4 landscape:grid landscape:grid-cols-12 landscape:gap-4 lg:grid lg:grid-cols-12 lg:gap-8 lg:items-stretch">
+      <main className="px-4 max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] mx-auto flex-1 min-h-0 flex flex-col space-y-3 pb-3 lg:pb-6 lg:space-y-6 w-full lg:px-6 overflow-x-hidden max-w-full">
+        <div className="flex-1 min-h-0 flex flex-col gap-4 landscape:grid landscape:grid-cols-12 landscape:gap-4 lg:grid lg:grid-cols-12 lg:gap-8 lg:items-stretch w-full max-w-full overflow-hidden">
           
           {/* LEFT COLUMN: CANVAS & PREVIEW AREA */}
           <PreviewStage 
@@ -974,7 +974,7 @@ export default function App() {
           />
 
           {/* RIGHT COLUMN: WORKSPACE DETAILS */}
-          <div className="h-1/2 min-h-0 flex flex-col space-y-2 lg:space-y-4 w-full landscape:h-full landscape:min-h-0 landscape:col-span-7 lg:h-full lg:min-h-0 lg:col-span-7 xl:col-span-7">
+          <div className="h-1/2 min-h-0 flex flex-col space-y-2 lg:space-y-4 w-full max-w-full overflow-hidden landscape:h-full landscape:min-h-0 landscape:col-span-7 lg:h-full lg:min-h-0 lg:col-span-7 xl:col-span-7">
             
             {/* WORKSPACE PANELS */}
             {workspace === "garment" && (

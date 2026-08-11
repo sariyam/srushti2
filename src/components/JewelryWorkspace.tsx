@@ -223,11 +223,11 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
   };
 
   return (
-    <section className="space-y-3 flex-1 min-h-0 flex flex-col">
+    <section className="space-y-3 flex-1 min-h-0 flex flex-col overflow-hidden w-full max-w-full">
 
 
       {/* Jewelry Sub-Tabs strip */}
-      <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl nm-inset-sm shrink-0">
+      <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl nm-inset-sm shrink-0 w-full min-w-0">
         <button
           id="tab-jewelry-setup"
           onClick={() => setJewelryTab("setup")}
@@ -265,25 +265,25 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
         <motion.div 
           initial={{ opacity: 0, y: 5 }} 
           animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
+          className="nm-outset rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-thin w-full max-w-full"
         >
           {/* User Selection Breadcrumb + Reselect Business Edit Button */}
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 w-full">
             <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center gap-1.5 px-1">
-              <Building2 className="w-3.5 h-3.5 text-accent" />
+              <Building2 className="w-3.5 h-3.5 text-accent shrink-0" />
               {lang === "en" ? "Select Business" : "బిజినెస్ ఎంచుకోండి"}
             </label>
-            <div className="flex items-center justify-between p-2.5 px-3 rounded-2xl nm-inset-sm border border-black/5 dark:border-white/5 bg-[var(--bg-secondary)]/40 gap-2">
-              <div className="flex items-center gap-1.5 text-xs font-extrabold text-[var(--text-emphasis)] flex-wrap">
-                <span className="capitalize">{lang === "en" ? "jewelry" : "నగలు"}</span>
+            <div className="flex items-center justify-between p-2.5 px-3 rounded-2xl nm-inset-sm border border-black/5 dark:border-white/5 bg-[var(--bg-secondary)]/40 gap-2 min-w-0 w-full max-w-full overflow-hidden">
+              <div className="flex items-center gap-1.5 text-xs font-extrabold text-[var(--text-emphasis)] flex-wrap min-w-0">
+                <span className="capitalize shrink-0">{lang === "en" ? "jewelry" : "నగలు"}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-accent opacity-80 shrink-0" />
-                <span>
+                <span className="shrink-0">
                   {jewelryModelGender === "female" 
                     ? (lang === "en" ? "female" : "స్త్రీల") 
                     : (lang === "en" ? "male" : "పురుషుల")}
                 </span>
                 <ChevronRight className="w-3.5 h-3.5 text-accent opacity-80 shrink-0" />
-                <span className="text-accent font-black uppercase">
+                <span className="text-accent font-black uppercase truncate max-w-[120px] sm:max-w-[200px] xl:max-w-none">
                   {t[jewelryType] || jewelryType}
                 </span>
               </div>
@@ -293,34 +293,34 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 onClick={() => {
                   document.getElementById("btn-trigger-business-modal")?.click();
                 }}
-                className="p-1.5 px-2 rounded-xl nm-outset-sm text-accent hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0 border border-accent/20 flex items-center gap-1 text-[11px] font-extrabold"
+                className="p-1.5 px-2.5 rounded-xl nm-outset-sm text-accent hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0 border border-accent/20 flex items-center gap-1 text-[11px] font-extrabold"
                 title={lang === "en" ? "Select Business" : "బిజినెస్ మార్చండి"}
               >
-                <Edit2 className="w-3.5 h-3.5" />
+                <Edit2 className="w-3.5 h-3.5 shrink-0" />
                 <span className="text-[10px] font-bold">{lang === "en" ? "Edit" : "మార్చండి"}</span>
               </button>
             </div>
           </div>
 
           {/* Photography Style */}
-          <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5">
+          <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5 w-full">
             <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center gap-1.5 px-1">
-              <Camera className="w-3.5 h-3.5 text-accent" />
+              <Camera className="w-3.5 h-3.5 text-accent shrink-0" />
               {lang === "en" ? "Photography Style" : "ఫోటోగ్రఫీ శైలి"}
             </label>
-            <div className="grid grid-cols-2 gap-2 w-full pt-1">
+            <div className="grid grid-cols-2 gap-2 w-full pt-1 min-w-0">
               <button
                 id="btn-photo-style-editorial"
                 type="button"
                 onClick={() => setJewelryPhotoStyle("editorial")}
-                className={`p-2.5 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-0.5 transition-all w-full cursor-pointer ${
+                className={`p-2.5 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-0.5 transition-all w-full cursor-pointer min-w-0 overflow-hidden ${
                   jewelryPhotoStyle === "editorial" ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
                 }`}
               >
-                <span className="text-[11px] font-black uppercase tracking-wider">
+                <span className="text-[11px] font-black uppercase tracking-wider truncate max-w-full">
                   {lang === "en" ? "Editorial" : "ఎడిటోరియల్"}
                 </span>
-                <span className="text-[9px] opacity-70 font-normal normal-case text-center">
+                <span className="text-[9px] opacity-70 font-normal normal-case text-center line-clamp-2 break-words">
                   {lang === "en" ? "Creative stories & mood" : "సృజనాత్మక కథనాలు & మూడ్"}
                 </span>
               </button>
@@ -328,14 +328,14 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 id="btn-photo-style-campaign"
                 type="button"
                 onClick={() => setJewelryPhotoStyle("campaign")}
-                className={`p-2.5 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-0.5 transition-all w-full cursor-pointer ${
+                className={`p-2.5 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-0.5 transition-all w-full cursor-pointer min-w-0 overflow-hidden ${
                   jewelryPhotoStyle === "campaign" ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
                 }`}
               >
-                <span className="text-[11px] font-black uppercase tracking-wider">
+                <span className="text-[11px] font-black uppercase tracking-wider truncate max-w-full">
                   {lang === "en" ? "Campaign" : "క్యాంపెయిన్"}
                 </span>
-                <span className="text-[9px] opacity-70 font-normal normal-case text-center">
+                <span className="text-[9px] opacity-70 font-normal normal-case text-center line-clamp-2 break-words">
                   {lang === "en" ? "Commercial promotional shine" : "వాణిజ్య ప్రచార ప్రకాశం"}
                 </span>
               </button>
@@ -343,12 +343,12 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
           </div>
 
           {/* Orientation selection */}
-          <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5">
+          <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5 w-full">
             <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center gap-1.5 px-1">
               <LuMonitorIcon className="w-3.5 h-3.5 text-accent shrink-0" />
               {t.orientationLabel}
             </label>
-            <div className="grid grid-cols-3 gap-2 w-full pt-1">
+            <div className="grid grid-cols-3 gap-2 w-full pt-1 min-w-0">
               {(["square", "portrait", "landscape"] as const).map((orient) => (
                 <button
                   key={orient}
@@ -360,7 +360,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     else if (orient === "portrait") setJewelryAspectRatio("3:4");
                     else if (orient === "landscape") setJewelryAspectRatio("4:3");
                   }}
-                  className={`py-2.5 px-2 rounded-2xl text-[10.5px] font-extrabold flex flex-col items-center justify-center gap-1 transition-all w-full cursor-pointer ${
+                  className={`py-2.5 px-2 rounded-2xl text-[10.5px] font-extrabold flex flex-col items-center justify-center gap-1 transition-all w-full cursor-pointer min-w-0 overflow-hidden ${
                     jewelryOrientation === orient ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
                   }`}
                 >
@@ -369,7 +369,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     {orient === "portrait" && <LuSmartphoneIcon className="w-3.5 h-3.5 text-accent" />}
                     {orient === "landscape" && <LuMonitorIcon className="w-3.5 h-3.5 text-accent" />}
                   </span>
-                  <span className="truncate">{t[orient]}</span>
+                  <span className="truncate max-w-full text-center">{t[orient]}</span>
                 </button>
               ))}
             </div>
@@ -377,17 +377,17 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
 
           {/* Render Quality Selector (if gptimage_2) */}
           {selectedImageModel === "gptimage_2" && (
-            <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5">
-              <div className="flex items-center justify-between px-1">
-                <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center gap-1.5">
+            <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5 w-full">
+              <div className="flex items-center justify-between px-1 gap-2 flex-wrap sm:flex-nowrap min-w-0">
+                <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center gap-1.5 shrink-0">
                   <LuSparklesIcon className="w-3.5 h-3.5 text-accent animate-pulse shrink-0" />
                   {lang === "en" ? "Render Quality" : "ఫోటో క్వాలిటీ"}
                 </label>
-                <span className="text-[9px] font-extrabold text-accent px-1.5 py-0.5 rounded-md bg-accent/10 border border-accent/20">
+                <span className="text-[9px] font-extrabold text-accent px-1.5 py-0.5 rounded-md bg-accent/10 border border-accent/20 shrink-0">
                   {lang === "en" ? "Quality Level" : "క్వాలిటీ స్థాయి"}
                 </span>
               </div>
-              <div className="grid grid-cols-3 gap-2 w-full pt-1">
+              <div className="grid grid-cols-3 gap-2 w-full pt-1 min-w-0">
                 {(["low", "medium", "high"] as const).map((qual) => {
                   const isSelected = gptImageQuality === qual;
                   const price = getImagePrice("gptimage_2", jewelryResolution, qual, jewelryAspectRatio);
@@ -397,14 +397,14 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                       type="button"
                       id={`btn-jewelry-quality-${qual}`}
                       onClick={() => setGptImageQuality?.(qual)}
-                      className={`py-2 px-2 rounded-xl flex flex-col items-center justify-center text-center transition-all w-full cursor-pointer ${
+                      className={`py-2 px-2 rounded-xl flex flex-col items-center justify-center text-center transition-all w-full cursor-pointer min-w-0 overflow-hidden ${
                         isSelected
                           ? "nm-inset-sm text-accent scale-[0.98] border-2 border-accent/30 font-black"
                           : "nm-outset-sm opacity-80 hover:opacity-100"
                       }`}
                     >
-                      <span className="text-[11px] capitalize font-black">{qual}</span>
-                      <span className="text-[9.5px] font-mono text-accent font-extrabold mt-0.5">{formatPrice(price, currency, usdToInrRate)}</span>
+                      <span className="text-[11px] capitalize font-black truncate max-w-full">{qual}</span>
+                      <span className="text-[9.5px] font-mono text-accent font-extrabold mt-0.5 truncate max-w-full">{formatPrice(price, currency, usdToInrRate)}</span>
                     </button>
                   );
                 })}
@@ -413,17 +413,17 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
           )}
 
           {/* Resolution Selection */}
-          <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5">
-            <div className="flex items-center justify-between px-1">
-              <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center gap-1.5">
+          <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5 w-full">
+            <div className="flex items-center justify-between px-1 gap-2 flex-wrap sm:flex-nowrap min-w-0">
+              <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center gap-1.5 shrink-0">
                 <LuSparklesIcon className="w-3.5 h-3.5 text-accent shrink-0" />
                 {t.resolutionLabel}
               </label>
-              <span className="text-[9.5px] font-black px-2 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20">
+              <span className="text-[9.5px] font-black px-2 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20 truncate max-w-full shrink-0">
                 {currency === "INR" ? `₹ INR (@ ₹${usdToInrRate.toFixed(2)}/USD)` : "$ USD"}
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full pt-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full pt-1 min-w-0">
               {(["512k", "1k", "2k", "4k"] as const).map((res) => {
                 const finalPrice = getImagePrice(selectedImageModel, res, gptImageQuality, jewelryAspectRatio);
                 const isSelected = jewelryResolution === res;
@@ -435,7 +435,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     id={`btn-jewelry-res-${res}`}
                     onClick={() => !isDisabled && setJewelryResolution(res)}
                     disabled={isDisabled}
-                    className={`p-2 rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-200 w-full cursor-pointer ${
+                    className={`p-2 rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-200 w-full cursor-pointer min-w-0 overflow-hidden ${
                       isDisabled
                         ? "opacity-40 cursor-not-allowed nm-inset-sm bg-black/5 dark:bg-white/5"
                         : isSelected 
@@ -443,11 +443,11 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                           : "nm-outset-sm hover:scale-[1.01]"
                     }`}
                   >
-                    <div className="space-y-0.5 my-auto">
-                      <div className="text-xs font-black tracking-wide uppercase">
+                    <div className="space-y-0.5 my-auto w-full min-w-0">
+                      <div className="text-xs font-black tracking-wide uppercase truncate max-w-full">
                         {res}
                       </div>
-                      <div className="font-mono text-[9px] opacity-75 text-center leading-none break-words">
+                      <div className="font-mono text-[8.5px] sm:text-[9px] opacity-75 text-center leading-none truncate max-w-full">
                         {res === "512k" && "512px"}
                         {res === "1k" && (
                           selectedImageModel === "gptimage_2" ? (
@@ -469,8 +469,8 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                         )}
                       </div>
                     </div>
-                    <div className="w-full mt-1">
-                      <span className={`block text-[9px] font-black px-1 py-0.5 rounded-md text-center break-words leading-tight ${
+                    <div className="w-full mt-1 min-w-0">
+                      <span className={`block text-[8.5px] sm:text-[9px] font-black px-1 py-0.5 rounded-md text-center truncate max-w-full leading-tight ${
                         isDisabled
                           ? "bg-black/10 dark:bg-white/10 text-gray-500 font-mono"
                           : "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-mono"
