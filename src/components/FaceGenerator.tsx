@@ -970,7 +970,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
                       </div>
                     )}
                   </div>
-                  <span className="text-[10px] sm:text-[11px] font-extrabold break-words leading-tight w-full text-center opacity-95 truncate pt-0.5">
+                  <span className="text-[8.5px] xs:text-[9.5px] sm:text-[11px] font-extrabold break-words leading-tight w-full text-center opacity-95 pt-0.5 whitespace-normal">
                     {(lang === "en" ? face.nameEn : face.nameTe).replace(/\s*\([^)]*\)/g, "")}
                   </span>
                 </button>

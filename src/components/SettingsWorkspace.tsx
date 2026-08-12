@@ -241,23 +241,23 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3 gap-2">
-            <div className="flex items-center gap-2 min-w-0">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl nm-inset-sm flex items-center justify-center text-accent shrink-0">
+          <div className="flex items-start sm:items-center justify-between border-b border-black/5 dark:border-white/5 pb-3 gap-2">
+            <div className="flex items-start sm:items-center gap-2 min-w-0 flex-1">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl nm-inset-sm flex items-center justify-center text-accent shrink-0 mt-0.5 sm:mt-0">
                 <SmartphoneIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div className="min-w-0">
-                <h3 className="font-extrabold text-xs sm:text-sm md:text-base text-[var(--text-emphasis)] truncate">
+              <div className="min-w-0 flex-1">
+                <h3 className="font-extrabold text-xs sm:text-sm md:text-base text-[var(--text-emphasis)] leading-tight whitespace-normal break-words">
                   {isEn ? "Sign In to Your Account" : "మీ ఖాతాలోకి సైన్ ఇన్ అవ్వండి"}
                 </h3>
-                <p className="text-[10px] sm:text-[11px] opacity-70 truncate">
+                <p className="text-[10px] sm:text-[11px] opacity-70 leading-snug mt-0.5 whitespace-normal break-words">
                   {otpStep === "phone"
                     ? (isEn ? "Enter phone number to receive 6-digit OTP code" : "6 అంకెల OTP కోడ్‌ను అందుకోవడానికి ఫోన్ నంబర్‌ను నమోదు చేయండి")
                     : (isEn ? `OTP sent to ${authCountryCode} ${authPhone}` : `OTP ${authCountryCode} ${authPhone} కి పంపబడింది`)}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-1 text-[9px] sm:text-[10px] font-extrabold px-2 sm:px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 shrink-0">
+            <div className="flex items-center gap-1 text-[9px] sm:text-[10px] font-extrabold px-2 sm:px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 shrink-0 self-start sm:self-auto">
               <KeyRoundIcon className="w-3 h-3 text-accent" />
               <span>{otpStep === "phone" ? (isEn ? "Step 1 of 2" : "దశ 1/2") : (isEn ? "Step 2 of 2" : "దశ 2/2")}</span>
             </div>

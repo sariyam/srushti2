@@ -311,7 +311,7 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
               <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full nm-inset-sm flex items-center justify-center flex-shrink-0">
                 {getItemIcon(id)}
               </div>
-              <span className="text-[10px] font-bold text-center leading-tight break-words max-w-full truncate">
+              <span className="text-[8.5px] sm:text-[10px] font-bold text-center leading-tight break-words max-w-full whitespace-normal">
                 {t[id] || id}
               </span>
             </button>

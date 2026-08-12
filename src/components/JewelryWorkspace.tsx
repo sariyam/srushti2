@@ -369,7 +369,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     {orient === "portrait" && <LuSmartphoneIcon className="w-3.5 h-3.5 text-accent" />}
                     {orient === "landscape" && <LuMonitorIcon className="w-3.5 h-3.5 text-accent" />}
                   </span>
-                  <span className="truncate">{t[orient]}</span>
+                  <span className="text-[8.5px] sm:text-[10.5px] font-extrabold leading-tight break-words text-center whitespace-normal">{t[orient]}</span>
                 </button>
               ))}
             </div>
