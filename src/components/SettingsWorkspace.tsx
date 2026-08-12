@@ -209,13 +209,16 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
         </div>
       )}
 
-      {/* Signed Out - Phone + OTP Sign In Workflow */}
-      {isSignedOut ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="nm-outset rounded-[1.75rem] sm:rounded-[2rem] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border border-accent/20 bg-[var(--bg-panel)] w-full overflow-hidden"
-        >
+      {/* Responsive 2-Column Grid: Stacks on mobile/tablet, side-by-side on desktop */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 items-start">
+        {/* Left Side: Account Profile or Sign In Card */}
+        <div className="space-y-5 w-full">
+          {isSignedOut ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="nm-outset rounded-[1.75rem] sm:rounded-[2rem] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border border-accent/20 bg-[var(--bg-panel)] w-full overflow-hidden"
+            >
           {/* Header Logo above Sign In */}
           <div className="flex flex-col items-center justify-center text-center space-y-1.5 sm:space-y-2 pt-1 pb-2 border-b border-black/5 dark:border-white/5">
             <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden nm-outset-sm p-1.5 bg-[var(--bg-panel)] flex items-center justify-center shadow-md">
@@ -564,74 +567,79 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
           </div>
         </div>
       )}
+    </div>
 
-      {/* Choose Theme / Appearance Card */}
-      <div className="nm-outset rounded-[2rem] p-5 space-y-4">
-        <div className="flex items-center gap-2">
-          {theme === "light" ? <SunIcon className="w-5 h-5 text-accent" /> : <MoonIcon className="w-5 h-5 text-accent" />}
-          <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsThemeLabel}</h3>
-        </div>
+    {/* Right Side: Theme / Appearance & Language Options */}
+    <div className="space-y-5 w-full">
+          {/* Choose Theme / Appearance Card */}
+          <div className="nm-outset rounded-[2rem] p-5 space-y-4">
+            <div className="flex items-center gap-2">
+              {theme === "light" ? <SunIcon className="w-5 h-5 text-accent" /> : <MoonIcon className="w-5 h-5 text-accent" />}
+              <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsThemeLabel}</h3>
+            </div>
 
-        <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
-          <button
-            id="settings-theme-light"
-            onClick={() => setTheme("light")}
-            className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-              theme === "light" 
-                ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-            }`}
-          >
-            <SunIcon className="w-4 h-4" />
-            <span>{t.lightTheme}</span>
-          </button>
-          
-          <button
-            id="settings-theme-dark"
-            onClick={() => setTheme("dark")}
-            className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-              theme === "dark" 
-                ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-            }`}
-          >
-            <MoonIcon className="w-4 h-4" />
-            <span>{t.darkTheme}</span>
-          </button>
-        </div>
-      </div>
+            <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
+              <button
+                id="settings-theme-light"
+                onClick={() => setTheme("light")}
+                className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                  theme === "light" 
+                    ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                }`}
+              >
+                <SunIcon className="w-4 h-4" />
+                <span>{t.lightTheme}</span>
+              </button>
+              
+              <button
+                id="settings-theme-dark"
+                onClick={() => setTheme("dark")}
+                className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                  theme === "dark" 
+                    ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                }`}
+              >
+                <MoonIcon className="w-4 h-4" />
+                <span>{t.darkTheme}</span>
+              </button>
+            </div>
+          </div>
 
-      {/* Choose Language / భాష ఎంచుకోండి Card */}
-      <div className="nm-outset rounded-[2rem] p-5 space-y-4">
-        <div className="flex items-center gap-2">
-          <LanguagesIcon className="w-5 h-5 text-accent" />
-          <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsLanguageLabel}</h3>
-        </div>
+          {/* Choose Language / భాష ఎంచుకోండి Card */}
+          <div className="nm-outset rounded-[2rem] p-5 space-y-4">
+            <div className="flex items-center gap-2">
+              <LanguagesIcon className="w-5 h-5 text-accent" />
+              <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsLanguageLabel}</h3>
+            </div>
 
-        <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
-          <button
-            id="settings-lang-en"
-            onClick={() => setLang("en")}
-            className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-              lang === "en" 
-                ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-            }`}
-          >
-            English
-          </button>
-          
-          <button
-            id="settings-lang-te"
-            onClick={() => setLang("te")}
-            className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-              lang === "te" 
-                ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-            }`}
-          >
-            తెలుగు
-          </button>
+            <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
+              <button
+                id="settings-lang-en"
+                onClick={() => setLang("en")}
+                className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                  lang === "en" 
+                    ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                }`}
+              >
+                English
+              </button>
+              
+              <button
+                id="settings-lang-te"
+                onClick={() => setLang("te")}
+                className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                  lang === "te" 
+                    ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                }`}
+              >
+                తెలుగు
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </motion.section>

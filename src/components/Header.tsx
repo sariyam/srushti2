@@ -980,9 +980,7 @@ export const Header: React.FC<HeaderProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              className={`relative bg-[var(--bg-primary)] rounded-[2rem] p-4 sm:p-6 md:p-8 w-[90vw] space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-xl transition-all ${
-                isSignedOut ? "max-w-[90vw] lg:max-w-lg" : "max-w-[90vw] lg:max-w-3xl"
-              }`}
+              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-4 sm:p-6 md:p-8 w-[90vw] max-w-[90vw] lg:max-w-4xl space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-xl transition-all"
             >
               {/* Header inside the popup card (hidden when signed out) */}
               {!isSignedOut && (
