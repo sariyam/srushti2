@@ -404,8 +404,8 @@ export default function App() {
 
     if (!rawOpenaiApiKey) {
       setGenerationError(lang === "en" 
-        ? "Please enter and save your OpenAI API Key (starting with sk-) in Application Settings or Admin Panel." 
-        : "దయచేసి సెట్టింగ్‌లలో మీ ఓపెన్ AI API కీని నమోదు చేయండి.");
+        ? "Please enter and save your OpenAI API Key (starting with sk-) in Admin Panel." 
+        : "దయచేసి అడ్మిన్ ప్యానెల్‌లో మీ ఓపెన్ AI API కీని నమోదు చేయండి.");
       setDebugPayload(null);
       setDebugPrompt(null);
       return;

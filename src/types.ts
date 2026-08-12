@@ -47,7 +47,7 @@ export const TRANSLATIONS = {
     navJewelry: "Jewelry",
     navBilling: "Admin Panel",
     navAdmin: "Admin Panel",
-    navSettings: "Settings",
+    navSettings: "Profile",
     
     // Garment tab labels
     garmentTitle: "Garment Photography",
@@ -58,8 +58,8 @@ export const TRANSLATIONS = {
     adminTitle: "Admin Panel",
     billingSubtitle: "Configure AI models, pricing, and API keys",
     adminSubtitle: "Configure AI models, pricing, and API keys",
-    settingsTitle: "Application Settings",
-    settingsSubtitle: "Configure API Key, App Theme, and Language preferences",
+    settingsTitle: "User Profile",
+    settingsSubtitle: "Manage your profile details, theme, and preferences",
     settingsThemeLabel: "Choose Theme / Appearance",
     settingsLanguageLabel: "Choose Language / భాష ఎంచుకోండి",
     
@@ -398,7 +398,7 @@ export const TRANSLATIONS = {
     navJewelry: "నగల ఫోటోలు",
     navBilling: "అడ్మిన్ ప్యానెల్",
     navAdmin: "అడ్మిన్ ప్యానెల్",
-    navSettings: "అమరికలు",
+    navSettings: "ప్రొఫైల్",
     
     // Garment tab labels
     garmentTitle: "బట్టల ఫోటోగ్రఫీ",
@@ -409,13 +409,13 @@ export const TRANSLATIONS = {
     adminTitle: "అడ్మిన్ ప్యానెల్ (Admin Panel)",
     billingSubtitle: "ఏఐ మోడల్ ధరలు మరియు ఏపీఐ అమరికలను నిర్వహించండి",
     adminSubtitle: "ఏఐ మోడల్ ధరలు మరియు ఏపీఐ అమరికలను నిర్వహించండి",
-    settingsTitle: "యాప్ అమరికలు (Settings)",
-    settingsSubtitle: "మీ ఏపీఐ కీ, యాప్ థీమ్ మరియు భాషలను ఇక్కడ సెట్ చేసుకోండి",
+    settingsTitle: "యూజర్ ప్రొఫైల్ (Profile)",
+    settingsSubtitle: "మీ ఖాతా వివరాలు, థీమ్ మరియు భాషల అమరికలు",
     settingsThemeLabel: "థీమ్ / రంగు ఎంచుకోండి",
     settingsLanguageLabel: "భాషను మార్చుకోండి (Choose Language)",
     
     // Canvas / Upload
-    uploadTitle: "ఉత్పత్తి ఫోటో స్పష్టమైన ఫ్రంట్ వ్యూలో అన్ని వివరాలతో ఉండాలి",
+    uploadTitle: "ప్రొడక్ట్ ఫోటో స్పష్టమైన ఫ్రంట్ వ్యూలో అన్ని వివరాలతో ఉండాలి",
     uploadSubtitle: "ఇక్కడ ఫోటోను వేయండి లేదా కెమెరా కోసం నొక్కండి",
     removingBg: "వెనుక బ్యాక్‌గ్రౌండ్ తీసివేయబడుతోంది...",
     removeBgSuccess: "బ్యాక్‌గ్రౌండ్ విజయవంతంగా తీసివేయబడింది!",

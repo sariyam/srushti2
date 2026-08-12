@@ -15,6 +15,7 @@ const Shirt = (props: any) => <Icon icon="lucide:shirt" {...props} />;
 const Gem = (props: any) => <Icon icon="lucide:gem" {...props} />;
 const CreditCard = (props: any) => <Icon icon="lucide:credit-card" {...props} />;
 const Settings = (props: any) => <Icon icon="lucide:settings" {...props} />;
+const UserIcon = (props: any) => <Icon icon="lucide:user" {...props} />;
 const Download = (props: any) => <Icon icon="lucide:download" {...props} />;
 
 const LuLayersIcon = (props: any) => <Icon icon="lucide:layers" {...props} />;
@@ -437,6 +438,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isOpen, setIsOpen] = useState(true);
   const [isBillingOpen, setIsBillingOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSignedOut, setIsSignedOut] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [bannerDismissed, setBannerDismissed] = useState<boolean>(false);
@@ -581,14 +583,14 @@ export const Header: React.FC<HeaderProps> = ({
             <CreditCard className="w-4 h-4" />
           </button>
 
-          {/* Settings popup trigger icon */}
+          {/* Profile popup trigger icon */}
           <button
             id="btn-trigger-settings-modal"
             onClick={() => setIsSettingsOpen(true)}
             className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
-            title={isEn ? "Settings" : "అమరికలు"}
+            title={isEn ? "Profile" : "ప్రొఫైల్"}
           >
-            <Settings className="w-4 h-4" />
+            <UserIcon className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -937,6 +939,17 @@ export const Header: React.FC<HeaderProps> = ({
                   isFetchingRate={isFetchingRate}
                   rateFetchStatus={rateFetchStatus}
                   hideTitle={true}
+                  isValidatingKey={isValidatingKey}
+                  keyValidationError={keyValidationError}
+                  setKeyValidationError={setKeyValidationError}
+                  openaiApiKey={openaiApiKey}
+                  openaiApiInput={openaiApiInput}
+                  setOpenaiApiInput={setOpenaiApiInput}
+                  onSaveOpenaiApiKey={onSaveOpenaiApiKey}
+                  geminiApiKey={geminiApiKey}
+                  geminiApiInput={geminiApiInput}
+                  setGeminiApiInput={setGeminiApiInput}
+                  onSaveGeminiApiKey={onSaveGeminiApiKey}
                 />
               </div>
             </motion.div>
@@ -953,7 +966,11 @@ export const Header: React.FC<HeaderProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsSettingsOpen(false)}
+              onClick={() => {
+                if (!isSignedOut) {
+                  setIsSettingsOpen(false);
+                }
+              }}
               className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm"
             />
 
@@ -963,25 +980,29 @@ export const Header: React.FC<HeaderProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-6 max-w-sm landscape:max-w-2xl lg:max-w-3xl w-full space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[85vh] overflow-y-auto custom-scrollbar shadow-none"
+              className={`relative bg-[var(--bg-primary)] rounded-[2rem] p-4 sm:p-6 md:p-8 w-[94vw] sm:w-[88vw] md:w-full space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-xl transition-all ${
+                isSignedOut ? "max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl" : "max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-3xl"
+              }`}
             >
-              {/* Header inside the popup card */}
-              <div className="flex items-start justify-between border-b border-white/5 pb-2">
-                <div>
-                  <h3 className="text-sm font-extrabold text-[var(--text-emphasis)] tracking-tight">
-                    {t.settingsTitle}
-                  </h3>
-                  <p className="text-[10px] opacity-75 mt-0.5 leading-relaxed">
-                    {t.settingsSubtitle}
-                  </p>
+              {/* Header inside the popup card (hidden when signed out) */}
+              {!isSignedOut && (
+                <div className="flex items-start justify-between border-b border-white/5 pb-2">
+                  <div>
+                    <h3 className="text-sm font-extrabold text-[var(--text-emphasis)] tracking-tight">
+                      {t.settingsTitle}
+                    </h3>
+                    <p className="text-[10px] opacity-75 mt-0.5 leading-relaxed">
+                      {t.settingsSubtitle}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setIsSettingsOpen(false)}
+                    className="w-7 h-7 rounded-full flex items-center justify-center nm-outset-sm hover:scale-105 active:scale-95 text-accent cursor-pointer shrink-0"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setIsSettingsOpen(false)}
-                  className="w-7 h-7 rounded-full flex items-center justify-center nm-outset-sm hover:scale-105 active:scale-95 text-accent cursor-pointer shrink-0"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
+              )}
 
               {/* Settings Workspace Component */}
               <div className="pt-2">
@@ -1007,6 +1028,9 @@ export const Header: React.FC<HeaderProps> = ({
                   openaiApiInput={openaiApiInput}
                   setOpenaiApiInput={setOpenaiApiInput}
                   onSaveOpenaiApiKey={onSaveOpenaiApiKey}
+                  isSignedOut={isSignedOut}
+                  setIsSignedOut={setIsSignedOut}
+                  onCloseModal={() => setIsSettingsOpen(false)}
                 />
               </div>
             </motion.div>
