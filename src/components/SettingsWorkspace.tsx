@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { motion } from "motion/react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
@@ -19,6 +19,10 @@ const KeyRoundIcon = (props: any) => <Icon icon="lucide:key-round" {...props} />
 const ArrowRightIcon = (props: any) => <Icon icon="lucide:arrow-right" {...props} />;
 const RefreshCwIcon = (props: any) => <Icon icon="lucide:refresh-cw" {...props} />;
 const SmartphoneIcon = (props: any) => <Icon icon="lucide:smartphone" {...props} />;
+const InfoIcon = (props: any) => <Icon icon="lucide:info" {...props} />;
+const FileTextIcon = (props: any) => <Icon icon="lucide:file-text" {...props} />;
+const ScaleIcon = (props: any) => <Icon icon="lucide:scale" {...props} />;
+const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
 
 interface SettingsWorkspaceProps {
   apiKey?: string;
@@ -75,6 +79,18 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
   const [verificationNotice, setVerificationNotice] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [internalSignedOut, setInternalSignedOut] = useState(false);
+  const [legalModal, setLegalModal] = useState<"terms" | "privacy" | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname;
+      if (path === "/termsandconditions") {
+        setLegalModal("terms");
+      } else if (path === "/privacypolicy") {
+        setLegalModal("privacy");
+      }
+    }
+  }, []);
 
   const isSignedOut = propIsSignedOut !== undefined ? propIsSignedOut : internalSignedOut;
   const setIsSignedOut = propSetIsSignedOut || setInternalSignedOut;
@@ -209,15 +225,15 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
         </div>
       )}
 
-      {/* Responsive 2-Column Grid: Stacks on mobile/tablet, side-by-side on desktop */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 items-start">
+      {/* Responsive 2-Column Grid: Stacks on mobile/tablet, side-by-side on desktop with equal height columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 items-start lg:items-stretch">
         {/* Left Side: Account Profile or Sign In Card */}
-        <div className="space-y-5 w-full">
+        <div className="space-y-5 w-full lg:h-full lg:flex lg:flex-col">
           {isSignedOut ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="nm-outset rounded-[1.75rem] sm:rounded-[2rem] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border border-accent/20 bg-[var(--bg-panel)] w-full overflow-hidden"
+              className="nm-outset rounded-[1.75rem] sm:rounded-[2rem] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border border-accent/20 bg-[var(--bg-panel)] w-full overflow-hidden lg:h-full lg:flex lg:flex-col lg:justify-between"
             >
           {/* Header Logo above Sign In */}
           <div className="flex flex-col items-center justify-center text-center space-y-1.5 sm:space-y-2 pt-1 pb-2 border-b border-black/5 dark:border-white/5">
@@ -426,7 +442,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
         </motion.div>
       ) : (
         /* User Profile Details Card */
-        <div className="nm-outset rounded-[2rem] p-5 space-y-4 w-full">
+        <div className="nm-outset rounded-[2rem] p-5 space-y-4 w-full lg:h-full lg:flex lg:flex-col lg:justify-between">
           <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3">
             <div className="flex items-center gap-2">
               <UserIcon className="w-5 h-5 text-accent shrink-0" />
@@ -570,7 +586,53 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
     </div>
 
     {/* Right Side: Theme / Appearance & Language Options */}
-    <div className="space-y-5 w-full">
+    <div className="space-y-5 w-full lg:h-full lg:flex lg:flex-col lg:justify-between">
+          {/* Note Card with embedded Terms & Conditions & Privacy Policy links */}
+          <div className="nm-outset rounded-[2rem] p-4 sm:p-5 space-y-3 bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/25">
+            <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+              <InfoIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+              <h4 className="font-extrabold text-xs sm:text-sm tracking-tight">
+                {lang === "te" ? "గమనిక" : "Note"}
+              </h4>
+            </div>
+            <p className="text-[11px] leading-relaxed text-[var(--text-primary)] opacity-90 font-medium break-words">
+              {lang === "te"
+                ? "గమనిక: జనరేట్ చేయబడిన చిత్రాల ఖచ్చితత్వం అప్‌లోడ్ చేసిన ప్రొడక్ట్ ఇమేజ్ యొక్క నాణ్యత మరియు స్పష్టతపై ఆధారపడి ఉంటుంది. సోర్స్ ఇమేజ్ తక్కువ రిజల్యూషన్, మసకగా, క్రాప్ చేయబడి లేదా కనిపించే వివరాలు లేనట్లయితే, జనరేట్ చేయబడిన చిత్రం అసలు ప్రొడక్ట్ కంటే భిన్నంగా ఉండవచ్చు."
+                : "Note: The accuracy of generated images depends on the quality and clarity of the uploaded product image. If the source image is low-resolution, blurry, cropped, or lacks visible details, the generated image may vary from the original product."}
+            </p>
+            <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold text-[var(--text-primary)]">
+              <span>{lang === "te" ? "Srushti AI ని ఉపయోగించడం ద్వారా, మీరు మా" : "By using Srushti AI, you agree to our"}</span>
+              <button
+                id="link-terms-and-conditions"
+                type="button"
+                onClick={() => {
+                  setLegalModal("terms");
+                  if (typeof window !== "undefined") {
+                    window.history.pushState({}, "", "/termsandconditions");
+                  }
+                }}
+                className="underline underline-offset-2 text-accent hover:opacity-80 transition-opacity cursor-pointer font-extrabold"
+              >
+                {lang === "te" ? "నిబంధనలు & షరతులు" : "Terms & Conditions"}
+              </button>
+              <span>{lang === "te" ? "మరియు" : "&"}</span>
+              <button
+                id="link-privacy-policy"
+                type="button"
+                onClick={() => {
+                  setLegalModal("privacy");
+                  if (typeof window !== "undefined") {
+                    window.history.pushState({}, "", "/privacypolicy");
+                  }
+                }}
+                className="underline underline-offset-2 text-accent hover:opacity-80 transition-opacity cursor-pointer font-extrabold"
+              >
+                {lang === "te" ? "గోప్యతా విధానం" : "Privacy Policy"}
+              </button>
+              <span>{lang === "te" ? "కు అంగీకరిస్తున్నారు." : ""}</span>
+            </div>
+          </div>
+
           {/* Choose Theme / Appearance Card */}
           <div className="nm-outset rounded-[2rem] p-5 space-y-4">
             <div className="flex items-center gap-2">
@@ -642,6 +704,134 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Legal Modal Dialog for Terms & Conditions & Privacy Policy */}
+      <AnimatePresence>
+        {legalModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative w-full max-w-2xl bg-[var(--bg-primary)] border border-neutral-300 dark:border-neutral-700 rounded-[2rem] p-5 sm:p-7 text-[var(--text-primary)] shadow-2xl max-h-[85vh] flex flex-col space-y-4"
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl nm-inset-sm flex items-center justify-center text-accent">
+                    {legalModal === "terms" ? <FileTextIcon className="w-5 h-5" /> : <ShieldCheckIcon className="w-5 h-5" />}
+                  </div>
+                  <div>
+                    <h2 className="font-extrabold text-base sm:text-lg text-[var(--text-emphasis)]">
+                      {legalModal === "terms" 
+                        ? (lang === "te" ? "నిబంధనలు మరియు షరతులు (Terms & Conditions)" : "Terms & Conditions") 
+                        : (lang === "te" ? "గోప్యతా విధానం (Privacy Policy)" : "Privacy Policy")}
+                    </h2>
+                    <p className="text-[11px] opacity-60 font-mono">
+                      {legalModal === "terms" ? "/termsandconditions" : "/privacypolicy"}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setLegalModal(null);
+                    if (typeof window !== "undefined") {
+                      window.history.pushState({}, "", "/");
+                    }
+                  }}
+                  className="p-2 rounded-xl nm-outset-sm hover:text-red-500 transition-all cursor-pointer"
+                >
+                  <XIcon className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Scrollable Content Body */}
+              <div className="overflow-y-auto custom-scrollbar flex-1 pr-1 space-y-4 text-xs leading-relaxed text-[var(--text-primary)]">
+                {legalModal === "terms" ? (
+                  <div className="space-y-3.5">
+                    <p className="opacity-80">
+                      Welcome to <strong>Srushti AI</strong>. By accessing or using our platform, services, or AI generation features, you agree to be bound by the following Terms & Conditions.
+                    </p>
+
+                    <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 font-medium text-[11px] space-y-1.5">
+                      <p className="font-extrabold flex items-center gap-1.5">
+                        <InfoIcon className="w-4 h-4 shrink-0 text-amber-500" />
+                        <span>AI Image Generation & Accuracy Disclaimer</span>
+                      </p>
+                      <p>
+                        Note: The accuracy of generated images depends on the quality and clarity of the uploaded product image. If the source image is low-resolution, blurry, cropped, or lacks visible details, the generated image may vary from the original product.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">1. User Accounts & Authentication</h3>
+                      <p className="opacity-80">You must provide a valid phone number to authenticate and access Srushti AI services. You are responsible for maintaining confidentiality of your account session.</p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">2. Uploaded Content & Intellectual Property</h3>
+                      <p className="opacity-80">You retain full ownership rights over all product images uploaded to Srushti AI. You grant Srushti AI a limited non-exclusive license solely to process and generate garment and jewelry visualizations on your behalf.</p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">3. Prohibited Conduct</h3>
+                      <p className="opacity-80">Users must not upload content that violates third-party intellectual property rights, contains unlawful material, or attempts to reverse engineer AI model endpoints.</p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">4. Limitation of Liability</h3>
+                      <p className="opacity-80">Srushti AI shall not be liable for any direct, indirect, or incidental damages resulting from variations in AI-generated product images compared to physical products.</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3.5">
+                    <p className="opacity-80">
+                      At <strong>Srushti AI</strong>, your privacy and data protection are central to our platform. This Privacy Policy outlines how your personal information and uploaded media are managed.
+                    </p>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">1. Information We Collect</h3>
+                      <p className="opacity-80">• Account Information: Phone number provided during OTP authentication.</p>
+                      <p className="opacity-80">• Uploaded Media: Product images uploaded for generating AI garment and jewelry trials.</p>
+                      <p className="opacity-80">• App Preferences: UI theme (Light/Dark) and language preferences (English/Telugu).</p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">2. Usage of Collected Information</h3>
+                      <p className="opacity-80">Information collected is used strictly to process AI generation requests, verify account logins, and save workspace display preferences.</p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">3. Data Protection & Security</h3>
+                      <p className="opacity-80">Uploaded images are encrypted during transmission and processing. Srushti AI does not sell, rent, or trade user data with third-party advertising networks.</p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">4. Your Data Rights</h3>
+                      <p className="opacity-80">You may request deletion of your profile or stored session data at any time through our support team.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="pt-2 border-t border-black/10 dark:border-white/10 flex justify-end">
+                <button
+                  onClick={() => {
+                    setLegalModal(null);
+                    if (typeof window !== "undefined") {
+                      window.history.pushState({}, "", "/");
+                    }
+                  }}
+                  className="px-5 py-2.5 rounded-xl text-xs font-extrabold nm-outset text-accent bg-accent/10 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+                >
+                  {lang === "te" ? "అర్థమైంది / మూసివేయి" : "I Understand & Close"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 };
