@@ -438,7 +438,21 @@ export const Header: React.FC<HeaderProps> = ({
   const [isOpen, setIsOpen] = useState(true);
   const [isBillingOpen, setIsBillingOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isSignedOut, setIsSignedOut] = useState(false);
+  const [isSignedOut, setIsSignedOut] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("srushti_is_signed_out") === "true";
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("srushti_is_signed_out", isSignedOut ? "true" : "false");
+    }
+    if (isSignedOut) {
+      setIsSettingsOpen(true);
+    }
+  }, [isSignedOut]);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [bannerDismissed, setBannerDismissed] = useState<boolean>(false);

@@ -21,6 +21,8 @@ import { AdminWorkspace } from "./components/AdminWorkspace";
 import { SettingsWorkspace } from "./components/SettingsWorkspace";
 import { PRESET_FACES } from "./components/FaceGenerator";
 import { SplashScreen } from "./components/SplashScreen";
+import { TermsAndConditionsPage } from "./components/TermsAndConditionsPage";
+import { PrivacyPolicyPage } from "./components/PrivacyPolicyPage";
 
 const Shirt = (props: any) => <Icon icon="lucide:shirt" {...props} />;
 const Gem = (props: any) => <Icon icon="lucide:gem" {...props} />;
@@ -34,6 +36,21 @@ const SettingsIcon = (props: any) => <Icon icon="lucide:settings" {...props} />;
 const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
 
 export default function App() {
+  const [currentPath, setCurrentPath] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.location.pathname.toLowerCase().replace(/\/$/, "");
+    }
+    return "";
+  });
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setCurrentPath(window.location.pathname.toLowerCase().replace(/\/$/, ""));
+    };
+    window.addEventListener("popstate", handleLocationChange);
+    return () => window.removeEventListener("popstate", handleLocationChange);
+  }, []);
+
   // --- Persistent & Local States ---
   const [showSplash, setShowSplash] = useState(true);
   const [lang, setLang] = useState<Language>(() => {
@@ -636,6 +653,14 @@ export default function App() {
       copyToClipboard
     );
   };
+
+  if (currentPath === "/termsandconditions") {
+    return <TermsAndConditionsPage />;
+  }
+
+  if (currentPath === "/privacypolicy") {
+    return <PrivacyPolicyPage />;
+  }
 
   return (
     <div className="h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 flex flex-col overflow-hidden">
