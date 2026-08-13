@@ -32,7 +32,7 @@ export const PresentationSlider = <T extends string>({
               onClick={() => onSelect(item.id)}
               className={`px-3 py-2 rounded-2xl text-[10px] sm:text-[11px] font-extrabold flex flex-row items-center justify-center gap-1.5 transition-all cursor-pointer ${
                 isSelected
-                  ? "nm-inset-sm text-accent scale-[0.98] ring-1 ring-accent/30 font-black"
+                  ? "nm-inset-sm text-accent scale-[0.98] font-black"
                   : "nm-outset-sm hover:scale-[1.02]"
               }`}
             >

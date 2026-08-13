@@ -304,7 +304,7 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
               onClick={() => onSelect(id)}
               className={`min-w-[80px] sm:min-w-[90px] p-2 rounded-xl text-[11px] font-extrabold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
                 isSelected
-                  ? "nm-inset-sm text-accent scale-[0.98] ring-1 ring-accent/30 font-black"
+                  ? "nm-inset-sm text-accent scale-[0.98] font-black"
                   : "nm-outset-sm hover:scale-[1.02]"
               }`}
             >
@@ -699,7 +699,7 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${
                       tempWorkspace === "garment" && tempGarmentGender === "female"
-                        ? "nm-inset border border-accent text-accent font-extrabold"
+                        ? "nm-inset text-accent font-extrabold"
                         : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
                     }`}
                   >
@@ -719,7 +719,7 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${
                       tempWorkspace === "garment" && tempGarmentGender === "male"
-                        ? "nm-inset border border-accent text-accent font-extrabold"
+                        ? "nm-inset text-accent font-extrabold"
                         : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
                     }`}
                   >
@@ -748,7 +748,7 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${
                       tempWorkspace === "jewelry" && tempJewelryGender === "female"
-                        ? "nm-inset border border-accent text-accent font-extrabold"
+                        ? "nm-inset text-accent font-extrabold"
                         : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
                     }`}
                   >
@@ -768,7 +768,7 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${
                       tempWorkspace === "jewelry" && tempJewelryGender === "male"
-                        ? "nm-inset border border-accent text-accent font-extrabold"
+                        ? "nm-inset text-accent font-extrabold"
                         : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
                     }`}
                   >

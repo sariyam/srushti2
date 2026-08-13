@@ -293,7 +293,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 onClick={() => {
                   document.getElementById("btn-trigger-business-modal")?.click();
                 }}
-                className="p-1.5 px-2 rounded-xl nm-outset-sm text-accent hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0 border border-accent/20 flex items-center gap-1 text-[11px] font-extrabold"
+                className="p-1.5 px-2 rounded-xl nm-outset-sm text-accent hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0 flex items-center gap-1 text-[11px] font-extrabold"
                 title={lang === "en" ? "Select Business" : "బిజినెస్ మార్చండి"}
               >
                 <Edit2 className="w-3.5 h-3.5" />
@@ -399,7 +399,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                       onClick={() => setGptImageQuality?.(qual)}
                       className={`py-2 px-2 rounded-xl flex flex-col items-center justify-center text-center transition-all w-full cursor-pointer ${
                         isSelected
-                          ? "nm-inset-sm text-accent scale-[0.98] border-2 border-accent/30 font-black"
+                          ? "nm-inset-sm text-accent scale-[0.98] font-black"
                           : "nm-outset-sm opacity-80 hover:opacity-100"
                       }`}
                     >
@@ -439,7 +439,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                       isDisabled
                         ? "opacity-40 cursor-not-allowed nm-inset-sm bg-black/5 dark:bg-white/5"
                         : isSelected 
-                          ? "nm-inset-sm text-accent scale-[0.98] border-2 border-accent/20" 
+                          ? "nm-inset-sm text-accent scale-[0.98] font-black" 
                           : "nm-outset-sm hover:scale-[1.01]"
                     }`}
                   >
@@ -606,9 +606,9 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                         setJewelryBackground(comp.indoor[0] || "luxury");
                       }
                     }}
-                    className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 border ${
+                    className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 ${
                       bgCategory === "indoor" 
-                        ? "border-accent text-accent scale-[1.02]" 
+                        ? "nm-inset-sm text-accent scale-[1.02]" 
                         : "border-transparent text-[var(--text-emphasis)] text-opacity-60 hover:text-opacity-90"
                     }`}
                   >
@@ -623,9 +623,9 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                         setJewelryBackground(comp.outdoor[0] || "beach");
                       }
                     }}
-                    className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 border ${
+                    className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 ${
                       bgCategory === "outdoor" 
-                        ? "border-accent text-accent scale-[1.02]" 
+                        ? "nm-inset-sm text-accent scale-[1.02]" 
                         : "border-transparent text-[var(--text-emphasis)] text-opacity-60 hover:text-opacity-90"
                     }`}
                   >

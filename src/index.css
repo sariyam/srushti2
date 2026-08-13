@@ -60,110 +60,131 @@ button, input, select, textarea {
 
 /* Custom Neumorphic Soft-UI shadow helper classes */
 
+/* --- CONVEX UPWARD EFFECT (INITIAL/DEFAULT STATE) --- */
 .nm-outset {
   background-color: var(--bg-secondary);
-  box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nm-inset {
-  background-color: var(--bg-secondary);
-  box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
 }
 
 .nm-outset-sm {
   background-color: var(--bg-secondary);
-  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 3px 3px 7px var(--shadow-dark), -3px -3px 7px var(--shadow-light);
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+}
+
+.nm-outset-lg {
+  background-color: var(--bg-secondary);
+  box-shadow: 10px 10px 22px var(--shadow-dark), -10px -10px 22px var(--shadow-light);
+  transition: box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+}
+
+.nm-outset-bg-primary {
+  background-color: var(--bg-primary);
+  box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+}
+
+.nm-outset-bg-primary-sm {
+  background-color: var(--bg-primary);
+  box-shadow: 3px 3px 7px var(--shadow-dark), -3px -3px 7px var(--shadow-light);
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+}
+
+/* --- CONCAVE DOWNWARD EFFECT (INSET DEPRESSED / PRESSED STATE) --- */
+.nm-inset {
+  background-color: var(--bg-secondary);
+  box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
 }
 
 .nm-inset-sm {
   background-color: var(--bg-secondary);
   box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nm-outset-lg {
-  background-color: var(--bg-secondary);
-  box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
 }
 
 .nm-inset-lg {
   background-color: var(--bg-secondary);
-  box-shadow: inset 10px 10px 20px var(--shadow-dark), inset -10px -10px 20px var(--shadow-light);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Base surface version for elements rendered on the primary background */
-.nm-outset-bg-primary {
-  background-color: var(--bg-primary);
-  box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 8px 8px 16px var(--shadow-dark), inset -8px -8px 16px var(--shadow-light);
+  transition: box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
 }
 
 .nm-inset-bg-primary {
   background-color: var(--bg-primary);
-  box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nm-outset-bg-primary-sm {
-  background-color: var(--bg-primary);
-  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
 }
 
 .nm-inset-bg-primary-sm {
   background-color: var(--bg-primary);
   box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+}
+
+/* --- ACTIVE TRANSITION: CONVEX UPWARD -> CONCAVE DOWNWARD WHEN PRESSED/ACTIVE/SELECTED --- */
+.nm-outset:active,
+.nm-outset.active,
+.nm-outset.is-active,
+.nm-outset[data-active="true"],
+.nm-outset[aria-selected="true"],
+.nm-outset[data-state="active"] {
+  box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light) !important;
+  transform: translateY(1px);
+}
+
+.nm-outset-sm:active,
+.nm-outset-sm.active,
+.nm-outset-sm.is-active,
+.nm-outset-sm[aria-selected="true"],
+.nm-outset-sm[data-active="true"],
+.nm-outset-sm[data-state="active"] {
+  box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light) !important;
+  transform: translateY(0.5px);
+}
+
+.nm-outset-lg:active,
+.nm-outset-lg.active,
+.nm-outset-lg.is-active,
+.nm-outset-lg[aria-selected="true"],
+.nm-outset-lg[data-active="true"],
+.nm-outset-lg[data-state="active"] {
+  box-shadow: inset 8px 8px 16px var(--shadow-dark), inset -8px -8px 16px var(--shadow-light) !important;
+  transform: translateY(1px);
+}
+
+.nm-outset-bg-primary:active,
+.nm-outset-bg-primary.active,
+.nm-outset-bg-primary.is-active,
+.nm-outset-bg-primary[aria-selected="true"],
+.nm-outset-bg-primary[data-active="true"] {
+  box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light) !important;
+  transform: translateY(1px);
+}
+
+.nm-outset-bg-primary-sm:active,
+.nm-outset-bg-primary-sm.active,
+.nm-outset-bg-primary-sm.is-active,
+.nm-outset-bg-primary-sm[aria-selected="true"],
+.nm-outset-bg-primary-sm[data-active="true"] {
+  box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light) !important;
+  transform: translateY(0.5px);
 }
 
 /* Custom interactive animations for neumorphic elements */
-.nm-btn-active:active, .nm-btn-active-pressed {
+.nm-btn-active:active,
+.nm-btn-active-pressed,
+button.nm-outset:active,
+button.nm-outset-sm:active,
+button.nm-outset-lg:active,
+.cursor-pointer.nm-outset:active,
+.cursor-pointer.nm-outset-sm:active {
   box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light) !important;
+  transform: translateY(1px);
 }
 
 .nm-card-active {
-  box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light) !important;
-}
-
-/* Custom light glowing shadow & border-ring for selected UI elements (glowing neon-green or rose accents) */
-.text-accent.nm-inset-sm,
-.text-accent.nm-inset,
-.text-accent.nm-outset-sm,
-.text-accent.nm-outset,
-.text-accent.shadow-md,
-.border-accent,
-.border-rose-500\/30 {
-  box-shadow: 0 0 0 1.5px var(--color-accent), 0 0 12px rgba(50, 207, 17, 0.45) !important;
-  border-color: var(--color-accent) !important;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .text-accent.nm-inset-sm,
-.dark .text-accent.nm-inset,
-.dark .text-accent.nm-outset-sm,
-.dark .text-accent.nm-outset,
-.dark .text-accent.shadow-md,
-.dark .border-accent,
-.dark .border-rose-500\/30 {
-  box-shadow: 0 0 0 1.5px var(--color-accent), 0 0 16px rgba(57, 255, 20, 0.6) !important;
-  border-color: var(--color-accent) !important;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Specific glowing shadow for rose selection buttons (such as model face selection) */
-.border-rose-500\/30 {
-  box-shadow: 0 0 0 1.5px rgb(244, 63, 94), 0 0 12px rgba(244, 63, 94, 0.45) !important;
-  border-color: rgb(244, 63, 94) !important;
-}
-
-.dark .border-rose-500\/30 {
-  box-shadow: 0 0 0 1.5px rgb(244, 63, 94), 0 0 16px rgba(244, 63, 94, 0.6) !important;
-  border-color: rgb(244, 63, 94) !important;
+  box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light) !important;
 }
 
 /* Custom hide scrollbars but keep functionality */

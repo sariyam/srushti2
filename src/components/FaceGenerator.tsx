@@ -903,7 +903,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
                 onClick={() => setActiveSubtab(tab.id)}
                 className={`px-2 py-1.5 rounded-xl text-[9.5px] sm:text-[10px] font-extrabold transition-all text-center leading-tight flex items-center justify-center gap-1 shrink-0 cursor-pointer ${
                   isActive
-                    ? "nm-inset-sm text-accent scale-[0.98] border border-accent/20 bg-accent/10"
+                    ? "nm-inset-sm text-accent scale-[0.98] bg-accent/10"
                     : "nm-outset-sm text-[var(--text-primary)] opacity-80 hover:opacity-100 hover:scale-[1.02]"
                 }`}
               >
@@ -937,7 +937,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
                     setSelectedFacePrompt(face.prompt);
                   }}
                   className={`relative p-1.5 sm:p-2 rounded-2xl flex flex-col items-center justify-between gap-1 transition-all cursor-pointer ${
-                    isSelected ? "nm-inset-sm scale-95 border-accent text-accent font-black" : "nm-outset-sm hover:scale-[1.02]"
+                    isSelected ? "nm-inset-sm scale-95 text-accent font-black" : "nm-outset-sm hover:scale-[1.02]"
                   }`}
                 >
                   <div className="relative w-full aspect-square rounded-xl overflow-hidden nm-inset-xs bg-[var(--bg-secondary)] flex items-center justify-center shrink-0">
