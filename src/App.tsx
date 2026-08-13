@@ -663,7 +663,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col overflow-hidden">
       
       {/* --- TOP BRAND HEADER BAR --- */}
       <Header 

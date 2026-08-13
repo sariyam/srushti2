@@ -36,6 +36,10 @@
   --color-accent-hover: #32e60f;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -45,7 +49,6 @@ body {
   text-rendering: optimizeLegibility;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   letter-spacing: -0.01em;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Enhanced legibility optimization for small sizes & labels (ideal for older users) */
@@ -64,66 +67,78 @@ button, input, select, textarea {
 .nm-outset {
   background-color: var(--bg-secondary);
   box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
-  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
+}
+
+/* Static container background panels (Setup, Studio, Bg) - disable click press/depression effect */
+.nm-panel,
+.nm-panel:active,
+div.nm-panel,
+div.nm-panel:active {
+  box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light) !important;
+  transform: none !important;
 }
 
 .nm-outset-sm {
   background-color: var(--bg-secondary);
   box-shadow: 3px 3px 7px var(--shadow-dark), -3px -3px 7px var(--shadow-light);
-  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
 .nm-outset-lg {
   background-color: var(--bg-secondary);
   box-shadow: 10px 10px 22px var(--shadow-dark), -10px -10px 22px var(--shadow-light);
-  transition: box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
 .nm-outset-bg-primary {
   background-color: var(--bg-primary);
   box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
-  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
 .nm-outset-bg-primary-sm {
   background-color: var(--bg-primary);
   box-shadow: 3px 3px 7px var(--shadow-dark), -3px -3px 7px var(--shadow-light);
-  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
 /* --- CONCAVE DOWNWARD EFFECT (INSET DEPRESSED / PRESSED STATE) --- */
 .nm-inset {
   background-color: var(--bg-secondary);
   box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
-  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
 .nm-inset-sm {
   background-color: var(--bg-secondary);
   box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
 .nm-inset-lg {
   background-color: var(--bg-secondary);
   box-shadow: inset 8px 8px 16px var(--shadow-dark), inset -8px -8px 16px var(--shadow-light);
-  transition: box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
 .nm-inset-bg-primary {
   background-color: var(--bg-primary);
   box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
-  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
 .nm-inset-bg-primary-sm {
   background-color: var(--bg-primary);
   box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease, background-color 0.2s ease;
+  transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease;
 }
 
-/* --- ACTIVE TRANSITION: CONVEX UPWARD -> CONCAVE DOWNWARD WHEN PRESSED/ACTIVE/SELECTED --- */
-.nm-outset:active,
+/* --- ACTIVE TRANSITION FOR BUTTONS / INTERACTIVE CONTROLS ONLY --- */
+button.nm-outset:active,
+a.nm-outset:active,
+[role="button"].nm-outset:active,
+.nm-btn.nm-outset:active,
 .nm-outset.active,
 .nm-outset.is-active,
 .nm-outset[data-active="true"],
@@ -133,7 +148,10 @@ button, input, select, textarea {
   transform: translateY(1px);
 }
 
-.nm-outset-sm:active,
+button.nm-outset-sm:active,
+a.nm-outset-sm:active,
+[role="button"].nm-outset-sm:active,
+.nm-btn.nm-outset-sm:active,
 .nm-outset-sm.active,
 .nm-outset-sm.is-active,
 .nm-outset-sm[aria-selected="true"],
@@ -143,7 +161,10 @@ button, input, select, textarea {
   transform: translateY(0.5px);
 }
 
-.nm-outset-lg:active,
+button.nm-outset-lg:active,
+a.nm-outset-lg:active,
+[role="button"].nm-outset-lg:active,
+.nm-btn.nm-outset-lg:active,
 .nm-outset-lg.active,
 .nm-outset-lg.is-active,
 .nm-outset-lg[aria-selected="true"],
@@ -153,7 +174,9 @@ button, input, select, textarea {
   transform: translateY(1px);
 }
 
-.nm-outset-bg-primary:active,
+button.nm-outset-bg-primary:active,
+a.nm-outset-bg-primary:active,
+[role="button"].nm-outset-bg-primary:active,
 .nm-outset-bg-primary.active,
 .nm-outset-bg-primary.is-active,
 .nm-outset-bg-primary[aria-selected="true"],
@@ -162,7 +185,9 @@ button, input, select, textarea {
   transform: translateY(1px);
 }
 
-.nm-outset-bg-primary-sm:active,
+button.nm-outset-bg-primary-sm:active,
+a.nm-outset-bg-primary-sm:active,
+[role="button"].nm-outset-bg-primary-sm:active,
 .nm-outset-bg-primary-sm.active,
 .nm-outset-bg-primary-sm.is-active,
 .nm-outset-bg-primary-sm[aria-selected="true"],

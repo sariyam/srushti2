@@ -269,10 +269,8 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
 
       {/* Tab 1 Content: Merged Setup (Style + Export + Resolution) */}
       {garmentTab === "setup" && (
-        <motion.div 
-          initial={{ opacity: 0, y: 5 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
+        <div 
+          className="nm-outset nm-panel rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
           {/* User Selection Breadcrumb + Reselect Business Edit Button */}
           <div className="space-y-1.5">
@@ -489,15 +487,13 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
               })}
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* Tab 2 Content: Studio / Human Model Options */}
       {garmentTab === "studio" && (
-        <motion.div 
-          initial={{ opacity: 0, y: 5 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
+        <div 
+          className="nm-outset nm-panel rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
           {/* Presentation Options */}
           <div className="space-y-1.5">
@@ -542,15 +538,13 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
               lang={lang}
             />
           )}
-        </motion.div>
+        </div>
       )}
 
       {/* Tab 3 Content: Background Customization */}
       {garmentTab === "background" && (
-        <motion.div 
-          initial={{ opacity: 0, y: 5 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
+        <div 
+          className="nm-outset nm-panel rounded-3xl p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
           {/* Background Selection */}
           <div className="space-y-2">
@@ -794,7 +788,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
               <span>{t.generateBtn}</span>
             </button>
           </div>
-        </motion.div>
+        </div>
       )}
 
 

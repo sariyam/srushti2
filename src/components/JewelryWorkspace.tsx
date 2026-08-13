@@ -262,10 +262,8 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
 
       {/* Tab 1 Content: Merged Setup (Style + Export + Resolution) */}
       {jewelryTab === "setup" && (
-        <motion.div 
-          initial={{ opacity: 0, y: 5 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
+        <div 
+          className="nm-outset nm-panel rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
           {/* User Selection Breadcrumb + Reselect Business Edit Button */}
           <div className="space-y-1.5">
@@ -482,15 +480,13 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
               })}
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* Tab 2 Content: Studio / Face or Bust display selection */}
       {jewelryTab === "studio" && (
-        <motion.div 
-          initial={{ opacity: 0, y: 5 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
+        <div 
+          className="nm-outset nm-panel rounded-3xl p-3 sm:p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
           {/* Presentation Options */}
           <div className="space-y-1.5">
@@ -573,15 +569,13 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
               </div>
             </div>
           ) : null}
-        </motion.div>
+        </div>
       )}
 
       {/* Tab 3 Content: Background selections */}
       {jewelryTab === "background" && (
-        <motion.div 
-          initial={{ opacity: 0, y: 5 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="nm-outset rounded-3xl p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
+        <div 
+          className="nm-outset nm-panel rounded-3xl p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
           {/* Background Selection */}
           <div className="space-y-2">
@@ -831,7 +825,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
               <span>{t.generateBtn}</span>
             </button>
           </div>
-        </motion.div>
+        </div>
       )}
 
 
