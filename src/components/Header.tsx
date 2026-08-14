@@ -30,7 +30,7 @@ const LuLinkIcon = (props: any) => <Icon icon="lucide:link" {...props} />;
 const LuHeartIcon = (props: any) => <Icon icon="lucide:heart" {...props} />;
 
 const KurtaIcon = (props: any) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-accent" {...props}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>
     <path d="M6 3h12l3 5-3 14H6L3 8l3-5z" />
     <path d="M12 3v7" />
     <path d="M10 7h4" />
@@ -39,7 +39,7 @@ const KurtaIcon = (props: any) => (
 );
 
 const SuitIcon = (props: any) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-accent" {...props}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>
     <path d="M4 3h16l-3 6v12H7V9L4 3z" />
     <path d="M8 3l4 6 4-6" />
     <path d="M12 9v12" />
@@ -48,7 +48,7 @@ const SuitIcon = (props: any) => (
 );
 
 const WesternWearIcon = (props: any) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-accent" {...props}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>
     <path d="M9 2h6l2 4-2 4 3 12H6l3-12-2-4 2-4z" />
     <path d="M9 10h6" />
     <circle cx="12" cy="15" r="1.5" fill="currentColor" fillOpacity="0.3" />
@@ -56,7 +56,7 @@ const WesternWearIcon = (props: any) => (
 );
 
 const NecklaceIcon = (props: any) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-accent" {...props}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>
     <path d="M4 3c0 7 3.5 13 8 13s8-6 8-13" />
     <polygon points="12,15 15,19 12,22 9,19" fill="currentColor" fillOpacity="0.3" />
     <circle cx="7" cy="8" r="1" fill="currentColor" />
@@ -65,7 +65,7 @@ const NecklaceIcon = (props: any) => (
 );
 
 const ChokerIcon = (props: any) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-accent" {...props}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>
     <rect x="3" y="6" width="18" height="6" rx="2" fill="currentColor" fillOpacity="0.15" />
     <path d="M12 12v5" />
     <polygon points="12,17 14.5,20 12,22 9.5,20" fill="currentColor" />
@@ -73,66 +73,66 @@ const ChokerIcon = (props: any) => (
 );
 
 const GARMENT_ICONS: Record<string, React.ReactNode> = {
-  saree: <Icon icon="lucide:sparkles" className="w-4 h-4 text-accent" />,
+  saree: <Icon icon="lucide:sparkles" className="w-4 h-4" />,
   western_wear: <WesternWearIcon />,
   westernwear: <WesternWearIcon />,
   "western wear": <WesternWearIcon />,
-  jeans: <Icon icon="lucide:scissors" className="w-4 h-4 text-accent" />,
-  salwar: <Icon icon="lucide:flower-2" className="w-4 h-4 text-accent" />,
-  tshirt: <Shirt className="w-4 h-4 text-accent" />,
-  shirt: <Shirt className="w-4 h-4 text-accent" />,
+  jeans: <Icon icon="lucide:scissors" className="w-4 h-4" />,
+  salwar: <Icon icon="lucide:flower-2" className="w-4 h-4" />,
+  tshirt: <Shirt className="w-4 h-4" />,
+  shirt: <Shirt className="w-4 h-4" />,
   kurta: <KurtaIcon />,
   suit: <SuitIcon />,
   classic_suit: <SuitIcon />,
   classicsuit: <SuitIcon />,
   "classic suit": <SuitIcon />,
-  lehenga: <Icon icon="lucide:sparkles" className="w-4 h-4 text-accent" />,
-  gown: <Icon icon="lucide:crown" className="w-4 h-4 text-accent" />,
-  skirt: <Icon icon="lucide:layers" className="w-4 h-4 text-accent" />,
-  crop_top: <Shirt className="w-4 h-4 text-accent" />,
-  blouse: <Shirt className="w-4 h-4 text-accent" />,
+  lehenga: <Icon icon="lucide:sparkles" className="w-4 h-4" />,
+  gown: <Icon icon="lucide:crown" className="w-4 h-4" />,
+  skirt: <Icon icon="lucide:layers" className="w-4 h-4" />,
+  crop_top: <Shirt className="w-4 h-4" />,
+  blouse: <Shirt className="w-4 h-4" />,
   sherwani: <KurtaIcon />,
-  dhoti: <Icon icon="lucide:layers" className="w-4 h-4 text-accent" />,
+  dhoti: <Icon icon="lucide:layers" className="w-4 h-4" />,
   blazer: <SuitIcon />,
-  tracksuit: <Icon icon="lucide:activity" className="w-4 h-4 text-accent" />,
-  hoodie: <Shirt className="w-4 h-4 text-accent" />,
+  tracksuit: <Icon icon="lucide:activity" className="w-4 h-4" />,
+  hoodie: <Shirt className="w-4 h-4" />,
 };
 
 const JEWELRY_ICONS: Record<string, React.ReactNode> = {
-  earrings: <Icon icon="lucide:disc" className="w-4 h-4 text-accent" />,
+  earrings: <Icon icon="lucide:disc" className="w-4 h-4" />,
   necklace: <NecklaceIcon />,
-  chain: <Icon icon="lucide:link" className="w-4 h-4 text-accent" />,
-  ring: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
-  finger_ring: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
-  thumb_ring: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
-  solitaire: <Gem className="w-4 h-4 text-accent" />,
-  bracelet: <Icon icon="lucide:circle" className="w-4 h-4 text-accent" />,
-  watch: <Icon icon="lucide:watch" className="w-4 h-4 text-accent" />,
-  anklet: <Icon icon="lucide:footprints" className="w-4 h-4 text-accent" />,
-  payal: <Icon icon="lucide:footprints" className="w-4 h-4 text-accent" />,
-  toe_ring: <Icon icon="lucide:footprints" className="w-4 h-4 text-accent" />,
-  toe: <Icon icon="lucide:footprints" className="w-4 h-4 text-accent" />,
-  nose_ring: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
-  nose_pin: <Icon icon="lucide:sparkles" className="w-4 h-4 text-accent" />,
-  nath: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
-  nose: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
-  noise: <Icon icon="lucide:circle-dot" className="w-4 h-4 text-accent" />,
-  waistband: <Icon icon="lucide:circle-dashed" className="w-4 h-4 text-accent" />,
-  hip_chain: <Icon icon="lucide:link" className="w-4 h-4 text-accent" />,
-  kamarbandh: <Icon icon="lucide:circle-dashed" className="w-4 h-4 text-accent" />,
-  bangles: <Icon icon="lucide:circle" className="w-4 h-4 text-accent" />,
+  chain: <Icon icon="lucide:link" className="w-4 h-4" />,
+  ring: <Icon icon="lucide:circle-dot" className="w-4 h-4" />,
+  finger_ring: <Icon icon="lucide:circle-dot" className="w-4 h-4" />,
+  thumb_ring: <Icon icon="lucide:circle-dot" className="w-4 h-4" />,
+  solitaire: <Gem className="w-4 h-4" />,
+  bracelet: <Icon icon="lucide:circle" className="w-4 h-4" />,
+  watch: <Icon icon="lucide:watch" className="w-4 h-4" />,
+  anklet: <Icon icon="lucide:footprints" className="w-4 h-4" />,
+  payal: <Icon icon="lucide:footprints" className="w-4 h-4" />,
+  toe_ring: <Icon icon="lucide:footprints" className="w-4 h-4" />,
+  toe: <Icon icon="lucide:footprints" className="w-4 h-4" />,
+  nose_ring: <Icon icon="lucide:circle-dot" className="w-4 h-4" />,
+  nose_pin: <Icon icon="lucide:sparkles" className="w-4 h-4" />,
+  nath: <Icon icon="lucide:circle-dot" className="w-4 h-4" />,
+  nose: <Icon icon="lucide:circle-dot" className="w-4 h-4" />,
+  noise: <Icon icon="lucide:circle-dot" className="w-4 h-4" />,
+  waistband: <Icon icon="lucide:circle-dashed" className="w-4 h-4" />,
+  hip_chain: <Icon icon="lucide:link" className="w-4 h-4" />,
+  kamarbandh: <Icon icon="lucide:circle-dashed" className="w-4 h-4" />,
+  bangles: <Icon icon="lucide:circle" className="w-4 h-4" />,
   choker: <ChokerIcon />,
   premium_choker: <ChokerIcon />,
   premiumchoker: <ChokerIcon />,
   "premium choker": <ChokerIcon />,
-  cufflinks: <Icon icon="lucide:gem" className="w-4 h-4 text-accent" />,
-  pendant: <Icon icon="lucide:heart" className="w-4 h-4 text-accent" />,
-  kada: <Icon icon="lucide:circle" className="w-4 h-4 text-accent" />,
-  maang_tikka: <Icon icon="lucide:sparkles" className="w-4 h-4 text-accent" />,
-  matha_patti: <Icon icon="lucide:crown" className="w-4 h-4 text-accent" />,
-  borla: <Icon icon="lucide:sparkles" className="w-4 h-4 text-accent" />,
-  passa: <Icon icon="lucide:sparkles" className="w-4 h-4 text-accent" />,
-  headband: <Icon icon="lucide:crown" className="w-4 h-4 text-accent" />,
+  cufflinks: <Icon icon="lucide:gem" className="w-4 h-4" />,
+  pendant: <Icon icon="lucide:heart" className="w-4 h-4" />,
+  kada: <Icon icon="lucide:circle" className="w-4 h-4" />,
+  maang_tikka: <Icon icon="lucide:sparkles" className="w-4 h-4" />,
+  matha_patti: <Icon icon="lucide:crown" className="w-4 h-4" />,
+  borla: <Icon icon="lucide:sparkles" className="w-4 h-4" />,
+  passa: <Icon icon="lucide:sparkles" className="w-4 h-4" />,
+  headband: <Icon icon="lucide:crown" className="w-4 h-4" />,
 };
 
 const getGarmentIcon = (id: string) => {
@@ -525,28 +525,15 @@ export const Header: React.FC<HeaderProps> = ({
     setIsOpen(true);
   };
 
-  // Formulate a localized display name for the currently selected business focus
-  let selectedLabel = "";
-  if (workspace === "garment") {
-    if (garmentModelGender === "female") {
-      selectedLabel = isEn ? "Garments (Female)" : "బట్టలు (మహిళల కలెక్షన్)";
-    } else {
-      selectedLabel = isEn ? "Garments (Male)" : "బట్టలు (పురుషుల కలెక్షన్)";
-    }
-  } else if (workspace === "jewelry") {
-    if (jewelryModelGender === "female") {
-      selectedLabel = isEn ? "Jewelry (Female)" : "నగలు (మహిళల కలెక్షన్)";
-    } else {
-      selectedLabel = isEn ? "Jewelry (Male)" : "నగలు (పురుషుల కలెక్షన్)";
-    }
-  } else {
-    // Fallback labels when settings/billing are active
-    if (garmentModelGender === "female") {
-      selectedLabel = isEn ? "Garments (Female)" : "బట్టలు (మహిళల కలెక్షన్)";
-    } else {
-      selectedLabel = isEn ? "Garments (Male)" : "బట్టలు (పురుషుల కలెక్షన్)";
-    }
-  }
+  useEffect(() => {
+    const handleOpenBusinessModalEvent = () => {
+      handleOpenModal();
+    };
+    window.addEventListener("srushti:open-business-modal", handleOpenBusinessModalEvent);
+    return () => {
+      window.removeEventListener("srushti:open-business-modal", handleOpenBusinessModalEvent);
+    };
+  }, [workspace, garmentModelGender, jewelryModelGender, garmentType, jewelryType]);
 
   return (
     <header className="px-4 pt-2 pb-3 mx-auto max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] w-full shrink-0">
@@ -564,29 +551,8 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Actions panel with Selected Business Pill, Billing, and Settings triggers */}
+        {/* Actions panel with Billing and Settings triggers */}
         <div className="flex items-center gap-3">
-          {/* Selected Business Pill and Edit Trigger */}
-          <button
-            id="btn-trigger-business-modal"
-            onClick={handleOpenModal}
-            className="flex items-center gap-1.5 sm:gap-2.5 landscape:gap-2.5 px-2.5 sm:px-3.5 landscape:px-3.5 py-1.5 rounded-xl nm-outset-sm hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer bg-[var(--bg-panel)] text-[var(--text-emphasis)]"
-          >
-            <div className="flex items-center gap-1.5">
-              {workspace === "jewelry" ? (
-                <Gem className="w-3.5 h-3.5 text-accent" />
-              ) : (
-                <Shirt className="w-3.5 h-3.5 text-accent" />
-              )}
-              <span className="text-[10px] font-extrabold tracking-tight hidden sm:inline landscape:inline">
-                {selectedLabel}
-              </span>
-            </div>
-            <div className="w-5 h-5 rounded-full flex items-center justify-center nm-inset-sm bg-accent/10 hover:bg-accent/20 text-accent ml-0.5 shrink-0">
-              <Pencil className="w-2.5 h-2.5" />
-            </div>
-          </button>
-
           {/* Admin Panel popup trigger icon */}
           <button
             id="btn-trigger-admin-modal"
@@ -877,7 +843,7 @@ export const Header: React.FC<HeaderProps> = ({
                     }
                     setIsOpen(false);
                   }}
-                  className="w-full py-3 rounded-2xl text-xs font-black tracking-wide nm-outset flex items-center justify-center gap-2 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 border border-accent/20 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+                  className="w-full py-3 rounded-2xl text-xs font-black tracking-wide nm-outset flex items-center justify-center gap-2 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-accent animate-pulse" />
                   {isEn ? "Confirm Selection" : "సెలక్షన్ నిర్ధారించండి"}
@@ -1043,6 +1009,12 @@ export const Header: React.FC<HeaderProps> = ({
                   isSignedOut={isSignedOut}
                   setIsSignedOut={setIsSignedOut}
                   onCloseModal={() => setIsSettingsOpen(false)}
+                  onSignInSuccess={() => {
+                    setIsSettingsOpen(false);
+                    setTimeout(() => {
+                      handleOpenModal();
+                    }, 100);
+                  }}
                 />
               </div>
             </motion.div>

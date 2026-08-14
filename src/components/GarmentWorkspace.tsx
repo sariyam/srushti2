@@ -239,17 +239,17 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
           id="tab-garment-setup"
           onClick={() => setGarmentTab("setup")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            garmentTab === "setup" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
+            garmentTab === "setup" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
           }`}
         >
-          <LuSettingsIcon className="w-3.5 h-3.5 flex-shrink-0 text-accent" />
+          <LuSettingsIcon className="w-3.5 h-3.5 flex-shrink-0" />
           <span className="break-words">{lang === "en" ? "Setup" : "సెటప్"}</span>
         </button>
         <button
           id="tab-garment-studio"
           onClick={() => setGarmentTab("studio")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            garmentTab === "studio" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
+            garmentTab === "studio" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
           }`}
         >
           <User className="w-3.5 h-3.5 flex-shrink-0" />
@@ -259,7 +259,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
           id="tab-garment-background"
           onClick={() => setGarmentTab("background")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            garmentTab === "background" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
+            garmentTab === "background" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
           }`}
         >
           <Palette className="w-3.5 h-3.5 flex-shrink-0" />
@@ -296,7 +296,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                 id="btn-reselect-business-garment"
                 type="button"
                 onClick={() => {
-                  document.getElementById("btn-trigger-business-modal")?.click();
+                  window.dispatchEvent(new CustomEvent("srushti:open-business-modal"));
                 }}
                 className="p-1.5 px-2 rounded-xl nm-outset-sm text-accent hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0 flex items-center gap-1 text-[11px] font-extrabold"
                 title={lang === "en" ? "Select Business" : "బిజినెస్ మార్చండి"}
@@ -366,13 +366,13 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                     else if (orient === "landscape") setGarmentAspectRatio("4:3");
                   }}
                   className={`py-2.5 px-2 rounded-2xl text-[10.5px] font-extrabold flex flex-col items-center justify-center gap-1 transition-all w-full cursor-pointer ${
-                    garmentOrientation === orient ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
+                    garmentOrientation === orient ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.01]"
                   }`}
                 >
                   <span className="flex items-center justify-center shrink-0">
-                    {orient === "square" && <LuMaximizeIcon className="w-3.5 h-3.5 text-accent" />}
-                    {orient === "portrait" && <LuSmartphoneIcon className="w-3.5 h-3.5 text-accent" />}
-                    {orient === "landscape" && <LuMonitorIcon className="w-3.5 h-3.5 text-accent" />}
+                    {orient === "square" && <LuMaximizeIcon className="w-3.5 h-3.5" />}
+                    {orient === "portrait" && <LuSmartphoneIcon className="w-3.5 h-3.5" />}
+                    {orient === "landscape" && <LuMonitorIcon className="w-3.5 h-3.5" />}
                   </span>
                   <span className="text-[8.5px] sm:text-[10.5px] font-extrabold leading-tight break-words text-center whitespace-normal">{t[orient]}</span>
                 </button>
@@ -405,11 +405,11 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                       className={`py-2 px-2 rounded-xl flex flex-col items-center justify-center text-center transition-all w-full cursor-pointer ${
                         isSelected
                           ? "nm-inset-sm text-accent scale-[0.98] font-black"
-                          : "nm-outset-sm opacity-80 hover:opacity-100"
+                          : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.01]"
                       }`}
                     >
                       <span className="text-[11px] capitalize font-black">{qual}</span>
-                      <span className="text-[9.5px] font-mono text-accent font-extrabold mt-0.5">{formatPrice(price, currency, usdToInrRate)}</span>
+                      <span className={`text-[9.5px] font-mono font-extrabold mt-0.5 ${isSelected ? "text-accent" : "text-[var(--text-primary)] opacity-70"}`}>{formatPrice(price, currency, usdToInrRate)}</span>
                     </button>
                   );
                 })}
@@ -442,10 +442,10 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                     disabled={isDisabled}
                     className={`p-2 rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-200 w-full cursor-pointer ${
                       isDisabled
-                        ? "opacity-40 cursor-not-allowed nm-inset-sm bg-black/5 dark:bg-white/5"
+                        ? "opacity-40 cursor-not-allowed nm-inset-sm bg-black/5 dark:bg-white/5 text-[var(--text-primary)]"
                         : isSelected 
                           ? "nm-inset-sm text-accent scale-[0.98] font-black" 
-                          : "nm-outset-sm hover:scale-[1.01]"
+                          : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.01]"
                     }`}
                   >
                     <div className="space-y-0.5 my-auto">
@@ -477,7 +477,9 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                       <span className={`block text-[9px] font-black px-1 py-0.5 rounded-md text-center break-words leading-tight ${
                         isDisabled
                           ? "bg-black/10 dark:bg-white/10 text-gray-500 font-mono"
-                          : "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-mono"
+                          : isSelected
+                            ? "bg-accent/10 text-accent font-mono border border-accent/20"
+                            : "bg-black/5 dark:bg-white/5 text-[var(--text-primary)] opacity-80 font-mono"
                       }`}>
                         {isDisabled ? "N/A" : formatPrice(finalPrice, currency, usdToInrRate)}
                       </span>
@@ -507,16 +509,16 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                 label: (t as any)[mode] || (mode === "partial_face" ? ((t as any).partialFace || "Human Model(Partial Face)") : mode === "no_face" ? ((t as any).noFace || "Human Model (No Face)") : mode),
                 icon: (
                   <>
-                    {mode === "model" && <User className="w-4 h-4 text-accent" />}
-                    {mode === "partial_face" && <ScanFace className="w-4 h-4 text-accent" />}
-                    {mode === "no_face" && <UserX className="w-4 h-4 text-accent" />}
-                    {mode === "mannequin" && <LuUserRoundIcon className="w-4 h-4 text-accent" />}
-                    {mode === "hanger" && <Icon icon="ph:coat-hanger-bold" className="w-4 h-4 text-accent" />}
-                    {mode === "ghost" && <LuGhostIcon className="w-4 h-4 text-accent" />}
-                    {mode === "flat_lay" && <Icon icon="ph:layout-bold" className="w-4 h-4 text-accent" />}
-                    {mode === "folded" && <Icon icon="ph:stack-bold" className="w-4 h-4 text-accent" />}
-                    {mode === "shelf" && <Icon icon="lucide:grid" className="w-4 h-4 text-accent" />}
-                    {mode === "shopwindow" && <Icon icon="ph:storefront-bold" className="w-4 h-4 text-accent" />}
+                    {mode === "model" && <User className="w-4 h-4" />}
+                    {mode === "partial_face" && <ScanFace className="w-4 h-4" />}
+                    {mode === "no_face" && <UserX className="w-4 h-4" />}
+                    {mode === "mannequin" && <LuUserRoundIcon className="w-4 h-4" />}
+                    {mode === "hanger" && <Icon icon="ph:coat-hanger-bold" className="w-4 h-4" />}
+                    {mode === "ghost" && <LuGhostIcon className="w-4 h-4" />}
+                    {mode === "flat_lay" && <Icon icon="ph:layout-bold" className="w-4 h-4" />}
+                    {mode === "folded" && <Icon icon="ph:stack-bold" className="w-4 h-4" />}
+                    {mode === "shelf" && <Icon icon="lucide:grid" className="w-4 h-4" />}
+                    {mode === "shopwindow" && <Icon icon="ph:storefront-bold" className="w-4 h-4" />}
                   </>
                 ),
               }))}
@@ -608,15 +610,15 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                 label: t[`bg_${bg}`] || bg,
                 icon: (
                   <>
-                    {bg === "plain" && <Icon icon="lucide:square" className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "studio" && <LuCameraIcon className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "traditional" && <LuFlowerIcon className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "festival" && <LuFlameIcon className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "luxury" && <LuGemIcon className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "royal" && <LuCrownIcon className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "vintage" && <LuCoffeeIcon className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "modern_office" && <Icon icon="lucide:building-2" className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "urban" && <Icon icon="lucide:building" className="w-3.5 h-3.5 text-accent" />}
+                    {bg === "plain" && <Icon icon="lucide:square" className="w-3.5 h-3.5" />}
+                    {bg === "studio" && <LuCameraIcon className="w-3.5 h-3.5" />}
+                    {bg === "traditional" && <LuFlowerIcon className="w-3.5 h-3.5" />}
+                    {bg === "festival" && <LuFlameIcon className="w-3.5 h-3.5" />}
+                    {bg === "luxury" && <LuGemIcon className="w-3.5 h-3.5" />}
+                    {bg === "royal" && <LuCrownIcon className="w-3.5 h-3.5" />}
+                    {bg === "vintage" && <LuCoffeeIcon className="w-3.5 h-3.5" />}
+                    {bg === "modern_office" && <Icon icon="lucide:building-2" className="w-3.5 h-3.5" />}
+                    {bg === "urban" && <Icon icon="lucide:building" className="w-3.5 h-3.5" />}
                   </>
                 ),
               }))}
@@ -763,12 +765,12 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                 items={getGarmentPoses(garmentType, garmentPresentation).map((pose) => ({
                   id: pose,
                   label: (t as any)[pose] || pose,
-                  icon: pose.includes("front") || pose.includes("portrait") ? <LuSmileIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("side") || pose.includes("profile") ? <LuRefreshCcwIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("three_quarter") || pose.includes("3q") ? <LuSparklesIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("walk") || pose.includes("step") || pose.includes("stance") || pose.includes("stride") ? <LuFootprintsIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("chair") || pose.includes("seated") || pose.includes("lap") ? <LuArmchairIcon className="w-3.5 h-3.5 text-accent" /> :
-                        <LuCameraIcon className="w-3.5 h-3.5 text-accent" />
+                  icon: pose.includes("front") || pose.includes("portrait") ? <LuSmileIcon className="w-3.5 h-3.5" /> :
+                        pose.includes("side") || pose.includes("profile") ? <LuRefreshCcwIcon className="w-3.5 h-3.5" /> :
+                        pose.includes("three_quarter") || pose.includes("3q") ? <LuSparklesIcon className="w-3.5 h-3.5" /> :
+                        pose.includes("walk") || pose.includes("step") || pose.includes("stance") || pose.includes("stride") ? <LuFootprintsIcon className="w-3.5 h-3.5" /> :
+                        pose.includes("chair") || pose.includes("seated") || pose.includes("lap") ? <LuArmchairIcon className="w-3.5 h-3.5" /> :
+                        <LuCameraIcon className="w-3.5 h-3.5" />
                 }))}
                 selectedId={garmentModelPose}
                 onSelect={(pose) => setGarmentModelPose(pose as any)}
@@ -782,7 +784,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
               id="btn-generate-ai-bg-tab"
               onClick={onGenerate}
               disabled={isGenerating}
-              className="w-full py-3.5 rounded-2xl font-extrabold text-xs nm-outset flex items-center justify-center gap-1.5 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 border border-accent/20 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50"
+              className="w-full py-3.5 rounded-2xl font-extrabold text-xs nm-outset flex items-center justify-center gap-1.5 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50"
             >
               <LuSparklesIcon className="w-4 h-4 text-accent animate-bounce" />
               <span>{t.generateBtn}</span>

@@ -735,7 +735,7 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
                   className={`py-1.5 px-2 rounded-xl text-[10px] capitalize font-bold transition-all ${
                     gptImageQuality === qual
                       ? "nm-inset-sm text-accent bg-[var(--bg-panel)] font-extrabold border border-accent/30 shadow-sm"
-                      : "nm-outset-sm opacity-75 hover:opacity-100"
+                      : "nm-outset-sm text-[var(--text-primary)] opacity-75 hover:opacity-100"
                   }`}
                 >
                   {qual}
@@ -1067,20 +1067,20 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-black/5 dark:divide-white/5 font-mono text-[10px]">
-                      <tr className={gptImageQuality === "low" ? "bg-emerald-500/10 font-bold" : ""}>
-                        <td className="py-1.5 px-2 font-sans font-black text-emerald-600 dark:text-emerald-400">Low</td>
+                      <tr className={gptImageQuality === "low" ? "bg-accent/10 font-bold text-accent" : "text-[var(--text-primary)]"}>
+                        <td className={`py-1.5 px-2 font-sans font-black ${gptImageQuality === "low" ? "text-accent" : "text-[var(--text-primary)]"}`}>Low</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.006, currency, usdToInrRate)}</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.005, currency, usdToInrRate)}</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.005, currency, usdToInrRate)}</td>
                       </tr>
-                      <tr className={gptImageQuality === "medium" ? "bg-amber-500/10 font-bold" : ""}>
-                        <td className="py-1.5 px-2 font-sans font-black text-amber-600 dark:text-amber-400">Medium</td>
+                      <tr className={gptImageQuality === "medium" ? "bg-accent/10 font-bold text-accent" : "text-[var(--text-primary)]"}>
+                        <td className={`py-1.5 px-2 font-sans font-black ${gptImageQuality === "medium" ? "text-accent" : "text-[var(--text-primary)]"}`}>Medium</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.053, currency, usdToInrRate)}</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.041, currency, usdToInrRate)}</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.041, currency, usdToInrRate)}</td>
                       </tr>
-                      <tr className={gptImageQuality === "high" ? "bg-indigo-500/10 font-bold" : ""}>
-                        <td className="py-1.5 px-2 font-sans font-black text-indigo-600 dark:text-indigo-400">High</td>
+                      <tr className={gptImageQuality === "high" ? "bg-accent/10 font-bold text-accent" : "text-[var(--text-primary)]"}>
+                        <td className={`py-1.5 px-2 font-sans font-black ${gptImageQuality === "high" ? "text-accent" : "text-[var(--text-primary)]"}`}>High</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.211, currency, usdToInrRate)}</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.165, currency, usdToInrRate)}</td>
                         <td className="py-1.5 px-2 text-right">{formatPrice(0.165, currency, usdToInrRate)}</td>

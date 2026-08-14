@@ -937,7 +937,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
                     setSelectedFacePrompt(face.prompt);
                   }}
                   className={`relative p-1.5 sm:p-2 rounded-2xl flex flex-col items-center justify-between gap-1 transition-all cursor-pointer ${
-                    isSelected ? "nm-inset-sm scale-95 text-accent font-black" : "nm-outset-sm hover:scale-[1.02]"
+                    isSelected ? "nm-inset-sm scale-95 text-accent font-black" : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.02]"
                   }`}
                 >
                   <div className="relative w-full aspect-square rounded-xl overflow-hidden nm-inset-xs bg-[var(--bg-secondary)] flex items-center justify-center shrink-0">

@@ -33,7 +33,7 @@ export const PresentationSlider = <T extends string>({
               className={`px-3 py-2 rounded-2xl text-[10px] sm:text-[11px] font-extrabold flex flex-row items-center justify-center gap-1.5 transition-all cursor-pointer ${
                 isSelected
                   ? "nm-inset-sm text-accent scale-[0.98] font-black"
-                  : "nm-outset-sm hover:scale-[1.02]"
+                  : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.02]"
               }`}
             >
               <span className="flex items-center justify-center shrink-0">

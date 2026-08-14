@@ -448,7 +448,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                 title={t.originalLabel}
                 className={`w-8 h-8 rounded-full transition-all flex items-center justify-center cursor-pointer ${
                   activePreviewTab === "original" 
-                    ? "nm-outset-sm text-[var(--text-emphasis)] scale-105" 
+                    ? "nm-outset-sm text-accent scale-105 font-bold" 
                     : "text-[var(--text-primary)] opacity-65 hover:opacity-100"
                 }`}
               >
@@ -461,11 +461,11 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                 title={t.finalLabel}
                 className={`w-8 h-8 rounded-full transition-all flex items-center justify-center disabled:opacity-40 cursor-pointer ${
                   activePreviewTab === "generated" 
-                    ? "nm-outset-sm text-accent scale-105" 
+                    ? "nm-outset-sm text-accent scale-105 font-bold" 
                     : "text-[var(--text-primary)] opacity-65 hover:opacity-100"
                 }`}
               >
-                <Sparkles className="w-3.5 h-3.5 text-accent" />
+                <Sparkles className="w-3.5 h-3.5" />
               </button>
             </div>
           )}

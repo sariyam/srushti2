@@ -232,17 +232,17 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
           id="tab-jewelry-setup"
           onClick={() => setJewelryTab("setup")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            jewelryTab === "setup" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
+            jewelryTab === "setup" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
           }`}
         >
-          <LuSettingsIcon className="w-3.5 h-3.5 flex-shrink-0 text-accent" />
+          <LuSettingsIcon className="w-3.5 h-3.5 flex-shrink-0" />
           <span className="break-words">{lang === "en" ? "Setup" : "సెటప్"}</span>
         </button>
         <button
           id="tab-jewelry-studio"
           onClick={() => setJewelryTab("studio")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            jewelryTab === "studio" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
+            jewelryTab === "studio" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
           }`}
         >
           <User className="w-3.5 h-3.5 flex-shrink-0" />
@@ -252,7 +252,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
           id="tab-jewelry-background"
           onClick={() => setJewelryTab("background")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            jewelryTab === "background" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-muted)] opacity-70 hover:opacity-100"
+            jewelryTab === "background" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
           }`}
         >
           <Palette className="w-3.5 h-3.5 flex-shrink-0" />
@@ -289,7 +289,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 id="btn-reselect-business-jewelry"
                 type="button"
                 onClick={() => {
-                  document.getElementById("btn-trigger-business-modal")?.click();
+                  window.dispatchEvent(new CustomEvent("srushti:open-business-modal"));
                 }}
                 className="p-1.5 px-2 rounded-xl nm-outset-sm text-accent hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0 flex items-center gap-1 text-[11px] font-extrabold"
                 title={lang === "en" ? "Select Business" : "బిజినెస్ మార్చండి"}
@@ -359,13 +359,13 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     else if (orient === "landscape") setJewelryAspectRatio("4:3");
                   }}
                   className={`py-2.5 px-2 rounded-2xl text-[10.5px] font-extrabold flex flex-col items-center justify-center gap-1 transition-all w-full cursor-pointer ${
-                    jewelryOrientation === orient ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm hover:scale-[1.01]"
+                    jewelryOrientation === orient ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.01]"
                   }`}
                 >
                   <span className="flex items-center justify-center shrink-0">
-                    {orient === "square" && <LuMaximizeIcon className="w-3.5 h-3.5 text-accent" />}
-                    {orient === "portrait" && <LuSmartphoneIcon className="w-3.5 h-3.5 text-accent" />}
-                    {orient === "landscape" && <LuMonitorIcon className="w-3.5 h-3.5 text-accent" />}
+                    {orient === "square" && <LuMaximizeIcon className="w-3.5 h-3.5" />}
+                    {orient === "portrait" && <LuSmartphoneIcon className="w-3.5 h-3.5" />}
+                    {orient === "landscape" && <LuMonitorIcon className="w-3.5 h-3.5" />}
                   </span>
                   <span className="text-[8.5px] sm:text-[10.5px] font-extrabold leading-tight break-words text-center whitespace-normal">{t[orient]}</span>
                 </button>
@@ -398,11 +398,11 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                       className={`py-2 px-2 rounded-xl flex flex-col items-center justify-center text-center transition-all w-full cursor-pointer ${
                         isSelected
                           ? "nm-inset-sm text-accent scale-[0.98] font-black"
-                          : "nm-outset-sm opacity-80 hover:opacity-100"
+                          : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.01]"
                       }`}
                     >
                       <span className="text-[11px] capitalize font-black">{qual}</span>
-                      <span className="text-[9.5px] font-mono text-accent font-extrabold mt-0.5">{formatPrice(price, currency, usdToInrRate)}</span>
+                      <span className={`text-[9.5px] font-mono font-extrabold mt-0.5 ${isSelected ? "text-accent" : "text-[var(--text-primary)] opacity-70"}`}>{formatPrice(price, currency, usdToInrRate)}</span>
                     </button>
                   );
                 })}
@@ -435,10 +435,10 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     disabled={isDisabled}
                     className={`p-2 rounded-2xl flex flex-col items-center justify-between text-center transition-all duration-200 w-full cursor-pointer ${
                       isDisabled
-                        ? "opacity-40 cursor-not-allowed nm-inset-sm bg-black/5 dark:bg-white/5"
+                        ? "opacity-40 cursor-not-allowed nm-inset-sm bg-black/5 dark:bg-white/5 text-[var(--text-primary)]"
                         : isSelected 
                           ? "nm-inset-sm text-accent scale-[0.98] font-black" 
-                          : "nm-outset-sm hover:scale-[1.01]"
+                          : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.01]"
                     }`}
                   >
                     <div className="space-y-0.5 my-auto">
@@ -470,7 +470,9 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                       <span className={`block text-[9px] font-black px-1 py-0.5 rounded-md text-center break-words leading-tight ${
                         isDisabled
                           ? "bg-black/10 dark:bg-white/10 text-gray-500 font-mono"
-                          : "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-mono"
+                          : isSelected
+                            ? "bg-accent/10 text-accent font-mono border border-accent/20"
+                            : "bg-black/5 dark:bg-white/5 text-[var(--text-primary)] opacity-80 font-mono"
                       }`}>
                         {isDisabled ? "N/A" : formatPrice(finalPrice, currency, usdToInrRate)}
                       </span>
@@ -499,27 +501,27 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 {
                   id: "model" as const,
                   label: t.model,
-                  icon: <User className="w-4 h-4 text-accent" />,
+                  icon: <User className="w-4 h-4" />,
                 },
                 {
                   id: "partial_face" as const,
                   label: (t as any).partialFace || "Human Model(Partial Face)",
-                  icon: <ScanFace className="w-4 h-4 text-accent" />,
+                  icon: <ScanFace className="w-4 h-4" />,
                 },
                 {
                   id: "body_part" as const,
                   label: (t as any).bodyPart || "Body Part Close-Up",
-                  icon: <ScanFace className="w-4 h-4 text-accent" />,
+                  icon: <ScanFace className="w-4 h-4" />,
                 },
                 {
                   id: "no_face" as const,
                   label: (t as any).noFace || "Human Model (No Face)",
-                  icon: <UserX className="w-4 h-4 text-accent" />,
+                  icon: <UserX className="w-4 h-4" />,
                 },
                 {
                   id: "bust" as const,
                   label: t.bust,
-                  icon: <UserRound className="w-4 h-4 text-accent" />,
+                  icon: <UserRound className="w-4 h-4" />,
                 },
               ]}
               selectedId={jewelryPresentation}
@@ -550,18 +552,18 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                     key={region}
                     onClick={() => setJewelryBustRegion(region)}
                     className={`py-1.5 px-2 rounded-2xl text-[10px] font-extrabold flex flex-col items-center justify-center gap-1 transition-all ${
-                      jewelryBustRegion === region ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm"
+                      jewelryBustRegion === region ? "nm-inset-sm text-accent scale-[0.98]" : "nm-outset-sm text-[var(--text-primary)]"
                     }`}
                   >
                     <span className="flex items-center justify-center h-4">
-                      {region === "head" && <Icon icon="lucide:smile" className="w-3.5 h-3.5 text-accent" />}
-                      {region === "neck" && <Icon icon="lucide:crown" className="w-3.5 h-3.5 text-accent" />}
-                      {region === "wrist" && <Icon icon="lucide:circle-dashed" className="w-3.5 h-3.5 text-accent" />}
-                      {region === "ankle" && <LuFootprintsIcon className="w-3.5 h-3.5 text-accent" />}
-                      {region === "finger" && <Icon icon="lucide:circle-dot" className="w-3.5 h-3.5 text-accent" />}
-                      {region === "hand" && <Icon icon="lucide:hand" className="w-3.5 h-3.5 text-accent" />}
-                      {region === "naturally" && <LuSparklesIcon className="w-3.5 h-3.5 text-accent" />}
-                      {region === "ear" && <Icon icon="lucide:disc" className="w-3.5 h-3.5 text-accent" />}
+                      {region === "head" && <Icon icon="lucide:smile" className="w-3.5 h-3.5" />}
+                      {region === "neck" && <Icon icon="lucide:crown" className="w-3.5 h-3.5" />}
+                      {region === "wrist" && <Icon icon="lucide:circle-dashed" className="w-3.5 h-3.5" />}
+                      {region === "ankle" && <LuFootprintsIcon className="w-3.5 h-3.5" />}
+                      {region === "finger" && <Icon icon="lucide:circle-dot" className="w-3.5 h-3.5" />}
+                      {region === "hand" && <Icon icon="lucide:hand" className="w-3.5 h-3.5" />}
+                      {region === "naturally" && <LuSparklesIcon className="w-3.5 h-3.5" />}
+                      {region === "ear" && <Icon icon="lucide:disc" className="w-3.5 h-3.5" />}
                     </span>
                     {(t as any)[`region_${region}`] || (t as any)[region] || region}
                   </button>
@@ -639,17 +641,17 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 label: t[`bg_${bg}`] || bg,
                 icon: (
                   <>
-                    {bg === "plain" && <Icon icon="lucide:square" className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "studio" && <Camera className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "luxury" && <Gem className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "festival" && <Flame className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "traditional" && <Flower className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "wood" && <Icon icon="lucide:tree-pine" className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "beach" && <Sun className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "velvet" && <Icon icon="ph:sparkle-bold" className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "silk" && <Icon icon="ph:waves-bold" className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "granite" && <Icon icon="lucide:box" className="w-3.5 h-3.5 text-accent" />}
-                    {bg === "mirror" && <LuSparklesIcon className="w-3.5 h-3.5 text-accent" />}
+                    {bg === "plain" && <Icon icon="lucide:square" className="w-3.5 h-3.5" />}
+                    {bg === "studio" && <Camera className="w-3.5 h-3.5" />}
+                    {bg === "luxury" && <Gem className="w-3.5 h-3.5" />}
+                    {bg === "festival" && <Flame className="w-3.5 h-3.5" />}
+                    {bg === "traditional" && <Flower className="w-3.5 h-3.5" />}
+                    {bg === "wood" && <Icon icon="lucide:tree-pine" className="w-3.5 h-3.5" />}
+                    {bg === "beach" && <Sun className="w-3.5 h-3.5" />}
+                    {bg === "velvet" && <Icon icon="ph:sparkle-bold" className="w-3.5 h-3.5" />}
+                    {bg === "silk" && <Icon icon="ph:waves-bold" className="w-3.5 h-3.5" />}
+                    {bg === "granite" && <Icon icon="lucide:box" className="w-3.5 h-3.5" />}
+                    {bg === "mirror" && <LuSparklesIcon className="w-3.5 h-3.5" />}
                   </>
                 ),
               }))}
@@ -795,17 +797,17 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 items={getJewelryPoses(jewelryType, jewelryPresentation).map((pose) => ({
                   id: pose,
                   label: t[pose] || pose,
-                  icon: pose.includes("no_face") ? <UserX className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("partial_face") || pose.includes("partial_skin") || pose.includes("macro") || pose.includes("lips") || pose.includes("chin") ? <ScanFace className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("neck") || pose.includes("chest") || pose.includes("collarbone") ? <Gem className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("ear") || pose.includes("profile") || pose.includes("tilt") ? <LuRefreshCcwIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("hand") || pose.includes("gesture") || pose.includes("finger") ? <LuSmileIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("wrist") || pose.includes("arm") || pose.includes("cross") ? <Watch className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("hip") || pose.includes("waist") ? <UserRound className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("nose") || pose.includes("veil") || pose.includes("nostril") ? <LuSparklesIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("anklet") || pose.includes("ankle") || pose.includes("foot") || pose.includes("toe") ? <LuFootprintsIcon className="w-3.5 h-3.5 text-accent" /> :
-                        pose.includes("forehead") || pose.includes("tikka") || pose.includes("passa") || pose.includes("borla") || pose.includes("matha") ? <Crown className="w-3.5 h-3.5 text-accent" /> :
-                        <User className="w-3.5 h-3.5 text-accent" />
+                  icon: pose.includes("no_face") ? <UserX className="w-3.5 h-3.5" /> :
+                        pose.includes("partial_face") || pose.includes("partial_skin") || pose.includes("macro") || pose.includes("lips") || pose.includes("chin") ? <ScanFace className="w-3.5 h-3.5" /> :
+                        pose.includes("neck") || pose.includes("chest") || pose.includes("collarbone") ? <Gem className="w-3.5 h-3.5" /> :
+                        pose.includes("ear") || pose.includes("profile") || pose.includes("tilt") ? <LuRefreshCcwIcon className="w-3.5 h-3.5" /> :
+                        pose.includes("hand") || pose.includes("gesture") || pose.includes("finger") ? <LuSmileIcon className="w-3.5 h-3.5" /> :
+                        pose.includes("wrist") || pose.includes("arm") || pose.includes("cross") ? <Watch className="w-3.5 h-3.5" /> :
+                        pose.includes("hip") || pose.includes("waist") ? <UserRound className="w-3.5 h-3.5" /> :
+                        pose.includes("nose") || pose.includes("veil") || pose.includes("nostril") ? <LuSparklesIcon className="w-3.5 h-3.5" /> :
+                        pose.includes("anklet") || pose.includes("ankle") || pose.includes("foot") || pose.includes("toe") ? <LuFootprintsIcon className="w-3.5 h-3.5" /> :
+                        pose.includes("forehead") || pose.includes("tikka") || pose.includes("passa") || pose.includes("borla") || pose.includes("matha") ? <Crown className="w-3.5 h-3.5" /> :
+                        <User className="w-3.5 h-3.5" />
                 }))}
                 selectedId={jewelryModelPose}
                 onSelect={(pose) => setJewelryModelPose(pose as any)}
@@ -819,7 +821,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
               id="btn-generate-ai-bg-tab"
               onClick={onGenerate}
               disabled={isGenerating}
-              className="w-full py-3.5 rounded-2xl font-extrabold text-xs nm-outset flex items-center justify-center gap-1.5 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 border border-accent/20 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50"
+              className="w-full py-3.5 rounded-2xl font-extrabold text-xs nm-outset flex items-center justify-center gap-1.5 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50"
             >
               <LuSparklesIcon className="w-4 h-4 text-accent animate-bounce" />
               <span>{t.generateBtn}</span>

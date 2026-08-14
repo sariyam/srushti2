@@ -55,18 +55,39 @@ interface SettingsWorkspaceProps {
   isSignedOut?: boolean;
   setIsSignedOut?: (val: boolean) => void;
   onCloseModal?: () => void;
+  onSignInSuccess?: () => void;
 }
 
 export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
+  apiKey,
+  apiInput,
+  setApiInput,
+  onSaveApiKey,
   theme,
   setTheme,
   lang,
   setLang,
   t,
   hideTitle = false,
+  isValidatingKey,
+  keyValidationError,
+  setKeyValidationError,
+  selectedProvider,
+  setSelectedProvider,
+  selectedImageModel,
+  selectedVideoModel,
+  geminiApiKey,
+  geminiApiInput,
+  setGeminiApiInput,
+  onSaveGeminiApiKey,
+  openaiApiKey,
+  openaiApiInput,
+  setOpenaiApiInput,
+  onSaveOpenaiApiKey,
   isSignedOut: propIsSignedOut,
   setIsSignedOut: propSetIsSignedOut,
   onCloseModal,
+  onSignInSuccess,
 }) => {
   // Profile Field States
   const [fullName, setFullName] = useState(() => {
@@ -165,7 +186,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
       setOtpStep("phone");
       setOtpValue("");
       setOtpNotice(null);
-      if (onCloseModal) {
+      if (onSignInSuccess) {
+        onSignInSuccess();
+      } else if (onCloseModal) {
         onCloseModal();
       }
     }, 800);
