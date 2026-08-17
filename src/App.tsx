@@ -4,6 +4,13 @@ import { motion, AnimatePresence } from "motion/react";
 import { TRANSLATIONS, Workspace, Language } from "./types";
 import { compilePrompt, IMAGE_MODELS, IMAGE_RESOLUTIONS, getImagePrice, formatPrice, getGptImage2SizeString } from "./data";
 import { OptionValidator } from "./utils/optionMapping";
+import { 
+  WalletTransaction, 
+  getInitialWalletBalance, 
+  getInitialWalletTransactions, 
+  saveWalletBalance, 
+  saveWalletTransactions 
+} from "./utils/wallet";
 
 // Reusable Utilities
 import { 
@@ -148,6 +155,59 @@ export default function App() {
   const [gptImageQuality, setGptImageQuality] = useState<"low" | "medium" | "high">(
     () => (localStorage.getItem("srushti_gpt_image_quality") as "low" | "medium" | "high") || "medium"
   );
+
+  // Studio Wallet & Credits State
+  const [walletBalance, setWalletBalance] = useState<number>(() =>
+    getInitialWalletBalance(currency)
+  );
+  const [walletTransactions, setWalletTransactions] = useState<WalletTransaction[]>(() =>
+    getInitialWalletTransactions()
+  );
+
+  useEffect(() => {
+    setWalletBalance(getInitialWalletBalance(currency));
+  }, [currency]);
+
+  useEffect(() => {
+    saveWalletBalance(currency, walletBalance);
+  }, [currency, walletBalance]);
+
+  useEffect(() => {
+    saveWalletTransactions(walletTransactions);
+  }, [walletTransactions]);
+
+  const handleRechargeWallet = (amount: number, bonus: number, note: string) => {
+    const totalAdded = amount + bonus;
+    setWalletBalance((prev) => {
+      const next = prev + totalAdded;
+      saveWalletBalance(currency, next);
+      return next;
+    });
+    const newTx: WalletTransaction = {
+      id: `tx-${Date.now()}`,
+      type: "credit",
+      amount: totalAdded,
+      currency: currency,
+      title:
+        currency === "INR"
+          ? `UPI / Card Top-up (+₹${bonus} Bonus)`
+          : `Card Top-up (+$${bonus.toFixed(2)} Bonus)`,
+      titleTe:
+        currency === "INR"
+          ? `UPI / కార్డ్ టాప్-అప్ (+₹${bonus} బోనస్)`
+          : `కార్డ్ టాప్-అప్ (+$${bonus.toFixed(2)} బోనస్)`,
+      description: note,
+      descriptionTe: note,
+      date: "Just now",
+      status: "success",
+      category: "recharge",
+    };
+    setWalletTransactions((prev) => {
+      const next = [newTx, ...prev];
+      saveWalletTransactions(next);
+      return next;
+    });
+  };
 
   // Persist selected models & quality
   useEffect(() => {
@@ -609,6 +669,34 @@ export default function App() {
         setActivePreviewTab("generated");
         setShowSuccessToast(true);
         setTimeout(() => setShowSuccessToast(false), 4000);
+
+        // Deduct generated photo cost from studio wallet & record transaction
+        try {
+          const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
+          const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
+          const finalCostUsd = getImagePrice(selectedImageModel, activeRes, gptImageQuality, activeAspect);
+          const deductedAmount = currency === "INR" ? finalCostUsd * usdToInrRate : finalCostUsd;
+          const formattedDeduction = parseFloat(deductedAmount.toFixed(2));
+
+          setWalletBalance((prev) => Math.max(0, parseFloat((prev - formattedDeduction).toFixed(2))));
+          const debitTx: WalletTransaction = {
+            id: `tx-${Date.now()}`,
+            type: "debit",
+            amount: formattedDeduction,
+            currency: currency,
+            title: workspace === "garment" ? "Garment Model Shoot (AI Photo)" : "Jewelry Studio Shoot (AI Photo)",
+            titleTe: workspace === "garment" ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
+            description: `GPTImage-2 (${gptImageQuality.toUpperCase()}) • ${activeRes.toUpperCase()} • ${activeAspect}`,
+            descriptionTe: `GPTImage-2 (${gptImageQuality.toUpperCase()}) • ${activeRes.toUpperCase()} • ${activeAspect}`,
+            date: "Just now",
+            status: "success",
+            category: "generation",
+          };
+          setWalletTransactions((prev) => [debitTx, ...prev]);
+        } catch (walletDeductErr) {
+          console.log("Wallet deduction status info:", walletDeductErr);
+        }
+
         try {
           downloadImage(generatedImageUrl, `srushti_${workspace}_photography.png`);
         } catch (downloadErr) {
@@ -709,6 +797,9 @@ export default function App() {
         isValidatingKey={isValidatingKey}
         keyValidationError={keyValidationError}
         setKeyValidationError={setKeyValidationError}
+        walletBalance={walletBalance}
+        walletTransactions={walletTransactions}
+        onRecharge={handleRechargeWallet}
       />
 
       {/* --- MAIN PAGE CORE STAGE --- */}

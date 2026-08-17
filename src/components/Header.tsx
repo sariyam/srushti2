@@ -4,6 +4,8 @@ import { Icon } from "@iconify/react";
 import { GENDER_GARMENT_MAPPING, GENDER_JEWELRY_MAPPING, GARMENT_CATEGORY_MAPPING, JEWELRY_CATEGORY_MAPPING } from "../utils/optionMapping";
 import { AdminWorkspace } from "./AdminWorkspace";
 import { SettingsWorkspace } from "./SettingsWorkspace";
+import { WalletModal } from "./WalletModal";
+import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions } from "../utils/wallet";
 import { Logo } from "./Logo";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
@@ -377,6 +379,11 @@ interface HeaderProps {
   setGarmentType: (val: any) => void;
   jewelryType: "earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
   setJewelryType: (val: any) => void;
+
+  // Wallet props
+  walletBalance?: number;
+  walletTransactions?: WalletTransaction[];
+  onRecharge?: (amount: number, bonus: number, note: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -434,10 +441,66 @@ export const Header: React.FC<HeaderProps> = ({
   setGarmentType,
   jewelryType,
   setJewelryType,
+
+  // Wallet props
+  walletBalance: propWalletBalance,
+  walletTransactions: propWalletTransactions,
+  onRecharge: propOnRecharge,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isBillingOpen, setIsBillingOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isWalletOpen, setIsWalletOpen] = useState(false);
+
+  // Internal wallet fallback state if not provided from top
+  const [internalWalletBalance, setInternalWalletBalance] = useState<number>(() =>
+    getInitialWalletBalance(currency)
+  );
+  const [internalTransactions, setInternalTransactions] = useState<WalletTransaction[]>(() =>
+    getInitialWalletTransactions()
+  );
+
+  const activeWalletBalance =
+    propWalletBalance !== undefined ? propWalletBalance : internalWalletBalance;
+  const activeTransactions =
+    propWalletTransactions !== undefined ? propWalletTransactions : internalTransactions;
+
+  const handleWalletRecharge = (amount: number, bonus: number, note: string) => {
+    if (propOnRecharge) {
+      propOnRecharge(amount, bonus, note);
+    } else {
+      const total = amount + bonus;
+      setInternalWalletBalance((prev) => {
+        const next = prev + total;
+        saveWalletBalance(currency, next);
+        return next;
+      });
+      const newTx: WalletTransaction = {
+        id: `tx-${Date.now()}`,
+        type: "credit",
+        amount: total,
+        currency: currency,
+        title:
+          currency === "INR"
+            ? `UPI / Card Top-up (+₹${bonus} Bonus)`
+            : `Card Top-up (+$${bonus.toFixed(2)} Bonus)`,
+        titleTe:
+          currency === "INR"
+            ? `UPI / కార్డ్ టాప్-అప్ (+₹${bonus} బోనస్)`
+            : `కార్డ్ టాప్-అప్ (+$${bonus.toFixed(2)} బోనస్)`,
+        description: note,
+        descriptionTe: note,
+        date: "Just now",
+        status: "success",
+        category: "recharge",
+      };
+      setInternalTransactions((prev) => {
+        const next = [newTx, ...prev];
+        saveWalletTransactions(next);
+        return next;
+      });
+    }
+  };
   const [isSignedOut, setIsSignedOut] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("srushti_is_signed_out") === "true";
@@ -551,8 +614,24 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Actions panel with Billing and Settings triggers */}
-        <div className="flex items-center gap-3">
+        {/* Actions panel with Wallet, Billing and Settings triggers */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Wallet balance trigger button */}
+          <button
+            id="btn-trigger-wallet-modal"
+            type="button"
+            onClick={() => setIsWalletOpen(true)}
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl nm-outset-sm hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer bg-[var(--bg-panel)] text-[var(--text-emphasis)] shrink-0"
+            title={isEn ? "Studio Wallet & Credits" : "స్టూడియో వాలెట్ & క్రెడిట్స్"}
+          >
+            <div className="w-5 h-5 rounded-full flex items-center justify-center nm-inset-sm bg-accent/10 text-accent shrink-0">
+              <Icon icon="lucide:wallet" className="w-3 h-3 text-accent" />
+            </div>
+            <span className="text-xs font-black font-mono text-accent">
+              {currency === "INR" ? `₹${activeWalletBalance.toFixed(2)}` : `$${activeWalletBalance.toFixed(2)}`}
+            </span>
+          </button>
+
           {/* Admin Panel popup trigger icon */}
           <button
             id="btn-trigger-admin-modal"
@@ -1189,6 +1268,22 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Pop-up Dialog for Studio Wallet & Credits */}
+      <AnimatePresence>
+        {isWalletOpen && (
+          <WalletModal
+            isOpen={isWalletOpen}
+            onClose={() => setIsWalletOpen(false)}
+            currency={currency}
+            walletBalance={activeWalletBalance}
+            transactions={activeTransactions}
+            onRecharge={handleWalletRecharge}
+            lang={lang}
+            usdToInrRate={usdToInrRate}
+          />
         )}
       </AnimatePresence>
 
