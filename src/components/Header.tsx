@@ -6,7 +6,7 @@ import { AdminWorkspace } from "./AdminWorkspace";
 import { SettingsWorkspace } from "./SettingsWorkspace";
 import { WalletModal } from "./WalletModal";
 import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions, formatCredits } from "../utils/wallet";
-import { usePwaInstall, isPwaInstalled } from "../utils/pwautils";
+import { usePwaInstall } from "../utils/pwautils";
 import { Logo } from "./Logo";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
@@ -20,17 +20,6 @@ const CreditCard = (props: any) => <Icon icon="lucide:credit-card" {...props} />
 const Settings = (props: any) => <Icon icon="lucide:settings" {...props} />;
 const UserIcon = (props: any) => <Icon icon="lucide:user" {...props} />;
 const Download = (props: any) => <Icon icon="lucide:download" {...props} />;
-
-const LuLayersIcon = (props: any) => <Icon icon="lucide:layers" {...props} />;
-const LuSparklesIcon = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
-const LuPocketIcon = (props: any) => <Icon icon="lucide:pocket" {...props} />;
-const LuFlowerIcon = (props: any) => <Icon icon="lucide:flower" {...props} />;
-const LuLeafIcon = (props: any) => <Icon icon="lucide:leaf" {...props} />;
-const LuCrownIcon = (props: any) => <Icon icon="lucide:crown" {...props} />;
-const LuWatchIcon = (props: any) => <Icon icon="lucide:watch" {...props} />;
-const LuCircleIcon = (props: any) => <Icon icon="lucide:circle" {...props} />;
-const LuLinkIcon = (props: any) => <Icon icon="lucide:link" {...props} />;
-const LuHeartIcon = (props: any) => <Icon icon="lucide:heart" {...props} />;
 
 const KurtaIcon = (props: any) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>

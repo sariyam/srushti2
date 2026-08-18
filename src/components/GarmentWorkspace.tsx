@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "motion/react";
 import { Icon } from "@iconify/react";
 import { HexColorPicker } from "react-colorful";
-import { PRESET_COLORS, IMAGE_MODELS, IMAGE_RESOLUTIONS, getImagePrice, formatPrice } from "../data";
+import { PRESET_COLORS } from "../data";
 import { calculateRequiredCredits, formatCredits, getCreditSettings, CreditSettings } from "../utils/wallet";
 import { GENDER_GARMENT_MAPPING, GARMENT_CATEGORY_MAPPING, getGarmentPoses } from "../utils/optionMapping";
 import { FaceGenerator, ModelFace } from "./FaceGenerator";

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from "motion/react";
 import { TRANSLATIONS, Workspace, Language } from "./types";
-import { compilePrompt, IMAGE_MODELS, IMAGE_RESOLUTIONS, getImagePrice, formatPrice, getGptImage2SizeString } from "./data";
+import { compilePrompt, getGptImage2SizeString } from "./data";
 import { OptionValidator } from "./utils/optionMapping";
 import { 
   WalletTransaction, 
@@ -29,22 +29,14 @@ import { Header } from "./components/Header";
 import { PreviewStage } from "./components/PreviewStage";
 import { GarmentWorkspace } from "./components/GarmentWorkspace";
 import { JewelryWorkspace } from "./components/JewelryWorkspace";
-import { AdminWorkspace } from "./components/AdminWorkspace";
-import { SettingsWorkspace } from "./components/SettingsWorkspace";
 import { PRESET_FACES } from "./components/FaceGenerator";
 import { SplashScreen } from "./components/SplashScreen";
 import { TermsAndConditionsPage } from "./components/TermsAndConditionsPage";
 import { PrivacyPolicyPage } from "./components/PrivacyPolicyPage";
 
-const Shirt = (props: any) => <Icon icon="lucide:shirt" {...props} />;
-const Gem = (props: any) => <Icon icon="lucide:gem" {...props} />;
-const CreditCard = (props: any) => <Icon icon="lucide:credit-card" {...props} />;
 const CheckCircle2 = (props: any) => <Icon icon="lucide:circle-check" {...props} />;
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
-const Download = (props: any) => <Icon icon="lucide:download" {...props} />;
-const Share2 = (props: any) => <Icon icon="lucide:share-2" {...props} />;
 const AlertTriangle = (props: any) => <Icon icon="lucide:triangle-alert" {...props} />;
-const SettingsIcon = (props: any) => <Icon icon="lucide:settings" {...props} />;
 const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
 
 export default function App() {
