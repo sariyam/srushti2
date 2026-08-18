@@ -6,7 +6,7 @@ import { AdminWorkspace } from "./AdminWorkspace";
 import { SettingsWorkspace } from "./SettingsWorkspace";
 import { WalletModal } from "./WalletModal";
 import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions, formatCredits } from "../utils/wallet";
-import { usePWAInstall, triggerPWAInstall } from "../utils/pwautils";
+import { usePwaInstall, isPwaInstalled } from "../utils/pwautils";
 import { Logo } from "./Logo";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
@@ -556,7 +556,7 @@ export const Header: React.FC<HeaderProps> = ({
     }
   }, [isSignedOut]);
 
-  const { isInstalled, promptInstall } = usePWAInstall();
+  const { canInstall, promptInstall } = usePwaInstall();
   const isEn = lang === "en";
 
   const handleHeaderDownloadClick = async () => {
