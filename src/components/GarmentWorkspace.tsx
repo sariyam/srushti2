@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Icon } from "@iconify/react";
 import { HexColorPicker } from "react-colorful";
 import { PRESET_COLORS, IMAGE_MODELS, IMAGE_RESOLUTIONS, getImagePrice, formatPrice } from "../data";
+import { calculateRequiredCredits, formatCredits, getCreditSettings, CreditSettings } from "../utils/wallet";
 import { GENDER_GARMENT_MAPPING, GARMENT_CATEGORY_MAPPING, getGarmentPoses } from "../utils/optionMapping";
 import { FaceGenerator, ModelFace } from "./FaceGenerator";
 import { PresentationSlider } from "./PresentationSlider";
@@ -145,6 +146,17 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
     if (typeof window === "undefined") return false;
     return window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   });
+
+  const [creditSettings, setCreditSettings] = React.useState<CreditSettings>(() => getCreditSettings());
+
+  React.useEffect(() => {
+    const handleCreditSettingsChange = (e: any) => {
+      if (e?.detail) setCreditSettings(e.detail);
+      else setCreditSettings(getCreditSettings());
+    };
+    window.addEventListener("srushti:credit-settings-updated", handleCreditSettingsChange);
+    return () => window.removeEventListener("srushti:credit-settings-updated", handleCreditSettingsChange);
+  }, []);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -395,7 +407,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
               <div className="grid grid-cols-3 gap-2 w-full pt-1">
                 {(["low", "medium", "high"] as const).map((qual) => {
                   const isSelected = gptImageQuality === qual;
-                  const price = getImagePrice("gptimage_2", garmentResolution, qual, garmentAspectRatio);
+                  const reqCredits = calculateRequiredCredits("gptimage_2", garmentResolution, qual, garmentAspectRatio, creditSettings);
                   return (
                     <button
                       key={qual}
@@ -409,7 +421,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                       }`}
                     >
                       <span className="text-[11px] capitalize font-black">{qual}</span>
-                      <span className={`text-[9.5px] font-mono font-extrabold mt-0.5 ${isSelected ? "text-accent" : "text-[var(--text-primary)] opacity-70"}`}>{formatPrice(price, currency, usdToInrRate)}</span>
+                      <span className={`text-[9.5px] font-mono font-extrabold mt-0.5 ${isSelected ? "text-accent" : "text-[var(--text-primary)] opacity-70"}`}>{formatCredits(reqCredits)}</span>
                     </button>
                   );
                 })}
@@ -425,14 +437,14 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                 {t.resolutionLabel}
               </label>
               <span className="text-[9.5px] font-black px-2 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20">
-                {currency === "INR" ? `₹ INR (@ ₹${usdToInrRate.toFixed(2)}/USD)` : "$ USD"}
+                {lang === "en" ? "Export Resolution" : "ఎక్స్‌పోర్ట్ రిజల్యూషన్"}
               </span>
             </div>
             <div className="grid grid-cols-3 gap-2 w-full pt-1">
               {(["1k", "2k", "4k"] as const).map((res) => {
-                const finalPrice = getImagePrice(selectedImageModel, res, gptImageQuality, garmentAspectRatio);
+                const reqCredits = calculateRequiredCredits(selectedImageModel, res, gptImageQuality, garmentAspectRatio, creditSettings);
                 const isSelected = garmentResolution === res;
-                const isDisabled = finalPrice === 0;
+                const isDisabled = reqCredits === 0;
                 return (
                   <button
                     key={res}
@@ -481,7 +493,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                             ? "bg-accent/10 text-accent font-mono border border-accent/20"
                             : "bg-black/5 dark:bg-white/5 text-[var(--text-primary)] opacity-80 font-mono"
                       }`}>
-                        {isDisabled ? "N/A" : formatPrice(finalPrice, currency, usdToInrRate)}
+                        {isDisabled ? "N/A" : formatCredits(reqCredits)}
                       </span>
                     </div>
                   </button>
@@ -780,15 +792,29 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
 
           {/* Generate Button in Bg Tab */}
           <div className="pt-4 border-t border-black/5 dark:border-white/5 flex flex-col gap-2">
-            <button
-              id="btn-generate-ai-bg-tab"
-              onClick={onGenerate}
-              disabled={isGenerating}
-              className="w-full py-3.5 rounded-2xl font-extrabold text-xs nm-outset flex items-center justify-center gap-1.5 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50"
-            >
-              <LuSparklesIcon className="w-4 h-4 text-accent animate-bounce" />
-              <span>{t.generateBtn}</span>
-            </button>
+            {(() => {
+              const reqCredits = calculateRequiredCredits(
+                selectedImageModel,
+                garmentResolution,
+                gptImageQuality,
+                garmentAspectRatio,
+                creditSettings
+              );
+              return (
+                <button
+                  id="btn-generate-ai-bg-tab"
+                  onClick={onGenerate}
+                  disabled={isGenerating}
+                  className="w-full py-3.5 rounded-2xl font-extrabold text-xs nm-outset flex items-center justify-center gap-2 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 cursor-pointer"
+                >
+                  <LuSparklesIcon className="w-4 h-4 text-accent animate-bounce" />
+                  <span>{t.generateBtn}</span>
+                  <span className="ml-1 text-[11px] font-black font-mono px-2 py-0.5 rounded-full bg-accent/20 text-accent">
+                    {formatCredits(reqCredits)}
+                  </span>
+                </button>
+              );
+            })()}
           </div>
         </div>
       )}

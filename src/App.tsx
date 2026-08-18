@@ -6,10 +6,15 @@ import { compilePrompt, IMAGE_MODELS, IMAGE_RESOLUTIONS, getImagePrice, formatPr
 import { OptionValidator } from "./utils/optionMapping";
 import { 
   WalletTransaction, 
+  CreditSettings,
+  getCreditSettings,
   getInitialWalletBalance, 
   getInitialWalletTransactions, 
   saveWalletBalance, 
-  saveWalletTransactions 
+  saveWalletTransactions,
+  clearAllWalletCache,
+  calculateRequiredCredits,
+  formatCredits
 } from "./utils/wallet";
 
 // Reusable Utilities
@@ -157,12 +162,28 @@ export default function App() {
   );
 
   // Studio Wallet & Credits State
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState<boolean>(false);
+  const [lowBalanceInfo, setLowBalanceInfo] = useState<{ required: number; balance: number } | null>(null);
+  const [creditSettings, setCreditSettings] = useState<CreditSettings>(() => getCreditSettings());
   const [walletBalance, setWalletBalance] = useState<number>(() =>
     getInitialWalletBalance(currency)
   );
   const [walletTransactions, setWalletTransactions] = useState<WalletTransaction[]>(() =>
     getInitialWalletTransactions()
   );
+
+  // Listen for credit settings updates from Admin panel in real-time
+  useEffect(() => {
+    const handleCreditSettingsChange = (e: any) => {
+      if (e?.detail) {
+        setCreditSettings(e.detail);
+      } else {
+        setCreditSettings(getCreditSettings());
+      }
+    };
+    window.addEventListener("srushti:credit-settings-updated", handleCreditSettingsChange);
+    return () => window.removeEventListener("srushti:credit-settings-updated", handleCreditSettingsChange);
+  }, []);
 
   useEffect(() => {
     setWalletBalance(getInitialWalletBalance(currency));
@@ -188,14 +209,8 @@ export default function App() {
       type: "credit",
       amount: totalAdded,
       currency: currency,
-      title:
-        currency === "INR"
-          ? `UPI / Card Top-up (+₹${bonus} Bonus)`
-          : `Card Top-up (+$${bonus.toFixed(2)} Bonus)`,
-      titleTe:
-        currency === "INR"
-          ? `UPI / కార్డ్ టాప్-అప్ (+₹${bonus} బోనస్)`
-          : `కార్డ్ టాప్-అప్ (+$${bonus.toFixed(2)} బోనస్)`,
+      title: `Credit Top-up (+${bonus} Bonus Credits)`,
+      titleTe: `క్రెడిట్ టాప్-అప్ (+${bonus} బోనస్ క్రెడిట్స్)`,
       description: note,
       descriptionTe: note,
       date: "Just now",
@@ -207,6 +222,17 @@ export default function App() {
       saveWalletTransactions(next);
       return next;
     });
+  };
+
+  const handleClearWalletHistory = () => {
+    setWalletTransactions([]);
+    saveWalletTransactions([]);
+  };
+
+  const handleResetWalletCache = () => {
+    clearAllWalletCache();
+    setWalletBalance(0);
+    setWalletTransactions([]);
   };
 
   // Persist selected models & quality
@@ -461,12 +487,12 @@ export default function App() {
     await handleSaveOpenaiApiKey();
   };
 
-  // Cost calculation based on selected parameters
+  // Cost calculation based on selected parameters in Credits
   const getEstimatedCost = () => {
     const resId = workspace === "garment" ? garmentResolution : jewelryResolution;
     const activeAspectRatio = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
-    const finalCost = getImagePrice(selectedImageModel, resId, gptImageQuality, activeAspectRatio);
-    const formatted = formatPrice(finalCost, currency, usdToInrRate);
+    const requiredCredits = calculateRequiredCredits(selectedImageModel, resId, gptImageQuality, activeAspectRatio);
+    const formatted = formatCredits(requiredCredits);
     return `${formatted} (GPTImage-2 @ ${gptImageQuality.toUpperCase()} Quality)`;
   };
 
@@ -483,6 +509,21 @@ export default function App() {
       setGenerationError(lang === "en" 
         ? "Please enter and save your OpenAI API Key (starting with sk-) in Admin Panel." 
         : "దయచేసి అడ్మిన్ ప్యానెల్‌లో మీ ఓపెన్ AI API కీని నమోదు చేయండి.");
+      setDebugPayload(null);
+      setDebugPrompt(null);
+      return;
+    }
+
+    // Pre-generation balance check for Studio Credits
+    const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
+    const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
+    const requiredCredits = calculateRequiredCredits(selectedImageModel, activeRes, gptImageQuality, activeAspect);
+
+    if (walletBalance < requiredCredits) {
+      setLowBalanceInfo({
+        required: requiredCredits,
+        balance: walletBalance,
+      });
       setDebugPayload(null);
       setDebugPrompt(null);
       return;
@@ -670,19 +711,17 @@ export default function App() {
         setShowSuccessToast(true);
         setTimeout(() => setShowSuccessToast(false), 4000);
 
-        // Deduct generated photo cost from studio wallet & record transaction
+        // Deduct generated photo cost from studio wallet in Credits & record transaction
         try {
           const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
           const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
-          const finalCostUsd = getImagePrice(selectedImageModel, activeRes, gptImageQuality, activeAspect);
-          const deductedAmount = currency === "INR" ? finalCostUsd * usdToInrRate : finalCostUsd;
-          const formattedDeduction = parseFloat(deductedAmount.toFixed(2));
+          const requiredCredits = calculateRequiredCredits(selectedImageModel, activeRes, gptImageQuality, activeAspect);
 
-          setWalletBalance((prev) => Math.max(0, parseFloat((prev - formattedDeduction).toFixed(2))));
+          setWalletBalance((prev) => Math.max(0, parseFloat((prev - requiredCredits).toFixed(1))));
           const debitTx: WalletTransaction = {
             id: `tx-${Date.now()}`,
             type: "debit",
-            amount: formattedDeduction,
+            amount: requiredCredits,
             currency: currency,
             title: workspace === "garment" ? "Garment Model Shoot (AI Photo)" : "Jewelry Studio Shoot (AI Photo)",
             titleTe: workspace === "garment" ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
@@ -800,6 +839,10 @@ export default function App() {
         walletBalance={walletBalance}
         walletTransactions={walletTransactions}
         onRecharge={handleRechargeWallet}
+        onClearHistory={handleClearWalletHistory}
+        onResetWalletCache={handleResetWalletCache}
+        isWalletOpen={isWalletModalOpen}
+        setIsWalletOpen={setIsWalletModalOpen}
       />
 
       {/* --- MAIN PAGE CORE STAGE --- */}
@@ -934,6 +977,104 @@ export default function App() {
           </div>
         </div>
       </main>
+
+      {/* --- LOW BALANCE / INSUFFICIENT CREDITS MODAL --- */}
+      <AnimatePresence>
+        {lowBalanceInfo && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setLowBalanceInfo(null)}
+              className="absolute inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: "spring", duration: 0.35, bounce: 0.15 }}
+              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-6 max-w-sm w-full border border-amber-500/30 text-[var(--text-primary)] z-10 shadow-2xl space-y-4"
+            >
+              {/* Header Icon + Title */}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center shrink-0">
+                    <Icon icon="lucide:coins" className="w-6 h-6 animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-extrabold text-[var(--text-emphasis)] leading-tight">
+                      {lang === "en" ? "Low Credit Balance" : "క్రెడిట్స్ సరిపోవు"}
+                    </h3>
+                    <p className="text-[11px] text-[var(--text-secondary)] opacity-80 mt-0.5">
+                      {lang === "en" ? "Recharge to continue creating AI photos" : "AI ఫోటోలు సృష్టించడానికి రీఛార్జ్ చేయండి"}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  id="btn-close-low-balance-modal"
+                  onClick={() => setLowBalanceInfo(null)}
+                  className="w-8 h-8 rounded-full nm-outset-sm hover:scale-105 active:scale-95 flex items-center justify-center text-[var(--text-primary)] opacity-70 hover:opacity-100 cursor-pointer"
+                >
+                  <XIcon className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Balance Comparison Card */}
+              <div className="nm-inset rounded-2xl p-4 space-y-2.5 bg-black/5 dark:bg-black/20">
+                <div className="flex items-center justify-between text-xs font-bold">
+                  <span className="opacity-75">{lang === "en" ? "Current Balance:" : "ప్రస్తుత బ్యాలెన్స్:"}</span>
+                  <span className="font-mono font-black text-rose-500">
+                    {formatCredits(lowBalanceInfo.balance)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs font-bold pt-2 border-t border-black/5 dark:border-white/5">
+                  <span className="opacity-75">{lang === "en" ? "Required for Shoot:" : "ఈ ఫోటోకి కావలసినవి:"}</span>
+                  <span className="font-mono font-black text-amber-500">
+                    {formatCredits(lowBalanceInfo.required)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs font-extrabold pt-2 border-t border-black/5 dark:border-white/5 text-accent">
+                  <span>{lang === "en" ? "Needed Credits:" : "అదనంగా కావలసినవి:"}</span>
+                  <span className="font-mono font-black">
+                    +{formatCredits(Math.max(0, lowBalanceInfo.required - lowBalanceInfo.balance))}
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-[11.5px] leading-relaxed opacity-85 text-center px-1">
+                {lang === "en"
+                  ? "Top up your studio wallet instantly via UPI, Cards, or NetBanking to generate high-resolution professional photoshoot images."
+                  : "హై-రిజల్యూషన్ ఫోటోషూట్ చిత్రాల కోసం UPI లేదా కార్డుల ద్వారా మీ స్టూడియో వాలెట్‌ను తక్షణమే రీఛార్జ్ చేయండి."}
+              </p>
+
+              {/* Actions */}
+              <div className="pt-1 flex flex-col gap-2">
+                <button
+                  id="btn-recharge-from-low-balance-popup"
+                  type="button"
+                  onClick={() => {
+                    setLowBalanceInfo(null);
+                    setIsWalletModalOpen(true);
+                  }}
+                  className="w-full py-3.5 rounded-2xl bg-accent text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <Icon icon="lucide:zap" className="w-4 h-4 text-amber-300" />
+                  <span>{lang === "en" ? "Recharge Credits Now" : "ఇప్పుడే క్రెడిట్స్ రీఛార్జ్ చేయండి"}</span>
+                </button>
+                <button
+                  id="btn-cancel-low-balance-popup"
+                  type="button"
+                  onClick={() => setLowBalanceInfo(null)}
+                  className="w-full py-2.5 rounded-xl text-xs font-bold opacity-75 hover:opacity-100 transition-all cursor-pointer text-center"
+                >
+                  {lang === "en" ? "Maybe Later" : "తర్వాత చేస్తాను"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* --- ERROR DIALOG POPUP --- */}
       <AnimatePresence>

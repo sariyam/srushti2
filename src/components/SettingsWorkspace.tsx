@@ -23,6 +23,8 @@ const InfoIcon = (props: any) => <Icon icon="lucide:info" {...props} />;
 const FileTextIcon = (props: any) => <Icon icon="lucide:file-text" {...props} />;
 const ScaleIcon = (props: any) => <Icon icon="lucide:scale" {...props} />;
 const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
+const TrashIcon = (props: any) => <Icon icon="lucide:trash-2" {...props} />;
+const WalletIcon = (props: any) => <Icon icon="lucide:wallet" {...props} />;
 
 interface SettingsWorkspaceProps {
   apiKey?: string;
@@ -56,6 +58,7 @@ interface SettingsWorkspaceProps {
   setIsSignedOut?: (val: boolean) => void;
   onCloseModal?: () => void;
   onSignInSuccess?: () => void;
+  onResetWalletCache?: () => void;
 }
 
 export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
@@ -88,6 +91,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
   setIsSignedOut: propSetIsSignedOut,
   onCloseModal,
   onSignInSuccess,
+  onResetWalletCache,
 }) => {
   // Profile Field States
   const [fullName, setFullName] = useState(() => {
@@ -99,6 +103,8 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
   const [verificationNotice, setVerificationNotice] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetSuccessNotice, setResetSuccessNotice] = useState<string | null>(null);
   const [internalSignedOut, setInternalSignedOut] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("srushti_is_signed_out") === "true";
@@ -587,6 +593,77 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                 </motion.p>
               )}
             </div>
+          </div>
+
+          {/* Clean Wallet Cache & Reset Action */}
+          <div className="pt-3 border-t border-black/5 dark:border-white/5 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-emphasis)]">
+                <WalletIcon className="w-4 h-4 text-accent" />
+                <span>{isEn ? "Wallet & Credits Storage" : "వాలెట్ & క్రెడిట్స్ డేటా"}</span>
+              </div>
+              
+              {!showResetConfirm ? (
+                <button
+                  id="settings-btn-clean-wallet-cache"
+                  type="button"
+                  onClick={() => setShowResetConfirm(true)}
+                  className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all flex items-center gap-1 cursor-pointer"
+                >
+                  <TrashIcon className="w-3.5 h-3.5" />
+                  <span>{isEn ? "Clean Wallet Cache" : "వాలెట్ కాష్ క్లీన్ చేయండి"}</span>
+                </button>
+              ) : (
+                <div className="flex items-center gap-1.5 bg-rose-500/15 p-1 rounded-xl border border-rose-500/30">
+                  <span className="text-[10px] font-bold text-rose-500 px-1">
+                    {isEn ? "Reset balance & history to 0?" : "బ్యాలెన్స్ & చరిత్ర 0 చేయాలా?"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onResetWalletCache) {
+                        onResetWalletCache();
+                      } else {
+                        localStorage.removeItem("srushti_wallet_inr");
+                        localStorage.removeItem("srushti_wallet_usd");
+                        localStorage.removeItem("srushti_wallet_transactions");
+                        localStorage.setItem("srushti_wallet_inr", "0.00");
+                        localStorage.setItem("srushti_wallet_usd", "0.00");
+                        localStorage.setItem("srushti_wallet_transactions", JSON.stringify([]));
+                      }
+                      setShowResetConfirm(false);
+                      setResetSuccessNotice(
+                        isEn
+                          ? "Wallet cache cleaned! Amount reset to 0.00 and history cleared."
+                          : "వాలెట్ కాష్ క్లీన్ చేయబడింది! మొత్తం 0.00 మరియు చరిత్ర తొలగించబడింది."
+                      );
+                      setTimeout(() => setResetSuccessNotice(null), 3000);
+                    }}
+                    className="px-2 py-0.5 rounded-lg bg-rose-500 text-white text-[10px] font-black hover:bg-rose-600 cursor-pointer"
+                  >
+                    {isEn ? "Yes, Clean" : "అవును, క్లీన్"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowResetConfirm(false)}
+                    className="px-1.5 py-0.5 rounded-lg text-[10px] font-bold opacity-70 hover:opacity-100 cursor-pointer"
+                  >
+                    {isEn ? "Cancel" : "రద్దు"}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {resetSuccessNotice && (
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-2 rounded-xl border border-emerald-500/20 flex items-center gap-1.5"
+              >
+                <CheckCircleIcon className="w-3.5 h-3.5 shrink-0" />
+                <span>{resetSuccessNotice}</span>
+              </motion.p>
+            )}
           </div>
 
           {/* Sign Out Action Button */}

@@ -11,6 +11,13 @@ import {
   getImagePrice,
   formatPrice
 } from "../data";
+import { 
+  CreditSettings, 
+  getCreditSettings, 
+  saveCreditSettings, 
+  DEFAULT_CREDIT_SETTINGS,
+  formatCredits
+} from "../utils/wallet";
 
 const CreditCard = (props: any) => <Icon icon="lucide:credit-card" {...props} />;
 const Key = (props: any) => <Icon icon="lucide:key" {...props} />;
@@ -27,6 +34,11 @@ const TableIcon = (props: any) => <Icon icon="lucide:table" {...props} />;
 const LuRefreshCcwIcon = (props: any) => <Icon icon="lucide:refresh-ccw" {...props} />;
 const EyeIcon = (props: any) => <Icon icon="lucide:eye" {...props} />;
 const EyeOffIcon = (props: any) => <Icon icon="lucide:eye-off" {...props} />;
+const LuSlidersIcon = (props: any) => <Icon icon="lucide:sliders" {...props} />;
+const LuZapIcon = (props: any) => <Icon icon="lucide:zap" {...props} />;
+const LuPercentIcon = (props: any) => <Icon icon="lucide:percent" {...props} />;
+const LuDollarSignIcon = (props: any) => <Icon icon="lucide:dollar-sign" {...props} />;
+const LuShieldAlertIcon = (props: any) => <Icon icon="lucide:shield-alert" {...props} />;
 
 interface AdminWorkspaceProps {
   apiKey: string;
@@ -309,6 +321,25 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
 
   const totalCost = calculateTotalCost();
 
+  // Credit Settings state
+  const [creditSettings, setCreditSettings] = useState<CreditSettings>(() => getCreditSettings());
+  const [creditSettingsSavedToast, setCreditSettingsSavedToast] = useState(false);
+
+  const handleUpdateCreditSetting = (key: keyof CreditSettings, value: any) => {
+    const updated = { ...creditSettings, [key]: value };
+    setCreditSettings(updated);
+    saveCreditSettings(updated);
+    setCreditSettingsSavedToast(true);
+    setTimeout(() => setCreditSettingsSavedToast(false), 2500);
+  };
+
+  const handleResetCreditSettings = () => {
+    setCreditSettings(DEFAULT_CREDIT_SETTINGS);
+    saveCreditSettings(DEFAULT_CREDIT_SETTINGS);
+    setCreditSettingsSavedToast(true);
+    setTimeout(() => setCreditSettingsSavedToast(false), 2500);
+  };
+
   return (
     <motion.section 
       initial={{ opacity: 0 }} 
@@ -328,14 +359,367 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
         </div>
       )}
 
-      {/* 1. Estimated Cost per Photo Card */}
-      <div className="nm-outset rounded-[2rem] p-5 space-y-3 w-full">
-        <div className="flex items-center justify-between text-xs font-bold">
-          <span className="flex items-center gap-1.5 text-sm text-[var(--text-emphasis)]">
-            <Coins className="w-5 h-5 text-accent animate-pulse shrink-0" />
-            {t.estCost}:
-          </span>
-          <span className="text-accent text-sm font-extrabold">{estimatedCost}</span>
+      {/* 1. Estimated Cost per Photo Card (Displaying both Credits and Currency) */}
+      <div className="nm-outset rounded-[2rem] p-5 space-y-3 w-full bg-gradient-to-r from-accent/5 via-transparent to-accent/5 border border-accent/15">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-2xl bg-accent/15 text-accent flex items-center justify-center shrink-0 shadow-inner">
+              <Coins className="w-5 h-5 text-accent animate-pulse" />
+            </div>
+            <div>
+              <span className="text-xs font-black uppercase tracking-wider text-[var(--text-emphasis)] block">
+                {lang === "en" ? "Generation Cost Rate" : "జనరేషన్ క్రెడిట్ రేట్"}
+              </span>
+              <span className="text-[10px] text-[var(--text-secondary)] opacity-80">
+                {lang === "en" 
+                  ? `Active Model: GPTImage-2 (${gptImageQuality.toUpperCase()})` 
+                  : `యాక్టివ్ మోడల్: GPTImage-2 (${gptImageQuality.toUpperCase()})`}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <div className="px-3.5 py-1.5 rounded-xl bg-accent text-white font-black text-xs shadow-md shadow-accent/25 flex items-center gap-1.5">
+              <LuZapIcon className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+              <span>
+                {gptImageQuality === "low"
+                  ? formatCredits(creditSettings.costPerImageGenLow)
+                  : gptImageQuality === "medium"
+                  ? formatCredits(creditSettings.costPerImageGenMed)
+                  : formatCredits(creditSettings.costPerImageGenHigh)}
+              </span>
+            </div>
+            <span className="text-[11px] font-mono font-bold text-accent/80 px-2.5 py-1 rounded-lg nm-inset-sm">
+              ≈ {estimatedCost}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* NEW SECTION: CREDIT SYSTEM SETTINGS */}
+      <div className="nm-outset rounded-[2rem] p-5 space-y-4 w-full border border-accent/20 bg-accent/[0.02]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-black/5 dark:border-white/5 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-accent/10 text-accent flex items-center justify-center shrink-0">
+              <LuSlidersIcon className="w-4 h-4 text-accent" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">
+                  {lang === "en" ? "Credit System & Pricing Settings" : "క్రెడిట్ సిస్టమ్ & ధరల అమరికలు"}
+                </h3>
+                {creditSettingsSavedToast && (
+                  <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 animate-pulse">
+                    {lang === "en" ? "Saved ✓" : "సేవ్ చేయబడింది ✓"}
+                  </span>
+                )}
+              </div>
+              <p className="text-[9.5px] opacity-75">
+                {lang === "en"
+                  ? "Configure credit exchange rates for Razorpay purchases, deduction costs, and threshold limits."
+                  : "రేజర్‌పే కొనుగోళ్లు, తగ్గింపు ఖర్చులు మరియు లిమిట్‌ల కోసం క్రెడిట్ మార్పిడి రేట్లను కాన్ఫిగర్ చేయండి."}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleResetCreditSettings}
+            className="text-[10px] font-bold text-accent hover:underline self-start sm:self-auto cursor-pointer"
+          >
+            {lang === "en" ? "Reset Defaults" : "డిఫాల్ట్ పునరుద్ధరించండి"}
+          </button>
+        </div>
+
+        {/* Grid of Credit Configuration Inputs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          {/* Card: Currency to Credit Exchange Rates */}
+          <div className="p-4 rounded-2xl nm-inset-sm bg-black/[0.02] dark:bg-white/[0.02] space-y-3">
+            <div className="flex items-center justify-between text-xs font-bold text-[var(--text-emphasis)] border-b border-black/5 dark:border-white/5 pb-2">
+              <span className="flex items-center gap-1.5">
+                <Coins className="w-3.5 h-3.5 text-accent" />
+                {lang === "en" ? "Recharge Conversion Rates" : "రీఛార్జ్ మార్పిడి రేట్లు"}
+              </span>
+              <span className="text-[9px] text-accent font-black">Razorpay Gateway</span>
+            </div>
+
+            {/* 1 INR to Credits */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[10.5px]">
+                <span className="font-bold text-[var(--text-primary)] opacity-85">
+                  {lang === "en" ? "1 INR (₹) gives:" : "1 రూపాయితో లభించే క్రెడిట్స్:"}
+                </span>
+                <span className="font-mono text-accent font-extrabold text-xs">
+                  {creditSettings.creditsPerInr} Credits
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0.1"
+                  step="0.1"
+                  value={creditSettings.creditsPerInr}
+                  onChange={(e) => handleUpdateCreditSetting("creditsPerInr", Math.max(0.01, parseFloat(e.target.value) || 1))}
+                  className="flex-1 px-3 py-2 rounded-xl text-xs font-mono font-bold outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] focus:ring-1 focus:ring-accent"
+                />
+                <span className="text-[10px] font-bold opacity-60">Credits / ₹</span>
+              </div>
+            </div>
+
+            {/* 1 USD to Credits */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[10.5px]">
+                <span className="font-bold text-[var(--text-primary)] opacity-85">
+                  {lang === "en" ? "1 USD ($) gives:" : "1 డాలర్‌తో లభించే క్రెడిట్స్:"}
+                </span>
+                <span className="font-mono text-accent font-extrabold text-xs">
+                  {creditSettings.creditsPerUsd} Credits
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={creditSettings.creditsPerUsd}
+                  onChange={(e) => handleUpdateCreditSetting("creditsPerUsd", Math.max(1, parseFloat(e.target.value) || 85))}
+                  className="flex-1 px-3 py-2 rounded-xl text-xs font-mono font-bold outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] focus:ring-1 focus:ring-accent"
+                />
+                <span className="text-[10px] font-bold opacity-60">Credits / $</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card: AI Photo Quality Credit Costs */}
+          <div className="p-4 rounded-2xl nm-inset-sm bg-black/[0.02] dark:bg-white/[0.02] space-y-3">
+            <div className="flex items-center justify-between text-xs font-bold text-[var(--text-emphasis)] border-b border-black/5 dark:border-white/5 pb-2">
+              <span className="flex items-center gap-1.5">
+                <LuSparklesIcon className="w-3.5 h-3.5 text-accent" />
+                {lang === "en" ? "Photo Shoot Generation Costs" : "ఫోటో షూట్ క్రెడిట్ ఛార్జీలు"}
+              </span>
+              <span className="text-[9px] text-accent font-black">Per Image</span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              {/* Low Quality */}
+              <div className="space-y-1 text-center">
+                <label className="text-[9.5px] font-black uppercase text-[var(--text-primary)] opacity-75 block">
+                  Low (Draft)
+                </label>
+                <input
+                  type="number"
+                  min="0.1"
+                  step="0.5"
+                  value={creditSettings.costPerImageGenLow}
+                  onChange={(e) => handleUpdateCreditSetting("costPerImageGenLow", Math.max(0.1, parseFloat(e.target.value) || 1))}
+                  className="w-full text-center py-1.5 rounded-xl text-xs font-mono font-black outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] focus:ring-1 focus:ring-accent"
+                />
+                <span className="text-[8.5px] opacity-60">Credits</span>
+              </div>
+
+              {/* Medium Quality */}
+              <div className="space-y-1 text-center">
+                <label className="text-[9.5px] font-black uppercase text-accent block">
+                  Medium (HD)
+                </label>
+                <input
+                  type="number"
+                  min="0.5"
+                  step="0.5"
+                  value={creditSettings.costPerImageGenMed}
+                  onChange={(e) => handleUpdateCreditSetting("costPerImageGenMed", Math.max(0.5, parseFloat(e.target.value) || 5))}
+                  className="w-full text-center py-1.5 rounded-xl text-xs font-mono font-black outline-none nm-inset-sm bg-[var(--bg-secondary)] text-accent border border-accent/30 focus:ring-1 focus:ring-accent"
+                />
+                <span className="text-[8.5px] text-accent font-bold">Credits</span>
+              </div>
+
+              {/* High Quality */}
+              <div className="space-y-1 text-center">
+                <label className="text-[9.5px] font-black uppercase text-purple-600 dark:text-purple-400 block">
+                  High (Ultra)
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={creditSettings.costPerImageGenHigh}
+                  onChange={(e) => handleUpdateCreditSetting("costPerImageGenHigh", Math.max(1, parseFloat(e.target.value) || 18))}
+                  className="w-full text-center py-1.5 rounded-xl text-xs font-mono font-black outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] focus:ring-1 focus:ring-accent"
+                />
+                <span className="text-[8.5px] opacity-60">Credits</span>
+              </div>
+            </div>
+
+            {/* Video duration & Low Threshold Row */}
+            <div className="pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-[10px]">
+              <span className="opacity-80">{lang === "en" ? "Video per second:" : "వీడియో సెకనుకు:"}</span>
+              <div className="flex items-center gap-1.5 font-mono font-bold">
+                <input
+                  type="number"
+                  min="1"
+                  value={creditSettings.costPerVideoSec}
+                  onChange={(e) => handleUpdateCreditSetting("costPerVideoSec", Math.max(1, parseFloat(e.target.value) || 10))}
+                  className="w-14 text-center py-0.5 rounded-lg text-[10px] font-mono font-bold nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)]"
+                />
+                <span>Credits/s</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3: Profit Margin & Business Markup Settings */}
+          <div className="p-4 rounded-2xl nm-inset-sm bg-black/[0.02] dark:bg-white/[0.02] space-y-3">
+            <div className="flex items-center justify-between text-xs font-bold text-[var(--text-emphasis)] border-b border-black/5 dark:border-white/5 pb-2">
+              <span className="flex items-center gap-1.5">
+                <LuPercentIcon className="w-3.5 h-3.5 text-emerald-500" />
+                {lang === "en" ? "Profit Margin & Markup Settings" : "లాభ మార్జిన్ & ధర మార్కప్"}
+              </span>
+              <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-black">
+                {creditSettings.pricingMode === "cost_plus_margin" 
+                  ? `${creditSettings.profitMarginPercent}% Markup Active` 
+                  : "Flat Rate Active"}
+              </span>
+            </div>
+
+            {/* Pricing Mode Toggle */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-[10.5px]">
+                <span className="font-bold text-[var(--text-primary)] opacity-85">
+                  {lang === "en" ? "Pricing Strategy:" : "ధరల వ్యూహం:"}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl nm-inset-sm bg-black/5 dark:bg-white/5 text-[10px] font-bold">
+                <button
+                  type="button"
+                  onClick={() => handleUpdateCreditSetting("pricingMode", "flat_credits")}
+                  className={`py-1.5 px-2 rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                    creditSettings.pricingMode === "flat_credits"
+                      ? "nm-outset-sm bg-[var(--bg-panel)] text-accent font-extrabold shadow-sm"
+                      : "opacity-65 hover:opacity-100"
+                  }`}
+                >
+                  <Coins className="w-3 h-3 text-inherit" />
+                  <span>{lang === "en" ? "Flat Credits" : "స్థిర క్రెడిట్స్"}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleUpdateCreditSetting("pricingMode", "cost_plus_margin")}
+                  className={`py-1.5 px-2 rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                    creditSettings.pricingMode === "cost_plus_margin"
+                      ? "nm-outset-sm bg-[var(--bg-panel)] text-emerald-600 dark:text-emerald-400 font-extrabold shadow-sm"
+                      : "opacity-65 hover:opacity-100"
+                  }`}
+                >
+                  <LuTrendingUpIcon className="w-3 h-3 text-inherit" />
+                  <span>{lang === "en" ? "Cost + Margin" : "ఖర్చు + మార్జిన్"}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Profit Margin Slider & Input */}
+            <div className="space-y-1.5 pt-1">
+              <div className="flex items-center justify-between text-[10.5px]">
+                <span className="font-bold text-[var(--text-primary)] opacity-85">
+                  {lang === "en" ? "Studio Profit Margin (%):" : "స్టూడియో లాభ మార్జిన్ (%):"}
+                </span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold text-xs">
+                  +{creditSettings.profitMarginPercent}%
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="range"
+                  min="0"
+                  max="300"
+                  step="5"
+                  value={creditSettings.profitMarginPercent}
+                  onChange={(e) => handleUpdateCreditSetting("profitMarginPercent", parseInt(e.target.value) || 0)}
+                  className="flex-1 accent-emerald-500 cursor-pointer"
+                />
+                <div className="flex items-center gap-1 font-mono">
+                  <input
+                    type="number"
+                    min="0"
+                    max="500"
+                    value={creditSettings.profitMarginPercent}
+                    onChange={(e) => handleUpdateCreditSetting("profitMarginPercent", Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-16 text-center py-1 rounded-xl text-xs font-mono font-bold outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] focus:ring-1 focus:ring-emerald-500"
+                  />
+                  <span className="text-[10px] opacity-75 font-bold">%</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center text-[8.5px] opacity-60 px-0.5">
+                <span>0% (Cost Only)</span>
+                <span>25% (Standard)</span>
+                <span>50% (High Profit)</span>
+                <span>100%+ (Premium)</span>
+              </div>
+            </div>
+
+            {/* Profit Simulation Preview */}
+            <div className="pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-[9.5px]">
+              <span className="opacity-80">
+                {lang === "en" ? "Example HD Photo Effective Cost:" : "ఉదాహరణ HD ఫోటో ఖర్చు:"}
+              </span>
+              <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                {creditSettings.pricingMode === "cost_plus_margin"
+                  ? `${Math.round(creditSettings.costPerImageGenMed * (1 + creditSettings.profitMarginPercent / 100) * 10) / 10} Credits (${creditSettings.costPerImageGenMed} base + ${Math.round(creditSettings.costPerImageGenMed * (creditSettings.profitMarginPercent / 100) * 10) / 10} profit)`
+                  : `${creditSettings.costPerImageGenMed} Credits (Flat)`}
+              </span>
+            </div>
+          </div>
+
+          {/* Card 4: Wallet Security & Threshold Settings */}
+          <div className="p-4 rounded-2xl nm-inset-sm bg-black/[0.02] dark:bg-white/[0.02] space-y-3">
+            <div className="flex items-center justify-between text-xs font-bold text-[var(--text-emphasis)] border-b border-black/5 dark:border-white/5 pb-2">
+              <span className="flex items-center gap-1.5">
+                <LuShieldAlertIcon className="w-3.5 h-3.5 text-amber-500" />
+                {lang === "en" ? "Thresholds & Automation" : "పరిమితులు & ఆటోమేషన్"}
+              </span>
+              <span className="text-[9px] text-amber-500 font-black">Studio Protection</span>
+            </div>
+
+            {/* Low Balance Warning Threshold */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[10.5px]">
+                <span className="font-bold text-[var(--text-primary)] opacity-85">
+                  {lang === "en" ? "Low Balance Alert Threshold:" : "తక్కువ బ్యాలెన్స్ హెచ్చరిక పరిమితి:"}
+                </span>
+                <span className="font-mono text-amber-500 font-extrabold text-xs">
+                  {creditSettings.lowBalanceThreshold} Credits
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={creditSettings.lowBalanceThreshold}
+                  onChange={(e) => handleUpdateCreditSetting("lowBalanceThreshold", Math.max(0, parseInt(e.target.value) || 0))}
+                  className="flex-1 px-3 py-2 rounded-xl text-xs font-mono font-bold outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] focus:ring-1 focus:ring-amber-500"
+                />
+                <span className="text-[10px] font-bold opacity-60">Credits</span>
+              </div>
+            </div>
+
+            {/* Auto Credit Deduction Switch */}
+            <div className="pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+              <div>
+                <span className="text-[10.5px] font-bold text-[var(--text-primary)] block">
+                  {lang === "en" ? "Auto Deduct on Generation" : "జనరేషన్‌పై ఆటో క్రెడిట్ తగ్గింపు"}
+                </span>
+                <span className="text-[9px] opacity-70">
+                  {lang === "en" ? "Automatically deduct balance on generation" : "ఫోటో తయారైనప్పుడు క్రెడిట్స్ వెంటనే కట్ చేయబడతాయి"}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleUpdateCreditSetting("autoCreditDeduction", !creditSettings.autoCreditDeduction)}
+                className={`w-11 h-6 rounded-full p-1 transition-colors cursor-pointer flex items-center ${
+                  creditSettings.autoCreditDeduction ? "bg-accent justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
+                }`}
+              >
+                <div className="w-4 h-4 rounded-full bg-white shadow-md" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

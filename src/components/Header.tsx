@@ -5,7 +5,7 @@ import { GENDER_GARMENT_MAPPING, GENDER_JEWELRY_MAPPING, GARMENT_CATEGORY_MAPPIN
 import { AdminWorkspace } from "./AdminWorkspace";
 import { SettingsWorkspace } from "./SettingsWorkspace";
 import { WalletModal } from "./WalletModal";
-import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions } from "../utils/wallet";
+import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions, formatCredits } from "../utils/wallet";
 import { Logo } from "./Logo";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
@@ -384,6 +384,10 @@ interface HeaderProps {
   walletBalance?: number;
   walletTransactions?: WalletTransaction[];
   onRecharge?: (amount: number, bonus: number, note: string) => void;
+  onClearHistory?: () => void;
+  onResetWalletCache?: () => void;
+  isWalletOpen?: boolean;
+  setIsWalletOpen?: (val: boolean) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -446,11 +450,18 @@ export const Header: React.FC<HeaderProps> = ({
   walletBalance: propWalletBalance,
   walletTransactions: propWalletTransactions,
   onRecharge: propOnRecharge,
+  onClearHistory: propOnClearHistory,
+  onResetWalletCache: propOnResetWalletCache,
+  isWalletOpen: propIsWalletOpen,
+  setIsWalletOpen: propSetIsWalletOpen,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isBillingOpen, setIsBillingOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isWalletOpen, setIsWalletOpen] = useState(false);
+  const [internalIsWalletOpen, setInternalIsWalletOpen] = useState(false);
+
+  const isWalletOpen = propIsWalletOpen !== undefined ? propIsWalletOpen : internalIsWalletOpen;
+  const setIsWalletOpen = propSetIsWalletOpen !== undefined ? propSetIsWalletOpen : setInternalIsWalletOpen;
 
   // Internal wallet fallback state if not provided from top
   const [internalWalletBalance, setInternalWalletBalance] = useState<number>(() =>
@@ -499,6 +510,26 @@ export const Header: React.FC<HeaderProps> = ({
         saveWalletTransactions(next);
         return next;
       });
+    }
+  };
+
+  const handleClearTransactions = () => {
+    if (propOnClearHistory) {
+      propOnClearHistory();
+    } else {
+      setInternalTransactions([]);
+      saveWalletTransactions([]);
+    }
+  };
+
+  const handleResetWalletCache = () => {
+    if (propOnResetWalletCache) {
+      propOnResetWalletCache();
+    } else {
+      setInternalWalletBalance(0);
+      setInternalTransactions([]);
+      saveWalletBalance(currency, 0);
+      saveWalletTransactions([]);
     }
   };
   const [isSignedOut, setIsSignedOut] = useState<boolean>(() => {
@@ -592,11 +623,16 @@ export const Header: React.FC<HeaderProps> = ({
     const handleOpenBusinessModalEvent = () => {
       handleOpenModal();
     };
+    const handleOpenWalletModalEvent = () => {
+      setIsWalletOpen(true);
+    };
     window.addEventListener("srushti:open-business-modal", handleOpenBusinessModalEvent);
+    window.addEventListener("srushti:open-wallet-modal", handleOpenWalletModalEvent);
     return () => {
       window.removeEventListener("srushti:open-business-modal", handleOpenBusinessModalEvent);
+      window.removeEventListener("srushti:open-wallet-modal", handleOpenWalletModalEvent);
     };
-  }, [workspace, garmentModelGender, jewelryModelGender, garmentType, jewelryType]);
+  }, [workspace, garmentModelGender, jewelryModelGender, garmentType, jewelryType, setIsWalletOpen]);
 
   return (
     <header className="px-4 pt-2 pb-3 mx-auto max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] w-full shrink-0">
@@ -625,10 +661,10 @@ export const Header: React.FC<HeaderProps> = ({
             title={isEn ? "Studio Wallet & Credits" : "స్టూడియో వాలెట్ & క్రెడిట్స్"}
           >
             <div className="w-5 h-5 rounded-full flex items-center justify-center nm-inset-sm bg-accent/10 text-accent shrink-0">
-              <Icon icon="lucide:wallet" className="w-3 h-3 text-accent" />
+              <Icon icon="lucide:coins" className="w-3 h-3 text-amber-500" />
             </div>
             <span className="text-xs font-black font-mono text-accent">
-              {currency === "INR" ? `₹${activeWalletBalance.toFixed(2)}` : `$${activeWalletBalance.toFixed(2)}`}
+              {formatCredits(activeWalletBalance)}
             </span>
           </button>
 
@@ -1094,6 +1130,7 @@ export const Header: React.FC<HeaderProps> = ({
                       handleOpenModal();
                     }, 100);
                   }}
+                  onResetWalletCache={handleResetWalletCache}
                 />
               </div>
             </motion.div>
@@ -1281,6 +1318,8 @@ export const Header: React.FC<HeaderProps> = ({
             walletBalance={activeWalletBalance}
             transactions={activeTransactions}
             onRecharge={handleWalletRecharge}
+            onClearHistory={handleClearTransactions}
+            onResetWalletCache={handleResetWalletCache}
             lang={lang}
             usdToInrRate={usdToInrRate}
           />
