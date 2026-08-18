@@ -28,7 +28,11 @@ const ShieldCheckIcon = (props: any) => <Icon icon="lucide:shield-check" {...pro
 const UsersIcon = (props: any) => <Icon icon="lucide:users" {...props} />;
 const WalletIcon = (props: any) => <Icon icon="lucide:wallet" {...props} />;
 const StarIcon = (props: any) => <Icon icon="lucide:star" {...props} />;
-const ArrowUpRight = (props: any) => <Icon icon="lucide:arrow-up-right" {...props} />;
+const MenuIcon = (props: any) => <Icon icon="lucide:menu" {...props} />;
+const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
+const BadgeCheck = (props: any) => <Icon icon="lucide:badge-check" {...props} />;
+const ImageDown = (props: any) => <Icon icon="lucide:image-down" {...props} />;
+const Sliders = (props: any) => <Icon icon="lucide:sliders" {...props} />;
 
 function LandingPageComponent() {
   const navigate = useNavigate();
@@ -53,6 +57,7 @@ function LandingPageComponent() {
   });
 
   const [activeShowcase, setActiveShowcase] = useState<"garment" | "jewelry">("garment");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -187,54 +192,79 @@ function LandingPageComponent() {
 
   const t = translations[lang === "te" ? "te" : "en"];
 
+  const planFeatures = {
+    plan1: [
+      lang === "en" ? "4K Ultra-HD Downloads" : "4K అల్ట్రా-HD డౌన్‌లోడ్స్",
+      lang === "en" ? "Garment & Jewelry Workspaces" : "గార్మెంట్స్ & జ్యువెలరీ స్టూడియో",
+      lang === "en" ? "Standard Indian Models" : "స్టాండర్డ్ భారతీయ మోడల్స్",
+      lang === "en" ? "Standard Processing Speed" : "స్టాండర్డ్ ప్రాసెసింగ్ స్పీడ్",
+    ],
+    plan2: [
+      lang === "en" ? "All Starter Features" : "స్టార్టర్ ఫీచర్లు అన్నీ",
+      lang === "en" ? "Custom Face Swap & Upload" : "కస్టమ్ ఫేస్ స్వాప్ & అప్‌లోడ్",
+      lang === "en" ? "Luxury Velvet & Temple Backdrops" : "లగ్జరీ వెల్వెట్ & టెంపుల్ బ్యాక్‌గ్రౌండ్స్",
+      lang === "en" ? "High Priority GPU Speed" : "హై ప్రయారిటీ సూపర్ ఫాస్ట్ ప్రాసెసింగ్",
+      lang === "en" ? "Full Commercial Rights" : "పూర్తి కమర్షియల్ హక్కులు",
+    ],
+    plan3: [
+      lang === "en" ? "All Artisan Pro Features" : "ఆర్టిసాన్ ప్రో ఫీచర్లు అన్నీ",
+      lang === "en" ? "Batch High-Res Processing" : "బ్యాచ్ ప్రాసెసింగ్ సపోర్ట్",
+      lang === "en" ? "Dedicated Account Manager" : "డెడికేటెడ్ అకౌంట్ సపోర్ట్",
+      lang === "en" ? "Custom Brand Watermark Removal" : "వాటర్‌మార్క్ లేకుండా డౌన్‌లోడ్స్",
+      lang === "en" ? "API Access for Web Stores" : "వెబ్‌సైట్ & స్టోర్ల కోసం API సపోర్ట్",
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 font-sans flex flex-col selection:bg-accent/20 selection:text-accent">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 font-sans flex flex-col selection:bg-accent/20 selection:text-accent overflow-x-hidden">
       
       {/* --- TOP NAVBAR --- */}
-      <header className="sticky top-0 z-50 bg-[var(--bg-primary)]/90 backdrop-blur-md border-b border-black/10 dark:border-white/10 px-4 sm:px-8 py-3.5 transition-colors">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 bg-[var(--bg-primary)]/90 backdrop-blur-md border-b border-black/10 dark:border-white/10 px-3 xs:px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 transition-colors">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
           
           {/* Brand Logo & Tagline */}
-          <Link to="/" className="flex items-center gap-3 group cursor-pointer">
+          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer shrink-0">
             <Logo />
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg sm:text-xl font-black tracking-tight text-[var(--text-emphasis)] block leading-none group-hover:text-accent transition-colors">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="text-base sm:text-xl font-black tracking-tight text-[var(--text-emphasis)] block leading-none group-hover:text-accent transition-colors">
                   Srushti AI
                 </span>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20">
+                <span className="px-1.5 py-0.5 rounded text-[8.5px] sm:text-[9px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20">
                   Studio
                 </span>
               </div>
-              <span className="text-[10px] font-bold text-[var(--text-secondary)] block mt-0.5">
+              <span className="text-[9px] sm:text-[10px] font-bold text-[var(--text-secondary)] block mt-0.5">
                 Business to Brand
               </span>
             </div>
           </Link>
 
-          {/* Center Navigation Links (Desktop) */}
-          <nav className="hidden md:flex items-center gap-6 text-xs font-bold text-[var(--text-secondary)]">
-            <a href="#showcase" className="hover:text-accent transition-colors">
+          {/* Center Navigation Links (Desktop & Large Tablet) */}
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-extrabold text-[var(--text-secondary)]">
+            <a href="#showcase" className="hover:text-accent transition-colors py-1">
               {lang === "en" ? "Showcase" : "ప్రదర్శన"}
             </a>
-            <a href="#features" className="hover:text-accent transition-colors">
+            <a href="#features" className="hover:text-accent transition-colors py-1">
               {lang === "en" ? "Features" : "ఫీచర్లు"}
             </a>
-            <a href="#how-it-works" className="hover:text-accent transition-colors">
+            <a href="#how-it-works" className="hover:text-accent transition-colors py-1">
               {lang === "en" ? "How It Works" : "ఎలా పనిచేస్తుంది"}
             </a>
-            <a href="#pricing" className="hover:text-accent transition-colors">
+            <a href="#pricing" className="hover:text-accent transition-colors py-1">
               {lang === "en" ? "Pricing" : "ధరలు"}
             </a>
           </nav>
 
           {/* Right Action Controls */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            
             {/* Language Selector */}
-            <div className="flex items-center rounded-xl nm-inset p-0.5 text-[11px] font-bold">
+            <div className="flex items-center rounded-xl nm-inset p-0.5 text-[10px] sm:text-[11px] font-bold">
               <button
+                id="btn-nav-lang-te"
                 onClick={() => setLang("te")}
-                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                   lang === "te"
                     ? "bg-accent text-white font-extrabold shadow-sm"
                     : "text-[var(--text-secondary)] hover:text-accent"
@@ -244,8 +274,9 @@ function LandingPageComponent() {
                 తెలుగు
               </button>
               <button
+                id="btn-nav-lang-en"
                 onClick={() => setLang("en")}
-                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                   lang === "en"
                     ? "bg-accent text-white font-extrabold shadow-sm"
                     : "text-[var(--text-secondary)] hover:text-accent"
@@ -258,41 +289,92 @@ function LandingPageComponent() {
 
             {/* Theme Toggle */}
             <button
+              id="btn-nav-theme-toggle"
               onClick={toggleTheme}
-              className="p-2 rounded-xl nm-outset text-xs font-bold flex items-center justify-center hover:text-accent transition-all cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-xl nm-outset text-xs font-bold flex items-center justify-center hover:text-accent transition-all cursor-pointer shrink-0"
               title="Toggle Theme"
+              aria-label="Toggle Theme"
             >
               {theme === "light" ? <MoonIcon className="w-4 h-4 text-accent" /> : <SunIcon className="w-4 h-4 text-accent" />}
             </button>
 
-            {/* Launch App Primary CTA */}
-            <Link
-              to="/studio"
-              className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-accent text-white text-xs sm:text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-accent/20 hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer"
+            {/* Mobile / Tablet Menu Trigger */}
+            <button
+              id="btn-nav-mobile-menu"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              className="lg:hidden p-1.5 sm:p-2 rounded-xl nm-outset text-[var(--text-emphasis)] hover:text-accent transition-all cursor-pointer shrink-0"
+              aria-label="Open Navigation Menu"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>{t.ctaLaunch}</span>
-            </Link>
+              {mobileMenuOpen ? <XIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Navigation Drawer */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="lg:hidden overflow-hidden pt-3 border-t border-black/10 dark:border-white/10 mt-2.5"
+            >
+              <div className="flex flex-col gap-2 p-2 rounded-2xl nm-inset-sm bg-black/5 dark:bg-black/20 text-xs font-bold text-[var(--text-primary)]">
+                <a
+                  href="#showcase"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2.5 rounded-xl hover:bg-black/10 dark:hover:bg-white/10 transition-colors flex items-center justify-between"
+                >
+                  <span>{lang === "en" ? "Showcase & Demos" : "ప్రదర్శన & డెమోలు"}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-accent" />
+                </a>
+                <a
+                  href="#features"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2.5 rounded-xl hover:bg-black/10 dark:hover:bg-white/10 transition-colors flex items-center justify-between"
+                >
+                  <span>{lang === "en" ? "Core Features" : "ఫీచర్లు & సామర్థ్యాలు"}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-accent" />
+                </a>
+                <a
+                  href="#how-it-works"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2.5 rounded-xl hover:bg-black/10 dark:hover:bg-white/10 transition-colors flex items-center justify-between"
+                >
+                  <span>{lang === "en" ? "How It Works" : "ఎలా పనిచేస్తుంది"}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-accent" />
+                </a>
+                <a
+                  href="#pricing"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2.5 rounded-xl hover:bg-black/10 dark:hover:bg-white/10 transition-colors flex items-center justify-between"
+                >
+                  <span>{lang === "en" ? "Pricing & Wallet Credits" : "ధరలు & క్రెడిట్స్"}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-accent" />
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* --- HERO SECTION --- */}
-      <section className="relative overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-black/5 dark:border-white/5">
+      <section className="relative overflow-hidden pt-8 pb-12 sm:pt-16 sm:pb-20 md:pt-20 md:pb-24 px-4 sm:px-6 lg:px-8 border-b border-black/5 dark:border-white/5">
         
         {/* Subtle Background Glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-accent/10 rounded-full blur-3xl pointer-events-none -z-10" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[550px] lg:w-[700px] h-[250px] sm:h-[350px] bg-accent/10 rounded-full blur-3xl pointer-events-none -z-10" />
         
-        <div className="max-w-5xl mx-auto text-center space-y-6">
+        <div className="max-w-5xl mx-auto text-center space-y-4 sm:space-y-6">
           
           {/* Eyebrow Badge */}
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full nm-outset text-xs font-black text-accent bg-accent/5 border border-accent/20"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full nm-outset text-[10.5px] sm:text-xs font-black text-accent bg-accent/5 border border-accent/20 max-w-full"
           >
-            <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
-            <span>{t.badge}</span>
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 animate-spin-slow" />
+            <span className="truncate">{t.badge}</span>
           </motion.div>
 
           {/* Main Headline */}
@@ -300,10 +382,10 @@ function LandingPageComponent() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[var(--text-emphasis)] leading-[1.15]"
+            className="text-2xl xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-[var(--text-emphasis)] leading-[1.2] sm:leading-[1.15]"
           >
             {t.headlineTitle}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-amber-500 to-rose-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-amber-500 to-rose-500 block sm:inline mt-1 sm:mt-0">
               {t.headlineHighlight}
             </span>
           </motion.h1>
@@ -313,7 +395,7 @@ function LandingPageComponent() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="max-w-3xl mx-auto text-sm sm:text-base md:text-lg text-[var(--text-secondary)] font-medium leading-relaxed"
+            className="max-w-2xl lg:max-w-3xl mx-auto text-xs xs:text-sm sm:text-base md:text-lg text-[var(--text-secondary)] font-medium leading-relaxed px-2"
           >
             {t.subtitle}
           </motion.p>
@@ -323,22 +405,24 @@ function LandingPageComponent() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex flex-wrap items-center justify-center gap-4 pt-4"
+            className="flex flex-col xs:flex-row items-stretch xs:items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4 max-w-md xs:max-w-none mx-auto px-4"
           >
             <Link
+              id="btn-hero-launch-studio"
               to="/studio"
-              className="px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl bg-accent text-white text-sm sm:text-base font-black flex items-center gap-3 shadow-xl shadow-accent/30 hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer"
+              className="px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl bg-accent text-white text-xs sm:text-sm md:text-base font-black flex items-center justify-center gap-2.5 sm:gap-3 shadow-xl shadow-accent/30 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer min-h-[48px]"
             >
-              <CameraIcon className="w-5 h-5" />
+              <CameraIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
               <span>{t.ctaLaunch}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             </Link>
 
             <a
+              id="btn-hero-explore-demo"
               href="#showcase"
-              className="px-6 py-3.5 sm:px-7 sm:py-4 rounded-2xl nm-outset text-sm sm:text-base font-extrabold text-[var(--text-primary)] hover:text-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center gap-2"
+              className="px-6 py-3.5 sm:px-7 sm:py-4 rounded-2xl nm-outset text-xs sm:text-sm md:text-base font-extrabold text-[var(--text-primary)] hover:text-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 min-h-[48px]"
             >
-              <ZapIcon className="w-4 h-4 text-accent" />
+              <ZapIcon className="w-4 h-4 text-accent shrink-0" />
               <span>{t.ctaDemo}</span>
             </a>
           </motion.div>
@@ -348,82 +432,84 @@ function LandingPageComponent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="pt-10 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
+            className="pt-6 sm:pt-10 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto"
           >
-            <div className="nm-outset rounded-2xl p-4 text-center">
-              <span className="text-xl sm:text-2xl font-black text-accent block">{t.stats1}</span>
-              <span className="text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats1Sub}</span>
+            <div className="nm-outset rounded-2xl p-3 sm:p-4 text-center">
+              <span className="text-lg sm:text-2xl font-black text-accent block">{t.stats1}</span>
+              <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats1Sub}</span>
             </div>
-            <div className="nm-outset rounded-2xl p-4 text-center">
-              <span className="text-xl sm:text-2xl font-black text-emerald-500 block">{t.stats2}</span>
-              <span className="text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats2Sub}</span>
+            <div className="nm-outset rounded-2xl p-3 sm:p-4 text-center">
+              <span className="text-lg sm:text-2xl font-black text-emerald-500 block">{t.stats2}</span>
+              <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats2Sub}</span>
             </div>
-            <div className="nm-outset rounded-2xl p-4 text-center">
-              <span className="text-xl sm:text-2xl font-black text-amber-500 block">{t.stats3}</span>
-              <span className="text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats3Sub}</span>
+            <div className="nm-outset rounded-2xl p-3 sm:p-4 text-center">
+              <span className="text-lg sm:text-2xl font-black text-amber-500 block">{t.stats3}</span>
+              <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats3Sub}</span>
             </div>
-            <div className="nm-outset rounded-2xl p-4 text-center">
-              <span className="text-xl sm:text-2xl font-black text-rose-500 block">{t.stats4}</span>
-              <span className="text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats4Sub}</span>
+            <div className="nm-outset rounded-2xl p-3 sm:p-4 text-center">
+              <span className="text-lg sm:text-2xl font-black text-rose-500 block">{t.stats4}</span>
+              <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats4Sub}</span>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* --- INTERACTIVE SHOWCASE SECTION --- */}
-      <section id="showcase" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <div className="text-center space-y-3 mb-10">
-          <h2 className="text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
+      <section id="showcase" className="py-12 sm:py-16 md:py-24 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div className="text-center space-y-2 sm:space-y-3 mb-6 sm:mb-10">
+          <h2 className="text-xl xs:text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
             {t.showcaseTitle}
           </h2>
-          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-xl mx-auto font-medium">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-xl mx-auto font-medium px-2">
             {t.showcaseSub}
           </p>
 
           {/* Tab Selector */}
-          <div className="inline-flex rounded-2xl nm-inset p-1.5 mt-4">
+          <div className="inline-flex rounded-2xl nm-inset p-1 sm:p-1.5 mt-2 sm:mt-4 max-w-full">
             <button
+              id="btn-tab-garments"
               onClick={() => setActiveShowcase("garment")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
                 activeShowcase === "garment"
-                  ? "bg-accent text-white shadow-md"
+                  ? "bg-accent text-white shadow-md font-black"
                   : "text-[var(--text-secondary)] hover:text-accent"
               }`}
             >
-              <ShirtIcon className="w-4 h-4" />
+              <ShirtIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span>{t.garmentTab}</span>
             </button>
 
             <button
+              id="btn-tab-jewelry"
               onClick={() => setActiveShowcase("jewelry")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
                 activeShowcase === "jewelry"
-                  ? "bg-accent text-white shadow-md"
+                  ? "bg-accent text-white shadow-md font-black"
                   : "text-[var(--text-secondary)] hover:text-accent"
               }`}
             >
-              <GemIcon className="w-4 h-4" />
+              <GemIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span>{t.jewelryTab}</span>
             </button>
           </div>
         </div>
 
         {/* Showcase Card Preview */}
-        <div className="nm-outset rounded-3xl p-6 sm:p-8 bg-[var(--bg-primary)] border border-black/5 dark:border-white/5">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="nm-outset rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 bg-[var(--bg-primary)] border border-black/5 dark:border-white/5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
             
             {/* Left: Interactive Details & Preset Highlights */}
-            <div className="lg:col-span-5 space-y-6">
+            <div className="lg:col-span-5 space-y-4 sm:space-y-6">
               <div>
-                <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block mb-3">
+                <span className="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block mb-2 sm:mb-3">
                   {activeShowcase === "garment" ? "Garment AI Studio" : "Jewelry AI Studio"}
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black text-[var(--text-emphasis)] leading-snug">
+                <h3 className="text-lg sm:text-2xl font-black text-[var(--text-emphasis)] leading-snug">
                   {activeShowcase === "garment" 
                     ? (lang === "en" ? "Silk Sarees, Kurtas & Lehengas on Real Models" : "పట్టు చీరలు & కుర్తాలు రాయల్ మోడల్స్‌పై")
                     : (lang === "en" ? "Temple & Diamond Jewelry on Velvet Busts" : "వజ్రాల మరియు కుందన్ ఆభరణాల మెరుపు")}
                 </h3>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-2 font-medium leading-relaxed">
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1.5 sm:mt-2 font-medium leading-relaxed">
                   {activeShowcase === "garment"
                     ? (lang === "en" 
                         ? "Seamlessly render silk sheen, heavy zari borders, and flowing pallus with natural model poses, temple backdrops, and studio key-lighting." 
@@ -435,7 +521,7 @@ function LandingPageComponent() {
               </div>
 
               {/* Feature Checklist */}
-              <div className="space-y-2.5">
+              <div className="space-y-2 sm:space-y-2.5">
                 {(activeShowcase === "garment"
                   ? [
                       lang === "en" ? "Authentic Indian Female & Male Models" : "దక్షిణ మరియు ఉత్తర భారత మోడల్స్",
@@ -450,9 +536,9 @@ function LandingPageComponent() {
                       lang === "en" ? "Studio Spotlights & Shadow Controls" : "స్టూడియో స్పాట్‌లైట్ & షాడో కంట్రోల్స్",
                     ]
                 ).map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-xs font-bold text-[var(--text-primary)]">
-                    <div className="w-5 h-5 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
-                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  <div key={i} className="flex items-center gap-2.5 sm:gap-3 text-[11px] sm:text-xs font-bold text-[var(--text-primary)]">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
                     </div>
                     <span>{item}</span>
                   </div>
@@ -460,71 +546,88 @@ function LandingPageComponent() {
               </div>
 
               {/* Direct Link to Studio */}
-              <div className="pt-2">
+              <div className="pt-1 sm:pt-2">
                 <Link
+                  id="btn-showcase-open-studio"
                   to="/studio"
-                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-accent text-white text-xs font-black hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/20 transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 sm:gap-2.5 px-5 sm:px-6 py-3 rounded-xl bg-accent text-white text-xs sm:text-sm font-black hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/20 transition-all cursor-pointer"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 shrink-0" />
                   <span>{lang === "en" ? `Open ${activeShowcase === "garment" ? "Garment" : "Jewelry"} Studio` : "స్టూడియో తెరవండి"}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                 </Link>
               </div>
             </div>
 
             {/* Right: Studio Mockup Preview Card */}
             <div className="lg:col-span-7">
-              <div className="nm-inset rounded-2xl p-4 bg-black/5 dark:bg-black/20 border border-black/5 dark:border-white/5 space-y-3">
-                <div className="flex items-center justify-between px-2 text-[11px] font-bold text-[var(--text-secondary)]">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="nm-inset rounded-2xl p-3 sm:p-4 bg-black/5 dark:bg-black/20 border border-black/5 dark:border-white/5 space-y-3">
+                <div className="flex items-center justify-between px-1 sm:px-2 text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)]">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                     <span>{lang === "en" ? "Live Studio Generation Preview" : "స్టూడియో లైవ్ ప్రివ్యూ"}</span>
                   </div>
-                  <span className="text-[10px] text-accent font-black tracking-wider uppercase">4K Ready</span>
+                  <span className="text-[9px] sm:text-[10px] text-accent font-black tracking-wider uppercase">4K Ready</span>
                 </div>
 
                 {/* Split Comparison Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {/* Left: Input Product Lay */}
-                  <div className="nm-outset rounded-xl p-3 bg-[var(--bg-primary)] space-y-2">
-                    <div className="flex items-center justify-between text-[10px] font-extrabold text-[var(--text-secondary)]">
+                  <div className="nm-outset rounded-xl p-2.5 sm:p-3 bg-[var(--bg-primary)] space-y-2">
+                    <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-extrabold text-[var(--text-secondary)]">
                       <span>{lang === "en" ? "1. Your Product Photo" : "1. మీ ఉత్పత్తి ఫోటో"}</span>
-                      <span className="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 text-[9px]">Input</span>
+                      <span className="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 text-[8.5px] sm:text-[9px]">Input</span>
                     </div>
-                    <div className="aspect-[3/4] rounded-lg bg-neutral-200 dark:bg-neutral-800 flex flex-col items-center justify-center p-4 text-center border border-dashed border-black/20 dark:border-white/20">
+                    <div className="aspect-[3/4] min-h-[190px] sm:min-h-[220px] rounded-lg bg-neutral-200 dark:bg-neutral-800 flex flex-col items-center justify-center p-3 sm:p-4 text-center border border-dashed border-black/20 dark:border-white/20">
                       {activeShowcase === "garment" ? (
                         <>
-                          <ShirtIcon className="w-12 h-12 text-accent/60 mb-2" />
-                          <span className="text-xs font-bold text-[var(--text-primary)]">Handloom Silk Saree</span>
-                          <span className="text-[10px] text-[var(--text-secondary)] mt-1">Flat-lay or phone snap</span>
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-2 nm-inset-sm">
+                            <ShirtIcon className="w-6 h-6 sm:w-8 sm:h-8 text-accent" />
+                          </div>
+                          <span className="text-xs sm:text-sm font-black text-[var(--text-primary)]">Handloom Silk Saree</span>
+                          <span className="text-[9.5px] sm:text-[10px] text-[var(--text-secondary)] mt-1">Raw phone flat-lay photo</span>
+                          <span className="mt-2 px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/5 text-[8.5px] font-mono text-[var(--text-secondary)]">
+                            Original Specimen
+                          </span>
                         </>
                       ) : (
                         <>
-                          <GemIcon className="w-12 h-12 text-amber-500/60 mb-2" />
-                          <span className="text-xs font-bold text-[var(--text-primary)]">Temple Gold Necklace</span>
-                          <span className="text-[10px] text-[var(--text-secondary)] mt-1">Raw jeweler piece photo</span>
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-2 nm-inset-sm">
+                            <GemIcon className="w-6 h-6 sm:w-8 sm:h-8 text-amber-500" />
+                          </div>
+                          <span className="text-xs sm:text-sm font-black text-[var(--text-primary)]">Temple Gold Necklace</span>
+                          <span className="text-[9.5px] sm:text-[10px] text-[var(--text-secondary)] mt-1">Raw jeweler piece photo</span>
+                          <span className="mt-2 px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/5 text-[8.5px] font-mono text-[var(--text-secondary)]">
+                            Original Specimen
+                          </span>
                         </>
                       )}
                     </div>
                   </div>
 
                   {/* Right: AI Output on Model */}
-                  <div className="nm-outset rounded-xl p-3 bg-[var(--bg-primary)] space-y-2 border border-accent/20">
-                    <div className="flex items-center justify-between text-[10px] font-extrabold text-accent">
+                  <div className="nm-outset rounded-xl p-2.5 sm:p-3 bg-[var(--bg-primary)] space-y-2 border border-accent/30">
+                    <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-extrabold text-accent">
                       <span>{lang === "en" ? "2. AI Studio Model Output" : "2. ఏఐ స్టూడియో అవుట్‌పుట్"}</span>
-                      <span className="px-1.5 py-0.5 rounded bg-accent/10 text-[9px] font-black">4K UHD</span>
+                      <span className="px-1.5 py-0.5 rounded bg-accent/15 text-[8.5px] sm:text-[9px] font-black">4K UHD</span>
                     </div>
-                    <div className="aspect-[3/4] rounded-lg bg-gradient-to-b from-amber-500/10 via-rose-500/10 to-accent/15 flex flex-col items-center justify-center p-4 text-center border border-accent/30 relative overflow-hidden">
-                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-accent text-white text-[9px] font-black">
+                    <div className="aspect-[3/4] min-h-[190px] sm:min-h-[220px] rounded-lg bg-gradient-to-b from-accent/10 via-amber-500/10 to-rose-500/15 flex flex-col items-center justify-center p-3 sm:p-4 text-center border border-accent/40 relative overflow-hidden">
+                      <div className="absolute top-2 right-2 px-1.5 sm:px-2 py-0.5 rounded bg-accent text-white text-[8px] sm:text-[9px] font-black shadow-sm">
                         AI Model
                       </div>
-                      <CameraIcon className="w-12 h-12 text-accent mb-2 animate-bounce-slow" />
-                      <span className="text-xs font-black text-[var(--text-emphasis)]">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-accent/20 flex items-center justify-center mb-2 nm-outset-sm">
+                        <CameraIcon className="w-6 h-6 sm:w-8 sm:h-8 text-accent animate-bounce-slow" />
+                      </div>
+                      <span className="text-xs sm:text-sm font-black text-[var(--text-emphasis)]">
                         {activeShowcase === "garment" ? "Royal Runway Drape" : "Luxury Velvet Bust Shoot"}
                       </span>
-                      <span className="text-[10px] text-accent font-bold mt-1">
+                      <span className="text-[9.5px] sm:text-[10px] text-accent font-bold mt-1">
                         {lang === "en" ? "Studio Lighting • True Texture" : "స్టూడియో లైటింగ్ • సహజమైన అందం"}
                       </span>
+                      <div className="mt-2 flex items-center gap-1 text-[8.5px] font-bold text-[var(--text-secondary)]">
+                        <BadgeCheck className="w-3 h-3 text-accent" />
+                        <span>Ready for E-Commerce</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -536,70 +639,78 @@ function LandingPageComponent() {
       </section>
 
       {/* --- FEATURES GRID --- */}
-      <section id="features" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
-        <div className="max-w-7xl mx-auto space-y-12">
+      <section id="features" className="py-12 sm:py-16 md:py-24 px-3 xs:px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+        <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
           
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
+          <div className="text-center space-y-2 sm:space-y-3 max-w-2xl mx-auto">
+            <span className="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
               Core Capabilities
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
+            <h2 className="text-xl xs:text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
               {t.featuresTitle}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             
             {/* Feature 1 */}
-            <div className="nm-outset rounded-2xl p-6 bg-[var(--bg-primary)] space-y-4 hover:scale-[1.02] transition-transform">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center nm-outset">
-                <UsersIcon className="w-6 h-6" />
+            <div className="nm-outset rounded-2xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 sm:space-y-4 hover:scale-[1.02] transition-transform flex flex-col justify-between">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center nm-outset">
+                  <UsersIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.feature1Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {t.feature1Desc}
+                </p>
               </div>
-              <h3 className="text-base font-black text-[var(--text-emphasis)]">
-                {t.feature1Title}
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
-                {t.feature1Desc}
-              </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="nm-outset rounded-2xl p-6 bg-[var(--bg-primary)] space-y-4 hover:scale-[1.02] transition-transform">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center nm-outset">
-                <LayersIcon className="w-6 h-6" />
+            <div className="nm-outset rounded-2xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 sm:space-y-4 hover:scale-[1.02] transition-transform flex flex-col justify-between">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center nm-outset">
+                  <LayersIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.feature2Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {t.feature2Desc}
+                </p>
               </div>
-              <h3 className="text-base font-black text-[var(--text-emphasis)]">
-                {t.feature2Title}
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
-                {t.feature2Desc}
-              </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="nm-outset rounded-2xl p-6 bg-[var(--bg-primary)] space-y-4 hover:scale-[1.02] transition-transform">
-              <div className="w-12 h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center nm-outset">
-                <GemIcon className="w-6 h-6" />
+            <div className="nm-outset rounded-2xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 sm:space-y-4 hover:scale-[1.02] transition-transform flex flex-col justify-between">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center nm-outset">
+                  <GemIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.feature3Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {t.feature3Desc}
+                </p>
               </div>
-              <h3 className="text-base font-black text-[var(--text-emphasis)]">
-                {t.feature3Title}
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
-                {t.feature3Desc}
-              </p>
             </div>
 
             {/* Feature 4 */}
-            <div className="nm-outset rounded-2xl p-6 bg-[var(--bg-primary)] space-y-4 hover:scale-[1.02] transition-transform">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center nm-outset">
-                <GlobeIcon className="w-6 h-6" />
+            <div className="nm-outset rounded-2xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 sm:space-y-4 hover:scale-[1.02] transition-transform flex flex-col justify-between">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center nm-outset">
+                  <GlobeIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.feature4Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {t.feature4Desc}
+                </p>
               </div>
-              <h3 className="text-base font-black text-[var(--text-emphasis)]">
-                {t.feature4Title}
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
-                {t.feature4Desc}
-              </p>
             </div>
 
           </div>
@@ -607,23 +718,23 @@ function LandingPageComponent() {
       </section>
 
       {/* --- HOW IT WORKS (3 EASY STEPS) --- */}
-      <section id="how-it-works" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <div className="text-center space-y-3 max-w-2xl mx-auto mb-14">
-          <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
+      <section id="how-it-works" className="py-12 sm:py-16 md:py-24 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div className="text-center space-y-2 sm:space-y-3 max-w-2xl mx-auto mb-8 sm:mb-14">
+          <span className="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
             Workflow
           </span>
-          <h2 className="text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
+          <h2 className="text-xl xs:text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
             {t.howItWorksTitle}
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8 relative">
           {/* Step 1 */}
-          <div className="nm-outset rounded-3xl p-6 bg-[var(--bg-primary)] space-y-3 relative">
-            <div className="w-10 h-10 rounded-xl bg-accent text-white font-black text-base flex items-center justify-center shadow-lg shadow-accent/30">
+          <div className="nm-outset rounded-2xl sm:rounded-3xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 relative">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-accent text-white font-black text-sm sm:text-base flex items-center justify-center shadow-lg shadow-accent/30">
               1
             </div>
-            <h3 className="text-lg font-black text-[var(--text-emphasis)] pt-2">
+            <h3 className="text-base sm:text-lg font-black text-[var(--text-emphasis)] pt-1 sm:pt-2">
               {t.step1Title}
             </h3>
             <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
@@ -632,11 +743,11 @@ function LandingPageComponent() {
           </div>
 
           {/* Step 2 */}
-          <div className="nm-outset rounded-3xl p-6 bg-[var(--bg-primary)] space-y-3 relative">
-            <div className="w-10 h-10 rounded-xl bg-amber-500 text-white font-black text-base flex items-center justify-center shadow-lg shadow-amber-500/30">
+          <div className="nm-outset rounded-2xl sm:rounded-3xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 relative">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500 text-white font-black text-sm sm:text-base flex items-center justify-center shadow-lg shadow-amber-500/30">
               2
             </div>
-            <h3 className="text-lg font-black text-[var(--text-emphasis)] pt-2">
+            <h3 className="text-base sm:text-lg font-black text-[var(--text-emphasis)] pt-1 sm:pt-2">
               {t.step2Title}
             </h3>
             <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
@@ -645,11 +756,11 @@ function LandingPageComponent() {
           </div>
 
           {/* Step 3 */}
-          <div className="nm-outset rounded-3xl p-6 bg-[var(--bg-primary)] space-y-3 relative">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white font-black text-base flex items-center justify-center shadow-lg shadow-emerald-500/30">
+          <div className="nm-outset rounded-2xl sm:rounded-3xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 relative">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500 text-white font-black text-sm sm:text-base flex items-center justify-center shadow-lg shadow-emerald-500/30">
               3
             </div>
-            <h3 className="text-lg font-black text-[var(--text-emphasis)] pt-2">
+            <h3 className="text-base sm:text-lg font-black text-[var(--text-emphasis)] pt-1 sm:pt-2">
               {t.step3Title}
             </h3>
             <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
@@ -660,92 +771,128 @@ function LandingPageComponent() {
       </section>
 
       {/* --- PRICING & CREDITS --- */}
-      <section id="pricing" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
-        <div className="max-w-7xl mx-auto space-y-12">
+      <section id="pricing" className="py-12 sm:py-16 md:py-24 px-3 xs:px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+        <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
           
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
+          <div className="text-center space-y-2 sm:space-y-3 max-w-2xl mx-auto">
+            <span className="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
               Wallet & Pricing
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
+            <h2 className="text-xl xs:text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
               {t.pricingTitle}
             </h2>
-            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-medium">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-medium px-2">
               {t.pricingSub}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-5xl mx-auto items-stretch">
             
             {/* Starter Plan */}
-            <div className="nm-outset rounded-3xl p-6 bg-[var(--bg-primary)] space-y-5 flex flex-col justify-between">
-              <div className="space-y-3">
-                <span className="text-xs font-black uppercase tracking-wider text-[var(--text-secondary)] block">
-                  {t.plan1Title}
-                </span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-[var(--text-emphasis)]">₹499</span>
-                  <span className="text-xs font-bold text-accent">/ {t.plan1Credits}</span>
+            <div className="nm-outset rounded-2xl sm:rounded-3xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-5 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div>
+                  <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[var(--text-secondary)] block">
+                    {t.plan1Title}
+                  </span>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <span className="text-2xl sm:text-3xl font-black text-[var(--text-emphasis)]">₹499</span>
+                    <span className="text-xs font-bold text-accent">/ {t.plan1Credits}</span>
+                  </div>
+                  <p className="text-xs text-[var(--text-secondary)] font-medium mt-1.5">
+                    {t.plan1Desc}
+                  </p>
                 </div>
-                <p className="text-xs text-[var(--text-secondary)] font-medium">
-                  {t.plan1Desc}
-                </p>
+
+                <div className="space-y-2 pt-2 border-t border-black/5 dark:border-white/5">
+                  {planFeatures.plan1.map((f, i) => (
+                    <div key={i} className="flex items-center gap-2 text-[11px] sm:text-xs font-bold text-[var(--text-primary)]">
+                      <Check className="w-3.5 h-3.5 text-accent shrink-0 stroke-[3]" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <Link
+                id="btn-pricing-starter"
                 to="/studio"
-                className="w-full py-3 rounded-xl nm-outset text-xs font-black text-center text-[var(--text-primary)] hover:text-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer block"
+                className="w-full py-3 rounded-xl nm-outset text-xs font-black text-center text-[var(--text-primary)] hover:text-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer block min-h-[44px] flex items-center justify-center"
               >
                 {lang === "en" ? "Get Started" : "ప్రారంభించండి"}
               </Link>
             </div>
 
             {/* Pro Plan (Highlighted) */}
-            <div className="nm-outset rounded-3xl p-6 bg-[var(--bg-primary)] space-y-5 flex flex-col justify-between border-2 border-accent relative shadow-xl shadow-accent/10">
-              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-accent text-white text-[10px] font-black uppercase tracking-wider">
+            <div className="nm-outset rounded-2xl sm:rounded-3xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-5 flex flex-col justify-between border-2 border-accent relative shadow-xl shadow-accent/10">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 sm:py-1 rounded-full bg-accent text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider shadow-sm">
                 Most Popular
               </div>
-              <div className="space-y-3 pt-2">
-                <span className="text-xs font-black uppercase tracking-wider text-accent block">
-                  {t.plan2Title}
-                </span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-[var(--text-emphasis)]">₹1,999</span>
-                  <span className="text-xs font-bold text-accent">/ {t.plan2Credits}</span>
+              <div className="space-y-4 pt-1 sm:pt-2">
+                <div>
+                  <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-accent block">
+                    {t.plan2Title}
+                  </span>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <span className="text-2xl sm:text-3xl font-black text-[var(--text-emphasis)]">₹1,999</span>
+                    <span className="text-xs font-bold text-accent">/ {t.plan2Credits}</span>
+                  </div>
+                  <p className="text-xs text-[var(--text-secondary)] font-medium mt-1.5">
+                    {t.plan2Desc}
+                  </p>
                 </div>
-                <p className="text-xs text-[var(--text-secondary)] font-medium">
-                  {t.plan2Desc}
-                </p>
+
+                <div className="space-y-2 pt-2 border-t border-black/5 dark:border-white/5">
+                  {planFeatures.plan2.map((f, i) => (
+                    <div key={i} className="flex items-center gap-2 text-[11px] sm:text-xs font-bold text-[var(--text-primary)]">
+                      <Check className="w-3.5 h-3.5 text-accent shrink-0 stroke-[3]" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <Link
+                id="btn-pricing-pro"
                 to="/studio"
-                className="w-full py-3.5 rounded-xl bg-accent text-white text-xs font-black text-center shadow-lg shadow-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer block"
+                className="w-full py-3.5 rounded-xl bg-accent text-white text-xs font-black text-center shadow-lg shadow-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer block min-h-[44px] flex items-center justify-center"
               >
                 {lang === "en" ? "Launch Studio" : "స్టూడియో ప్రారంభించండి"}
               </Link>
             </div>
 
             {/* Enterprise Plan */}
-            <div className="nm-outset rounded-3xl p-6 bg-[var(--bg-primary)] space-y-5 flex flex-col justify-between">
-              <div className="space-y-3">
-                <span className="text-xs font-black uppercase tracking-wider text-[var(--text-secondary)] block">
-                  {t.plan3Title}
-                </span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-[var(--text-emphasis)]">₹6,999</span>
-                  <span className="text-xs font-bold text-accent">/ {t.plan3Credits}</span>
+            <div className="nm-outset rounded-2xl sm:rounded-3xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-5 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div>
+                  <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[var(--text-secondary)] block">
+                    {t.plan3Title}
+                  </span>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <span className="text-2xl sm:text-3xl font-black text-[var(--text-emphasis)]">₹6,999</span>
+                    <span className="text-xs font-bold text-accent">/ {t.plan3Credits}</span>
+                  </div>
+                  <p className="text-xs text-[var(--text-secondary)] font-medium mt-1.5">
+                    {t.plan3Desc}
+                  </p>
                 </div>
-                <p className="text-xs text-[var(--text-secondary)] font-medium">
-                  {t.plan3Desc}
-                </p>
+
+                <div className="space-y-2 pt-2 border-t border-black/5 dark:border-white/5">
+                  {planFeatures.plan3.map((f, i) => (
+                    <div key={i} className="flex items-center gap-2 text-[11px] sm:text-xs font-bold text-[var(--text-primary)]">
+                      <Check className="w-3.5 h-3.5 text-accent shrink-0 stroke-[3]" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <Link
+                id="btn-pricing-enterprise"
                 to="/studio"
-                className="w-full py-3 rounded-xl nm-outset text-xs font-black text-center text-[var(--text-primary)] hover:text-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer block"
+                className="w-full py-3 rounded-xl nm-outset text-xs font-black text-center text-[var(--text-primary)] hover:text-accent hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer block min-h-[44px] flex items-center justify-center"
               >
-                {lang === "en" ? "Contact Sales" : "వివరాలు తెలుసుకోండి"}
+                {lang === "en" ? "Select Plan" : "ప్లాన్ ఎంచుకోండి"}
               </Link>
             </div>
 
@@ -754,107 +901,118 @@ function LandingPageComponent() {
       </section>
 
       {/* --- TESTIMONIALS --- */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
-        <div className="text-center space-y-3 max-w-2xl mx-auto mb-12">
-          <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
+      <section className="py-12 sm:py-16 md:py-24 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+        <div className="text-center space-y-2 sm:space-y-3 max-w-2xl mx-auto mb-8 sm:mb-12">
+          <span className="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
             Success Stories
           </span>
-          <h2 className="text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
+          <h2 className="text-xl xs:text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
             {t.testimonialsTitle}
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
           {/* Testimonial 1 */}
-          <div className="nm-outset rounded-3xl p-6 sm:p-8 bg-[var(--bg-primary)] space-y-4">
-            <div className="flex items-center gap-1 text-amber-500">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className="w-4 h-4 fill-amber-500" />
-              ))}
+          <div className="nm-outset rounded-2xl sm:rounded-3xl p-5 sm:p-8 bg-[var(--bg-primary)] space-y-3 sm:space-y-4 flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center gap-1 text-amber-500">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-500" />
+                ))}
+              </div>
+              <p className="text-xs sm:text-sm text-[var(--text-primary)] font-semibold italic leading-relaxed">
+                {t.testimonial1}
+              </p>
             </div>
-            <p className="text-xs sm:text-sm text-[var(--text-primary)] font-semibold italic leading-relaxed">
-              {t.testimonial1}
-            </p>
-            <div className="pt-2 border-t border-black/5 dark:border-white/5">
-              <span className="text-xs font-black text-[var(--text-emphasis)] block">{t.testimonial1Author}</span>
-              <span className="text-[11px] font-bold text-[var(--text-secondary)] block">{t.testimonial1Role}</span>
+            <div className="pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+              <div>
+                <span className="text-xs font-black text-[var(--text-emphasis)] block">{t.testimonial1Author}</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block">{t.testimonial1Role}</span>
+              </div>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[9px] font-bold">Verified</span>
             </div>
           </div>
 
           {/* Testimonial 2 */}
-          <div className="nm-outset rounded-3xl p-6 sm:p-8 bg-[var(--bg-primary)] space-y-4">
-            <div className="flex items-center gap-1 text-amber-500">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className="w-4 h-4 fill-amber-500" />
-              ))}
+          <div className="nm-outset rounded-2xl sm:rounded-3xl p-5 sm:p-8 bg-[var(--bg-primary)] space-y-3 sm:space-y-4 flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center gap-1 text-amber-500">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-500" />
+                ))}
+              </div>
+              <p className="text-xs sm:text-sm text-[var(--text-primary)] font-semibold italic leading-relaxed">
+                {t.testimonial2}
+              </p>
             </div>
-            <p className="text-xs sm:text-sm text-[var(--text-primary)] font-semibold italic leading-relaxed">
-              {t.testimonial2}
-            </p>
-            <div className="pt-2 border-t border-black/5 dark:border-white/5">
-              <span className="text-xs font-black text-[var(--text-emphasis)] block">{t.testimonial2Author}</span>
-              <span className="text-[11px] font-bold text-[var(--text-secondary)] block">{t.testimonial2Role}</span>
+            <div className="pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+              <div>
+                <span className="text-xs font-black text-[var(--text-emphasis)] block">{t.testimonial2Author}</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block">{t.testimonial2Role}</span>
+              </div>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[9px] font-bold">Verified</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* --- BOTTOM CALL TO ACTION --- */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/5 bg-accent/5">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
+      <section className="py-12 sm:py-16 md:py-20 px-3 xs:px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/5 bg-accent/5">
+        <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6">
+          <h2 className="text-xl xs:text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
             {lang === "en" ? "Ready to create stunning product photos?" : "మీ ఉత్పత్తులకు అద్భుతమైన ఫోటోషూట్ సిద్ధం చేయండి"}
           </h2>
-          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-xl mx-auto font-medium">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-xl mx-auto font-medium px-2">
             {lang === "en" 
               ? "Join thousands of handloom weavers, boutique designers, and jewelry artisans elevating their brand presence today."
               : "ఈరోజే వేలాది మంది చేనేత కళాకారులు మరియు వ్యాపారులతో కలిసి మీ వ్యాపారాన్ని బ్రాండ్‌గా మార్చుకోండి."}
           </p>
-          <div className="pt-2">
+          <div className="pt-1 sm:pt-2">
             <Link
+              id="btn-cta-bottom-launch"
               to="/studio"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-accent text-white text-sm sm:text-base font-black shadow-xl shadow-accent/30 hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2.5 sm:gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-accent text-white text-xs sm:text-sm md:text-base font-black shadow-xl shadow-accent/30 hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer min-h-[48px]"
             >
-              <Sparkles className="w-5 h-5" />
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
               <span>{t.ctaLaunch}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             </Link>
           </div>
         </div>
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="border-t border-black/10 dark:border-white/10 py-10 px-4 sm:px-8 bg-[var(--bg-primary)]">
+      <footer className="border-t border-black/10 dark:border-white/10 py-8 sm:py-10 px-4 sm:px-8 bg-[var(--bg-primary)]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           
           {/* Logo & Tagline */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 text-center md:text-left">
             <Logo />
             <div>
-              <span className="text-base font-black text-[var(--text-emphasis)] block">
+              <span className="text-sm sm:text-base font-black text-[var(--text-emphasis)] block">
                 Srushti AI
               </span>
-              <span className="text-[11px] text-[var(--text-secondary)] font-medium block">
+              <span className="text-[10px] sm:text-[11px] text-[var(--text-secondary)] font-medium block">
                 {t.footerTagline}
               </span>
             </div>
           </div>
 
           {/* Nav Links */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-bold text-[var(--text-secondary)]">
-            <Link to="/studio" className="hover:text-accent transition-colors">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs font-bold text-[var(--text-secondary)]">
+            <Link to="/studio" className="hover:text-accent transition-colors py-1">
               {lang === "en" ? "AI Studio" : "ఏఐ స్టూడియో"}
             </Link>
-            <Link to="/terms" className="hover:text-accent transition-colors">
+            <Link to="/terms" className="hover:text-accent transition-colors py-1">
               {lang === "en" ? "Terms & Conditions" : "నియమ నిబంధనలు"}
             </Link>
-            <Link to="/privacy" className="hover:text-accent transition-colors">
+            <Link to="/privacy" className="hover:text-accent transition-colors py-1">
               {lang === "en" ? "Privacy Policy" : "గోప్యతా విధానం"}
             </Link>
           </div>
 
           {/* Copyright */}
-          <div className="text-[11px] text-[var(--text-secondary)] font-medium text-center md:text-right">
+          <div className="text-[10px] sm:text-[11px] text-[var(--text-secondary)] font-medium text-center md:text-right">
             © {new Date().getFullYear()} Srushti AI. {t.rights}
           </div>
 
