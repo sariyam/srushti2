@@ -6,6 +6,7 @@ import { AdminWorkspace } from "./AdminWorkspace";
 import { SettingsWorkspace } from "./SettingsWorkspace";
 import { WalletModal } from "./WalletModal";
 import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions, formatCredits } from "../utils/wallet";
+import { usePWAInstall, triggerPWAInstall } from "../utils/pwautils";
 import { Logo } from "./Logo";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
@@ -554,55 +555,18 @@ export const Header: React.FC<HeaderProps> = ({
       setIsSettingsOpen(true);
     }
   }, [isSignedOut]);
+
+  const { isInstallable, isInstalled, isIOS, isAndroid, deferredPrompt, promptInstall } = usePWAInstall();
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [bannerDismissed, setBannerDismissed] = useState<boolean>(false);
-  const [isInstalled, setIsInstalled] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    const isStandalone =
-      window.matchMedia("(display-mode: standalone)").matches ||
-      (window.navigator as any).standalone === true;
-    const isMarked = localStorage.getItem("srushti_pwa_installed") === "true";
-    return isStandalone || isMarked;
-  });
   const isEn = lang === "en";
 
-  const isIOS = typeof navigator !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isAndroid = typeof navigator !== "undefined" && /Android/.test(navigator.userAgent);
-
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-
-    const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setDeferredPrompt(null);
-      localStorage.setItem("srushti_pwa_installed", "true");
-    };
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    window.addEventListener("appinstalled", handleAppInstalled);
-
-    if (window.matchMedia) {
-      const mediaQuery = window.matchMedia("(display-mode: standalone)");
-      const handleDisplayChange = (evt: MediaQueryListEvent) => {
-        if (evt.matches) {
-          setIsInstalled(true);
-          localStorage.setItem("srushti_pwa_installed", "true");
-        }
-      };
-      if (mediaQuery.addEventListener) {
-        mediaQuery.addEventListener("change", handleDisplayChange);
-      }
+  const handleHeaderDownloadClick = async () => {
+    const res = await promptInstall();
+    if (res.outcome === "manual_instructions" || res.method === "manual_guide" || isIOS || !deferredPrompt) {
+      setIsDownloadOpen(true);
     }
-
-    return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-      window.removeEventListener("appinstalled", handleAppInstalled);
-    };
-  }, []);
+  };
 
   // Temporary selection states to support the Confirm button workflow
   const [tempWorkspace, setTempWorkspace] = useState<"garment" | "jewelry">(
@@ -657,8 +621,22 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Actions panel with Wallet, Billing and Settings triggers */}
+        {/* Actions panel with Download, Wallet, Billing and Settings triggers */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Download / Install App trigger button */}
+          <button
+            id="btn-header-install-app"
+            type="button"
+            onClick={handleHeaderDownloadClick}
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
+            title={isEn ? "Download / Install App" : "యాప్ డౌన్‌లోడ్ / ఇన్‌స్టాల్ చేయండి"}
+          >
+            <Download className="w-4 h-4 text-accent" />
+            <span className="hidden md:inline text-xs font-extrabold text-[var(--text-emphasis)]">
+              {isEn ? "Download App" : "యాప్ డౌన్‌లోడ్"}
+            </span>
+          </button>
+
           {/* Wallet balance trigger button */}
           <button
             id="btn-trigger-wallet-modal"
@@ -1280,25 +1258,10 @@ export const Header: React.FC<HeaderProps> = ({
               {/* Download / Install Button */}
               <div className="pt-1 pb-1">
                 <button
+                  id="btn-modal-install-app-now"
                   onClick={async () => {
-                    if (deferredPrompt) {
-                      try {
-                        await deferredPrompt.prompt();
-                        const choice = await deferredPrompt.userChoice;
-                        if (choice && choice.outcome === "accepted") {
-                          setIsInstalled(true);
-                          localStorage.setItem("srushti_pwa_installed", "true");
-                        }
-                      } catch (err) {
-                        console.error("Install prompt error:", err);
-                      }
-                      setDeferredPrompt(null);
-                      setIsDownloadOpen(false);
-                    } else {
-                      setIsInstalled(true);
-                      localStorage.setItem("srushti_pwa_installed", "true");
-                      setIsDownloadOpen(false);
-                    }
+                    await promptInstall();
+                    setIsDownloadOpen(false);
                   }}
                   className="w-full py-3.5 px-5 rounded-2xl bg-accent text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
                 >

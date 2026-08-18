@@ -12,22 +12,24 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        injectRegister: 'auto',
         workbox: {
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,json}'],
         },
         includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'assets/front_logo.png', 'assets/back_logo.png', 'favicon.ico', 'favicon.png', 'faces/*.jpg'],
         manifest: {
           id: '/',
-          name: 'Srushti AI',
+          name: 'Srushti AI — Business to Brand',
           short_name: 'Srushti AI',
-          description: 'Business to Brand - AI-powered product photography.',
+          description: 'Business to Brand - AI-powered product photography & fashion studio.',
           theme_color: '#ebeaea',
           background_color: '#ebeaea',
           display: 'standalone',
-          orientation: 'portrait-primary',
+          orientation: 'any',
           start_url: '/',
           scope: '/',
-          categories: ['photo', 'business', 'productivity'],
+          categories: ['photo', 'business', 'productivity', 'utilities'],
           prefer_related_applications: false,
           icons: [
             {
@@ -71,7 +73,8 @@ export default defineConfig(() => {
           ]
         },
         devOptions: {
-          enabled: true
+          enabled: true,
+          type: 'module'
         }
       })
     ],
