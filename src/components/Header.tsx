@@ -593,7 +593,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="px-4 pt-2 pb-3 mx-auto max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] w-full shrink-0">
       <div className="nm-outset rounded-2xl px-4 py-2.5 flex items-center justify-between gap-3 w-full">
         {/* Brand title */}
-        <div className="flex items-center gap-2">
+        <a href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity cursor-pointer" title="Go to Home / Landing Page">
           <Logo />
           <div>
             <h1 className="text-base font-bold tracking-tight text-[var(--text-emphasis)] leading-none font-sans">
@@ -603,7 +603,7 @@ export const Header: React.FC<HeaderProps> = ({
               {subtitle}
             </p>
           </div>
-        </div>
+        </a>
 
         {/* Actions panel with Download, Wallet, Billing and Settings triggers */}
         <div className="flex items-center gap-2 sm:gap-3">

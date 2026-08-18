@@ -31,8 +31,6 @@ import { GarmentWorkspace } from "./components/GarmentWorkspace";
 import { JewelryWorkspace } from "./components/JewelryWorkspace";
 import { PRESET_FACES } from "./components/FaceGenerator";
 import { SplashScreen } from "./components/SplashScreen";
-import { TermsAndConditionsPage } from "./components/TermsAndConditionsPage";
-import { PrivacyPolicyPage } from "./components/PrivacyPolicyPage";
 
 const CheckCircle2 = (props: any) => <Icon icon="lucide:circle-check" {...props} />;
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
@@ -40,21 +38,6 @@ const AlertTriangle = (props: any) => <Icon icon="lucide:triangle-alert" {...pro
 const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
 
 export default function App() {
-  const [currentPath, setCurrentPath] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.location.pathname.toLowerCase().replace(/\/$/, "");
-    }
-    return "";
-  });
-
-  useEffect(() => {
-    const handleLocationChange = () => {
-      setCurrentPath(window.location.pathname.toLowerCase().replace(/\/$/, ""));
-    };
-    window.addEventListener("popstate", handleLocationChange);
-    return () => window.removeEventListener("popstate", handleLocationChange);
-  }, []);
-
   // --- Persistent & Local States ---
   const [showSplash, setShowSplash] = useState(true);
   const [lang, setLang] = useState<Language>(() => {
@@ -786,14 +769,6 @@ export default function App() {
       copyToClipboard
     );
   };
-
-  if (currentPath === "/termsandconditions") {
-    return <TermsAndConditionsPage />;
-  }
-
-  if (currentPath === "/privacypolicy") {
-    return <PrivacyPolicyPage />;
-  }
 
   return (
     <div className="h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col overflow-hidden">

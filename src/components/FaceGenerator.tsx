@@ -764,7 +764,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
   selectedFaceId,
   setSelectedFaceId,
   setSelectedFacePrompt,
-  customFaces = [],
+  customFaces = [] as ModelFace[],
   setCustomFaces,
   lang,
 }) => {
