@@ -17,6 +17,45 @@ interface WalletModalProps {
   usdToInrRate?: number;
 }
 
+export type DateRangeFilter = "7d" | "30d" | "90d" | "180d" | "365d" | "all";
+
+interface DateFilterOption {
+  id: DateRangeFilter;
+  labelEn: string;
+  labelTe: string;
+  shortLabelEn: string;
+  shortLabelTe: string;
+  days: number | null;
+}
+
+const DATE_FILTER_OPTIONS: DateFilterOption[] = [
+  { id: "7d", labelEn: "Last 7 Days", labelTe: "గత 7 రోజులు", shortLabelEn: "7 Days", shortLabelTe: "7 రోజులు", days: 7 },
+  { id: "30d", labelEn: "30 Days", labelTe: "30 రోజులు", shortLabelEn: "30 Days", shortLabelTe: "30 రోజులు", days: 30 },
+  { id: "90d", labelEn: "90 Days", labelTe: "90 రోజులు", shortLabelEn: "90 Days", shortLabelTe: "90 రోజులు", days: 90 },
+  { id: "180d", labelEn: "180 Days", labelTe: "180 రోజులు", shortLabelEn: "180 Days", shortLabelTe: "180 రోజులు", days: 180 },
+  { id: "365d", labelEn: "365 Days", labelTe: "365 రోజులు", shortLabelEn: "365 Days", shortLabelTe: "365 రోజులు", days: 365 },
+  { id: "all", labelEn: "All", labelTe: "అన్నీ", shortLabelEn: "All", shortLabelTe: "అన్నీ", days: null },
+];
+
+function getTxTimestamp(tx: WalletTransaction): number {
+  if (tx.timestamp && typeof tx.timestamp === "number" && !isNaN(tx.timestamp)) {
+    return tx.timestamp;
+  }
+  if (tx.id && typeof tx.id === "string" && tx.id.startsWith("tx-")) {
+    const extracted = parseInt(tx.id.replace("tx-", ""), 10);
+    if (!isNaN(extracted) && extracted > 1000000000000) {
+      return extracted;
+    }
+  }
+  if (tx.date && tx.date !== "Just now") {
+    const parsed = new Date(tx.date).getTime();
+    if (!isNaN(parsed) && parsed > 0) {
+      return parsed;
+    }
+  }
+  return Date.now();
+}
+
 export const WalletModal: React.FC<WalletModalProps> = ({
   isOpen,
   onClose,
@@ -32,6 +71,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
   const isEn = lang === "en";
   const creditSettings = getCreditSettings();
   const [historyTab, setHistoryTab] = useState<"all" | "debit" | "credit">("all");
+  const [dateFilter, setDateFilter] = useState<DateRangeFilter>("7d");
   const [showClearConfirm, setShowClearConfirm] = useState<boolean>(false);
   const [showResetWalletConfirm, setShowResetWalletConfirm] = useState<boolean>(false);
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number>(
@@ -80,10 +120,20 @@ export const WalletModal: React.FC<WalletModalProps> = ({
 
   const totalCreditsToAdd = baseCredits + calculatedBonus;
 
-  // Filter transactions according to active tab
+  // Filter transactions according to active tab and date range filter
+  const selectedDateOption = DATE_FILTER_OPTIONS.find((opt) => opt.id === dateFilter);
+  const now = Date.now();
+
   const filteredTransactions = transactions.filter((tx) => {
-    if (historyTab === "all") return true;
-    return tx.type === historyTab;
+    if (historyTab !== "all" && tx.type !== historyTab) return false;
+
+    if (selectedDateOption && selectedDateOption.days !== null) {
+      const txTimestamp = getTxTimestamp(tx);
+      const cutoffTime = now - selectedDateOption.days * 24 * 60 * 60 * 1000;
+      if (txTimestamp < cutoffTime) return false;
+    }
+
+    return true;
   });
 
   const totalDebited = transactions
@@ -91,6 +141,14 @@ export const WalletModal: React.FC<WalletModalProps> = ({
     .reduce((sum, tx) => sum + tx.amount, 0);
 
   const totalCredited = transactions
+    .filter((tx) => tx.type === "credit")
+    .reduce((sum, tx) => sum + tx.amount, 0);
+
+  const filteredDebited = filteredTransactions
+    .filter((tx) => tx.type === "debit")
+    .reduce((sum, tx) => sum + tx.amount, 0);
+
+  const filteredCredited = filteredTransactions
     .filter((tx) => tx.type === "credit")
     .reduce((sum, tx) => sum + tx.amount, 0);
 
@@ -431,8 +489,9 @@ export const WalletModal: React.FC<WalletModalProps> = ({
           </div>
         </div>
 
-        {/* SECTION 2: USAGE HISTORY WITH TABS [ALL, DEBIT, CREDIT] & CLEAR OPTION */}
-        <div className="flex flex-col gap-3 pt-2">
+        {/* SECTION 2: USAGE HISTORY WITH TABS [ALL, DEBIT, CREDIT] & DATE RANGE FILTER */}
+        <div className="flex flex-col gap-2.5 pt-2">
+          {/* Top Bar: Section Title + Clear Button + Type Tabs */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <label className="text-xs font-black uppercase tracking-wider text-[var(--text-emphasis)] flex items-center gap-1.5">
@@ -486,6 +545,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
             {/* Filter Tabs [All, Spent / Debits, Top-ups / Credits] */}
             <div className="flex items-center p-1 rounded-xl nm-inset-sm gap-1 self-start sm:self-auto">
               <button
+                id="btn-tx-tab-all"
                 type="button"
                 onClick={() => setHistoryTab("all")}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer ${
@@ -497,6 +557,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                 {isEn ? "All" : "అన్నీ"} ({transactions.length})
               </button>
               <button
+                id="btn-tx-tab-debit"
                 type="button"
                 onClick={() => setHistoryTab("debit")}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer ${
@@ -508,6 +569,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                 {isEn ? "Used" : "వాడినవి"} ({transactions.filter((t) => t.type === "debit").length})
               </button>
               <button
+                id="btn-tx-tab-credit"
                 type="button"
                 onClick={() => setHistoryTab("credit")}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer ${
@@ -521,6 +583,59 @@ export const WalletModal: React.FC<WalletModalProps> = ({
             </div>
           </div>
 
+          {/* Date Range Filter Strip: [Last 7 Days, 30 Days, 90 Days, 180 Days, 365 Days, All] */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-1.5 sm:p-2 rounded-2xl nm-inset-sm bg-[var(--bg-panel)]/40">
+            <div className="flex items-center gap-1.5 shrink-0 px-1">
+              <Icon icon="lucide:calendar-range" className="w-3.5 h-3.5 text-accent shrink-0" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-[var(--text-primary)] opacity-70">
+                {isEn ? "Period:" : "కాలపరిమితి:"}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar pb-0.5 sm:pb-0 w-full sm:w-auto">
+              {DATE_FILTER_OPTIONS.map((opt) => {
+                const isSelected = dateFilter === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    id={`btn-date-filter-${opt.id}`}
+                    type="button"
+                    onClick={() => setDateFilter(opt.id)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                      isSelected
+                        ? "bg-accent text-white shadow-xs scale-[1.02]"
+                        : "opacity-65 hover:opacity-100 text-[var(--text-primary)] hover:bg-black/5 dark:hover:bg-white/5"
+                    }`}
+                  >
+                    {isEn ? opt.labelEn : opt.labelTe}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Summary metrics info for active filter */}
+          <div className="flex items-center justify-between px-1 text-[10px] font-bold opacity-75">
+            <span className="flex items-center gap-1">
+              <Icon icon="lucide:filter" className="w-3 h-3 text-accent" />
+              {isEn
+                ? `Showing ${filteredTransactions.length} records (${selectedDateOption ? selectedDateOption.labelEn : "All"})`
+                : `${filteredTransactions.length} లావాదేవీలు చూపబడుతున్నాయి (${selectedDateOption ? selectedDateOption.labelTe : "అన్నీ"})`}
+            </span>
+            <div className="flex items-center gap-3 text-[9.5px]">
+              {filteredDebited > 0 && (
+                <span className="text-rose-500 font-mono font-black">
+                  -{formatCredits(filteredDebited)}
+                </span>
+              )}
+              {filteredCredited > 0 && (
+                <span className="text-emerald-500 font-mono font-black">
+                  +{formatCredits(filteredCredited)}
+                </span>
+              )}
+            </div>
+          </div>
+
           {/* Transactions List Area */}
           <div className="nm-inset rounded-2xl p-3 bg-[var(--bg-panel)]/30 max-h-56 overflow-y-auto custom-scrollbar flex flex-col gap-2">
             {filteredTransactions.length === 0 ? (
@@ -528,13 +643,33 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                 <Icon icon="lucide:receipt-text" className="w-7 h-7 stroke-1" />
                 <span className="text-xs font-bold">
                   {isEn
-                    ? "No transactions found in this view"
-                    : "ఈ విభాగంలో లావాదేవీలు లేవు"}
+                    ? `No transactions found in this period (${selectedDateOption?.labelEn || "All"})`
+                    : `ఈ కాలపరిమితిలో లావాదేవీలు లేవు (${selectedDateOption?.labelTe || "అన్నీ"})`}
                 </span>
+                {dateFilter !== "all" && (
+                  <button
+                    type="button"
+                    onClick={() => setDateFilter("all")}
+                    className="mt-1 px-3 py-1 rounded-lg text-[10px] font-extrabold text-accent bg-accent/10 hover:bg-accent/20 cursor-pointer"
+                  >
+                    {isEn ? "View All Time" : "అన్ని లావాదేవీలు చూడండి"}
+                  </button>
+                )}
               </div>
             ) : (
               filteredTransactions.map((tx) => {
                 const isCredit = tx.type === "credit";
+                const txTime = getTxTimestamp(tx);
+                const displayDate =
+                  tx.date && tx.date !== "Just now"
+                    ? tx.date
+                    : new Date(txTime).toLocaleString(isEn ? "en-US" : "te-IN", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      });
+
                 return (
                   <div
                     key={tx.id}
@@ -562,7 +697,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                           {isEn ? tx.title : tx.titleTe || tx.title}
                         </h4>
                         <div className="flex items-center gap-2 text-[9.5px] opacity-70 mt-0.5 font-medium">
-                          <span>{tx.date}</span>
+                          <span className="font-mono">{displayDate}</span>
                           {tx.description && (
                             <>
                               <span>•</span>

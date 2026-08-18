@@ -204,8 +204,10 @@ export default function App() {
       saveWalletBalance(currency, next);
       return next;
     });
+    const now = Date.now();
     const newTx: WalletTransaction = {
-      id: `tx-${Date.now()}`,
+      id: `tx-${now}`,
+      timestamp: now,
       type: "credit",
       amount: totalAdded,
       currency: currency,
@@ -213,7 +215,12 @@ export default function App() {
       titleTe: `క్రెడిట్ టాప్-అప్ (+${bonus} బోనస్ క్రెడిట్స్)`,
       description: note,
       descriptionTe: note,
-      date: "Just now",
+      date: new Date(now).toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
       status: "success",
       category: "recharge",
     };
@@ -715,11 +722,13 @@ export default function App() {
         try {
           const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
           const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
-          const requiredCredits = calculateRequiredCredits(selectedImageModel, activeRes, gptImageQuality, activeAspect);
+          const requiredCredits = calculateRequiredCredits(selectedImageModel, activeRes, gptImageQuality, activeAspect, creditSettings);
 
           setWalletBalance((prev) => Math.max(0, parseFloat((prev - requiredCredits).toFixed(1))));
+          const now = Date.now();
           const debitTx: WalletTransaction = {
-            id: `tx-${Date.now()}`,
+            id: `tx-${now}`,
+            timestamp: now,
             type: "debit",
             amount: requiredCredits,
             currency: currency,
@@ -727,7 +736,12 @@ export default function App() {
             titleTe: workspace === "garment" ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
             description: `GPTImage-2 (${gptImageQuality.toUpperCase()}) • ${activeRes.toUpperCase()} • ${activeAspect}`,
             descriptionTe: `GPTImage-2 (${gptImageQuality.toUpperCase()}) • ${activeRes.toUpperCase()} • ${activeAspect}`,
-            date: "Just now",
+            date: new Date(now).toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
             status: "success",
             category: "generation",
           };

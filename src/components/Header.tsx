@@ -486,8 +486,10 @@ export const Header: React.FC<HeaderProps> = ({
         saveWalletBalance(currency, next);
         return next;
       });
+      const now = Date.now();
       const newTx: WalletTransaction = {
-        id: `tx-${Date.now()}`,
+        id: `tx-${now}`,
+        timestamp: now,
         type: "credit",
         amount: total,
         currency: currency,
@@ -501,7 +503,12 @@ export const Header: React.FC<HeaderProps> = ({
             : `కార్డ్ టాప్-అప్ (+$${bonus.toFixed(2)} బోనస్)`,
         description: note,
         descriptionTe: note,
-        date: "Just now",
+        date: new Date(now).toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
         status: "success",
         category: "recharge",
       };
