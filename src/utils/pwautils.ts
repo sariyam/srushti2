@@ -23,6 +23,16 @@ function notifyListeners() {
   });
 }
 
+// Check if running inside an iframe (browsers block PWA installation inside iframes)
+export function isRunningInIframe(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+}
+
 // Check if app is running in standalone mode (already installed & launched from homescreen/desktop)
 export function isPWAInstalled(): boolean {
   if (typeof window === "undefined") return false;
@@ -32,21 +42,6 @@ export function isPWAInstalled(): boolean {
   const isLocalStorageMarked = localStorage.getItem("srushti_pwa_installed") === "true";
 
   return isStandaloneMatch || isNavigatorStandalone || isLocalStorageMarked;
-}
-
-// Check if running on iOS (iPhone / iPad / iPod)
-export function isIOSSafari(): boolean {
-  if (typeof navigator === "undefined") return false;
-  const ua = navigator.userAgent;
-  const isApple = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const isNotStandalone = !isPWAInstalled();
-  return isApple && isNotStandalone;
-}
-
-// Check if running on Android
-export function isAndroidDevice(): boolean {
-  if (typeof navigator === "undefined") return false;
-  return /Android/i.test(navigator.userAgent);
 }
 
 // Get the current deferred install prompt
@@ -60,15 +55,22 @@ export function setDeferredPrompt(e: BeforeInstallPromptEvent | null): void {
   notifyListeners();
 }
 
-// Trigger installation flow
-export async function triggerPWAInstall(): Promise<{
-  outcome: "accepted" | "dismissed" | "manual_instructions" | "already_installed";
-  method: "native_prompt" | "manual_guide" | "none";
-}> {
+/**
+ * Triggers the REAL native browser PWA installation.
+ * No custom UI / popups.
+ */
+export async function triggerPWAInstall(): Promise<"accepted" | "dismissed" | "opened_tab" | "unsupported"> {
   if (isPWAInstalled()) {
-    return { outcome: "already_installed", method: "none" };
+    return "accepted";
   }
 
+  // If inside an iframe (like AI Studio preview), opening in top tab enables native browser PWA prompt
+  if (isRunningInIframe() && !globalDeferredPrompt) {
+    window.open(window.location.href, "_blank");
+    return "opened_tab";
+  }
+
+  // If browser has the native install prompt ready, execute it directly
   if (globalDeferredPrompt) {
     try {
       await globalDeferredPrompt.prompt();
@@ -77,18 +79,22 @@ export async function triggerPWAInstall(): Promise<{
         localStorage.setItem("srushti_pwa_installed", "true");
         globalDeferredPrompt = null;
         notifyListeners();
-        return { outcome: "accepted", method: "native_prompt" };
+        return "accepted";
       } else {
-        return { outcome: "dismissed", method: "native_prompt" };
+        return "dismissed";
       }
     } catch (err) {
-      console.error("Error triggering native PWA prompt:", err);
-      return { outcome: "manual_instructions", method: "manual_guide" };
+      console.warn("Native PWA prompt execution error:", err);
     }
   }
 
-  // If no native prompt is available (e.g. Safari, iOS, Firefox, or already installed/denied)
-  return { outcome: "manual_instructions", method: "manual_guide" };
+  // If native prompt is not available yet, open standalone window or let browser handle
+  if (isRunningInIframe()) {
+    window.open(window.location.href, "_blank");
+    return "opened_tab";
+  }
+
+  return "unsupported";
 }
 
 // Global initialization of PWA events
@@ -122,15 +128,11 @@ if (typeof window !== "undefined") {
 export function usePWAInstall() {
   const [isInstallable, setIsInstallable] = useState<boolean>(() => !!globalDeferredPrompt);
   const [isInstalled, setIsInstalled] = useState<boolean>(() => isPWAInstalled());
-  const [isIOS, setIsIOS] = useState<boolean>(() => isIOSSafari());
-  const [isAndroid, setIsAndroid] = useState<boolean>(() => isAndroidDevice());
 
   useEffect(() => {
     const updateState = () => {
       setIsInstallable(!!globalDeferredPrompt);
       setIsInstalled(isPWAInstalled());
-      setIsIOS(isIOSSafari());
-      setIsAndroid(isAndroidDevice());
     };
 
     LISTENERS.add(updateState);
@@ -148,8 +150,6 @@ export function usePWAInstall() {
   return {
     isInstallable,
     isInstalled,
-    isIOS,
-    isAndroid,
     deferredPrompt: globalDeferredPrompt,
     promptInstall,
   };

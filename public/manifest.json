@@ -1,21 +1,39 @@
 {
+  "id": "/",
   "name": "Srushti AI — Business to Brand",
   "short_name": "Srushti AI",
-  "description": "Srushti AI Photo Studio & Branding Platform",
+  "description": "Business to Brand - AI-powered product photography & fashion studio.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#ebeaea",
   "theme_color": "#ebeaea",
   "icons": [
     {
       "src": "/pwa-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/pwa-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "categories": ["photo", "business", "productivity", "utilities"]
 }

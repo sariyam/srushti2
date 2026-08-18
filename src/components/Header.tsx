@@ -556,16 +556,11 @@ export const Header: React.FC<HeaderProps> = ({
     }
   }, [isSignedOut]);
 
-  const { isInstallable, isInstalled, isIOS, isAndroid, deferredPrompt, promptInstall } = usePWAInstall();
-  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
-  const [bannerDismissed, setBannerDismissed] = useState<boolean>(false);
+  const { isInstalled, promptInstall } = usePWAInstall();
   const isEn = lang === "en";
 
   const handleHeaderDownloadClick = async () => {
-    const res = await promptInstall();
-    if (res.outcome === "manual_instructions" || res.method === "manual_guide" || isIOS || !deferredPrompt) {
-      setIsDownloadOpen(true);
-    }
+    await promptInstall();
   };
 
   // Temporary selection states to support the Confirm button workflow
@@ -1117,161 +1112,6 @@ export const Header: React.FC<HeaderProps> = ({
                   }}
                   onResetWalletCache={handleResetWalletCache}
                 />
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Pop-up Dialog for Download / Install App */}
-      <AnimatePresence>
-        {isDownloadOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsDownloadOpen(false)}
-              className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm"
-            />
-
-            {/* Modal Dialog Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              className="relative bg-[var(--bg-primary)] rounded-[2.5rem] p-6 max-w-xs sm:max-w-sm w-full border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 shadow-2xl space-y-4 text-center"
-            >
-              <button
-                onClick={() => setIsDownloadOpen(false)}
-                className="absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center nm-outset-sm hover:scale-105 active:scale-95 text-accent cursor-pointer shrink-0"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-
-              {/* App Logo */}
-              <div className="pt-2 flex justify-center">
-                <div className="w-20 h-20 rounded-2xl overflow-hidden nm-outset-sm p-1.5 bg-[var(--bg-panel)] flex items-center justify-center shadow-md">
-                  <img
-                    src={LOGOS_BASE64.front || frontLogo || "/assets/front_logo.png"}
-                    alt="Srushti AI Logo"
-                    className="w-full h-full object-contain rounded-xl"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      if (!target.dataset.failed) {
-                        target.dataset.failed = "1";
-                        target.src = frontLogo || "/assets/front_logo.png";
-                      } else if (target.dataset.failed === "1") {
-                        target.dataset.failed = "2";
-                        target.src = "/front_logo.png";
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* App Name & Tagline */}
-              <div>
-                <h3 className="text-xl font-extrabold text-[var(--text-emphasis)] tracking-tight">
-                  Srushti AI
-                </h3>
-                <p className="text-xs font-bold text-accent mt-0.5 uppercase tracking-wider">
-                  Business to Brand
-                </p>
-                <p className="text-[11px] opacity-75 mt-2 leading-relaxed px-1">
-                  {isEn
-                    ? "Install Srushti AI on your tablet or mobile device as a Progressive Web App (PWA) for an offline-capable, fullscreen studio experience."
-                    : "మీ టాబ్లెట్ లేదా మొబైల్‌లో PWA ద్వారా రన్ అయ్యే వేగవంతమైన అనుభవం కోసం Srushti AI ఇన్‌స్టాల్ చేయండి."}
-                </p>
-              </div>
-
-              {/* Google Chrome & Browser Instruction Box */}
-              <div className="bg-[var(--bg-secondary)] rounded-2xl p-3.5 text-left border border-black/5 dark:border-white/5 space-y-2 text-[11px]">
-                <p className="font-extrabold text-accent text-[11px] flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>
-                    {isEn ? "Install Srushti AI via Google Chrome:" : "గూగుల్ క్రోమ్‌ ద్వారా ఇన్‌స్టాల్ చేయు విధానం:"}
-                  </span>
-                </p>
-
-                <div className="space-y-2 text-[11px] opacity-90 leading-relaxed">
-                  <div className="flex items-start gap-2 bg-[var(--bg-panel)] p-2 rounded-xl border border-black/5 dark:border-white/5">
-                    <span className="w-5 h-5 rounded-full bg-accent/10 text-accent font-extrabold flex items-center justify-center text-[10px] shrink-0 mt-0.5">
-                      1
-                    </span>
-                    <div>
-                      {isEn ? (
-                        <>Open <strong>Google Chrome</strong> and click the <strong>three-dots menu (⋮)</strong> in the top-right corner.</>
-                      ) : (
-                        <><strong>గూగుల్ క్రోమ్</strong> ఓపెన్ చేసి పై భాగాన ఉన్న <strong>మూడు చుక్కల మెనూ (⋮)</strong> క్లిక్ చేయండి.</>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2 bg-[var(--bg-panel)] p-2 rounded-xl border border-black/5 dark:border-white/5">
-                    <span className="w-5 h-5 rounded-full bg-accent/10 text-accent font-extrabold flex items-center justify-center text-[10px] shrink-0 mt-0.5">
-                      2
-                    </span>
-                    <div>
-                      {isEn ? (
-                        <div className="flex items-center flex-wrap gap-1">
-                          <span>Select</span>
-                          <span className="font-extrabold text-accent bg-accent/10 px-1.5 py-0.5 rounded-md border border-accent/20 flex items-center gap-1">
-                            <img
-                              src={LOGOS_BASE64.front || frontLogo || "/assets/front_logo.png"}
-                              alt="App Icon"
-                              className="w-4 h-4 object-contain rounded-sm"
-                            />
-                            Install page as an app
-                          </span>
-                          <span>(or "Install app").</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center flex-wrap gap-1">
-                          <span>మెనూలో</span>
-                          <span className="font-extrabold text-accent bg-accent/10 px-1.5 py-0.5 rounded-md border border-accent/20 flex items-center gap-1">
-                            <img
-                              src={LOGOS_BASE64.front || frontLogo || "/assets/front_logo.png"}
-                              alt="App Icon"
-                              className="w-4 h-4 object-contain rounded-sm"
-                            />
-                            Install page as an app
-                          </span>
-                          <span>లేదా "Add to Home Screen" ఎంచుకోండి.</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {isIOS && (
-                  <div className="pt-1 text-[10px] opacity-75 border-t border-black/5 dark:border-white/5">
-                    {isEn
-                      ? "On iPhone/Safari: Tap Share ⎋ → Add to Home Screen ⊕"
-                      : "iPhone/Safari లో: Share ⎋ క్లిక్ చేసి → Add to Home Screen ⊕ ఎంచుకోండి"}
-                  </div>
-                )}
-              </div>
-
-              {/* Download / Install Button */}
-              <div className="pt-1 pb-1">
-                <button
-                  id="btn-modal-install-app-now"
-                  onClick={async () => {
-                    await promptInstall();
-                    setIsDownloadOpen(false);
-                  }}
-                  className="w-full py-3.5 px-5 rounded-2xl bg-accent text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>
-                    {deferredPrompt 
-                      ? (isEn ? "Install App Now" : "ఇప్పుడే ఇన్‌స్టాల్ చేయండి") 
-                      : (isEn ? "Got It / Add to Home Screen" : "అర్థమైంది / హోమ్ స్క్రీన్‌కి జోడించు")}
-                  </span>
-                </button>
               </div>
             </motion.div>
           </div>
