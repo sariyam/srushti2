@@ -2,6 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
   return {
@@ -9,6 +10,59 @@ export default defineConfig(() => {
     plugins: [
       react(),
       tailwindcss(),
+      VitePWA({
+        registerType: 'autoUpdate',
+        includeAssets: [
+          'favicon.ico',
+          'favicon.png',
+          'pwa-192x192.png',
+          'pwa-512x512.png',
+          'front_logo.png',
+          'back_logo.png',
+        ],
+        manifest: {
+          id: '/',
+          name: 'Srushti AI — Business to Brand',
+          short_name: 'Srushti AI',
+          description: 'Business to Brand - AI-powered product photography & fashion studio.',
+          start_url: '/',
+          scope: '/',
+          display: 'standalone',
+          orientation: 'any',
+          background_color: '#ebeaea',
+          theme_color: '#ebeaea',
+          icons: [
+            {
+              src: '/pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
+              src: '/pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
+            {
+              src: '/pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
+              src: '/pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
+          ],
+          categories: ['photo', 'business', 'productivity', 'utilities'],
+        },
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,json}'],
+        },
+      }),
     ],
     resolve: {
       alias: {

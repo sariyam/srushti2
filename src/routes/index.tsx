@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { createRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { Route as rootRoute } from "./__root";
 import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from "motion/react";
 import { Logo } from "../components/Logo";
 import { Language } from "../types";
+import { isMobileStandalonePwa, usePwaInstall } from "../utils/pwautils";
 
 export const Route = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
+  beforeLoad: () => {
+    if (isMobileStandalonePwa()) {
+      throw redirect({
+        to: "/studio",
+      });
+    }
+  },
   component: LandingPageComponent,
 });
 
 // Icon Helpers
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 const ArrowRight = (props: any) => <Icon icon="lucide:arrow-right" {...props} />;
+const DownloadIcon = (props: any) => <Icon icon="lucide:download" {...props} />;
 const Check = (props: any) => <Icon icon="lucide:check" {...props} />;
 const SunIcon = (props: any) => <Icon icon="lucide:sun" {...props} />;
 const MoonIcon = (props: any) => <Icon icon="lucide:moon" {...props} />;
@@ -33,6 +42,45 @@ const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
 const BadgeCheck = (props: any) => <Icon icon="lucide:badge-check" {...props} />;
 const ImageDown = (props: any) => <Icon icon="lucide:image-down" {...props} />;
 const Sliders = (props: any) => <Icon icon="lucide:sliders" {...props} />;
+
+function InstallAppBanner({ lang }: { lang: Language }) {
+  const { canInstall, promptInstall } = usePwaInstall();
+
+  if (!canInstall) return null;
+
+  return (
+    <section className="border-t border-black/10 dark:border-white/10 py-8 sm:py-12 px-3 xs:px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-5 rounded-2xl nm-inset-sm bg-accent/5 p-6 sm:p-8 border border-accent/20">
+          <div className="flex items-center gap-4 text-center sm:text-left">
+            <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent text-white shadow-md shadow-accent/20">
+              <DownloadIcon className="h-6 w-6" />
+            </div>
+            <div>
+              <h2 className="text-base font-extrabold text-[var(--text-emphasis)] sm:text-lg">
+                {lang === "en" ? "Get the Srushti AI app" : "సృష్టి AI యాప్‌ను ఇన్‌స్టాల్ చేసుకోండి"}
+              </h2>
+              <p className="mt-1 text-xs sm:text-sm text-[var(--text-secondary)] font-medium">
+                {lang === "en"
+                  ? "Install Srushti AI on your device for quick, one-tap photoshoot access anytime."
+                  : "ఎప్పుడైనా సులభంగా ఒక్క ట్యాప్‌తో ఫోటోషూట్ చేయడానికి మీ డివైజ్‌లో ఇన్‌స్టాల్ చేసుకోండి."}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="btn-install-pwa-banner"
+            onClick={promptInstall}
+            className="inline-flex w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-xs sm:text-sm font-extrabold text-white shadow-md shadow-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+          >
+            <DownloadIcon className="h-4 w-4" />
+            <span>{lang === "en" ? "Download now" : "ఇప్పుడే డౌన్‌లోడ్ చేయండి"}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function LandingPageComponent() {
   const navigate = useNavigate();
@@ -955,6 +1003,9 @@ function LandingPageComponent() {
           </div>
         </div>
       </section>
+
+      {/* --- PWA INSTALL APP BANNER --- */}
+      <InstallAppBanner lang={lang} />
 
       {/* --- BOTTOM CALL TO ACTION --- */}
       <section className="py-12 sm:py-16 md:py-20 px-3 xs:px-4 sm:px-6 lg:px-8 border-t border-black/5 dark:border-white/5 bg-accent/5">
