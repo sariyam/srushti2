@@ -13,38 +13,63 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function PwaInstallButton() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState<boolean>(false);
+  const [isCurrentlyStandalone, setIsCurrentlyStandalone] = useState<boolean>(false);
+  const [isAppInstalled, setIsAppInstalled] = useState<boolean>(false);
   const [showIosGuide, setShowIosGuide] = useState<boolean>(false);
   const [isDismissed, setIsDismissed] = useState<boolean>(false);
   const [isIos, setIsIos] = useState<boolean>(false);
 
   useEffect(() => {
-    // 1. Check if already running in standalone / installed PWA mode
+    // 1. Check if CURRENTLY running inside standalone / installed app window
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||
       (window.navigator as any).standalone === true ||
       document.referrer.includes("android-app://");
 
     if (isStandalone) {
-      setIsInstalled(true);
+      setIsCurrentlyStandalone(true);
+      setIsAppInstalled(true);
+      localStorage.setItem("srushti_pwa_installed", "true");
       return;
     }
 
-    // 2. Detect iOS / iPadOS
+    // 2. Check if previously recorded as installed in browser
+    if (localStorage.getItem("srushti_pwa_installed") === "true") {
+      setIsAppInstalled(true);
+    }
+
+    // 3. Query navigator.getInstalledRelatedApps if supported by modern browsers
+    if ("getInstalledRelatedApps" in navigator) {
+      (navigator as any)
+        .getInstalledRelatedApps()
+        .then((relatedApps: any[]) => {
+          if (relatedApps && relatedApps.length > 0) {
+            setIsAppInstalled(true);
+            localStorage.setItem("srushti_pwa_installed", "true");
+          }
+        })
+        .catch(() => {
+          // graceful fallback
+        });
+    }
+
+    // 4. Detect iOS / iPadOS
     const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIosDevice = /iphone|ipad|ipod/.test(userAgent) || 
+    const isIosDevice =
+      /iphone|ipad|ipod/.test(userAgent) ||
       (window.navigator.platform === "MacIntel" && window.navigator.maxTouchPoints > 1);
     setIsIos(isIosDevice);
 
-    // 3. Listen for native browser beforeinstallprompt
+    // 5. Listen for native browser beforeinstallprompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
 
-    // 4. Listen for app installed event
+    // 6. Listen for app installed event
     const handleAppInstalled = () => {
-      setIsInstalled(true);
+      setIsAppInstalled(true);
+      localStorage.setItem("srushti_pwa_installed", "true");
       setDeferredPrompt(null);
       setShowIosGuide(false);
     };
@@ -58,38 +83,51 @@ export function PwaInstallButton() {
     };
   }, []);
 
-  // Trigger installation
-  const handleInstallClick = async () => {
+  // Action on button click
+  const handleButtonClick = async () => {
+    if (isAppInstalled) {
+      // Direct action to launch / open the installed PWA Studio
+      // Opening the start_url (/studio) in modern browser triggers the installed PWA WebAPK/Standalone container
+      try {
+        const appWindow = window.open("/studio", "_blank");
+        if (!appWindow || appWindow.closed || typeof appWindow.closed === "undefined") {
+          window.location.href = "/studio";
+        }
+      } catch {
+        window.location.href = "/studio";
+      }
+      return;
+    }
+
+    // Not yet installed: Trigger native browser install prompt dialog
     if (deferredPrompt) {
-      // Trigger native browser install prompt dialog
       try {
         await deferredPrompt.prompt();
         const choiceResult = await deferredPrompt.userChoice;
         if (choiceResult.outcome === "accepted") {
-          setIsInstalled(true);
+          setIsAppInstalled(true);
+          localStorage.setItem("srushti_pwa_installed", "true");
         }
         setDeferredPrompt(null);
       } catch (err) {
         console.log("Install prompt error:", err);
       }
     } else if (isIos) {
-      // Show iOS step-by-step installation instructions
       setShowIosGuide(true);
     } else {
-      // Fallback for browsers that require manual omnibox install
       setShowIosGuide(true);
     }
   };
 
-  // If already installed or dismissed by user in this session, do not render
-  if (isInstalled || isDismissed) {
+  // If already currently inside standalone mode or dismissed by user in this session, do not render
+  if (isCurrentlyStandalone || isDismissed) {
     return null;
   }
 
   return (
     <>
-      {/* Floating Bottom-Right Install Button Overlay */}
-      <div 
+      {/* Floating Bottom-Right Overlay */}
+      <div
         id="pwa-floating-install-container"
         className="fixed bottom-5 right-5 z-[999] flex flex-col items-end pointer-events-auto"
       >
@@ -100,30 +138,34 @@ export function PwaInstallButton() {
           transition={{ type: "spring", stiffness: 350, damping: 25 }}
           className="relative flex items-center group"
         >
-          {/* Main Floating Install CTA Button */}
+          {/* Main Floating Action Button (Open App vs Install App) */}
           <button
             id="pwa-floating-install-btn"
-            onClick={handleInstallClick}
-            aria-label="Install Srushti AI PWA App"
-            className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-[var(--bg-secondary)] border-2 border-accent/40 hover:border-accent text-[var(--text-emphasis)] shadow-2xl hover:shadow-[0_0_20px_rgba(50,207,17,0.35)] dark:hover:shadow-[0_0_25px_rgba(57,255,20,0.4)] nm-outset hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-md"
+            onClick={handleButtonClick}
+            aria-label={isAppInstalled ? "Open Srushti AI App" : "Install Srushti AI PWA App"}
+            className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-[var(--bg-secondary)] border-2 border-accent/50 hover:border-accent text-[var(--text-emphasis)] shadow-2xl hover:shadow-[0_0_20px_rgba(50,207,17,0.35)] dark:hover:shadow-[0_0_25px_rgba(57,255,20,0.4)] nm-outset hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-md"
           >
-            {/* Pulsing Animated App Icon Badge */}
+            {/* Animated Icon Badge */}
             <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-accent/20 text-accent font-bold">
-              <Icon icon="lucide:download" className="w-4 h-4 animate-bounce" />
+              {isAppInstalled ? (
+                <Icon icon="lucide:arrow-up-right" className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              ) : (
+                <Icon icon="lucide:download" className="w-4 h-4 animate-bounce" />
+              )}
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent animate-ping" />
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent" />
             </div>
 
             {/* Button Label */}
             <div className="flex flex-col items-start text-left pr-1">
-              <span className="text-xs font-black tracking-tight leading-none text-[var(--text-emphasis)] flex items-center gap-1">
-                Install App
+              <span className="text-xs font-black tracking-tight leading-none text-[var(--text-emphasis)] flex items-center gap-1.5">
+                {isAppInstalled ? "Open App" : "Install App"}
                 <span className="inline-block px-1 py-0.5 text-[8.5px] font-extrabold uppercase rounded bg-accent/20 text-accent leading-none">
                   PWA
                 </span>
               </span>
               <span className="text-[10px] text-[var(--text-secondary)] opacity-80 leading-none mt-1">
-                Fast & Full Screen
+                {isAppInstalled ? "Launch Studio" : "Fast & Full Screen"}
               </span>
             </div>
           </button>
@@ -264,3 +306,4 @@ export function PwaInstallButton() {
     </>
   );
 }
+
