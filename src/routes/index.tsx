@@ -33,6 +33,12 @@ const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
 const BadgeCheck = (props: any) => <Icon icon="lucide:badge-check" {...props} />;
 const ImageDown = (props: any) => <Icon icon="lucide:image-down" {...props} />;
 const Sliders = (props: any) => <Icon icon="lucide:sliders" {...props} />;
+const SmartphoneIcon = (props: any) => <Icon icon="lucide:smartphone" {...props} />;
+const StoreIcon = (props: any) => <Icon icon="lucide:store" {...props} />;
+const HomeIcon = (props: any) => <Icon icon="lucide:home" {...props} />;
+const ShoppingBagIcon = (props: any) => <Icon icon="lucide:shopping-bag" {...props} />;
+const PackageIcon = (props: any) => <Icon icon="lucide:package" {...props} />;
+const HeartHandshakeIcon = (props: any) => <Icon icon="lucide:heart-handshake" {...props} />;
 
 function LandingPageComponent() {
   const navigate = useNavigate();
@@ -56,7 +62,7 @@ function LandingPageComponent() {
     return "en";
   });
 
-  const [activeShowcase, setActiveShowcase] = useState<"garment" | "jewelry">("garment");
+  const [activeShowcase, setActiveShowcase] = useState<"garment" | "jewelry" | "lifestyle">("garment");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -77,116 +83,140 @@ function LandingPageComponent() {
 
   const translations = {
     en: {
-      badge: "AI Product Photography for Indian Artisans & Brands",
-      headlineTitle: "Turn Simple Product Photos into",
-      headlineHighlight: "High-Fashion Model Shoots",
-      subtitle: "Empower your handloom sarees, kurtas, and handcrafted jewelry with studio-grade on-model visual campaigns in seconds — no expensive photographers or models needed.",
+      badge: "AI Product Photography for Local & Home Businesses",
+      headlineTitle: "Studio-Quality Product Photography for",
+      headlineHighlight: "Local & Home Businesses",
+      subtitle: "Turn everyday smartphone photos of your sarees, boutique wear, jewelry, handmade crafts, and home products into high-fashion model shoots and editorial catalogues in seconds — no expensive photographers or studios needed.",
+      targetTags: ["Home Businesses", "Local Boutiques", "Handloom Weavers", "Jewelry Creators", "Instagram & WhatsApp Sellers"],
       ctaLaunch: "Launch AI Studio",
-      ctaDemo: "Explore Demo",
-      stats1: "10x Faster",
-      stats1Sub: "Catalogue Production",
-      stats2: "90% Cheaper",
-      stats2Sub: "Than Traditional Shoots",
-      stats3: "4K UHD",
-      stats3Sub: "Print & Social Ready",
-      stats4: "5+ Languages",
-      stats4Sub: "Vernacular First",
-      showcaseTitle: "Studio Quality In Three Clicks",
-      showcaseSub: "Switch between Garment and Jewelry workspaces to see AI in action.",
-      garmentTab: "Handloom & Garments",
-      jewelryTab: "Jewelry & Ornaments",
-      featuresTitle: "Crafted for Weavers, Boutique Owners & Jewelers",
-      feature1Title: "Regional & Diverse Models",
-      feature1Desc: "Choose authentic Indian models, diverse skin tones, regional expressions, and customizable hairstyles.",
-      feature2Title: "Realistic Fabric & Drape Texture",
-      feature2Desc: "Preserves delicate zari work, handwoven borders, silk textures, and embroidery with optical accuracy.",
-      feature3Title: "Jewelry Velvet & Model Busts",
-      feature3Desc: "Showcase gold necklaces, polki chokers, and diamond rings on premium velvet busts or real lifestyle models.",
-      feature4Title: "Multi-Lingual Experience",
-      feature4Desc: "Easily navigate in Telugu, Hindi, Tamil, Kannada, and English with dedicated voice & text prompt support.",
-      howItWorksTitle: "How Srushti AI Works",
-      step1Title: "1. Upload Product Image",
-      step1Desc: "Snap a quick photo on your phone or upload a flat-lay picture of your saree, dress, or jewelry item.",
-      step2Title: "2. Select Model & Ambience",
-      step2Desc: "Pick male or female models, pose style, lighting mood, and heritage or minimalist studio backdrops.",
-      step3Title: "3. Generate 4K Visuals",
-      step3Desc: "Click generate to receive high-resolution, commercial-ready photos ready for Instagram, Amazon, or WhatsApp catalogue.",
-      pricingTitle: "Simple, Pay-As-You-Go Credits",
-      pricingSub: "Recharge with UPI, Cards, or Net Banking anytime. No monthly lock-in contracts.",
-      plan1Title: "Starter Pack",
+      ctaDemo: "Explore Showcase",
+      stats1: "Zero Studio Needed",
+      stats1Sub: "Just Your Smartphone",
+      stats2: "90% Cost Savings",
+      stats2Sub: "vs ₹30,000+ Traditional Shoots",
+      stats3: "WhatsApp & Insta Ready",
+      stats3Sub: "Instant 4K Catalogues",
+      stats4: "Telugu & Multi-Lingual",
+      stats4Sub: "Simple Regional Navigation",
+      showcaseTitle: "Studio Magic for Every Local Product",
+      showcaseSub: "Choose a product category to see how simple phone photos transform into high-converting commercial photography.",
+      garmentTab: "Fashion & Sarees",
+      jewelryTab: "Jewelry & Accessories",
+      lifestyleTab: "Home & Handmade Goods",
+      localBizTitle: "Why Local & Home Businesses Choose Srushti AI",
+      localBizSub: "Tailored to help neighborhood entrepreneurs and home creators scale their sales without big agency budgets.",
+      benefit1Title: "Shoot Anywhere on Your Phone",
+      benefit1Desc: "Take a flat-lay picture on your bed, table, or shop counter. Srushti AI extracts the product and places it into high-end studio lighting.",
+      benefit2Title: "No Models or Studio Rent",
+      benefit2Desc: "Save ₹15,000 to ₹50,000 per photoshoot. Get diverse Indian and global models on-demand for every single new piece.",
+      benefit3Title: "Built for WhatsApp & Social Selling",
+      benefit3Desc: "Generate stunning vertical stories, catalogue squares, and high-res zoomable photos that build trust and close orders faster in DMs.",
+      benefit4Title: "Zero Tech Skills Required",
+      benefit4Desc: "Designed with an intuitive visual interface in Telugu & English. Upload, pick your style, and download in under 30 seconds.",
+      featuresTitle: "Everything You Need to Turn Products into Brands",
+      feature1Title: "Authentic Indian & Global Models",
+      feature1Desc: "Choose regional Indian models, custom hairstyles, poses, and expressions tailored to your target audience.",
+      feature2Title: "True Fabric & Material Realism",
+      feature2Desc: "Preserves zari gold weave, silk sheen, intricate embroidery, and gemstone refractions with photographic accuracy.",
+      feature3Title: "Luxury Velvet & Marble Pedestals",
+      feature3Desc: "Display necklaces, earrings, cosmetics, and handicrafts on velvet mannequins, marble slabs, or natural sunlight scenes.",
+      feature4Title: "Custom Face & Model Creator",
+      feature4Desc: "Generate unique brand-exclusive faces or maintain a consistent model identity across your seasonal collections.",
+      howItWorksTitle: "How It Works for Home & Local Sellers",
+      step1Title: "1. Snap a Quick Photo",
+      step1Desc: "Take a simple photo of your saree, jewelry piece, or product using your smartphone.",
+      step2Title: "2. Select Model & Setting",
+      step2Desc: "Pick male/female models, lighting tone, boutique studio, or festive temple backdrops.",
+      step3Title: "3. Download 4K Visuals",
+      step3Desc: "Get instant commercial-ready photos ready to post on Instagram, WhatsApp catalogues, Amazon, and Meesho.",
+      pricingTitle: "Affordable Pay-As-You-Go Credits",
+      pricingSub: "Recharge with UPI, GPay, PhonePe, or Cards anytime. No monthly subscription lock-ins.",
+      plan1Title: "Home Business Starter",
       plan1Credits: "100 Credits",
-      plan1Desc: "Perfect for testing new collections and quick social media drops.",
-      plan2Title: "Artisan Pro",
+      plan1Desc: "Ideal for testing new drops, home sellers, and weekly social media posts.",
+      plan2Title: "Boutique & Artisan Pro",
       plan2Credits: "500 Credits",
-      plan2Desc: "Ideal for boutique owners and handloom weavers launching season catalogues.",
-      plan3Title: "Enterprise Studio",
+      plan2Desc: "Most popular for local boutiques, handloom weavers, and seasonal catalogue launches.",
+      plan3Title: "Commercial Studio Growth",
       plan3Credits: "2,000 Credits",
-      plan3Desc: "For high-volume manufacturers, jewellery chains, and e-commerce brands.",
-      testimonialsTitle: "Loved by 2,000+ Artisans Across India",
-      testimonial1: "“Srushti AI changed our handloom business in Dharmavaram. We no longer spend ₹30,000 on studio models for every new silk saree launch!”",
-      testimonial1Author: "Venkata Rao",
-      testimonial1Role: "Master Weaver & Boutique Owner, AP",
-      testimonial2: "“The jewelry lighting on our kundan and diamond sets looks like a luxury Vogue campaign. Our WhatsApp inquiries tripled in 2 weeks.”",
-      testimonial2Author: "Pooja Mehta",
-      testimonial2Role: "Fine Jewelry Designer, Surat",
-      footerTagline: "Business to Brand - Transforming local craftsmanship into global luxury.",
-      rights: "All rights reserved. Designed with passion for Indian artisans.",
+      plan3Desc: "For growing brands, jewelry showrooms, and high-volume e-commerce stores.",
+      testimonialsTitle: "Loved by Local & Home Businesses Across India",
+      testimonial1: "“Running a boutique from home in Hyderabad, I used to struggle to photograph sarees without hiring models. Srushti AI gives my collection a designer boutique look right from my phone!”",
+      testimonial1Author: "Sravani Reddy",
+      testimonial1Role: "Home Boutique Owner, Hyderabad",
+      testimonial2: "“We sell handmade temple jewelry on WhatsApp and Instagram. After using Srushti AI’s velvet bust renders, customer trust jumped and our daily orders doubled.”",
+      testimonial2Author: "Ramesh & Sunitha V.",
+      testimonial2Role: "Handmade Jewelry Artisans, Vijayawada",
+      footerTagline: "Business to Brand — Empowering local shops and home entrepreneurs with studio-grade photography.",
+      rights: "All rights reserved. Dedicated to empowering local & home businesses.",
     },
     te: {
-      badge: "చేనేత కార్మికులు & ఆభరణాల వ్యాపారుల కోసం ఏఐ ఫోటోషూట్",
-      headlineTitle: "మీ సాధారణ ఉత్పత్తులను మార్చండి",
-      headlineHighlight: "రాయల్ మోడల్ ఫోటోషూట్ లా",
-      subtitle: "ఖరీదైన మోడల్స్, కెమెరాలు మరియు స్టూడియో ఖర్చులు లేకుండా — క్షణాల్లో మీ పట్టు చీరలు, కుర్తాలు మరియు బంగారు ఆభరణాలకు హై-క్వాలిటీ ఫోటోలు రూపొందించండి.",
+      badge: "స్థానిక & గృహ వ్యాపారాల కోసం ఏఐ ప్రొడక్ట్ ఫోటోగ్రఫీ",
+      headlineTitle: "మీ స్థానిక & గృహ వ్యాపార ఉత్పత్తులకు",
+      headlineHighlight: "రాయల్ స్టూడియో ఫోటోషూట్",
+      subtitle: "ఖరీదైన కెమెరాలు, లైట్లు మరియు మోడల్స్ ఖర్చు లేకుండా — మీ మొబైల్ ఫోటోలతో పట్టు చీరలు, బొటిక్ దుస్తులు, చేతితో చేసిన ఆభరణాలు మరియు హోమ్ ఉత్పత్తులకు క్షణాల్లో సూపర్ క్వాలిటీ ఫోటోషూట్ సిద్ధం చేయండి.",
+      targetTags: ["గృహ వ్యాపారాలు", "స్థానిక బొటిక్స్", "చేనేత నేతన్నలు", "జ్యువెలరీ వ్యాపారులు", "వాట్సాప్ & ఇన్‌స్టాగ్రామ్ సెల్లర్స్"],
       ctaLaunch: "స్టూడియో ప్రారంభించండి",
-      ctaDemo: "డెమో చూడండి",
-      stats1: "10 రెట్లు వేగం",
-      stats1Sub: "క్యాటలాగ్ తయారీ",
-      stats2: "90% ఆదా",
-      stats2Sub: "సాంప్రదాయ షూట్ కంటే",
-      stats3: "4K అల్ట్రా HD",
-      stats3Sub: "ప్రింట్ & సోషల్ మీడియాకు సిద్ధం",
-      stats4: "తెలుగు సహా 5+ భాషలు",
-      stats4Sub: "మీ ప్రాంతీయ భాషలో",
-      showcaseTitle: "మూడు క్లిక్కుల్లో స్టూడియో నాణ్యత",
-      showcaseSub: "గార్మెంట్స్ మరియు ఆభరణాల కోసం రూపొందించిన ప్రత్యేక ప్రదర్శన.",
-      garmentTab: "చేనేత & దుస్తులు",
-      jewelryTab: "బంగారు & వెండి ఆభరణాలు",
-      featuresTitle: "చేనేత నేతన్నలు మరియు జ్యువెలర్స్ కోసం రూపొందించబడింది",
+      ctaDemo: "ప్రదర్శన చూడండి",
+      stats1: "స్టూడియో అవసరం లేదు",
+      stats1Sub: "మీ సాధారణ స్మార్ట్‌ఫోన్ చాలు",
+      stats2: "90% ఖర్చు ఆదా",
+      stats2Sub: "వేలకు వేలు ఖర్చుల నుండి ఉపశమనం",
+      stats3: "వాట్సాప్ & సోషల్ రెడీ",
+      stats3Sub: "వెంటనే 4K క్యాటలాగ్స్",
+      stats4: "పూర్తి తెలుగు మద్దతు",
+      stats4Sub: "ఎంతో సులభమైన ఉపయోగం",
+      showcaseTitle: "ప్రతి స్థానిక ఉత్పత్తికి స్టూడియో మెరుపు",
+      showcaseSub: "మీ మొబైల్ ఫోటో ఎంత అద్భుతంగా ప్రొఫెషనల్ మోడల్ ఫోటోగా మారుతుందో చూడండి.",
+      garmentTab: "ఫ్యాషన్ & చీరలు",
+      jewelryTab: "ఆభరణాలు & జ్యువెలరీ",
+      lifestyleTab: "హోమ్ & చేతివృత్తులు",
+      localBizTitle: "స్థానిక & గృహ వ్యాపారాలు సృష్టి ఏఐని ఎందుకు ఎంచుకుంటాయి?",
+      localBizSub: "చిన్న వ్యాపారులు మరియు గృహ విక్రేతలు తక్కువ ఖర్చుతో ఎక్కువ ఆర్డర్లు సాధించడానికి ప్రత్యేకం.",
+      benefit1Title: "మొబైల్ ఫోన్‌తో ఎక్కడి నుంచైనా ఫోటో తీయండి",
+      benefit1Desc: "మీ ఇంటి టేబుల్ లేదా బెడ్ పై ఫోటో తీయండి. సృష్టి ఏఐ బ్యాక్‌గ్రౌండ్ మార్చి హై-ఎండ్ స్టూడియో లైటింగ్‌లో మోడల్ పై చూపిస్తుంది.",
+      benefit2Title: "మోడల్స్ లేదా స్టూడియో అద్దె భారం లేదు",
+      benefit2Desc: "ప్రతి కొత్త కలెక్షన్‌కు వేల రూపాయలు వెచ్చించాల్సిన పనిలేదు. మీకు నచ్చిన భారతీయ మోడల్స్‌ను ఎంచుకోండి.",
+      benefit3Title: "వాట్సాప్ & ఇన్‌స్టాగ్రామ్ అమ్మకాల కోసం ప్రత్యేకం",
+      benefit3Desc: "కస్టమర్లను ఆకట్టుకునే అందమైన ఫోటోలు, వాట్సాప్ క్యాటలాగ్స్ మరియు స్టేటస్ ఇమేజెస్ సులభంగా తయారు చేసుకోండి.",
+      benefit4Title: "ఎటువంటి సాంకేతిక నైపుణ్యం అవసరం లేదు",
+      benefit4Desc: "పూర్తిగా తెలుగులో సరళమైన బటన్లతో 30 సెకన్లలోనే ప్రొడక్ట్ ఫోటోలను సిద్ధం చేసుకోండి.",
+      featuresTitle: "ఉత్పత్తిని బ్రాండ్‌గా మార్చే ఫీచర్లు",
       feature1Title: "ప్రాంతీయ మరియు విభిన్న మోడల్స్",
-      feature1Desc: "దక్షిణ భారత, ఉత్తర భారత సాంప్రదాయ మోడల్స్ మరియు ముఖకవళికలను సులభంగా ఎంచుకోండి.",
+      feature1Desc: "దక్షిణ భారత, ఉత్తర భారత సాంప్రదాయ మోడల్స్, హెయిర్‌స్టైల్స్ మరియు ఎక్స్‌ప్రెషన్స్‌ను ఎంచుకోండి.",
       feature2Title: "సహజమైన నేత మరియు జరీ మెరుపు",
-      feature2Desc: "పట్టు చీరల జరీ అంచులు, నేత నైపుణ్యం మరియు రంగులు యథాతథంగా కనిపిస్తాయి.",
-      feature3Title: "ఆభరణాల నెక్ బస్ట్స్ & మోడల్స్",
-      feature3Desc: "నెక్లెస్‌లు, చెవిపోగులు మరియు ఉంగరాలను లగ్జరీ వెల్వెట్ బస్ట్‌లపై లేదా మోడల్స్‌పై అందంగా చూపించండి.",
-      feature4Title: "పూర్తి తెలుగు మరియు బహుభాషా మద్దతు",
-      feature4Desc: "తెలుగు, హిందీ, తమిళం, కన్నడ మరియు ఆంగ్లంలో ఎంతో సులభంగా ఉపయోగించండి.",
-      howItWorksTitle: "సృష్టి ఏఐ ఎలా పనిచేస్తుంది?",
-      step1Title: "1. ఉత్పత్తి ఫోటో అప్‌లోడ్ చేయండి",
-      step1Desc: "మీ మొబైల్ కెమెరాతో తీసిన చీర లేదా ఆభరణాల ఫోటోను అప్‌లోడ్ చేయండి.",
-      step2Title: "2. మోడల్ మరియు బ్యాక్‌గ్రౌండ్ ఎంచుకోండి",
-      step2Desc: "మీకు నచ్చిన పోజ్, స్టూడియో లేదా ఆలయ బ్యాక్‌గ్రౌండ్ లైటింగ్‌ను ఎంపిక చేయండి.",
+      feature2Desc: "పట్టు చీరల జరీ అంచులు, నేత నైపుణ్యం మరియు రంగులు సహజమైన కాంతితో కనిపిస్తాయి.",
+      feature3Title: "లగ్జరీ వెల్వెట్ & మార్బుల్ స్టాండ్స్",
+      feature3Desc: "నెక్లెస్‌లు, చెవిపోగులు మరియు హ్యాండ్‌మేడ్ వస్తువులను ప్రీమియం వెల్వెట్ బస్ట్‌లపై అందంగా చూపించండి.",
+      feature4Title: "కస్టమ్ ఫేస్ & మోడల్ క్రియేటర్",
+      feature4Desc: "మీ బ్రాండ్ కోసం ప్రత్యేకమైన మోడల్ ముఖాలను రూపొందించండి లేదా మీ స్వంత ఫోటోలను మోడల్‌గా మార్చుకోండి.",
+      howItWorksTitle: "గృహ & స్థానిక వ్యాపారులకు ఇది ఎలా పనిచేస్తుంది?",
+      step1Title: "1. మీ ఫోన్‌తో ఫోటో తీయండి",
+      step1Desc: "మీ చీర, ఆభరణం లేదా ప్రొడక్ట్ ఫోటోను ఫోన్ కెమెరాతో తీసి అప్‌లోడ్ చేయండి.",
+      step2Title: "2. మోడల్ మరియు స్టైల్ ఎంచుకోండి",
+      step2Desc: "మీకు నచ్చిన మోడల్, రాయల్ పాలెస్ లేదా మినిమల్ స్టూడియో లైటింగ్‌ను ఎంపిక చేయండి.",
       step3Title: "3. 4K ఫోటోలను డౌన్‌లోడ్ చేయండి",
-      step3Desc: "ఏఐ సిద్ధం చేసిన హై-రెజల్యూషన్ ఫోటోలను వాట్సాప్ మరియు ఆన్‌లైన్ సేల్స్ కోసం డౌన్‌లోడ్ చేయండి.",
-      pricingTitle: "సులభమైన క్రెడిట్ పద్ధతి",
-      pricingSub: "యూపీఐ ద్వారా సులభంగా రీఛార్జ్ చేసుకోండి. నెలవారీ చందా ఏదీ లేదు.",
-      plan1Title: "స్టార్టర్ ప్యాక్",
+      step3Desc: "వాట్సాప్, ఇన్‌స్టాగ్రామ్, మీషో మరియు అమెజాన్‌లో పోస్ట్ చేయడానికి హై-క్వాలిటీ ఫోటోలను పొందండి.",
+      pricingTitle: "సులభమైన క్రెడిట్ రీఛార్జ్",
+      pricingSub: "యూపీఐ (Google Pay, PhonePe) ద్వారా రీఛార్జ్ చేసుకోండి. నెలవారీ చందా ఏదీ లేదు.",
+      plan1Title: "హోమ్ బిజినెస్ స్టార్టర్",
       plan1Credits: "100 క్రెడిట్స్",
-      plan1Desc: "కొత్త కలెక్షన్స్ మరియు సోషల్ మీడియా పోస్టులకు అనుకూలం.",
-      plan2Title: "ఆర్టిసాన్ ప్రో",
+      plan1Desc: "కొత్త కలెక్షన్స్ మరియు సోషల్ మీడియా వీక్లీ పోస్టులకు సరైనది.",
+      plan2Title: "బొటిక్ & ఆర్టిసాన్ ప్రో",
       plan2Credits: "500 క్రెడిట్స్",
-      plan2Desc: "బొటిక్ వ్యాపారులు మరియు చేనేత కార్మికులకు ఉత్తమమైనది.",
-      plan3Title: "ఎంటర్‌ప్రైజ్ స్టూడియో",
+      plan2Desc: "స్థానిక బొటిక్స్ మరియు చేనేత వ్యాపారులకు అత్యంత ప్రజాదరణ పొందిన ప్లాన్.",
+      plan3Title: "కమర్షియల్ స్టూడియో గ్రోత్",
       plan3Credits: "2,000 క్రెడిట్స్",
-      plan3Desc: "పెద్ద ఎత్తున ఆభరణాల షోరూమ్‌లు మరియు ఈ-కామర్స్ బ్రాండ్‌ల కోసం.",
-      testimonialsTitle: "2,000+ చేనేత కళాకారులు & వ్యాపారుల నమ్మకం",
-      testimonial1: "“ధర్మవరంలో మా పట్టు చీరల వ్యాపారానికి సృష్టి ఏఐ ఎంతో సహాయపడింది. ప్రతి మోడల్‌కు వేలకు వేలు ఖర్చు చేయాల్సిన పని తప్పింది!”",
-      testimonial1Author: "వెంకట రావు",
-      testimonial1Role: "మాస్టర్ వీవర్, ఆంధ్రప్రదేశ్",
-      testimonial2: "“మా కుందన్ మరియు వజ్రాల నెక్లెస్‌లు లగ్జరీ మ్యాగజైన్ కవర్‌లా కనిపిస్తున్నాయి. మా వాట్సాప్ ఆర్డర్లు రెట్టింపు అయ్యాయి.”",
-      testimonial2Author: "పూజా మెహతా",
-      testimonial2Role: "జ్యువెలరీ డిజైనర్, గుజరాత్",
-      footerTagline: "బిజినెస్ టు బ్రాండ్ - స్థానిక నైపుణ్యాన్ని గ్లోబల్ బ్రాండ్‌గా మార్చండి.",
-      rights: "అన్ని హక్కులు ప్రత్యేకించబడ్డాయి. భారతీయ కళాకారుల కోసం రూపొందించబడింది.",
+      plan3Desc: "పెద్ద ఎత్తున ఆభరణాల షోరూమ్‌లు మరియు ఈ-కామర్స్ స్టోర్ల కోసం.",
+      testimonialsTitle: "స్థానిక & గృహ వ్యాపారుల అనుభవాలు",
+      testimonial1: "“హైదరాబాద్‌లో ఇంటి నుండి బొటిక్ నడుపుతున్నాను. మోడల్స్ లేకుండా చీరల ఫోటోలు తీయడం కష్టమయ్యేది. సృష్టి ఏఐతో నా కలెక్షన్స్ డిజైనర్ లుక్ పొందాయి!”",
+      testimonial1Author: "శ్రావణి రెడ్డి",
+      testimonial1Role: "హోమ్ బొటిక్ ఓనర్, హైదరాబాద్",
+      testimonial2: "“మేము విజయవాడలో చేతితో చేసిన టెంపుల్ జ్యువెలరీ అమ్ముతాము. సృష్టి ఏఐ వాడిన తర్వాత వాట్సాప్ ఎంక్వైరీలు రెట్టింపు అయ్యాయి.”",
+      testimonial2Author: "రమేష్ & సునీత",
+      testimonial2Role: "హ్యాండ్‌మేడ్ జ్యువెలరీ మేకర్స్, విజయవాడ",
+      footerTagline: "బిజినెస్ టు బ్రాండ్ — స్థానిక మరియు గృహ వ్యాపారులకు స్టూడియో స్థాయి ఫోటోగ్రఫీ సేవలు.",
+      rights: "అన్ని హక్కులు ప్రత్యేకించబడ్డాయి. స్థానిక వ్యాపారుల పురోగతి కోసం రూపొందించబడింది.",
     },
   };
 
@@ -400,12 +430,34 @@ function LandingPageComponent() {
             {t.subtitle}
           </motion.p>
 
+          {/* Target Audience Badges Pill Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="flex flex-wrap items-center justify-center gap-2 pt-1 pb-1 max-w-3xl mx-auto"
+          >
+            {t.targetTags.map((tag, idx) => (
+              <span
+                key={idx}
+                className="px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold nm-inset-sm bg-black/5 dark:bg-white/5 text-[var(--text-primary)] border border-black/5 dark:border-white/5 flex items-center gap-1.5"
+              >
+                {idx === 0 && <HomeIcon className="w-3 h-3 text-accent" />}
+                {idx === 1 && <StoreIcon className="w-3 h-3 text-amber-500" />}
+                {idx === 2 && <ShirtIcon className="w-3 h-3 text-rose-500" />}
+                {idx === 3 && <GemIcon className="w-3 h-3 text-emerald-500" />}
+                {idx === 4 && <SmartphoneIcon className="w-3 h-3 text-sky-500" />}
+                <span>{tag}</span>
+              </span>
+            ))}
+          </motion.div>
+
           {/* Action CTAs */}
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex flex-col xs:flex-row items-stretch xs:items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4 max-w-md xs:max-w-none mx-auto px-4"
+            className="flex flex-col xs:flex-row items-stretch xs:items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-3 max-w-md xs:max-w-none mx-auto px-4"
           >
             <Link
               id="btn-hero-launch-studio"
@@ -435,22 +487,101 @@ function LandingPageComponent() {
             className="pt-6 sm:pt-10 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto"
           >
             <div className="nm-outset rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-lg sm:text-2xl font-black text-accent block">{t.stats1}</span>
+              <span className="text-base sm:text-xl md:text-2xl font-black text-accent block">{t.stats1}</span>
               <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats1Sub}</span>
             </div>
             <div className="nm-outset rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-lg sm:text-2xl font-black text-emerald-500 block">{t.stats2}</span>
+              <span className="text-base sm:text-xl md:text-2xl font-black text-emerald-500 block">{t.stats2}</span>
               <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats2Sub}</span>
             </div>
             <div className="nm-outset rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-lg sm:text-2xl font-black text-amber-500 block">{t.stats3}</span>
+              <span className="text-base sm:text-xl md:text-2xl font-black text-amber-500 block">{t.stats3}</span>
               <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats3Sub}</span>
             </div>
             <div className="nm-outset rounded-2xl p-3 sm:p-4 text-center">
-              <span className="text-lg sm:text-2xl font-black text-rose-500 block">{t.stats4}</span>
+              <span className="text-base sm:text-xl md:text-2xl font-black text-rose-500 block">{t.stats4}</span>
               <span className="text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stats4Sub}</span>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* --- WHY LOCAL & HOME BUSINESSES SECTION --- */}
+      <section className="py-12 sm:py-16 md:py-20 px-3 xs:px-4 sm:px-6 lg:px-8 border-b border-black/5 dark:border-white/5 bg-accent/[0.02]">
+        <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
+          <div className="text-center space-y-2 sm:space-y-3 max-w-2xl mx-auto">
+            <span className="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
+              Made For Local Sellers
+            </span>
+            <h2 className="text-xl xs:text-2xl sm:text-4xl font-black text-[var(--text-emphasis)] tracking-tight">
+              {t.localBizTitle}
+            </h2>
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-medium px-2">
+              {t.localBizSub}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {/* Benefit 1 */}
+            <div className="nm-outset rounded-2xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 flex flex-col justify-between hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-sky-500/10 text-sky-500 flex items-center justify-center nm-outset">
+                  <SmartphoneIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.benefit1Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {t.benefit1Desc}
+                </p>
+              </div>
+            </div>
+
+            {/* Benefit 2 */}
+            <div className="nm-outset rounded-2xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 flex flex-col justify-between hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center nm-outset">
+                  <WalletIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.benefit2Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {t.benefit2Desc}
+                </p>
+              </div>
+            </div>
+
+            {/* Benefit 3 */}
+            <div className="nm-outset rounded-2xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 flex flex-col justify-between hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center nm-outset">
+                  <ShoppingBagIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.benefit3Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {t.benefit3Desc}
+                </p>
+              </div>
+            </div>
+
+            {/* Benefit 4 */}
+            <div className="nm-outset rounded-2xl p-5 sm:p-6 bg-[var(--bg-primary)] space-y-3 flex flex-col justify-between hover:scale-[1.01] transition-transform">
+              <div className="space-y-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center nm-outset">
+                  <HeartHandshakeIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.benefit4Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {t.benefit4Desc}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -465,11 +596,11 @@ function LandingPageComponent() {
           </p>
 
           {/* Tab Selector */}
-          <div className="inline-flex rounded-2xl nm-inset p-1 sm:p-1.5 mt-2 sm:mt-4 max-w-full">
+          <div className="inline-flex rounded-2xl nm-inset p-1 sm:p-1.5 mt-2 sm:mt-4 max-w-full flex-wrap justify-center gap-1">
             <button
               id="btn-tab-garments"
               onClick={() => setActiveShowcase("garment")}
-              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+              className={`px-3 sm:px-4.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
                 activeShowcase === "garment"
                   ? "bg-accent text-white shadow-md font-black"
                   : "text-[var(--text-secondary)] hover:text-accent"
@@ -482,7 +613,7 @@ function LandingPageComponent() {
             <button
               id="btn-tab-jewelry"
               onClick={() => setActiveShowcase("jewelry")}
-              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+              className={`px-3 sm:px-4.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
                 activeShowcase === "jewelry"
                   ? "bg-accent text-white shadow-md font-black"
                   : "text-[var(--text-secondary)] hover:text-accent"
@@ -490,6 +621,19 @@ function LandingPageComponent() {
             >
               <GemIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span>{t.jewelryTab}</span>
+            </button>
+
+            <button
+              id="btn-tab-lifestyle"
+              onClick={() => setActiveShowcase("lifestyle")}
+              className={`px-3 sm:px-4.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+                activeShowcase === "lifestyle"
+                  ? "bg-accent text-white shadow-md font-black"
+                  : "text-[var(--text-secondary)] hover:text-accent"
+              }`}
+            >
+              <PackageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>{t.lifestyleTab}</span>
             </button>
           </div>
         </div>
@@ -502,21 +646,25 @@ function LandingPageComponent() {
             <div className="lg:col-span-5 space-y-4 sm:space-y-6">
               <div>
                 <span className="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block mb-2 sm:mb-3">
-                  {activeShowcase === "garment" ? "Garment AI Studio" : "Jewelry AI Studio"}
+                  {activeShowcase === "garment" && (lang === "en" ? "Fashion & Handloom Studio" : "చేనేత & ఫ్యాషన్ స్టూడియో")}
+                  {activeShowcase === "jewelry" && (lang === "en" ? "Jewelry & Ornament Studio" : "ఆభరణాల ఏఐ స్టూడియో")}
+                  {activeShowcase === "lifestyle" && (lang === "en" ? "Home Goods & Crafts Studio" : "హోమ్ & చేతివృత్తుల స్టూడియో")}
                 </span>
                 <h3 className="text-lg sm:text-2xl font-black text-[var(--text-emphasis)] leading-snug">
-                  {activeShowcase === "garment" 
-                    ? (lang === "en" ? "Silk Sarees, Kurtas & Lehengas on Real Models" : "పట్టు చీరలు & కుర్తాలు రాయల్ మోడల్స్‌పై")
-                    : (lang === "en" ? "Temple & Diamond Jewelry on Velvet Busts" : "వజ్రాల మరియు కుందన్ ఆభరణాల మెరుపు")}
+                  {activeShowcase === "garment" && (lang === "en" ? "Silk Sarees, Kurtas & Lehengas on Real Models" : "పట్టు చీరలు & కుర్తాలు రాయల్ మోడల్స్‌పై")}
+                  {activeShowcase === "jewelry" && (lang === "en" ? "Temple & Diamond Jewelry on Velvet Busts" : "వజ్రాల మరియు కుందన్ ఆభరణాల మెరుపు")}
+                  {activeShowcase === "lifestyle" && (lang === "en" ? "Handcrafted Decor & Soaps in Aesthetic Sunlight" : "చేతివృత్తుల వస్తువులు & డెకోర్ లగ్జరీ సీన్‌లో")}
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1.5 sm:mt-2 font-medium leading-relaxed">
-                  {activeShowcase === "garment"
-                    ? (lang === "en" 
-                        ? "Seamlessly render silk sheen, heavy zari borders, and flowing pallus with natural model poses, temple backdrops, and studio key-lighting." 
-                        : "జరీ అంచులు, సహజమైన పట్టు మెరుపు మరియు మోడల్ హావభావాలు అద్భుతంగా రూపొందుతాయి.")
-                    : (lang === "en"
-                        ? "Showcase necklace sets, drop earrings, and bangles with realistic diamond brilliance, gold reflections, and customizable luxury display velvet."
-                        : "బంగారు మరియు వజ్రాల మెరుపును హై-ఎండ్ స్టూడియో లైటింగ్‌తో కస్టమర్లను ఆకట్టుకునేలా చూపించండి.")}
+                  {activeShowcase === "garment" && (lang === "en" 
+                    ? "Seamlessly render silk sheen, heavy zari borders, and flowing pallus with natural model poses, temple courtyards, and boutique studio key-lighting." 
+                    : "జరీ అంచులు, సహజమైన పట్టు మెరుపు మరియు మోడల్ హావభావాలు అద్భుతంగా రూపొందుతాయి.")}
+                  {activeShowcase === "jewelry" && (lang === "en"
+                    ? "Showcase necklace sets, drop earrings, and bangles with realistic diamond brilliance, gold reflections, and customizable luxury display velvet."
+                    : "బంగారు మరియు వజ్రాల మెరుపును హై-ఎండ్ స్టూడియో లైటింగ్‌తో కస్టమర్లను ఆకట్టుకునేలా చూపించండి.")}
+                  {activeShowcase === "lifestyle" && (lang === "en"
+                    ? "Transform home-made candles, organic cosmetics, pottery, and packaged snacks into editorial Instagram aesthetic scenes on marble pedestals with natural sunrays."
+                    : "మీ ఇంట్లో తయారుచేసిన కొవ్వొత్తులు, సేంద్రీయ సౌందర్య సాధనాలు మరియు క్రాఫ్ట్స్ లగ్జరీ స్టూడియో లైటింగ్‌లో మెరుస్తాయి.")}
                 </p>
               </div>
 
@@ -527,13 +675,20 @@ function LandingPageComponent() {
                       lang === "en" ? "Authentic Indian Female & Male Models" : "దక్షిణ మరియు ఉత్తర భారత మోడల్స్",
                       lang === "en" ? "Heritage Temple & Palace Courtyard Poses" : "సాంప్రదాయ ఆలయ & రాజభవన బ్యాక్‌గ్రౌండ్స్",
                       lang === "en" ? "True-to-Life Fabric Texture Preservation" : "పట్టు నేత మరియు జరీ నాణ్యత పరిరక్షణ",
-                      lang === "en" ? "Custom Color Grading & Contrast Tuning" : "కలర్ గ్రేడింగ్ & కాంట్రాస్ట్ ఎంపికలు",
+                      lang === "en" ? "Instant WhatsApp & Instagram Crop Presets" : "వాట్సాప్ & ఇన్‌స్టా సైజులు రెడీ",
                     ]
-                  : [
+                  : activeShowcase === "jewelry"
+                  ? [
                       lang === "en" ? "Velvet & Marble Neck Bust Display Options" : "వెల్వెట్ & మార్బుల్ నెక్ బస్ట్ ఆప్షన్స్",
                       lang === "en" ? "Realistic Gold, Polki & Diamond Refractions" : "బంగారు మరియు డైమండ్ రిఫ్లెక్షన్స్",
                       lang === "en" ? "Model Lifestyle Neck & Earring Shots" : "మోడల్ లైఫ్‌స్టైల్ క్లోజప్ షాట్స్",
                       lang === "en" ? "Studio Spotlights & Shadow Controls" : "స్టూడియో స్పాట్‌లైట్ & షాడో కంట్రోల్స్",
+                    ]
+                  : [
+                      lang === "en" ? "Natural Sunlight & Marble Aesthetic Scenes" : "మార్బుల్ & సహజ సూర్యకాంతి బ్యాక్‌గ్రౌండ్స్",
+                      lang === "en" ? "Label & Brand Packaging Preservation" : "ప్యాకేజింగ్ మరియు బ్రాండ్ లోగో స్పష్టత",
+                      lang === "en" ? "Clean Shadow Drop & Depth of Field" : "స్టూడియో డెప్త్ మరియు షాడో ఎఫెక్ట్స్",
+                      lang === "en" ? "Perfect for Amazon, Meesho & Instagram" : "అమెజాన్, మీషో మరియు ఇన్‌స్టాగ్రామ్ కోసం రెడీ",
                     ]
                 ).map((item, i) => (
                   <div key={i} className="flex items-center gap-2.5 sm:gap-3 text-[11px] sm:text-xs font-bold text-[var(--text-primary)]">
@@ -553,7 +708,7 @@ function LandingPageComponent() {
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 sm:gap-2.5 px-5 sm:px-6 py-3 rounded-xl bg-accent text-white text-xs sm:text-sm font-black hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/20 transition-all cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 shrink-0" />
-                  <span>{lang === "en" ? `Open ${activeShowcase === "garment" ? "Garment" : "Jewelry"} Studio` : "స్టూడియో తెరవండి"}</span>
+                  <span>{lang === "en" ? `Open ${activeShowcase === "garment" ? "Fashion" : activeShowcase === "jewelry" ? "Jewelry" : "Product"} Studio` : "స్టూడియో తెరవండి"}</span>
                   <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                 </Link>
               </div>
@@ -565,68 +720,124 @@ function LandingPageComponent() {
                 <div className="flex items-center justify-between px-1 sm:px-2 text-[10px] sm:text-[11px] font-bold text-[var(--text-secondary)]">
                   <div className="flex items-center gap-1.5 sm:gap-2">
                     <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>{lang === "en" ? "Live Studio Generation Preview" : "స్టూడియో లైవ్ ప్రివ్యూ"}</span>
+                    <span>{lang === "en" ? "Live Local Business Transformation" : "లైవ్ స్టూడియో రూపాంతరం"}</span>
                   </div>
                   <span className="text-[9px] sm:text-[10px] text-accent font-black tracking-wider uppercase">4K Ready</span>
                 </div>
 
                 {/* Split Comparison Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  {/* Left: Input Product Lay */}
+                  {/* Left: Input Product Lay (Phone Snapshot) */}
                   <div className="nm-outset rounded-xl p-2.5 sm:p-3 bg-[var(--bg-primary)] space-y-2">
                     <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-extrabold text-[var(--text-secondary)]">
-                      <span>{lang === "en" ? "1. Your Product Photo" : "1. మీ ఉత్పత్తి ఫోటో"}</span>
-                      <span className="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 text-[8.5px] sm:text-[9px]">Input</span>
+                      <div className="flex items-center gap-1">
+                        <SmartphoneIcon className="w-3 h-3 text-[var(--text-secondary)]" />
+                        <span>{lang === "en" ? "1. Your Phone Snapshot" : "1. మీ ఫోన్ ఫోటో"}</span>
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 text-[8.5px] sm:text-[9px] font-bold">Unedited Raw</span>
                     </div>
-                    <div className="aspect-[3/4] min-h-[190px] sm:min-h-[220px] rounded-lg bg-neutral-200 dark:bg-neutral-800 flex flex-col items-center justify-center p-3 sm:p-4 text-center border border-dashed border-black/20 dark:border-white/20">
-                      {activeShowcase === "garment" ? (
-                        <>
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-2 nm-inset-sm">
-                            <ShirtIcon className="w-6 h-6 sm:w-8 sm:h-8 text-accent" />
-                          </div>
-                          <span className="text-xs sm:text-sm font-black text-[var(--text-primary)]">Handloom Silk Saree</span>
-                          <span className="text-[9.5px] sm:text-[10px] text-[var(--text-secondary)] mt-1">Raw phone flat-lay photo</span>
-                          <span className="mt-2 px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/5 text-[8.5px] font-mono text-[var(--text-secondary)]">
-                            Original Specimen
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-2 nm-inset-sm">
-                            <GemIcon className="w-6 h-6 sm:w-8 sm:h-8 text-amber-500" />
-                          </div>
-                          <span className="text-xs sm:text-sm font-black text-[var(--text-primary)]">Temple Gold Necklace</span>
-                          <span className="text-[9.5px] sm:text-[10px] text-[var(--text-secondary)] mt-1">Raw jeweler piece photo</span>
-                          <span className="mt-2 px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/5 text-[8.5px] font-mono text-[var(--text-secondary)]">
-                            Original Specimen
-                          </span>
-                        </>
+                    
+                    <div className="aspect-[3/4] min-h-[220px] rounded-lg relative overflow-hidden bg-neutral-900 border border-black/10 dark:border-white/10 group">
+                      {activeShowcase === "garment" && (
+                        <img 
+                          src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800" 
+                          alt="Raw Phone Saree Snapshot" 
+                          className="w-full h-full object-cover object-center filter saturate-[0.85] brightness-[0.92] contrast-[0.95]"
+                          loading="lazy"
+                        />
                       )}
+                      {activeShowcase === "jewelry" && (
+                        <img 
+                          src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800" 
+                          alt="Raw Phone Jewelry Snapshot" 
+                          className="w-full h-full object-cover object-center filter saturate-[0.8] brightness-[0.88]"
+                          loading="lazy"
+                        />
+                      )}
+                      {activeShowcase === "lifestyle" && (
+                        <img 
+                          src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&q=80&w=800" 
+                          alt="Raw Phone Product Snapshot" 
+                          className="w-full h-full object-cover object-center filter saturate-[0.85] brightness-[0.9]"
+                          loading="lazy"
+                        />
+                      )}
+                      
+                      {/* Realistic phone camera overlay tag */}
+                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-white text-[8.5px] font-mono flex items-center gap-1 border border-white/10">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+                        <span>PHONE CAM • FLAT LAY</span>
+                      </div>
+
+                      {/* Bottom caption overlay */}
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-2.5 pt-6 text-white text-left">
+                        <span className="text-xs font-bold block text-neutral-100">
+                          {activeShowcase === "garment" && "Kanchipuram Silk Saree"}
+                          {activeShowcase === "jewelry" && "Temple Choker Necklace"}
+                          {activeShowcase === "lifestyle" && "Handmade Botanical Soap & Candle"}
+                        </span>
+                        <span className="text-[9px] text-neutral-300 font-medium">
+                          {lang === "en" ? "Casual indoor phone lighting on table" : "ఇంటి టేబుల్‌పై తీసిన సాధారణ ఫోటో"}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Right: AI Output on Model */}
-                  <div className="nm-outset rounded-xl p-2.5 sm:p-3 bg-[var(--bg-primary)] space-y-2 border border-accent/30">
+                  {/* Right: AI Output on Model / Luxury Studio */}
+                  <div className="nm-outset rounded-xl p-2.5 sm:p-3 bg-[var(--bg-primary)] space-y-2 border border-accent/40 relative">
                     <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-extrabold text-accent">
-                      <span>{lang === "en" ? "2. AI Studio Model Output" : "2. ఏఐ స్టూడియో అవుట్‌పుట్"}</span>
-                      <span className="px-1.5 py-0.5 rounded bg-accent/15 text-[8.5px] sm:text-[9px] font-black">4K UHD</span>
+                      <div className="flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-accent" />
+                        <span>{lang === "en" ? "2. Srushti AI Studio Result" : "2. సృష్టి ఏఐ స్టూడియో ఫలితం"}</span>
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-accent/20 text-accent text-[8.5px] sm:text-[9px] font-black uppercase">4K UHD Studio</span>
                     </div>
-                    <div className="aspect-[3/4] min-h-[190px] sm:min-h-[220px] rounded-lg bg-gradient-to-b from-accent/10 via-amber-500/10 to-rose-500/15 flex flex-col items-center justify-center p-3 sm:p-4 text-center border border-accent/40 relative overflow-hidden">
-                      <div className="absolute top-2 right-2 px-1.5 sm:px-2 py-0.5 rounded bg-accent text-white text-[8px] sm:text-[9px] font-black shadow-sm">
-                        AI Model
+
+                    <div className="aspect-[3/4] min-h-[220px] rounded-lg relative overflow-hidden bg-neutral-900 border border-accent/40 shadow-lg shadow-accent/10 group">
+                      {activeShowcase === "garment" && (
+                        <img 
+                          src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800" 
+                          alt="AI Studio Model Saree Photoshoot" 
+                          className="w-full h-full object-cover object-top filter contrast-[1.05] brightness-[1.02]"
+                          loading="lazy"
+                        />
+                      )}
+                      {activeShowcase === "jewelry" && (
+                        <img 
+                          src="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800" 
+                          alt="AI Studio Velvet Jewelry Showcase" 
+                          className="w-full h-full object-cover object-center filter contrast-[1.05] brightness-[1.02]"
+                          loading="lazy"
+                        />
+                      )}
+                      {activeShowcase === "lifestyle" && (
+                        <img 
+                          src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=800" 
+                          alt="AI Studio Luxury Marble Product Shoot" 
+                          className="w-full h-full object-cover object-center filter contrast-[1.05] brightness-[1.03]"
+                          loading="lazy"
+                        />
+                      )}
+
+                      {/* Badge badge overlay */}
+                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-accent text-white text-[8.5px] font-black uppercase shadow-md flex items-center gap-1">
+                        <Sparkles className="w-2.5 h-2.5" />
+                        <span>{activeShowcase === "lifestyle" ? "Luxury Editorial" : "Commercial Model Shoot"}</span>
                       </div>
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-accent/20 flex items-center justify-center mb-2 nm-outset-sm">
-                        <CameraIcon className="w-6 h-6 sm:w-8 sm:h-8 text-accent animate-bounce-slow" />
-                      </div>
-                      <span className="text-xs sm:text-sm font-black text-[var(--text-emphasis)]">
-                        {activeShowcase === "garment" ? "Royal Runway Drape" : "Luxury Velvet Bust Shoot"}
-                      </span>
-                      <span className="text-[9.5px] sm:text-[10px] text-accent font-bold mt-1">
-                        {lang === "en" ? "Studio Lighting • True Texture" : "స్టూడియో లైటింగ్ • సహజమైన అందం"}
-                      </span>
-                      <div className="mt-2 flex items-center gap-1 text-[8.5px] font-bold text-[var(--text-secondary)]">
-                        <BadgeCheck className="w-3 h-3 text-accent" />
-                        <span>Ready for E-Commerce</span>
+
+                      {/* Bottom details overlay */}
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-2.5 pt-8 text-white text-left space-y-0.5">
+                        <div className="flex items-center gap-1">
+                          <BadgeCheck className="w-3.5 h-3.5 text-accent shrink-0" />
+                          <span className="text-xs font-black text-amber-200">
+                            {activeShowcase === "garment" && "Royal Model Runway Drape"}
+                            {activeShowcase === "jewelry" && "Editorial Velvet Studio Showcase"}
+                            {activeShowcase === "lifestyle" && "Sunlit Marble Aesthetic Shoot"}
+                          </span>
+                        </div>
+                        <p className="text-[9px] text-neutral-200 font-semibold">
+                          {lang === "en" ? "Studio Key-Light • Zero Model Cost • Ready for WhatsApp" : "స్టూడియో లైటింగ్ • మోడల్ ఖర్చు సున్నా • వాట్సాప్ రెడీ"}
+                        </p>
                       </div>
                     </div>
                   </div>
