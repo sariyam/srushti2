@@ -12,11 +12,19 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        injectRegister: 'auto',
+        devOptions: {
+          enabled: true,
+        },
         includeAssets: [
           'favicon.ico',
           'favicon.png',
+          'pwa-64x64.png',
           'pwa-192x192.png',
           'pwa-512x512.png',
+          'pwa-maskable-192x192.png',
+          'pwa-maskable-512x512.png',
+          'apple-touch-icon.png',
           'front_logo.png',
           'back_logo.png',
         ],
@@ -33,13 +41,19 @@ export default defineConfig(() => {
           theme_color: '#ebeaea',
           icons: [
             {
+              src: '/pwa-64x64.png',
+              sizes: '64x64',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
               src: '/pwa-192x192.png',
               sizes: '192x192',
               type: 'image/png',
               purpose: 'any',
             },
             {
-              src: '/pwa-192x192.png',
+              src: '/pwa-maskable-192x192.png',
               sizes: '192x192',
               type: 'image/png',
               purpose: 'maskable',
@@ -51,7 +65,7 @@ export default defineConfig(() => {
               purpose: 'any',
             },
             {
-              src: '/pwa-512x512.png',
+              src: '/pwa-maskable-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'maskable',

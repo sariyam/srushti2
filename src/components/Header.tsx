@@ -6,7 +6,6 @@ import { AdminWorkspace } from "./AdminWorkspace";
 import { SettingsWorkspace } from "./SettingsWorkspace";
 import { WalletModal } from "./WalletModal";
 import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions, formatCredits } from "../utils/wallet";
-import { usePwaInstall } from "../utils/pwautils";
 import { Logo } from "./Logo";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
@@ -19,7 +18,6 @@ const Gem = (props: any) => <Icon icon="lucide:gem" {...props} />;
 const CreditCard = (props: any) => <Icon icon="lucide:credit-card" {...props} />;
 const Settings = (props: any) => <Icon icon="lucide:settings" {...props} />;
 const UserIcon = (props: any) => <Icon icon="lucide:user" {...props} />;
-const Download = (props: any) => <Icon icon="lucide:download" {...props} />;
 
 const KurtaIcon = (props: any) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>
@@ -545,12 +543,7 @@ export const Header: React.FC<HeaderProps> = ({
     }
   }, [isSignedOut]);
 
-  const { canInstall, promptInstall } = usePwaInstall();
   const isEn = lang === "en";
-
-  const handleHeaderDownloadClick = async () => {
-    await promptInstall();
-  };
 
   // Temporary selection states to support the Confirm button workflow
   const [tempWorkspace, setTempWorkspace] = useState<"garment" | "jewelry">(
@@ -605,22 +598,8 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </a>
 
-        {/* Actions panel with Download, Wallet, Billing and Settings triggers */}
+        {/* Actions panel with Wallet, Billing and Settings triggers */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Download / Install App trigger button */}
-          <button
-            id="btn-header-install-app"
-            type="button"
-            onClick={handleHeaderDownloadClick}
-            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
-            title={isEn ? "Download / Install App" : "యాప్ డౌన్‌లోడ్ / ఇన్‌స్టాల్ చేయండి"}
-          >
-            <Download className="w-4 h-4 text-accent" />
-            <span className="hidden md:inline text-xs font-extrabold text-[var(--text-emphasis)]">
-              {isEn ? "Download App" : "యాప్ డౌన్‌లోడ్"}
-            </span>
-          </button>
-
           {/* Wallet balance trigger button */}
           <button
             id="btn-trigger-wallet-modal"
