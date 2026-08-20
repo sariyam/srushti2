@@ -29,23 +29,18 @@ export function PwaInstallButton() {
     if (isStandalone) {
       setIsCurrentlyStandalone(true);
       setIsAppInstalled(true);
-      localStorage.setItem("srushti_pwa_installed", "true");
       return;
     }
 
-    // 2. Check if previously recorded as installed in browser
-    if (localStorage.getItem("srushti_pwa_installed") === "true") {
-      setIsAppInstalled(true);
-    }
-
-    // 3. Query navigator.getInstalledRelatedApps if supported by modern browsers
+    // 2. Query navigator.getInstalledRelatedApps if supported by modern Chrome/Edge
     if ("getInstalledRelatedApps" in navigator) {
       (navigator as any)
         .getInstalledRelatedApps()
         .then((relatedApps: any[]) => {
           if (relatedApps && relatedApps.length > 0) {
             setIsAppInstalled(true);
-            localStorage.setItem("srushti_pwa_installed", "true");
+          } else {
+            setIsAppInstalled(false);
           }
         })
         .catch(() => {
@@ -53,23 +48,27 @@ export function PwaInstallButton() {
         });
     }
 
-    // 4. Detect iOS / iPadOS
+    // 3. Detect iOS / iPadOS
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIosDevice =
       /iphone|ipad|ipod/.test(userAgent) ||
       (window.navigator.platform === "MacIntel" && window.navigator.maxTouchPoints > 1);
     setIsIos(isIosDevice);
 
-    // 5. Listen for native browser beforeinstallprompt
+    // 4. Listen for native browser beforeinstallprompt
+    // Note: When app is uninstalled or not yet installed, Chrome fires this event.
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setIsAppInstalled(false);
+      try {
+        localStorage.removeItem("srushti_pwa_installed");
+      } catch {}
     };
 
-    // 6. Listen for app installed event
+    // 5. Listen for app installed event
     const handleAppInstalled = () => {
       setIsAppInstalled(true);
-      localStorage.setItem("srushti_pwa_installed", "true");
       setDeferredPrompt(null);
       setShowIosGuide(false);
     };
@@ -106,7 +105,6 @@ export function PwaInstallButton() {
         const choiceResult = await deferredPrompt.userChoice;
         if (choiceResult.outcome === "accepted") {
           setIsAppInstalled(true);
-          localStorage.setItem("srushti_pwa_installed", "true");
         }
         setDeferredPrompt(null);
       } catch (err) {
