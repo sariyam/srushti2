@@ -9,6 +9,10 @@ const LanguagesIcon = (props: any) => <Icon icon="lucide:languages" {...props} /
 const ArrowLeftIcon = (props: any) => <Icon icon="lucide:arrow-left" {...props} />;
 const ShieldCheckIcon = (props: any) => <Icon icon="lucide:shield-check" {...props} />;
 const LockIcon = (props: any) => <Icon icon="lucide:lock" {...props} />;
+const SmartphoneIcon = (props: any) => <Icon icon="lucide:smartphone" {...props} />;
+const CreditCardIcon = (props: any) => <Icon icon="lucide:credit-card" {...props} />;
+const DatabaseIcon = (props: any) => <Icon icon="lucide:database" {...props} />;
+const UserCheckIcon = (props: any) => <Icon icon="lucide:user-check" {...props} />;
 
 export const PrivacyPolicyPage: React.FC = () => {
   const [lang, setLang] = useState<Language>(() => {
@@ -58,7 +62,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                   Srushti AI
                 </span>
                 <span className="text-[10px] font-bold text-accent block mt-0.5">
-                  /privacypolicy
+                  /privacy
                 </span>
               </div>
             </a>
@@ -115,8 +119,8 @@ export const PrivacyPolicyPage: React.FC = () => {
           </div>
           <p className="text-xs sm:text-sm leading-relaxed opacity-85 pt-1">
             {lang === "te"
-              ? "Srushti AI మీ సమాచారాన్ని మరియు అప్‌లోడ్ చేసిన ప్రొడక్ట్ చిత్రాలను ఎలా సేకరిస్తుంది, ఉపయోగిస్తుంది మరియు భద్రపరుస్తుందో వివరించే విధానం."
-              : "At Srushti AI, protecting your personal privacy and product image assets is fundamental. This Privacy Policy details our data processing practices."}
+              ? "Srushti AI మీ మొబైల్ సమాచారాన్ని, రేజర్‌పే లావాదేవీల డేటాను మరియు అప్‌లోడ్ చేసిన ప్రొడక్ట్ చిత్రాలను ఎలా సేకరిస్తుంది, ప్రాసెస్ చేస్తుంది మరియు భద్రపరుస్తుందో వివరించే పారదర్శక విధానం."
+              : "At Srushti AI, protecting your personal privacy, mobile credentials, and payment data is fundamental. This Privacy Policy details our data collection and protection practices regarding Mobile OTP authentication and Razorpay payments."}
           </p>
         </div>
 
@@ -125,67 +129,114 @@ export const PrivacyPolicyPage: React.FC = () => {
           <div className="flex items-center gap-2.5 text-emerald-600 dark:text-emerald-400">
             <LockIcon className="w-5 h-5 shrink-0" />
             <h2 className="font-extrabold text-sm sm:text-base tracking-tight">
-              {lang === "te" ? "భద్రతా ప్రమాణాలు (Encrypted Data Standards)" : "Data Protection & Privacy Guarantee"}
+              {lang === "te" ? "భద్రతా ప్రమాణాలు & చెల్లింపు గోప్యత" : "Data Protection & Financial Privacy Guarantee"}
             </h2>
           </div>
           <p className="text-xs sm:text-sm leading-relaxed text-[var(--text-primary)] font-medium break-words">
             {lang === "te"
-              ? "మీరు అప్‌లోడ్ చేసిన ఫోటోలు మరియు ప్రొడక్ట్ చిత్రాలు ఎన్‌క్రిప్ట్ చేయబడతాయి మరియు కేవలం AI ఇమేజ్ జనరేషన్ ప్రక్రియ కోసం మాత్రమే ఉపయోగించబడతాయి. మేము మీ డేటాను ఏ మూడవ పక్ష ప్రకటన నెట్‌వర్క్‌లకు విక్రయించము."
-              : "All uploaded photos and media assets are encrypted during transmission and processing. Your data is strictly used for generative model processing and is never sold to third-party ad networks."}
+              ? "మీ మొబైల్ నంబర్ మరియు పేమెంట్ వివరాలు ఎండ్-టు-ఎండ్ ఎన్‌క్రిప్ట్ చేయబడతాయి. బ్యాంక్ లేదా కార్డ్ వివరాలను మేము మా సర్వర్లలో నిల్వ చేయము. మీ డేటాను ఏ మూడవ పక్ష ప్రకటన నెట్‌వర్క్‌లకు ఎట్టి పరిస్థితుల్లోనూ విక్రయించము."
+              : "All phone numbers and transaction requests are encrypted during transmission. We never store credit card numbers, CVVs, or Net Banking passwords on Srushti AI servers. Your personal data is never sold to third-party ad networks."}
           </p>
         </div>
 
         {/* Policy Sections */}
         <div className="space-y-6">
-          {/* Section 1 */}
-          <section className="nm-outset rounded-[2rem] p-6 space-y-3 bg-[var(--bg-panel)]">
+          {/* Section 1: Mobile OTP Login */}
+          <section className="nm-outset rounded-[2rem] p-6 space-y-3 bg-[var(--bg-panel)] border-l-4 border-accent">
             <h2 className="font-extrabold text-base text-[var(--text-emphasis)] flex items-center gap-2">
               <span className="w-7 h-7 rounded-lg nm-inset-sm flex items-center justify-center text-xs text-accent font-mono">1</span>
-              <span>{lang === "te" ? "మేము సేకరించే సమాచారం (Information We Collect)" : "1. Information We Collect"}</span>
+              <SmartphoneIcon className="w-4 h-4 text-accent" />
+              <span>{lang === "te" ? "మొబైల్ OTP లాగిన్ & గుర్తింపు డేటా (Mobile OTP Login & Identification Data)" : "1. Mobile OTP Authentication & User Data"}</span>
             </h2>
             <div className="text-xs sm:text-sm leading-relaxed opacity-85 space-y-2">
-              <p>{lang === "te" ? "• ఖాతా సమాచారం: లాగిన్ సమయం నమోదు చేసిన ఫోన్ నంబర్." : "• Account Identification: Phone number supplied during OTP verification."}</p>
-              <p>{lang === "te" ? "• అప్‌లోడ్ చేసిన చిత్రాలు: మీరు గార్మెంట్ లేదా జ్యువెలరీ ట్రయల్ కోసం అప్‌లోడ్ చేసిన ప్రొడక్ట్ ఫోటోలు." : "• Uploaded Product Media: Images uploaded for garment, model, or jewelry trial rendering."}</p>
-              <p>{lang === "te" ? "• అప్లికేషన్ ప్రాధాన్యతలు: థీమ్ (Light/Dark) మరియు భాష ఎంపికలు (English/తెలుగు)." : "• App Preferences: Visual theme and preferred language choices."}</p>
+              <p>
+                {lang === "te"
+                  ? "• సేకరించే వివరాలు: మీరు లాగిన్ లేదా రిజిస్ట్రేషన్ సమయంలో నమోదు చేసిన 10 అంకెల మొబైల్ నంబర్ మరియు ధృవీకరణ OTP స్థితి."
+                  : "• Data Collected: Valid 10-digit mobile phone number provided during login or account registration, along with OTP delivery and verification status."}
+              </p>
+              <p>
+                {lang === "te"
+                  ? "• సమాచార ప్రయోజనం: మొబైల్ నంబర్ కేవలం మీ వాలెట్ బ్యాలెన్స్, జనరేట్ చేసిన ఫోటోల చరిత్ర, సురక్షిత లాగిన్ సెషన్ మరియు ముఖ్యమైన లావాదేవీ రశీదులను అందించడానికి మాత్రమే ఉపయోగించబడుతుంది."
+                  : "• Purpose of Collection: Your phone number is used strictly for user identification, provisioning your rechargeable wallet credits, retrieving generated photoshoot history, and dispatching transaction receipts."}
+              </p>
+              <p>
+                {lang === "te"
+                  ? "• ఎటువంటి స్పామ్ లేదు: మీ మొబైల్ నంబర్‌కు అనవసరమైన ప్రమోషనల్ కాల్స్ లేదా స్పామ్ ఎస్సెమ్మెస్‌లు పంపబడవు."
+                  : "• No Spam Guarantee: We do not share your phone number with third-party telemarketers or external advertisers."}
+              </p>
             </div>
           </section>
 
-          {/* Section 2 */}
-          <section className="nm-outset rounded-[2rem] p-6 space-y-3 bg-[var(--bg-panel)]">
+          {/* Section 2: Razorpay Payment Processing */}
+          <section className="nm-outset rounded-[2rem] p-6 space-y-3 bg-[var(--bg-panel)] border-l-4 border-amber-500">
             <h2 className="font-extrabold text-base text-[var(--text-emphasis)] flex items-center gap-2">
               <span className="w-7 h-7 rounded-lg nm-inset-sm flex items-center justify-center text-xs text-accent font-mono">2</span>
-              <span>{lang === "te" ? "సమాచార వినియోగం (How We Use Your Data)" : "2. How We Use Your Data"}</span>
+              <CreditCardIcon className="w-4 h-4 text-amber-500" />
+              <span>{lang === "te" ? "రేజర్‌పే పేమెంట్ డేటా & భద్రత (Razorpay Payment Gateway Data)" : "2. Payment Processing via Razorpay"}</span>
             </h2>
-            <p className="text-xs sm:text-sm leading-relaxed opacity-85">
-              {lang === "te"
-                ? "సేకరించిన సమాచారాన్ని కేవలం కృత్రిమ మేధస్సు మోడల్ ప్రొడక్ట్ చిత్రాలను సిద్ధం చేయడానికి, వినియోగదారు ఖాతా లాగిన్ ధృవీకరణకు మరియు మీ ప్రాధాన్యతలను సేవ్ చేయడానికి మాత్రమే ఉపయోగిస్తాము."
-                : "Information is used exclusively to generate requested AI imagery, verify login requests via OTP, optimize user interface performance, and maintain custom settings."}
-            </p>
+            <div className="text-xs sm:text-sm leading-relaxed opacity-85 space-y-2">
+              <p>
+                {lang === "te"
+                  ? "• గేట్‌వే నిర్వహణ: Srushti AI లో అన్ని ఆన్‌లైన్ పేమెంట్లు Razorpay (Razorpay Software Private Limited) ద్వారా నేరుగా నిర్వహించబడతాయి."
+                  : "• Payment Aggregator: All monetary transactions, credit pack purchases, and micro-wallet recharges are securely handled by Razorpay, an RBI-licensed payment aggregator."}
+              </p>
+              <p>
+                {lang === "te"
+                  ? "• రేజర్‌పేతో పంచుకునే వివరాలు: ఆర్డర్ ఐడీ (Order ID), చెల్లింపు మొత్తం, వినియోగదారు మొబైల్ నంబర్ మరియు పేమెంట్ స్థితి."
+                  : "• Data Shared with Razorpay: Order ID, transaction amount, customer phone number/email, and IP address for fraud detection and payment authorization."}
+              </p>
+              <p>
+                {lang === "te"
+                  ? "• బ్యాంక్ వివరాల రక్షణ (PCI-DSS): క్రెడిట్/డెబిట్ కార్డ్ నంబర్లు, CVV కోడ్‌లు లేదా బ్యాంక్ నెట్ బ్యాంకింగ్ పాస్‌వర్డ్‌లు Srushti AI సర్వర్లలో ఎప్పటికీ సేవ్ చేయబడవు. ఇవన్నీ నేరుగా రేజర్‌పే యొక్క 256-bit ఎన్‌క్రిప్టెడ్ PCI-DSS సర్టిఫైడ్ సర్వర్లలో మాత్రమే ప్రాసెస్ చేయబడతాయి."
+                  : "• PCI-DSS Compliance: Srushti AI never touches, stores, or handles credit/debit card numbers, CVVs, or Net Banking credentials. All financial authorizations occur directly through Razorpay's PCI-DSS Level 1 compliant secure infrastructure."}
+              </p>
+              <p>
+                {lang === "te"
+                  ? "• లావాదేవీ రికార్డులు: పన్ను మరియు ఆడిటింగ్ అవసరాల కోసం ఆర్డర్ ఐడీ మరియు పేమెంట్ రశీదు సమాచారం సురక్షితంగా భద్రపరచబడుతుంది."
+                  : "• Invoicing & Records: We retain basic transaction metadata (Order ID, Payment ID, timestamp, amount, and credit quantity) for statutory taxation, GST compliance, and accounting records."}
+              </p>
+            </div>
           </section>
 
-          {/* Section 3 */}
+          {/* Section 3: Uploaded Product Media */}
           <section className="nm-outset rounded-[2rem] p-6 space-y-3 bg-[var(--bg-panel)]">
             <h2 className="font-extrabold text-base text-[var(--text-emphasis)] flex items-center gap-2">
               <span className="w-7 h-7 rounded-lg nm-inset-sm flex items-center justify-center text-xs text-accent font-mono">3</span>
-              <span>{lang === "te" ? "డేటా రక్షణ & భద్రత (Data Security & Retention)" : "3. Data Security & Retention"}</span>
+              <DatabaseIcon className="w-4 h-4 text-accent" />
+              <span>{lang === "te" ? "అప్‌లోడ్ చేసిన ప్రొడక్ట్ చిత్రాలు (Uploaded Product Images & AI Generation)" : "3. Uploaded Product Media & AI Processing"}</span>
             </h2>
             <p className="text-xs sm:text-sm leading-relaxed opacity-85">
               {lang === "te"
-                ? "మేము సురక్షితమైన క్లౌడ్ మౌలిక సదుపాయాలు మరియు ఎన్‌క్రిప్షన్ ప్రోటోకాల్‌లను ఉపయోగిస్తాము. అనధికారిక ప్రాప్యత నుండి మీ డేటా రక్షించబడుతుంది."
-                : "We enforce strict encryption in transit and at rest using modern secure Cloud architecture. Media assets are processed ephemeral-first to protect user confidentiality."}
+                ? "మీరు అప్‌లోడ్ చేసిన ప్రొడక్ట్ ఫోటోలు కేవలం AI మోడల్ జనరేషన్ కోసం మాత్రమే ఉపయోగించబడతాయి. ప్రాసెసింగ్ పూర్తయిన తర్వాత మీ ఫోటోలు సురక్షిత క్లౌడ్ నిల్వలో భద్రపరచబడతాయి మరియు మీ అనుమతి లేకుండా బయటి వ్యక్తులకు అందించబడవు."
+                : "Product photographs uploaded for fashion, garment, or jewelry visualization are used solely to run generative AI synthesis. Images are transmitted via encrypted HTTPS and retained securely in accordance with your account access."}
             </p>
           </section>
 
-          {/* Section 4 */}
+          {/* Section 4: Data Security & Retention */}
           <section className="nm-outset rounded-[2rem] p-6 space-y-3 bg-[var(--bg-panel)]">
             <h2 className="font-extrabold text-base text-[var(--text-emphasis)] flex items-center gap-2">
               <span className="w-7 h-7 rounded-lg nm-inset-sm flex items-center justify-center text-xs text-accent font-mono">4</span>
-              <span>{lang === "te" ? "వినియోగదారు హక్కులు (Your Privacy Rights)" : "4. Your Privacy Rights"}</span>
+              <LockIcon className="w-4 h-4 text-accent" />
+              <span>{lang === "te" ? "డేటా ఎన్‌క్రిప్షన్ & భద్రత (Data Encryption & Security)" : "4. Data Encryption & Security Standards"}</span>
             </h2>
             <p className="text-xs sm:text-sm leading-relaxed opacity-85">
               {lang === "te"
-                ? "మీరు ఎప్పుడైనా మీ ఖాతా సెషన్ డేటాను తొలగించమని అభ్యర్థించవచ్చు లేదా సపోర్ట్ బృందాన్ని సంప్రదించవచ్చు."
-                : "You may clear active session data or request account deletion at any time by accessing settings or contacting our support team."}
+                ? "మేము అత్యాధునిక TLS/SSL ఎన్‌క్రిప్షన్ ప్రోటోకాల్స్ మరియు ఫైర్‌వాల్ రక్షణను ఉపయోగిస్తాము. మీ లాగిన్ సెషన్ టోకెన్లు సురక్షితంగా నిర్వహించబడతాయి."
+                : "We employ modern TLS/SSL encryption for all data in transit, reinforced with cloud perimeter firewalls. Secure session tokens protect your authentication status against unauthorized interception."}
+            </p>
+          </section>
+
+          {/* Section 5: User Rights */}
+          <section className="nm-outset rounded-[2rem] p-6 space-y-3 bg-[var(--bg-panel)]">
+            <h2 className="font-extrabold text-base text-[var(--text-emphasis)] flex items-center gap-2">
+              <span className="w-7 h-7 rounded-lg nm-inset-sm flex items-center justify-center text-xs text-accent font-mono">5</span>
+              <UserCheckIcon className="w-4 h-4 text-accent" />
+              <span>{lang === "te" ? "వినియోగదారు గోప్యతా హక్కులు (Your Rights & Data Deletion)" : "5. Your Rights & Data Deletion"}</span>
+            </h2>
+            <p className="text-xs sm:text-sm leading-relaxed opacity-85">
+              {lang === "te"
+                ? "మీరు ఎప్పుడైనా మీ ఖాతా డేటాను లేదా అప్‌లోడ్ చేసిన చిత్రాలను తొలగించమని మా సపోర్ట్ బృందాన్ని (support@srushti.ai) సంప్రదించి అభ్యర్థించవచ్చు."
+                : "You possess the right to review, update, or request the deletion of your account and uploaded assets. To request data deletion or account removal, contact our data protection team at support@srushti.ai."}
             </p>
           </section>
         </div>
@@ -196,10 +247,10 @@ export const PrivacyPolicyPage: React.FC = () => {
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>© 2026 Srushti AI. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <a href="/termsandconditions" className="hover:text-accent font-extrabold transition-colors">
+            <a href="/terms" className="hover:text-accent font-extrabold transition-colors">
               {lang === "te" ? "నిబంధనలు & షరతులు" : "Terms & Conditions"}
             </a>
-            <a href="/privacypolicy" className="text-accent font-extrabold underline">
+            <a href="/privacy" className="text-accent font-extrabold underline">
               {lang === "te" ? "గోప్యతా విధానం" : "Privacy Policy"}
             </a>
           </div>

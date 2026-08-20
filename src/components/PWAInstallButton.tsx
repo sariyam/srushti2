@@ -140,11 +140,6 @@ export function PWAInstallButton() {
             <div className="flex flex-col text-left">
               <span className="text-xs font-bold tracking-tight text-neutral-100 flex items-center gap-1.5 whitespace-nowrap">
                 {installedSuccess ? t.installed : t.buttonTitle}
-                {!installedSuccess && (
-                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-black tracking-widest uppercase border border-amber-500/30">
-                    PWA
-                  </span>
-                )}
               </span>
               <span className="text-[10px] text-neutral-400 font-medium whitespace-nowrap">
                 {t.buttonSubtitle}

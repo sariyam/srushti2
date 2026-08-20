@@ -12,10 +12,10 @@ export const Logo: React.FC = () => {
 
   return (
     <div
-      className="relative w-9 h-9 rounded-full bg-neutral-800 flex items-center justify-center shadow-md select-none shrink-0 cursor-pointer transition-colors duration-300"
+      className="relative w-9 h-9 rounded-full bg-neutral-800 flex items-center justify-center shadow-md select-none shrink-0 cursor-default transition-colors duration-300"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      title="Stacked logo"
+      title="Srushti AI Logo"
     >
       {/* 1. Back Logo Card (Bottom Layer) */}
       <motion.div
