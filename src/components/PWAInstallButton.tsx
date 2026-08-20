@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Share2, PlusSquare, Smartphone, Check, Sparkles } from 'lucide-react';
+import { X, Share2, PlusSquare, Smartphone, Check, Sparkles, Download } from 'lucide-react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import { LOGOS_BASE64 } from '../assets/logoBase64';
+import frontLogo from '../assets/front_logo.png';
+import backLogo from '../assets/back_logo.png';
 
 export function PWAInstallButton() {
   const { isStandalone, canPrompt, isIOS, triggerInstall } = usePWAInstall();
@@ -107,24 +110,40 @@ export function PWAInstallButton() {
           <button
             id="pwa-floating-download-btn"
             onClick={handleInstallClick}
-            className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#1e1d1c] hover:bg-[#2b2927] text-white border border-[#3e3b38] shadow-lg shadow-black/25 transition-all duration-200 active:scale-95 group-hover:border-amber-500/50 cursor-pointer"
+            className="flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-neutral-900/95 hover:bg-neutral-800 text-white border border-amber-500/30 hover:border-amber-500/70 shadow-2xl shadow-black/60 backdrop-blur-md transition-all duration-200 active:scale-95 group-hover:shadow-amber-500/10 cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-[#141312] border border-amber-500/30 overflow-hidden flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-inner">
+            {/* PWA App Icon with Squircle Container */}
+            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-b from-neutral-800 to-neutral-950 border border-amber-500/40 p-1 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform shadow-md overflow-hidden">
               {installedSuccess ? (
-                <Check className="w-4 h-4 text-emerald-400" />
+                <div className="w-full h-full rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                  <Check className="w-4 h-4 text-emerald-400" />
+                </div>
               ) : (
                 <img
-                  src="/pwa-192x192.png"
-                  alt="Srushti AI App Icon"
-                  className="w-full h-full object-cover"
+                  src={LOGOS_BASE64.front || frontLogo || "/pwa-192x192.png"}
+                  alt="Srushti AI PWA App Icon"
+                  className="w-full h-full object-contain filter drop-shadow"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    if (!target.dataset.failed) {
+                      target.dataset.failed = "1";
+                      target.src = "/pwa-192x192.png";
+                    } else if (target.dataset.failed === "1") {
+                      target.dataset.failed = "2";
+                      target.src = "/favicon.png";
+                    }
+                  }}
                 />
               )}
             </div>
+
             <div className="flex flex-col text-left">
-              <span className="text-xs font-semibold tracking-wide text-neutral-100 flex items-center gap-1.5 whitespace-nowrap">
+              <span className="text-xs font-bold tracking-tight text-neutral-100 flex items-center gap-1.5 whitespace-nowrap">
                 {installedSuccess ? t.installed : t.buttonTitle}
                 {!installedSuccess && (
-                  <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-black tracking-widest uppercase border border-amber-500/30">
+                    PWA
+                  </span>
                 )}
               </span>
               <span className="text-[10px] text-neutral-400 font-medium whitespace-nowrap">
