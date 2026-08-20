@@ -84,57 +84,13 @@ async function generateAssets() {
     .png()
     .toFile(path.join(publicDir, 'pwa-maskable-512x512.png'));
 
-  // 4. Desktop Wide Screenshot (1280x720) for Richer PWA Install UI
-  const wideLogo = await sharp(frontBuf)
-    .resize(320, 320, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .toBuffer();
+  // Clean up any stale screenshot files if present
+  ['screenshot-wide.png', 'screenshot-narrow.png'].forEach((f) => {
+    const p = path.join(publicDir, f);
+    if (fs.existsSync(p)) fs.unlinkSync(p);
+  });
 
-  // SVG overlay for wide banner
-  const wideSvg = Buffer.from(`
-    <svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
-      <rect width="1280" height="720" fill="#ebeaea"/>
-      <rect x="40" y="40" width="1200" height="640" rx="32" fill="#ffffff" stroke="#e0dede" stroke-width="2"/>
-      <text x="640" y="140" font-family="system-ui, sans-serif" font-size="44" font-weight="900" text-anchor="middle" fill="#1a1918">
-        Srushti AI — Business to Brand
-      </text>
-      <text x="640" y="200" font-family="system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle" fill="#666666">
-        AI-Powered Studio Photography for Garments &amp; Jewelry
-      </text>
-    </svg>
-  `);
-
-  await sharp(wideSvg)
-    .composite([{ input: wideLogo, top: 250, left: 480 }])
-    .png()
-    .toFile(path.join(publicDir, 'screenshot-wide.png'));
-
-  // 5. Mobile Narrow Screenshot (750x1334) for Richer PWA Install UI
-  const narrowLogo = await sharp(frontBuf)
-    .resize(300, 300, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .toBuffer();
-
-  const narrowSvg = Buffer.from(`
-    <svg width="750" height="1334" viewBox="0 0 750 1334" xmlns="http://www.w3.org/2000/svg">
-      <rect width="750" height="1334" fill="#ebeaea"/>
-      <rect x="30" y="50" width="690" height="1234" rx="36" fill="#ffffff" stroke="#e0dede" stroke-width="2"/>
-      <text x="375" y="160" font-family="system-ui, sans-serif" font-size="40" font-weight="900" text-anchor="middle" fill="#1a1918">
-        Srushti AI
-      </text>
-      <text x="375" y="220" font-family="system-ui, sans-serif" font-size="20" font-weight="600" text-anchor="middle" fill="#666666">
-        Business to Brand
-      </text>
-      <text x="375" y="260" font-family="system-ui, sans-serif" font-size="16" font-weight="500" text-anchor="middle" fill="#888888">
-        Instant AI Product Photoshoots
-      </text>
-    </svg>
-  `);
-
-  await sharp(narrowSvg)
-    .composite([{ input: narrowLogo, top: 400, left: 225 }])
-    .png()
-    .toFile(path.join(publicDir, 'screenshot-narrow.png'));
-
-  console.log('✅ All PWA icons and screenshots generated successfully with sharp.');
+  console.log('✅ All PWA icons generated successfully with sharp.');
 }
 
 generateAssets().catch((err) => {
