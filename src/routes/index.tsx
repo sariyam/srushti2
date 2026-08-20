@@ -4,6 +4,7 @@ import { Route as rootRoute } from "./__root";
 import { Icon } from "@iconify/react";
 import { motion } from "motion/react";
 import { Logo } from "../components/Logo";
+import { HeroCarousel } from "../components/HeroCarousel";
 import { Language } from "../types";
 
 export const Route = createRoute({
@@ -161,8 +162,13 @@ function LandingPageComponent() {
       </header>
 
       {/* --- HERO: PROBLEM & SOLUTION AGENDA --- */}
-      <section className="pt-8 pb-8 sm:pt-12 sm:pb-12 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-4 sm:space-y-6">
+      <section className="pt-4 pb-8 sm:pt-8 sm:pb-12 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-4 sm:space-y-6">
         
+        {/* Landscape Fashion Carousel Slider */}
+        <div className="mb-2 sm:mb-4">
+          <HeroCarousel lang={lang} />
+        </div>
+
         {/* Eyebrow badge */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full nm-outset text-[10.5px] sm:text-xs font-black text-accent bg-accent/5 border border-accent/20">
           <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
