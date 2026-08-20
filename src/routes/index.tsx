@@ -205,11 +205,11 @@ function LandingPageComponent() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
           <Link
             to="/studio"
-            className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-accent text-white text-sm sm:text-base font-black flex items-center justify-center gap-2.5 shadow-xl shadow-accent/30 hover:scale-105 active:scale-95 transition-all"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-2xl nm-outset bg-[var(--bg-secondary)] text-accent text-sm sm:text-base font-black flex items-center justify-center gap-2.5 hover:scale-105 active:scale-95 transition-all group"
           >
-            <CameraIcon className="w-4 h-4" />
-            <span>{t.ctaPrimary}</span>
-            <ArrowRight className="w-4 h-4" />
+            <CameraIcon className="w-4 h-4 text-accent transition-transform group-hover:scale-110" />
+            <span className="text-accent tracking-wide">{t.ctaPrimary}</span>
+            <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover:translate-x-0.5" />
           </Link>
 
           <a
@@ -251,36 +251,39 @@ function LandingPageComponent() {
           {/* Category Tabs */}
           <div className="inline-flex rounded-2xl nm-inset p-1 mt-2 flex-wrap justify-center gap-1">
             <button
+              id="tab-sarees-fashion"
               onClick={() => setActiveShowcase("garment")}
               className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
                 activeShowcase === "garment"
-                  ? "bg-accent text-white shadow-md"
+                  ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm"
                   : "text-[var(--text-secondary)] hover:text-accent"
               }`}
             >
-              <ShirtIcon className="w-3.5 h-3.5" />
+              <ShirtIcon className={`w-3.5 h-3.5 ${activeShowcase === "garment" ? "text-accent" : ""}`} />
               <span>{t.garmentTab}</span>
             </button>
             <button
+              id="tab-jewelry-ornaments"
               onClick={() => setActiveShowcase("jewelry")}
               className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
                 activeShowcase === "jewelry"
-                  ? "bg-accent text-white shadow-md"
+                  ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm"
                   : "text-[var(--text-secondary)] hover:text-accent"
               }`}
             >
-              <GemIcon className="w-3.5 h-3.5" />
+              <GemIcon className={`w-3.5 h-3.5 ${activeShowcase === "jewelry" ? "text-accent" : ""}`} />
               <span>{t.jewelryTab}</span>
             </button>
             <button
+              id="tab-home-handmade"
               onClick={() => setActiveShowcase("lifestyle")}
               className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
                 activeShowcase === "lifestyle"
-                  ? "bg-accent text-white shadow-md"
+                  ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm"
                   : "text-[var(--text-secondary)] hover:text-accent"
               }`}
             >
-              <PackageIcon className="w-3.5 h-3.5" />
+              <PackageIcon className={`w-3.5 h-3.5 ${activeShowcase === "lifestyle" ? "text-accent" : ""}`} />
               <span>{t.lifestyleTab}</span>
             </button>
           </div>
@@ -410,10 +413,10 @@ function LandingPageComponent() {
             </span>
             <Link
               to="/studio"
-              className="px-5 py-2.5 rounded-xl bg-accent text-white text-xs font-black flex items-center gap-2 shadow-md shadow-accent/20 hover:scale-105 active:scale-95 transition-all"
+              className="px-5 py-2.5 rounded-xl nm-outset bg-[var(--bg-secondary)] text-accent text-xs font-black flex items-center gap-2 hover:scale-105 active:scale-95 transition-all group"
             >
-              <span>Launch Srushti</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span className="text-accent">Launch Srushti</span>
+              <ArrowRight className="w-3.5 h-3.5 text-accent transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>
@@ -474,11 +477,11 @@ function LandingPageComponent() {
           <div className="pt-2">
             <Link
               to="/studio"
-              className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl bg-accent text-white text-sm font-black shadow-xl shadow-accent/30 hover:scale-105 active:scale-95 transition-all"
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl nm-outset bg-[var(--bg-secondary)] text-accent text-sm font-black hover:scale-105 active:scale-95 transition-all group"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>{t.ctaPrimary}</span>
-              <ArrowRight className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 text-accent transition-transform group-hover:scale-110" />
+              <span className="text-accent tracking-wide">{t.ctaPrimary}</span>
+              <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>
