@@ -20,6 +20,8 @@ export default defineConfig(() => {
         includeAssets: [
           'favicon.ico',
           'favicon.png',
+          'favicon-32x32.png',
+          'favicon-16x16.png',
           'pwa-64x64.png',
           'pwa-192x192.png',
           'pwa-512x512.png',
@@ -38,8 +40,8 @@ export default defineConfig(() => {
           scope: '/',
           display: 'standalone',
           orientation: 'any',
-          background_color: '#ebeaea',
-          theme_color: '#ebeaea',
+          background_color: '#222222',
+          theme_color: '#222222',
           icons: [
             {
               src: '/pwa-64x64.png',

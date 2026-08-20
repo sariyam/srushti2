@@ -24,65 +24,41 @@ async function generateAssets() {
   fs.writeFileSync(path.join(publicDir, 'front_logo.png'), frontBuf);
   fs.writeFileSync(path.join(publicDir, 'back_logo.png'), backBuf);
 
+  const DARK_GREY = { r: 34, g: 34, b: 34, alpha: 1 }; // #222222 elegant dark grey
+
+  // Helper to create square icon with dark grey background
+  async function createIcon(size, paddingRatio = 0.82) {
+    const logoSize = Math.round(size * paddingRatio);
+    const resizedLogo = await sharp(frontBuf)
+      .resize(logoSize, logoSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .toBuffer();
+
+    return sharp({
+      create: {
+        width: size,
+        height: size,
+        channels: 4,
+        background: DARK_GREY,
+      },
+    })
+      .composite([{ input: resizedLogo, gravity: 'center' }])
+      .png();
+  }
+
   // 1. Square icons for PWA (purpose: 'any')
-  await sharp(frontBuf)
-    .resize(64, 64, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toFile(path.join(publicDir, 'pwa-64x64.png'));
-
-  await sharp(frontBuf)
-    .resize(192, 192, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toFile(path.join(publicDir, 'pwa-192x192.png'));
-
-  await sharp(frontBuf)
-    .resize(512, 512, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toFile(path.join(publicDir, 'pwa-512x512.png'));
+  await (await createIcon(64, 0.85)).toFile(path.join(publicDir, 'pwa-64x64.png'));
+  await (await createIcon(192, 0.82)).toFile(path.join(publicDir, 'pwa-192x192.png'));
+  await (await createIcon(512, 0.82)).toFile(path.join(publicDir, 'pwa-512x512.png'));
 
   // 2. Square icons for Apple & Favicons
-  await sharp(frontBuf)
-    .resize(180, 180, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toFile(path.join(publicDir, 'apple-touch-icon.png'));
+  await (await createIcon(180, 0.82)).toFile(path.join(publicDir, 'apple-touch-icon.png'));
+  await (await createIcon(64, 0.85)).toFile(path.join(publicDir, 'favicon.png'));
+  await (await createIcon(32, 0.88)).toFile(path.join(publicDir, 'favicon-32x32.png'));
+  await (await createIcon(16, 0.90)).toFile(path.join(publicDir, 'favicon-16x16.png'));
 
-  await sharp(frontBuf)
-    .resize(64, 64, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toFile(path.join(publicDir, 'favicon.png'));
-
-  // 3. Maskable icons (purpose: 'maskable') with 20% safe-padding on #ebeaea background
-  const maskable192Logo = await sharp(frontBuf)
-    .resize(150, 150, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .toBuffer();
-
-  await sharp({
-    create: {
-      width: 192,
-      height: 192,
-      channels: 4,
-      background: { r: 235, g: 234, b: 234, alpha: 1 },
-    },
-  })
-    .composite([{ input: maskable192Logo, gravity: 'center' }])
-    .png()
-    .toFile(path.join(publicDir, 'pwa-maskable-192x192.png'));
-
-  const maskable512Logo = await sharp(frontBuf)
-    .resize(400, 400, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .toBuffer();
-
-  await sharp({
-    create: {
-      width: 512,
-      height: 512,
-      channels: 4,
-      background: { r: 235, g: 234, b: 234, alpha: 1 },
-    },
-  })
-    .composite([{ input: maskable512Logo, gravity: 'center' }])
-    .png()
-    .toFile(path.join(publicDir, 'pwa-maskable-512x512.png'));
+  // 3. Maskable icons (purpose: 'maskable') with 25% safe-padding on dark grey background
+  await (await createIcon(192, 0.75)).toFile(path.join(publicDir, 'pwa-maskable-192x192.png'));
+  await (await createIcon(512, 0.75)).toFile(path.join(publicDir, 'pwa-maskable-512x512.png'));
 
   // Clean up any stale screenshot files if present
   ['screenshot-wide.png', 'screenshot-narrow.png'].forEach((f) => {
