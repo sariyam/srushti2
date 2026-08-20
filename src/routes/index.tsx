@@ -156,15 +156,6 @@ function LandingPageComponent() {
             >
               {theme === "light" ? <MoonIcon className="w-4 h-4" /> : <SunIcon className="w-4 h-4" />}
             </button>
-
-            {/* Direct Studio CTA */}
-            <Link
-              to="/studio"
-              className="px-3.5 sm:px-5 py-2 rounded-xl bg-accent text-white text-xs sm:text-sm font-black shadow-md shadow-accent/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5"
-            >
-              <CameraIcon className="w-3.5 h-3.5" />
-              <span>Launch Srushti</span>
-            </Link>
           </div>
         </div>
       </header>
@@ -398,7 +389,7 @@ function LandingPageComponent() {
                     </span>
                   </div>
                   <p className="text-[9px] text-neutral-200 font-semibold">
-                    {lang === "en" ? "Studio Lighting • ₹0 Model Cost • Ready for WhatsApp" : "స్టూడియో లైటింగ్ • మోడల్ ఖర్చు సున్నా • వాట్సాప్ రెడీ"}
+                    {lang === "en" ? "Studio Lighting • Ready for Social Media" : "స్టూడియో లైటింగ్ • సోషల్ మీడియా రెడీ"}
                   </p>
                 </div>
               </div>
