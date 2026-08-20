@@ -32,11 +32,11 @@ export default defineConfig(() => {
           'back_logo.png',
         ],
         manifest: {
-          id: '/',
+          id: '/studio',
           name: 'Srushti AI — Business to Brand',
           short_name: 'Srushti AI',
           description: 'Business to Brand - AI-powered product photography & fashion studio.',
-          start_url: '/',
+          start_url: '/studio',
           scope: '/',
           display: 'standalone',
           orientation: 'any',
