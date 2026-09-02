@@ -27,6 +27,10 @@ const PackageIcon = (props: any) => <Icon icon="lucide:package" {...props} />;
 const SmartphoneIcon = (props: any) => <Icon icon="lucide:smartphone" {...props} />;
 const BadgeCheck = (props: any) => <Icon icon="lucide:badge-check" {...props} />;
 const ZapIcon = (props: any) => <Icon icon="lucide:zap" {...props} />;
+const HeartHandshake = (props: any) => <Icon icon="lucide:heart-handshake" {...props} />;
+const Share2Icon = (props: any) => <Icon icon="lucide:share-2" {...props} />;
+const ShieldCheck = (props: any) => <Icon icon="lucide:shield-check" {...props} />;
+const TrendingUp = (props: any) => <Icon icon="lucide:trending-up" {...props} />;
 
 function LandingPageComponent() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -83,6 +87,16 @@ function LandingPageComponent() {
       garmentTab: "Sarees & Fashion",
       jewelryTab: "Jewelry & Ornaments",
       lifestyleTab: "Home & Handmade Goods",
+      supportBadge: "Made with Heart for Home Creators & Small Businesses",
+      supportHeading: "Your Hard Work Deserves to Look as Precious as It Truly Is",
+      supportDesc: "Behind every handpicked saree, boutique design, or handcrafted product lies countless hours of dedication. You shouldn't need a ₹50,000 studio budget to be taken seriously on WhatsApp & Instagram.",
+      pillar1Title: "Share with Unshakable Confidence",
+      pillar1Desc: "Never hesitate before sending a catalogue picture to a buyer. Share photos that look like a top-tier luxury brand shoot on WhatsApp statuses and Instagram feeds.",
+      pillar2Title: "Turn Casual Inquiries into Confirmed Orders",
+      pillar2Desc: "Clear model drapes, true-to-life fabric textures, and studio lighting remove buyer doubts, helping customers visualize the real product and order instantly.",
+      pillar3Title: "Zero Financial Burden — Your Profit Stays Yours",
+      pillar3Desc: "Big retail brands spend lakhs on professional models, cameras, and studios. Srushti AI brings that exact high-end power directly to your hands starting from ₹1.",
+      quoteText: "“You focus on creating and sourcing the best products. We'll make sure the world sees their true beauty.”",
       stepsTitle: "How It Works in 3 Simple Steps",
       step1: "1. Snap on Phone",
       step1Desc: "Take a flat-lay picture on your bed, table, or shop counter.",
@@ -110,6 +124,16 @@ function LandingPageComponent() {
       garmentTab: "చీరలు & ఫ్యాషన్",
       jewelryTab: "ఆభరణాలు & జ్యువెలరీ",
       lifestyleTab: "హోమ్ & చేతివృత్తులు",
+      supportBadge: "గృహ మహిళా పారిశ్రామికవేత్తలు & చిన్న వ్యాపారులకు తోడుగా",
+      supportHeading: "మీ కష్టానికి దక్కాల్సిన నిజమైన రాయల్ గుర్తింపు",
+      supportDesc: "మీరు ఎంతో శ్రద్ధతో ఎంపిక చేసిన చీరలు, డిజైన్ చేసిన దుస్తులు మరియు చేతితో తయారుచేసిన ప్రొడక్ట్స్ సాధారణ ఫోటోలతో వెలవెలబోకూడదు. భారీ స్టూడియో ఖర్చులు లేకుండానే మీ కస్టమర్లను ఆకట్టుకోండి.",
+      pillar1Title: "గర్వంగా వాట్సాప్ & ఇన్‌స్టాలో షేర్ చేయండి",
+      pillar1Desc: "కస్టమర్లకు వాట్సాప్‌లో ఫోటోలు పంపేటప్పుడు ఇక ఏమాత్రం సందేహం అక్కర్లేదు. పెద్ద బ్రాండ్లలా మెరిసే రాయల్ మోడల్ డ్రేపింగ్‌తో నమ్మకాన్ని పెంచండి.",
+      pillar2Title: "క్యాటలాగ్ చూడగానే వేగంగా ఆర్డర్లు",
+      pillar2Desc: "స్పష్టమైన మోడల్ లుక్, క్లాత్ టెక్స్చర్ మరియు రిచ్ స్టూడియో వెలుగుతో కస్టమర్లలో సందేహాలు తొలగి, ఎంక్వైరీలు వెంటనే ఆర్డర్లుగా మారతాయి.",
+      pillar3Title: "జీరో బడ్జెట్ భారం — మీ లాభం మీదే",
+      pillar3Desc: "పెద్ద బ్రాండ్లు లక్షలు ఖర్చు చేసే ఫోటోషూట్లను, గృహ పారిశ్రామికవేత్తలు కేవలం ₹1 నుంచే తమ చేతుల్లోకి తీసుకురావడమే సృష్టి ఏఐ లక్ష్యం.",
+      quoteText: "“మీరు అద్భుతమైన ఉత్పత్తులను సృష్టించడంపై దృష్టి పెట్టండి. వాటిని ప్రపంచానికి అత్యంత అందంగా చూపించే బాధ్యత మాది.”",
       stepsTitle: "3 సులభమైన దశల్లో ఫోటోషూట్",
       step1: "1. ఫోన్‌తో ఫోటో తీయండి",
       step1Desc: "మీ ఇంటి టేబుల్ లేదా బెడ్‌పై ఉన్న ప్రొడక్ట్ ఫోటో తీయండి.",
@@ -162,23 +186,12 @@ function LandingPageComponent() {
       </header>
 
       {/* --- HERO: PROBLEM & SOLUTION AGENDA --- */}
-      <section className="pt-4 pb-8 sm:pt-8 sm:pb-12 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-4 sm:space-y-6">
+      <section className="pt-2 pb-8 sm:pt-4 sm:pb-12 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-4 sm:space-y-6">
         
-        {/* Landscape Fashion Carousel Slider */}
+        {/* Landscape Fashion Carousel Slider with Stacked Text Overlay */}
         <div className="mb-2 sm:mb-4">
-          <HeroCarousel lang={lang} />
+          <HeroCarousel lang={lang} badge={t.badge} tagline={t.tagline} />
         </div>
-
-        {/* Eyebrow badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full nm-outset text-[10.5px] sm:text-xs font-black text-accent bg-accent/5 border border-accent/20">
-          <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
-          <span>{t.badge}</span>
-        </div>
-
-        {/* Main Headline */}
-        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[var(--text-emphasis)] leading-tight">
-          {t.tagline}
-        </h1>
 
         {/* Subtitle */}
         <p className="max-w-2xl mx-auto text-xs sm:text-base text-[var(--text-secondary)] font-medium leading-relaxed">
@@ -419,6 +432,104 @@ function LandingPageComponent() {
               <ArrowRight className="w-3.5 h-3.5 text-accent transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* --- MINIMALIST EMOTIONAL & PSYCHOLOGICAL SUPPORT SECTION --- */}
+      <section className="py-8 sm:py-14 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+        <div className="nm-outset rounded-3xl p-5 sm:p-8 bg-[var(--bg-primary)] border border-black/5 dark:border-white/5 space-y-6 sm:space-y-8">
+          
+          {/* Header */}
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full nm-outset text-[10.5px] sm:text-xs font-black text-rose-500 bg-rose-500/5 border border-rose-500/20">
+              <HeartHandshake className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+              <span>{t.supportBadge}</span>
+            </div>
+
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-[var(--text-emphasis)] tracking-tight leading-snug">
+              {t.supportHeading}
+            </h2>
+
+            <p className="text-xs sm:text-sm md:text-base text-[var(--text-secondary)] font-medium leading-relaxed">
+              {t.supportDesc}
+            </p>
+          </div>
+
+          {/* 3 Emotional Pillars */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            {/* Pillar 1: Social Media Confidence */}
+            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-10 h-10 rounded-2xl nm-outset bg-[var(--bg-primary)] flex items-center justify-center text-accent">
+                  <Share2Icon className="w-5 h-5 text-accent" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.pillar1Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                  {t.pillar1Desc}
+                </p>
+              </div>
+              <div className="pt-2">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent bg-accent/10 px-2 py-0.5 rounded-md border border-accent/20">
+                  <BadgeCheck className="w-3 h-3" />
+                  <span>WhatsApp & Instagram Ready</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Pillar 2: Conversion & Trust */}
+            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-10 h-10 rounded-2xl nm-outset bg-[var(--bg-primary)] flex items-center justify-center text-amber-500">
+                  <TrendingUp className="w-5 h-5 text-amber-500" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.pillar2Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                  {t.pillar2Desc}
+                </p>
+              </div>
+              <div className="pt-2">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                  <Sparkles className="w-3 h-3" />
+                  <span>High-Converting Catalogue</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Pillar 3: Zero Financial Burden */}
+            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
+              <div className="space-y-2.5">
+                <div className="w-10 h-10 rounded-2xl nm-outset bg-[var(--bg-primary)] flex items-center justify-center text-emerald-500">
+                  <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                  {t.pillar3Title}
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                  {t.pillar3Desc}
+                </p>
+              </div>
+              <div className="pt-2">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                  <Check className="w-3 h-3" />
+                  <span>Pay-as-you-go from ₹1</span>
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Emotional Quote / Reassurance Banner */}
+          <div className="nm-inset rounded-2xl p-4 sm:p-5 bg-black/5 dark:bg-black/20 text-center max-w-2xl mx-auto border border-black/5 dark:border-white/5">
+            <p className="text-xs sm:text-sm font-semibold italic text-[var(--text-emphasis)] leading-relaxed">
+              {t.quoteText}
+            </p>
+          </div>
+
         </div>
       </section>
 
