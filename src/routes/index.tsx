@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import { motion } from "motion/react";
 import { Logo } from "../components/Logo";
 import { HeroCarousel } from "../components/HeroCarousel";
+import { QuoteSlider } from "../components/QuoteSlider";
 import { Language } from "../types";
 
 export const Route = createRoute({
@@ -523,12 +524,8 @@ function LandingPageComponent() {
 
           </div>
 
-          {/* Emotional Quote / Reassurance Banner */}
-          <div className="nm-inset rounded-2xl p-4 sm:p-5 bg-black/5 dark:bg-black/20 text-center max-w-2xl mx-auto border border-black/5 dark:border-white/5">
-            <p className="text-xs sm:text-sm font-semibold italic text-[var(--text-emphasis)] leading-relaxed">
-              {t.quoteText}
-            </p>
-          </div>
+          {/* Emotional Quote Slider / Reassurance Banner */}
+          <QuoteSlider lang={lang} />
 
         </div>
       </section>

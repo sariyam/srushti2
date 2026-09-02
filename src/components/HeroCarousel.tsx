@@ -12,7 +12,6 @@ interface HeroCarouselProps {
 const ChevronLeft = (props: any) => <Icon icon="lucide:chevron-left" {...props} />;
 const ChevronRight = (props: any) => <Icon icon="lucide:chevron-right" {...props} />;
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
-const Camera = (props: any) => <Icon icon="lucide:camera" {...props} />;
 
 const SLIDES = [
   {
@@ -122,31 +121,8 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
             />
 
             {/* Scrim Overlay Gradient for Crystal-Clear Text Readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/70" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/60" />
             <div className="absolute inset-0 bg-black/20 backdrop-brightness-95" />
-
-            {/* Top Badges */}
-            <div className="absolute top-2.5 sm:top-4 left-3 sm:left-5 right-3 sm:right-5 flex items-center justify-between pointer-events-none z-20">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-[9px] sm:text-[11px] font-bold text-amber-300 shadow-md">
-                <Camera className="w-3 h-3 text-amber-400" />
-                <span>{lang === "en" ? current.tagEn : current.tagTe}</span>
-              </div>
-              <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-accent text-white text-[8px] sm:text-[10px] font-black uppercase tracking-wider shadow-md">
-                <Sparkles className="w-2.5 h-2.5" />
-                <span>Srushti Studio AI</span>
-              </div>
-            </div>
-
-            {/* Bottom Content / Slide Detail */}
-            <div className="absolute bottom-2.5 sm:bottom-4 left-3 sm:left-5 right-16 sm:right-24 text-left text-white pointer-events-none space-y-0.5 z-20">
-              <h3 className="text-xs sm:text-sm md:text-base font-extrabold tracking-tight drop-shadow-md text-neutral-200 truncate">
-                {lang === "en" ? current.titleEn : current.titleTe}
-              </h3>
-              <p className="text-[9px] sm:text-[11px] text-neutral-300 font-medium drop-shadow flex items-center gap-1.5 truncate">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                <span>{lang === "en" ? current.highlightEn : current.highlightTe}</span>
-              </p>
-            </div>
           </motion.div>
         </AnimatePresence>
 
