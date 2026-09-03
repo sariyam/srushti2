@@ -845,26 +845,11 @@ export const PRICING_DATA: PricingRow[] = [
     model: "OpenAI GPTImage-2 (gptimage-2) ✨",
     resolution: "1024x1024 | 1024x1536 | 1536x1024 (Low / Medium / High Quality)",
     price: "$0.005 - $0.211 per image"
-  },
-  {
-    model: "OpenAI Sora 2 (sora-2) 🎬",
-    resolution: "720p ($0.10/sec)",
-    price: "$0.10 per second"
-  },
-  {
-    model: "OpenAI Sora 2 Pro (sora-2-pro) 🎬",
-    resolution: "720p ($0.30) | 1024p ($0.50) | 1080p ($0.70)",
-    price: "$0.30 - $0.70 per second"
   }
 ];
 
 export const IMAGE_MODELS = [
   { id: "gptimage_2", provider: "openai", name: "OpenAI GPTImage-2 (gptimage-2)", price: 0.08, unit: "image", desc: "OpenAI next-gen image synthesis model with superior prompt adherence & studio photorealism" }
-];
-
-export const VIDEO_MODELS = [
-  { id: "sora_2", provider: "openai", name: "OpenAI Sora 2 (sora-2)", price: 0.10, unit: "second", desc: "OpenAI Sora 2 standard generation (720p: $0.10/sec)" },
-  { id: "sora_2_pro", provider: "openai", name: "OpenAI Sora 2 Pro (sora-2-pro)", price: 0.30, unit: "second", desc: "OpenAI Sora 2 Pro high-definition model (720p: $0.30, 1024p: $0.50, 1080p: $0.70/sec)" }
 ];
 
 export const IMAGE_RESOLUTIONS = [
@@ -934,7 +919,7 @@ export const getGptImage2SizeString = (resolutionId: string, aspectRatio: string
 export const getImagePrice = (
   modelId: string, 
   resolutionId: string, 
-  quality: string = "medium",
+  quality: string = "low",
   aspectRatio: string = "1:1"
 ): number => {
   // Disable 4K export resolution for 1:1 image orientation across all models
@@ -965,7 +950,7 @@ export const getImagePrice = (
       else dimKey = "1024x1024";
     }
 
-    const q = (quality === "low" || quality === "high") ? quality : "medium";
+    const q = (quality === "medium" || quality === "high") ? quality : "low";
     const base1kPrice = GPTIMAGE2_PRICING_MATRIX[q][dimKey];
     return base1kPrice * multiplier;
   }
@@ -975,13 +960,6 @@ export const getImagePrice = (
   const resObj = IMAGE_RESOLUTIONS.find(r => r.id === resolutionId) || IMAGE_RESOLUTIONS[1];
   return modelObj.price * resObj.multiplier;
 };
-
-export const VIDEO_RESOLUTIONS = [
-  { id: "720p", name: "720p HD (720x1280 / 1280x720)", multiplier: 1.0, labelEn: "720p HD (720x1280)", labelTe: "720p HD" },
-  { id: "1024p", name: "1024p HD (1024x1792 / 1792x1024)", multiplier: 1.0, labelEn: "1024p HD (1024x1792)", labelTe: "1024p HD" },
-  { id: "1080p", name: "1080p Full HD (1080x1920 / 1920x1080)", multiplier: 1.0, labelEn: "1080p Full HD (1080x1920)", labelTe: "1080p Full HD" },
-  { id: "4K", name: "4K Ultra HD (Cinema)", multiplier: 1.5, labelEn: "4K Ultra HD", labelTe: "4K అల్ట్రా HD" },
-];
 
 export function formatPrice(
   amountInUSD: number,

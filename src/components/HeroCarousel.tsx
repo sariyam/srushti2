@@ -9,8 +9,6 @@ interface HeroCarouselProps {
   tagline?: string;
 }
 
-const ChevronLeft = (props: any) => <Icon icon="lucide:chevron-left" {...props} />;
-const ChevronRight = (props: any) => <Icon icon="lucide:chevron-right" {...props} />;
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 
 const SLIDES = [
@@ -56,23 +54,19 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
 
   const defaultBadge =
     lang === "en"
-      ? "AI Product Photography for Local & Home Businesses"
-      : "స్థానిక & గృహ వ్యాపారాల కోసం ఏఐ ప్రొడక్ట్ ఫోటోగ్రఫీ";
+      ? "AI Photoshoot for Home Sellers & Small Shops"
+      : "హోమ్ బిజినెస్‌లు & చిన్న షాపుల కోసం ఏఐ ఫోటోషూట్";
 
   const defaultTagline =
     lang === "en"
       ? "Turn Phone Photos into Studio-Quality Model Shoots"
-      : "మొబైల్ ఫోటోలను రాయల్ స్టూడియో మోడల్ షూట్‌గా మార్చండి";
+      : "ఫోన్ ఫోటోలను అందమైన మోడల్ షూట్‌గా మార్చేయండి";
 
   const displayBadge = badge || defaultBadge;
   const displayTagline = tagline || defaultTagline;
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % SLIDES.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
   };
 
   useEffect(() => {
@@ -150,27 +144,8 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
           </motion.h1>
         </div>
 
-        {/* Carousel Navigation Arrows */}
-        <button
-          id="carousel-prev-btn"
-          onClick={prevSlide}
-          aria-label="Previous Slide"
-          className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all opacity-80 hover:opacity-100 hover:scale-110 active:scale-95 shadow-xl z-30"
-        >
-          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
-
-        <button
-          id="carousel-next-btn"
-          onClick={nextSlide}
-          aria-label="Next Slide"
-          className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all opacity-80 hover:opacity-100 hover:scale-110 active:scale-95 shadow-xl z-30"
-        >
-          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
-
         {/* Slide Indicators / Dots */}
-        <div className="absolute bottom-2.5 right-3 sm:bottom-3 sm:right-5 flex items-center gap-1.5 z-30">
+        <div className="absolute bottom-2.5 sm:bottom-3.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-30">
           {SLIDES.map((slide, idx) => (
             <button
               key={slide.id}
@@ -178,7 +153,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
               aria-label={`Go to slide ${idx + 1}`}
               className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                 currentIndex === idx
-                  ? "w-5 sm:w-7 bg-amber-400 shadow-sm"
+                  ? "w-6 sm:w-8 bg-amber-400 shadow-md"
                   : "w-1.5 sm:w-2 bg-white/40 hover:bg-white/70"
               }`}
             />

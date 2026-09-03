@@ -385,43 +385,6 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
             </div>
           </div>
 
-          {/* Render Quality Selector (if gptimage_2) */}
-          {selectedImageModel === "gptimage_2" && (
-            <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5">
-              <div className="flex items-center justify-between px-1">
-                <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center gap-1.5">
-                  <LuSparklesIcon className="w-3.5 h-3.5 text-accent animate-pulse shrink-0" />
-                  {lang === "en" ? "Render Quality" : "ఫోటో క్వాలిటీ"}
-                </label>
-                <span className="text-[9px] font-extrabold text-accent px-1.5 py-0.5 rounded-md bg-accent/10 border border-accent/20">
-                  {lang === "en" ? "Quality Level" : "క్వాలిటీ స్థాయి"}
-                </span>
-              </div>
-              <div className="grid grid-cols-3 gap-2 w-full pt-1">
-                {(["low", "medium", "high"] as const).map((qual) => {
-                  const isSelected = gptImageQuality === qual;
-                  const reqCredits = calculateRequiredCredits("gptimage_2", jewelryResolution, qual, jewelryAspectRatio, creditSettings);
-                  return (
-                    <button
-                      key={qual}
-                      type="button"
-                      id={`btn-jewelry-quality-${qual}`}
-                      onClick={() => setGptImageQuality?.(qual)}
-                      className={`py-2 px-2 rounded-xl flex flex-col items-center justify-center text-center transition-all w-full cursor-pointer ${
-                        isSelected
-                          ? "nm-inset-sm text-accent scale-[0.98] font-black"
-                          : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.01]"
-                      }`}
-                    >
-                      <span className="text-[11px] capitalize font-black">{qual}</span>
-                      <span className={`text-[9.5px] font-mono font-extrabold mt-0.5 ${isSelected ? "text-accent" : "text-[var(--text-primary)] opacity-70"}`}>{formatCredits(reqCredits)}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
           {/* Resolution Selection */}
           <div className="space-y-1.5 pt-2 border-t border-black/5 dark:border-white/5">
             <div className="flex items-center justify-between px-1">

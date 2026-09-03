@@ -129,11 +129,8 @@ export default function App() {
   const [selectedImageModel, setSelectedImageModel] = useState<string>(() => {
     return localStorage.getItem("srushti_selected_image_model") || "gptimage_2";
   });
-  const [selectedVideoModel, setSelectedVideoModel] = useState<string>(() => {
-    return localStorage.getItem("srushti_selected_video_model") || "sora_2";
-  });
   const [gptImageQuality, setGptImageQuality] = useState<"low" | "medium" | "high">(
-    () => (localStorage.getItem("srushti_gpt_image_quality") as "low" | "medium" | "high") || "medium"
+    () => (localStorage.getItem("srushti_gpt_image_quality") as "low" | "medium" | "high") || "low"
   );
 
   // Studio Wallet & Credits State
@@ -238,10 +235,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("srushti_gpt_image_quality", gptImageQuality);
   }, [gptImageQuality]);
-
-  useEffect(() => {
-    localStorage.setItem("srushti_selected_video_model", selectedVideoModel);
-  }, [selectedVideoModel]);
 
   // Provider Selection state (default to OpenAI)
   const [selectedProvider, setSelectedProvider] = useState<"all" | "openai" | "google">("openai");
@@ -473,9 +466,9 @@ export default function App() {
   const getEstimatedCost = () => {
     const resId = workspace === "garment" ? garmentResolution : jewelryResolution;
     const activeAspectRatio = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
-    const requiredCredits = calculateRequiredCredits(selectedImageModel, resId, gptImageQuality, activeAspectRatio);
+    const requiredCredits = calculateRequiredCredits(selectedImageModel, resId, "low", activeAspectRatio);
     const formatted = formatCredits(requiredCredits);
-    return `${formatted} (GPTImage-2 @ ${gptImageQuality.toUpperCase()} Quality)`;
+    return `${formatted} (GPTImage-2 @ Low Quality)`;
   };
 
   // Creative Photo Generation Trigger
@@ -590,16 +583,14 @@ export default function App() {
       const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
       const sizeString = getGptImage2SizeString(activeRes, activeAspect);
 
-      const openAiQuality = gptImageQuality === "low" || gptImageQuality === "medium" || gptImageQuality === "auto"
-        ? gptImageQuality 
-        : "high";
+      const openAiQuality = "low";
       const openAiEndpoint = "https://api.openai.com/v1/images/edits";
 
       const formData = new FormData();
       formData.append("model", "gpt-image-2");
       formData.append("prompt", promptWithFace);
       formData.append("size", sizeString);
-      formData.append("quality", openAiQuality);
+      formData.append("quality", "low");
       formData.append("n", "1");
 
       // Helper to convert data URL or http URL to Blob
@@ -709,8 +700,8 @@ export default function App() {
             currency: currency,
             title: workspace === "garment" ? "Garment Model Shoot (AI Photo)" : "Jewelry Studio Shoot (AI Photo)",
             titleTe: workspace === "garment" ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
-            description: `GPTImage-2 (${gptImageQuality.toUpperCase()}) • ${activeRes.toUpperCase()} • ${activeAspect}`,
-            descriptionTe: `GPTImage-2 (${gptImageQuality.toUpperCase()}) • ${activeRes.toUpperCase()} • ${activeAspect}`,
+            description: `GPTImage-2 (Low) • ${activeRes.toUpperCase()} • ${activeAspect}`,
+            descriptionTe: `GPTImage-2 (Low) • ${activeRes.toUpperCase()} • ${activeAspect}`,
             date: new Date(now).toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
               month: "short",
               day: "numeric",
@@ -791,8 +782,6 @@ export default function App() {
         setSelectedImageModel={setSelectedImageModel}
         gptImageQuality={gptImageQuality}
         setGptImageQuality={setGptImageQuality}
-        selectedVideoModel={selectedVideoModel}
-        setSelectedVideoModel={setSelectedVideoModel}
         currency={currency}
         setCurrency={setCurrency}
         usdToInrRate={usdToInrRate}

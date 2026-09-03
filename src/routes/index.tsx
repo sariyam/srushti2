@@ -73,76 +73,76 @@ function LandingPageComponent() {
     en: {
       badge: "AI Product Photography for Local & Home Businesses",
       tagline: "Turn Phone Photos into Studio-Quality Model Shoots",
-      priceOffer: "Get your image starting from ₹1 — No subscriptions needed, just recharge & generate",
-      subtext: "Eliminate ₹30,000+ studio and model fees. Upload a casual phone snapshot of your sarees, boutique apparel, jewelry, or handmade products — Srushti AI renders them on authentic models in royal studio lighting in seconds.",
+      priceOffer: "Photos starting at just ₹1 — No monthly plans, just recharge whenever you need",
+      subtext: "Why spend ₹30,000 on studio lights and models? Take a simple phone photo of your sarees, boutique dresses, jewelry, or handmade items at home. Srushti AI puts them on real models in stunning studio lighting in seconds.",
       ctaPrimary: "Launch Srushti",
       ctaPricing: "Launch Srushti",
-      stat1Val: "Starting ₹1",
-      stat1Lbl: "Pay per image",
-      stat2Val: "Zero",
-      stat2Lbl: "Subscriptions / Lock-ins",
+      stat1Val: "From ₹1",
+      stat1Lbl: "Per photo",
+      stat2Val: "Zero Plans",
+      stat2Lbl: "No monthly fees or lock-ins",
       stat3Val: "30 Seconds",
-      stat3Lbl: "Ready for WhatsApp & Insta",
-      showcaseHeading: "The Problem & The Instant Solution",
-      showcaseDesc: "See how everyday flat-lay phone shots turn directly into luxury commercial catalogues.",
-      garmentTab: "Sarees & Fashion",
+      stat3Lbl: "Ready to share on WhatsApp & Insta",
+      showcaseHeading: "Simple Phone Pic vs Studio Model Shoot",
+      showcaseDesc: "See how a quick photo taken on your bed or table turns directly into a showroom catalogue pic.",
+      garmentTab: "Sarees & Dresses",
       jewelryTab: "Jewelry & Ornaments",
-      lifestyleTab: "Home & Handmade Goods",
-      supportBadge: "Made with Heart for Home Creators & Small Businesses",
-      supportHeading: "Your Hard Work Deserves to Look as Precious as It Truly Is",
-      supportDesc: "Behind every handpicked saree, boutique design, or handcrafted product lies countless hours of dedication. You shouldn't need a ₹50,000 studio budget to be taken seriously on WhatsApp & Instagram.",
-      pillar1Title: "Share with Unshakable Confidence",
-      pillar1Desc: "Never hesitate before sending a catalogue picture to a buyer. Share photos that look like a top-tier luxury brand shoot on WhatsApp statuses and Instagram feeds.",
-      pillar2Title: "Turn Casual Inquiries into Confirmed Orders",
-      pillar2Desc: "Clear model drapes, true-to-life fabric textures, and studio lighting remove buyer doubts, helping customers visualize the real product and order instantly.",
-      pillar3Title: "Zero Financial Burden — Your Profit Stays Yours",
-      pillar3Desc: "Big retail brands spend lakhs on professional models, cameras, and studios. Srushti AI brings that exact high-end power directly to your hands starting from ₹1.",
-      quoteText: "“You focus on creating and sourcing the best products. We'll make sure the world sees their true beauty.”",
-      stepsTitle: "How It Works in 3 Simple Steps",
+      lifestyleTab: "Handmade & Home Items",
+      supportBadge: "Made with love for Home Sellers & Small Shops",
+      supportHeading: "Your hard work shouldn't look like a simple phone snap",
+      supportDesc: "You put your heart into picking the prettiest sarees, designing dresses, or handcrafting items. You don't need a ₹50,000 studio budget to get respect and orders on WhatsApp and Instagram.",
+      pillar1Title: "Share on WhatsApp & Insta with Full Confidence",
+      pillar1Desc: "No more feeling shy before sending pics to customers. Post photos that look just like top designer brand shoots on your WhatsApp status and Instagram reels.",
+      pillar2Title: "Turn 'Price Please?' into Confirmed Orders",
+      pillar2Desc: "When customers see how the saree drapes on a model or how jewelry shines in studio light, their doubts vanish and they order immediately.",
+      pillar3Title: "Zero Studio Costs — Your Profit Stays Yours",
+      pillar3Desc: "Big showrooms spend lakhs on models and cameras. Srushti AI gives you that exact royal look right on your phone starting from ₹1.",
+      quoteText: "“You focus on bringing the best products. We'll make sure they look stunning to every buyer.”",
+      stepsTitle: "Just 3 Easy Steps",
       step1: "1. Snap on Phone",
-      step1Desc: "Take a flat-lay picture on your bed, table, or shop counter.",
-      step2: "2. Pick Model & Scene",
-      step2Desc: "Select Indian models, velvet display stands, or sunlit editorial setups.",
-      step3: "3. Download High-Res Visual",
-      step3Desc: "Get WhatsApp & Instagram catalogue-ready photos that convert orders.",
-      footerText: "Srushti AI — Empowering local boutiques, home entrepreneurs, and artisans with instant studio photography.",
+      step1Desc: "Take a simple photo on your bed, table, or shop counter.",
+      step2: "2. Pick Your Look",
+      step2Desc: "Choose Indian models, rich velvet stands, or neat studio backgrounds.",
+      step3: "3. Download & Share",
+      step3Desc: "Get crisp HD photos ready to share on WhatsApp and Instagram.",
+      footerText: "Srushti AI — Helping home sellers and local shops take stunning model photos in seconds.",
     },
     te: {
-      badge: "స్థానిక & గృహ వ్యాపారాల కోసం ఏఐ ప్రొడక్ట్ ఫోటోగ్రఫీ",
-      tagline: "మొబైల్ ఫోటోలను రాయల్ స్టూడియో మోడల్ షూట్‌గా మార్చండి",
-      priceOffer: "రూ. 1/- నుంచే మీ ప్రొడక్ట్ ఇమేజ్ — ఎటువంటి సబ్‌స్క్రిప్షన్ అవసరం లేదు, రీఛార్జ్ చేసి వెంటనే జనరేట్ చేసుకోండి",
-      subtext: "మోడల్స్ మరియు ఫోటోగ్రాఫర్లకు వేలకు వేలు ఖర్చు చేయాల్సిన పనిలేదు. మీ చీరలు, బొటిక్ దుస్తులు మరియు ఆభరణాల సాధారణ ఫోన్ ఫోటోలను క్షణాల్లో అద్భుతమైన స్టూడియో ఫోటోషూట్‌గా మార్చండి.",
+      badge: "హోమ్ బిజినెస్‌లు & చిన్న షాపుల కోసం ఏఐ ఫోటోషూట్",
+      tagline: "ఫోన్ ఫోటోలను అందమైన మోడల్ షూట్‌గా మార్చేయండి",
+      priceOffer: "రూ. 1/- నుంచే ఫోటోషూట్ — ఎలాంటి నెలవారీ ఫీజులు లేవు, కావలసినప్పుడు రీఛార్జ్ చేసుకోండి",
+      subtext: "స్టూడియోలకు, మోడల్స్‌కి వేలకు వేలు ఖర్చు పెట్టాల్సిన పనేలేదు. ఇంట్లో బెడ్‌పై లేదా టేబుల్‌పై తీసిన చీరలు, డ్రెస్సులు, జ్యువెలరీ ఫోటోలను సృష్టి ఏఐ క్షణాల్లో రిచ్ మోడల్ ఫోటోలుగా మార్చేస్తుంది.",
       ctaPrimary: "Launch Srushti",
       ctaPricing: "Launch Srushti",
       stat1Val: "రూ. 1/- నుంచే",
-      stat1Lbl: "ప్రతి ఫోటోకు ఖర్చు",
-      stat2Val: "జీరో",
-      stat2Lbl: "నెలవారీ చందా ఏదీ లేదు",
+      stat1Lbl: "ఒక్కో ఫోటోకి",
+      stat2Val: "జీరో ఫీజులు",
+      stat2Lbl: "నెలవారీ కట్లు ఏమీ ఉండవు",
       stat3Val: "30 సెకన్లు",
-      stat3Lbl: "వాట్సాప్ & ఇన్‌స్టా రెడీ",
-      showcaseHeading: "సమస్య & తక్షణ పరిష్కారం",
-      showcaseDesc: "సాధారణ మొబైల్ ఫోటో క్షణాల్లో ఎలా లగ్జరీ స్టూడియో ఫోటోగా మారుతుందో చూడండి.",
-      garmentTab: "చీరలు & ఫ్యాషన్",
+      stat3Lbl: "వాట్సాప్ & ఇన్‌స్టాలో పోస్ట్ చేయవచ్చు",
+      showcaseHeading: "సాధారణ ఫోన్ ఫోటో vs స్టూడియో మోడల్ లుక్",
+      showcaseDesc: "ఇంట్లో తీసిన ఫోటో క్షణాల్లో పెద్ద బ్రాండ్ల క్యాటలాగ్‌లా ఎలా మారుతుందో మీరే చూడండి.",
+      garmentTab: "చీరలు & డ్రెస్సులు",
       jewelryTab: "ఆభరణాలు & జ్యువెలరీ",
-      lifestyleTab: "హోమ్ & చేతివృత్తులు",
-      supportBadge: "గృహ మహిళా పారిశ్రామికవేత్తలు & చిన్న వ్యాపారులకు తోడుగా",
-      supportHeading: "మీ కష్టానికి దక్కాల్సిన నిజమైన రాయల్ గుర్తింపు",
-      supportDesc: "మీరు ఎంతో శ్రద్ధతో ఎంపిక చేసిన చీరలు, డిజైన్ చేసిన దుస్తులు మరియు చేతితో తయారుచేసిన ప్రొడక్ట్స్ సాధారణ ఫోటోలతో వెలవెలబోకూడదు. భారీ స్టూడియో ఖర్చులు లేకుండానే మీ కస్టమర్లను ఆకట్టుకోండి.",
-      pillar1Title: "గర్వంగా వాట్సాప్ & ఇన్‌స్టాలో షేర్ చేయండి",
-      pillar1Desc: "కస్టమర్లకు వాట్సాప్‌లో ఫోటోలు పంపేటప్పుడు ఇక ఏమాత్రం సందేహం అక్కర్లేదు. పెద్ద బ్రాండ్లలా మెరిసే రాయల్ మోడల్ డ్రేపింగ్‌తో నమ్మకాన్ని పెంచండి.",
-      pillar2Title: "క్యాటలాగ్ చూడగానే వేగంగా ఆర్డర్లు",
-      pillar2Desc: "స్పష్టమైన మోడల్ లుక్, క్లాత్ టెక్స్చర్ మరియు రిచ్ స్టూడియో వెలుగుతో కస్టమర్లలో సందేహాలు తొలగి, ఎంక్వైరీలు వెంటనే ఆర్డర్లుగా మారతాయి.",
-      pillar3Title: "జీరో బడ్జెట్ భారం — మీ లాభం మీదే",
-      pillar3Desc: "పెద్ద బ్రాండ్లు లక్షలు ఖర్చు చేసే ఫోటోషూట్లను, గృహ పారిశ్రామికవేత్తలు కేవలం ₹1 నుంచే తమ చేతుల్లోకి తీసుకురావడమే సృష్టి ఏఐ లక్ష్యం.",
-      quoteText: "“మీరు అద్భుతమైన ఉత్పత్తులను సృష్టించడంపై దృష్టి పెట్టండి. వాటిని ప్రపంచానికి అత్యంత అందంగా చూపించే బాధ్యత మాది.”",
-      stepsTitle: "3 సులభమైన దశల్లో ఫోటోషూట్",
+      lifestyleTab: "చేతివస్తువులు & హోమ్ ప్రొడక్ట్స్",
+      supportBadge: "ఇంటి నుంచి బిజినెస్ చేసే వాళ్లకు & చిన్న షాపులకు పూర్తి తోడుగా",
+      supportHeading: "మీ కష్టపడి తెచ్చిన వస్తువులు సాధారణ ఫోటోలతో వెలవెలబోకూడదు",
+      supportDesc: "మీరు ఎంతో ఇష్టపడి తెచ్చిన చీరలు, కుట్టిన దుస్తులు, చేతితో చేసిన వస్తువులు కస్టమర్లకి చూడగానే నచ్చాలి. వాట్సాప్, ఇన్‌స్టాలో పెద్ద బ్రాండ్‌లా కనిపించడానికి భారీ స్టూడియో ఖర్చులు అక్కర్లేదు.",
+      pillar1Title: "వాట్సాప్, ఇన్‌స్టాలో గర్వంగా షేర్ చేయండి",
+      pillar1Desc: "కస్టమర్లకి ఫోటోలు పంపేటప్పుడు ఇక ఏమాత్రం సందేహం అక్కర్లేదు. పెద్ద పెద్ద షోరూమ్‌ల లాంటి మోడల్ డ్రేపింగ్ ఫోటోలతో మీ వాట్సాప్ స్టేటస్ నింపేయండి.",
+      pillar2Title: "చూడగానే నచ్చి వెంటనే ఆర్డర్లు ఇస్తారు",
+      pillar2Desc: "చీర కట్టుకుంటే ఎలా ఉంటుంది, జ్యువెలరీ ఎలా మెరుస్తుందో స్పష్టంగా కనిపించడం వల్ల కస్టమర్ల అనుమానాలు పోయి వెంటనే కొంటారు.",
+      pillar3Title: "స్టూడియో ఖర్చు సున్నా — మీ లాభం మీ జేబులోనే",
+      pillar3Desc: "పెద్ద కంపెనీలు మోడల్స్, కెమెరాల కోసం లక్షలు ఖర్చు చేస్తాయి. సృష్టి ఏఐతో ఆ లుక్ మీకు కేవలం ₹1 నుంచే మీ చేతుల్లోకి వస్తుంది.",
+      quoteText: "“మీరు మంచి ప్రొడక్ట్స్ ఎంపిక చేయడంపై దృష్టి పెట్టండి. వాటిని కస్టమర్లకు ఎంత అందంగా చూపాలో ఆ బాధ్యత మాది.”",
+      stepsTitle: "కేవలం 3 చిన్న స్టెప్పులు",
       step1: "1. ఫోన్‌తో ఫోటో తీయండి",
-      step1Desc: "మీ ఇంటి టేబుల్ లేదా బెడ్‌పై ఉన్న ప్రొడక్ట్ ఫోటో తీయండి.",
-      step2: "2. మోడల్ & స్టైల్ ఎంచుకోండి",
-      step2Desc: "భారతీయ మోడల్స్ లేదా లగ్జరీ వెల్వెట్ స్టాండ్స్‌ను ఎంపిక చేయండి.",
-      step3: "3. హై-రెజల్యూషన్ ఫోటో డౌన్‌లోడ్ చేయండి",
-      step3Desc: "వాట్సాప్ క్యాటలాగ్ మరియు ఇన్‌స్టాగ్రామ్ కోసం వెంటనే వాడుకోండి.",
-      footerText: "సృష్టి ఏఐ — స్థానిక మరియు గృహ వ్యాపారుల కోసం సులభమైన స్టూడియో ఫోటోగ్రఫీ.",
+      step1Desc: "మీ ఇంట్లోని టేబుల్ లేదా బెడ్‌పై పెట్టి ఫోన్‌తో ఒక ఫోటో తీయండి.",
+      step2: "2. మోడల్ లేదా బ్యాక్‌గ్రౌండ్ ఎంచుకోండి",
+      step2Desc: "ఇండియన్ మోడల్స్ లేదా రిచ్ వెల్వెట్ స్టాండ్స్‌ని సెలెక్ట్ చేసుకోండి.",
+      step3: "3. డౌన్‌లోడ్ చేసి షేర్ చేసుకోండి",
+      step3Desc: "సూపర్ క్లారిటీ ఫోటోను డౌన్‌లోడ్ చేసి వాట్సాప్, ఇన్‌స్టాలో పోస్ట్ చేయండి.",
+      footerText: "సృష్టి ఏఐ — హోమ్ బిజినెస్‌లు మరియు లోకల్ షాపుల కోసం సులభమైన ఏఐ ఫోటోషూట్.",
     }
   };
 
@@ -523,11 +523,12 @@ function LandingPageComponent() {
             </div>
 
           </div>
-
-          {/* Emotional Quote Slider / Reassurance Banner */}
-          <QuoteSlider lang={lang} />
-
         </div>
+      </section>
+
+      {/* --- STANDALONE EMOTIONAL QUOTES CARD --- */}
+      <section className="py-4 sm:py-6 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+        <QuoteSlider lang={lang} />
       </section>
 
       {/* --- 3-STEP WORKFLOW --- */}
@@ -569,17 +570,17 @@ function LandingPageComponent() {
       <section className="py-8 sm:py-12 px-4 sm:px-6 max-w-3xl mx-auto w-full text-center space-y-4">
         <div className="nm-outset rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-accent/5 via-[var(--bg-primary)] to-emerald-500/5 border border-accent/30 space-y-4">
           <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-accent/10 text-accent border border-accent/20 inline-block">
-            {lang === "en" ? "Simple Pay-As-You-Go" : "సులభమైన క్రెడిట్ రీఛార్జ్"}
+            {lang === "en" ? "Simple UPI Recharge" : "సులభమైన యూపీఐ పేమెంట్"}
           </span>
 
           <h2 className="text-xl sm:text-3xl font-black text-[var(--text-emphasis)]">
-            {lang === "en" ? "Get Your First Image Starting from ₹1" : "రూ. 1/- నుంచే మీ ప్రొడక్ట్ ఫోటోషూట్"}
+            {lang === "en" ? "Start Your First Photoshoot from Just ₹1" : "కేవలం రూ. 1/- నుంచే మీ ఫోటోషూట్ మొదలుపెట్టండి"}
           </h2>
 
           <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md mx-auto font-medium leading-relaxed">
             {lang === "en"
-              ? "Zero monthly subscription fees. Recharge your wallet anytime with UPI (Google Pay, PhonePe) and generate high-resolution shoots on demand."
-              : "ఎటువంటి నెలవారీ చందాలు లేవు. యూపీఐతో రీఛార్జ్ చేసుకోండి మరియు ఎప్పుడైనా హై-క్వాలిటీ స్టూడియో ఫోటోలు జనరేట్ చేయండి."}
+              ? "No monthly plans or hidden charges. Just add a few rupees using Google Pay or PhonePe whenever you get new stock."
+              : "నెలనెలా కట్టాల్సిన పనేలేదు. కొత్త స్టాక్ వచ్చినప్పుడు గూగుల్ పే లేదా ఫోన్‌పేతో చిన్న రీఛార్జ్ చేసుకొని వెంటనే ఫోటోలు రెడీ చేసుకోండి."}
           </p>
 
           <div className="pt-2">

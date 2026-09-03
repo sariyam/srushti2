@@ -14,34 +14,34 @@ const QUOTES = [
   {
     id: "quote-1",
     en: {
-      text: "“You focus on creating and sourcing the best products. We'll make sure the world sees their true beauty.”",
-      author: "Srushti Promise to Creators & Home Businesses",
+      text: "“You pick and craft wonderful products with care. We make sure they look like top showroom shoots so customers fall in love at first glance!”",
+      author: "Supporting Home Sellers & Resellers",
     },
     te: {
-      text: "“మీరు అద్భుతమైన ఉత్పత్తులను సృష్టించడంపై దృష్టి పెట్టండి. వాటిని ప్రపంచానికి అత్యంత అందంగా చూపించే బాధ్యత మాది.”",
-      author: "క్రియేటర్లు & గృహ వ్యాపారులకు సృష్టి వాగ్దానం",
+      text: "“మీరు ఎంతో ఇష్టపడి తెచ్చిన వస్తువులు సాధారణ ఫోటోలతో వెలవెలబోకూడదు. కస్టమర్లు చూడగానే 'వావ్ చాలా బాగుంది' అని మెచ్చేలా చేద్దాం!”",
+      author: "హోమ్ బిజినెస్ మిత్రులకు ఎల్లప్పుడూ తోడుగా",
     },
   },
   {
     id: "quote-2",
     en: {
-      text: "“Big budgets don't define great businesses — your passion, craft, and quality do. Every piece you create deserves royal presentation.”",
-      author: "Empowering Local Boutiques & Artisans",
+      text: "“You don't need lakhs in the bank or costly studio lights. Your hard work deserves to shine just like big fashion brands.”",
+      author: "For Local Boutiques & Crafters",
     },
     te: {
-      text: "“భారీ బడ్జెట్లతో వ్యాపార ఘనత రాదు — మీ శ్రమ, ప్రతిభ మరియు నాణ్యతే మీ బలం. మీరు రూపొందించే ప్రతి వస్తువుకు రాయల్ ప్రెజెంటేషన్ దక్కాలి.”",
-      author: "స్థానిక బోటిక్‌లు & కళాకారులకు నిజమైన తోడ్పాటు",
+      text: "“స్టూడియోలకు వేలకు వేలు ఖర్చు పెట్టే పనేలేదు. మీ కష్టానికి తగ్గ అందమైన మోడల్ లుక్ ఇప్పుడు మీ చేతిలోని ఫోన్ లోనే!”",
+      author: "స్థానిక బోటిక్‌లు & షాపుల కోసం",
     },
   },
   {
     id: "quote-3",
     en: {
-      text: "“Turn casual inquiries into lifelong loyal customers with images that build instant trust on WhatsApp & Instagram.”",
-      author: "Building Buyer Trust & Growing Orders",
+      text: "“No more hesitation before sharing photos on WhatsApp or Instagram. Post with total pride, get instant trust, and close orders fast!”",
+      author: "More Trust • Happy Customers • Instant Orders",
     },
     te: {
-      text: "“కస్టమర్లకు మొదటి చూపులోనే నమ్మకాన్ని కలిగించి, మీ కష్టాన్ని గర్వంగా చాటిచెప్పే ఫోటోలతో వాట్సాప్ & ఇన్‌స్టాలో ఆర్డర్లు పెంచుకోండి.”",
-      author: "నమ్మకమైన వ్యాపారం & ఆర్డర్ల అభివృద్ధి",
+      text: "“వాట్సాప్ స్టేటస్ లేదా ఇన్‌స్టాలో గర్వంగా పోస్ట్ చేయండి. ఫోటో చూసి కస్టమర్లు వెంటనే నమ్మకంతో ఆర్డర్ పెట్టేస్తారు.”",
+      author: "కస్టమర్ల నమ్మకం & వేగవంతమైన ఆర్డర్లు",
     },
   },
 ];
@@ -72,19 +72,19 @@ export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
   return (
     <div
       id="quote-banner-slider"
-      className="relative nm-inset rounded-2xl p-4 sm:p-6 bg-black/5 dark:bg-black/20 text-center max-w-3xl mx-auto border border-black/5 dark:border-white/5 select-none overflow-hidden transition-all"
+      className="relative nm-outset rounded-3xl p-6 sm:p-8 bg-[var(--bg-primary)] text-center max-w-4xl mx-auto border border-black/5 dark:border-white/5 select-none overflow-hidden transition-all shadow-md"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Subtle Quote Background Glyph */}
-      <div className="absolute top-2 left-3 sm:left-5 text-accent/15 dark:text-accent/10 pointer-events-none">
-        <QuoteIcon className="w-8 h-8 sm:w-10 sm:h-10 rotate-180" />
+      <div className="absolute top-3 left-4 sm:left-6 text-accent/15 dark:text-accent/10 pointer-events-none">
+        <QuoteIcon className="w-10 h-10 sm:w-12 sm:h-12 rotate-180" />
       </div>
-      <div className="absolute bottom-2 right-3 sm:right-5 text-accent/15 dark:text-accent/10 pointer-events-none">
-        <QuoteIcon className="w-8 h-8 sm:w-10 sm:h-10" />
+      <div className="absolute bottom-3 right-4 sm:right-6 text-accent/15 dark:text-accent/10 pointer-events-none">
+        <QuoteIcon className="w-10 h-10 sm:w-12 sm:h-12" />
       </div>
 
-      <div className="relative min-h-[90px] sm:min-h-[80px] flex items-center justify-center">
+      <div className="relative min-h-[95px] sm:min-h-[85px] flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={QUOTES[currentIndex].id + "-" + lang}
@@ -92,13 +92,13 @@ export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ duration: 0.45, ease: "easeInOut" }}
-            className="space-y-2 px-6 sm:px-10"
+            className="space-y-2.5 px-6 sm:px-12"
           >
-            <p className="text-xs sm:text-sm md:text-base font-semibold italic text-[var(--text-emphasis)] leading-relaxed tracking-wide">
+            <p className="text-sm sm:text-base md:text-lg font-semibold italic text-[var(--text-emphasis)] leading-relaxed tracking-wide">
               {currentQuote.text}
             </p>
-            <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-accent tracking-wider uppercase">
-              <Sparkles className="w-2.5 h-2.5 text-accent animate-pulse" />
+            <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-accent tracking-wider uppercase">
+              <Sparkles className="w-3 h-3 text-accent animate-pulse" />
               <span>{currentQuote.author}</span>
             </div>
           </motion.div>
@@ -106,7 +106,7 @@ export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
       </div>
 
       {/* Slide Navigation Dots */}
-      <div className="flex items-center justify-center gap-1.5 mt-3 pt-1">
+      <div className="flex items-center justify-center gap-1.5 mt-4 pt-1">
         {QUOTES.map((quote, idx) => (
           <button
             key={quote.id}
@@ -114,7 +114,7 @@ export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
             aria-label={`Go to quote ${idx + 1}`}
             className={`h-1.5 rounded-full transition-all duration-300 ${
               currentIndex === idx
-                ? "w-6 bg-accent shadow-sm"
+                ? "w-6 sm:w-8 bg-accent shadow-sm"
                 : "w-2 bg-black/20 dark:bg-white/20 hover:bg-accent/50"
             }`}
           />

@@ -24,7 +24,6 @@ export interface CreditSettings {
   costPerImageGenLow: number;   // Credits per Low quality image (e.g. 1 Credit)
   costPerImageGenMed: number;   // Credits per Medium quality image (e.g. 5 Credits)
   costPerImageGenHigh: number;  // Credits per High quality image (e.g. 20 Credits)
-  costPerVideoSec: number;      // Credits per video second (e.g. 10 Credits)
   profitMarginPercent: number;  // Studio profit markup on raw API costs (%) (e.g. 25%)
   pricingMode: "flat_credits" | "cost_plus_margin"; // Flat credits or Cost + Profit Margin
   autoCreditDeduction: boolean; // Deduct credits automatically on generation
@@ -37,7 +36,6 @@ export const DEFAULT_CREDIT_SETTINGS: CreditSettings = {
   costPerImageGenLow: 1,      // 1 Credit
   costPerImageGenMed: 5,      // 5 Credits
   costPerImageGenHigh: 18,    // 18 Credits
-  costPerVideoSec: 10,        // 10 Credits / sec
   profitMarginPercent: 30,    // 30% Studio profit margin markup
   pricingMode: "cost_plus_margin", // Active Studio Profit Margin by default
   autoCreditDeduction: true,
@@ -154,7 +152,7 @@ export function clearAllWalletCache(): void {
 export function calculateRequiredCredits(
   modelId: string,
   resolutionId: string,
-  quality: "low" | "medium" | "high" | string = "medium",
+  quality: "low" | "medium" | "high" | string = "low",
   aspectRatio: string = "1:1",
   settings: CreditSettings = getCreditSettings()
 ): number {
@@ -162,8 +160,8 @@ export function calculateRequiredCredits(
     return 0;
   }
 
-  let baseCredits = settings.costPerImageGenMed;
-  if (quality === "low") baseCredits = settings.costPerImageGenLow;
+  let baseCredits = settings.costPerImageGenLow;
+  if (quality === "medium") baseCredits = settings.costPerImageGenMed;
   if (quality === "high") baseCredits = settings.costPerImageGenHigh;
 
   let multiplier = 1.0;
