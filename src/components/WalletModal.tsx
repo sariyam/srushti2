@@ -9,7 +9,7 @@ interface WalletModalProps {
   onClose: () => void;
   currency: "USD" | "INR";
   walletBalance: number; // in Credits
-  transactions: WalletTransaction[];
+  transactions?: WalletTransaction[];
   onRecharge: (amount: number, bonus: number, note: string) => void;
   onClearHistory?: () => void;
   onResetWalletCache?: () => void;
@@ -17,62 +17,18 @@ interface WalletModalProps {
   usdToInrRate?: number;
 }
 
-export type DateRangeFilter = "7d" | "30d" | "90d" | "180d" | "365d" | "all";
-
-interface DateFilterOption {
-  id: DateRangeFilter;
-  labelEn: string;
-  labelTe: string;
-  shortLabelEn: string;
-  shortLabelTe: string;
-  days: number | null;
-}
-
-const DATE_FILTER_OPTIONS: DateFilterOption[] = [
-  { id: "7d", labelEn: "Last 7 Days", labelTe: "గత 7 రోజులు", shortLabelEn: "7 Days", shortLabelTe: "7 రోజులు", days: 7 },
-  { id: "30d", labelEn: "30 Days", labelTe: "30 రోజులు", shortLabelEn: "30 Days", shortLabelTe: "30 రోజులు", days: 30 },
-  { id: "90d", labelEn: "90 Days", labelTe: "90 రోజులు", shortLabelEn: "90 Days", shortLabelTe: "90 రోజులు", days: 90 },
-  { id: "180d", labelEn: "180 Days", labelTe: "180 రోజులు", shortLabelEn: "180 Days", shortLabelTe: "180 రోజులు", days: 180 },
-  { id: "365d", labelEn: "365 Days", labelTe: "365 రోజులు", shortLabelEn: "365 Days", shortLabelTe: "365 రోజులు", days: 365 },
-  { id: "all", labelEn: "All", labelTe: "అన్నీ", shortLabelEn: "All", shortLabelTe: "అన్నీ", days: null },
-];
-
-function getTxTimestamp(tx: WalletTransaction): number {
-  if (tx.timestamp && typeof tx.timestamp === "number" && !isNaN(tx.timestamp)) {
-    return tx.timestamp;
-  }
-  if (tx.id && typeof tx.id === "string" && tx.id.startsWith("tx-")) {
-    const extracted = parseInt(tx.id.replace("tx-", ""), 10);
-    if (!isNaN(extracted) && extracted > 1000000000000) {
-      return extracted;
-    }
-  }
-  if (tx.date && tx.date !== "Just now") {
-    const parsed = new Date(tx.date).getTime();
-    if (!isNaN(parsed) && parsed > 0) {
-      return parsed;
-    }
-  }
-  return Date.now();
-}
-
 export const WalletModal: React.FC<WalletModalProps> = ({
   isOpen,
   onClose,
   currency,
   walletBalance,
-  transactions,
   onRecharge,
-  onClearHistory,
   onResetWalletCache,
   lang,
   usdToInrRate = 83.5,
 }) => {
   const isEn = lang === "en";
   const creditSettings = getCreditSettings();
-  const [historyTab, setHistoryTab] = useState<"all" | "debit" | "credit">("all");
-  const [dateFilter, setDateFilter] = useState<DateRangeFilter>("7d");
-  const [showClearConfirm, setShowClearConfirm] = useState<boolean>(false);
   const [showResetWalletConfirm, setShowResetWalletConfirm] = useState<boolean>(false);
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number>(
     currency === "INR" ? 500 : 25
@@ -119,38 +75,6 @@ export const WalletModal: React.FC<WalletModalProps> = ({
     : 0;
 
   const totalCreditsToAdd = baseCredits + calculatedBonus;
-
-  // Filter transactions according to active tab and date range filter
-  const selectedDateOption = DATE_FILTER_OPTIONS.find((opt) => opt.id === dateFilter);
-  const now = Date.now();
-
-  const filteredTransactions = transactions.filter((tx) => {
-    if (historyTab !== "all" && tx.type !== historyTab) return false;
-
-    if (selectedDateOption && selectedDateOption.days !== null) {
-      const txTimestamp = getTxTimestamp(tx);
-      const cutoffTime = now - selectedDateOption.days * 24 * 60 * 60 * 1000;
-      if (txTimestamp < cutoffTime) return false;
-    }
-
-    return true;
-  });
-
-  const totalDebited = transactions
-    .filter((tx) => tx.type === "debit")
-    .reduce((sum, tx) => sum + tx.amount, 0);
-
-  const totalCredited = transactions
-    .filter((tx) => tx.type === "credit")
-    .reduce((sum, tx) => sum + tx.amount, 0);
-
-  const filteredDebited = filteredTransactions
-    .filter((tx) => tx.type === "debit")
-    .reduce((sum, tx) => sum + tx.amount, 0);
-
-  const filteredCredited = filteredTransactions
-    .filter((tx) => tx.type === "credit")
-    .reduce((sum, tx) => sum + tx.amount, 0);
 
   const handleSelectPreset = (amount: number) => {
     setSelectedQuickAmount(amount);
@@ -209,7 +133,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94, y: 16 }}
         transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-        className="relative bg-[var(--bg-primary)] rounded-[2rem] p-5 sm:p-7 max-w-2xl w-full border border-neutral-300 dark:border-neutral-800 text-[var(--text-primary)] z-10 max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col gap-5 my-auto"
+        className="relative bg-[var(--bg-primary)] rounded-[2rem] p-5 sm:p-7 max-w-xl w-full border border-neutral-300 dark:border-neutral-800 text-[var(--text-primary)] z-10 max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col gap-5 my-auto"
       >
         {/* Header with Title and Close */}
         <div className="flex items-center justify-between gap-3 pb-3 border-b border-black/5 dark:border-white/5">
@@ -223,8 +147,8 @@ export const WalletModal: React.FC<WalletModalProps> = ({
               </h2>
               <p className="text-[11px] font-medium text-[var(--text-primary)] opacity-75">
                 {isEn
-                  ? "Recharge generation credits via Razorpay & track usage"
-                  : "రేజర్‌పే ద్వారా క్రెడిట్స్ రీఛార్జ్ చేయండి మరియు ఖర్చును ట్రాక్ చేయండి"}
+                  ? "Recharge generation credits instantly via Razorpay"
+                  : "రేజర్‌పే ద్వారా క్రెడిట్స్ తక్షణమే రీఛార్జ్ చేయండి"}
               </p>
             </div>
           </div>
@@ -255,130 +179,66 @@ export const WalletModal: React.FC<WalletModalProps> = ({
         </AnimatePresence>
 
         {/* Current Balance Neumorphic Showcase (Primary Credit Display) */}
-        <div className="nm-inset rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[var(--bg-panel)]/50">
-          <div className="flex items-center justify-between w-full sm:w-auto gap-3.5">
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl nm-outset-sm flex items-center justify-center text-accent shrink-0 bg-[var(--bg-primary)]">
-                <Icon icon="lucide:coins" className="w-6 h-6 text-amber-500" />
-              </div>
-              <div>
-                <span className="text-[10px] uppercase tracking-wider font-extrabold text-[var(--text-primary)] opacity-70 block">
-                  {isEn ? "Available Credits" : "అందుబాటులో ఉన్న క్రెడిట్స్"}
+        <div className="nm-inset rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 bg-[var(--bg-panel)]/50">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl nm-outset-sm flex items-center justify-center text-accent shrink-0 bg-[var(--bg-primary)]">
+              <Icon icon="lucide:coins" className="w-6 h-6 text-amber-500" />
+            </div>
+            <div>
+              <span className="text-[10px] uppercase tracking-wider font-extrabold text-[var(--text-primary)] opacity-70 block">
+                {isEn ? "Available Credits" : "అందుబాటులో ఉన్న క్రెడిట్స్"}
+              </span>
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-accent">
+                  {formatCredits(walletBalance)}
                 </span>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-accent">
-                    {formatCredits(walletBalance)}
+                <span className="text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                  {isEn ? "Active" : "యాక్టివ్"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Clean Cache (Reset Wallet to 0) Button */}
+          {onResetWalletCache && (
+            <div>
+              {!showResetWalletConfirm ? (
+                <button
+                  id="btn-clean-wallet-cache"
+                  type="button"
+                  onClick={() => setShowResetWalletConfirm(true)}
+                  className="px-3 py-1.5 rounded-xl text-[10px] font-extrabold text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
+                  title={isEn ? "Clean wallet cache & reset credits to 0" : "వాలెట్ కాష్ క్లీన్ చేసి క్రెడిట్స్ 0 చేయండి"}
+                >
+                  <Icon icon="lucide:trash-2" className="w-3.5 h-3.5" />
+                  <span>{isEn ? "Clean Cache" : "క్లీన్ కాష్"}</span>
+                </button>
+              ) : (
+                <div className="flex items-center gap-1.5 bg-rose-500/15 p-1 rounded-xl border border-rose-500/30">
+                  <span className="text-[9.5px] font-bold text-rose-500 px-1">
+                    {isEn ? "Reset to 0?" : "0 చేయాలా?"}
                   </span>
-                  <span className="text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
-                    {isEn ? "Active" : "యాక్టివ్"}
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onResetWalletCache();
+                      setShowResetWalletConfirm(false);
+                    }}
+                    className="px-2 py-1 rounded-lg bg-rose-500 text-white text-[9.5px] font-black hover:bg-rose-600 cursor-pointer"
+                  >
+                    {isEn ? "Yes" : "అవును"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowResetWalletConfirm(false)}
+                    className="px-1.5 py-1 text-[9.5px] font-bold text-[var(--text-primary)] opacity-70 hover:opacity-100 cursor-pointer"
+                  >
+                    ✕
+                  </button>
                 </div>
-              </div>
+              )}
             </div>
-
-            {/* Clean Cache (Reset Wallet to 0 & clear history) Button */}
-            {onResetWalletCache && (
-              <div className="sm:hidden">
-                {!showResetWalletConfirm ? (
-                  <button
-                    id="btn-clean-wallet-cache-mobile"
-                    type="button"
-                    onClick={() => setShowResetWalletConfirm(true)}
-                    className="px-2.5 py-1.5 rounded-xl text-[10px] font-extrabold text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all cursor-pointer flex items-center gap-1 shrink-0"
-                    title={isEn ? "Clean wallet cache & reset credits to 0" : "వాలెట్ కాష్ క్లీన్ చేసి క్రెడిట్స్ 0 చేయండి"}
-                  >
-                    <Icon icon="lucide:trash-2" className="w-3 h-3" />
-                    <span>{isEn ? "Clean Cache" : "క్లీన్ కాష్"}</span>
-                  </button>
-                ) : (
-                  <div className="flex items-center gap-1 bg-rose-500/15 p-1 rounded-xl border border-rose-500/30">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onResetWalletCache();
-                        setShowResetWalletConfirm(false);
-                      }}
-                      className="px-2 py-1 rounded-lg bg-rose-500 text-white text-[9.5px] font-black cursor-pointer"
-                    >
-                      {isEn ? "Reset 0" : "రీసెట్ 0"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowResetWalletConfirm(false)}
-                      className="px-1.5 py-1 text-[9.5px] font-bold opacity-70 cursor-pointer"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-3.5 w-full sm:w-auto justify-between sm:justify-end text-right border-t sm:border-t-0 pt-2.5 sm:pt-0 border-black/5 dark:border-white/5">
-            <div className="flex items-center gap-4">
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] font-bold opacity-70">
-                  {isEn ? "Total Credited" : "మొత్తం జోడించినవి"}
-                </span>
-                <span className="text-xs font-black font-mono text-emerald-500 mt-0.5 flex items-center gap-1">
-                  <Icon icon="lucide:arrow-down-left" className="w-3.5 h-3.5" />
-                  {formatCredits(totalCredited)}
-                </span>
-              </div>
-              <div className="h-7 w-[1px] bg-black/10 dark:bg-white/10" />
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] font-bold opacity-70">
-                  {isEn ? "Total Used" : "మొత్తం వాడినవి"}
-                </span>
-                <span className="text-xs font-black font-mono text-rose-500 mt-0.5 flex items-center gap-1">
-                  <Icon icon="lucide:arrow-up-right" className="w-3.5 h-3.5" />
-                  {formatCredits(totalDebited)}
-                </span>
-              </div>
-            </div>
-
-            {/* Desktop Clean Cache Button */}
-            {onResetWalletCache && (
-              <div className="hidden sm:flex items-center pl-2 border-l border-black/10 dark:border-white/10">
-                {!showResetWalletConfirm ? (
-                  <button
-                    id="btn-clean-wallet-cache"
-                    type="button"
-                    onClick={() => setShowResetWalletConfirm(true)}
-                    className="px-2.5 py-1.5 rounded-xl text-[10px] font-extrabold text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all cursor-pointer flex items-center gap-1 shrink-0"
-                    title={isEn ? "Clean wallet cache & reset credits to 0" : "వాలెట్ కాష్ క్లీన్ చేసి క్రెడిట్స్ 0 చేయండి"}
-                  >
-                    <Icon icon="lucide:trash-2" className="w-3 h-3" />
-                    <span>{isEn ? "Clean Cache" : "క్లీన్ కాష్"}</span>
-                  </button>
-                ) : (
-                  <div className="flex items-center gap-1 bg-rose-500/15 p-1 rounded-xl border border-rose-500/30">
-                    <span className="text-[9.5px] font-bold text-rose-500 px-1">
-                      {isEn ? "Reset 0?" : "0 చేయాలా?"}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onResetWalletCache();
-                        setShowResetWalletConfirm(false);
-                      }}
-                      className="px-2 py-0.5 rounded-md bg-rose-500 text-white text-[9.5px] font-black hover:bg-rose-600 cursor-pointer"
-                    >
-                      {isEn ? "Yes" : "అవును"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowResetWalletConfirm(false)}
-                      className="px-1.5 py-0.5 text-[9.5px] font-bold text-[var(--text-primary)] opacity-70 hover:opacity-100 cursor-pointer"
-                    >
-                      {isEn ? "No" : "వద్దు"}
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
         {/* SECTION 1: QUICK RECHARGE CARDS (Credits Focus) */}
@@ -486,246 +346,6 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                 </>
               )}
             </button>
-          </div>
-        </div>
-
-        {/* SECTION 2: USAGE HISTORY WITH TABS [ALL, DEBIT, CREDIT] & DATE RANGE FILTER */}
-        <div className="flex flex-col gap-2.5 pt-2">
-          {/* Top Bar: Section Title + Clear Button + Type Tabs */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <label className="text-xs font-black uppercase tracking-wider text-[var(--text-emphasis)] flex items-center gap-1.5">
-                <Icon icon="lucide:receipt" className="w-3.5 h-3.5 text-accent" />
-                {isEn ? "Credits Usage & Transaction History" : "క్రెడిట్స్ ఖర్చు మరియు లావాదేవీల చరిత్ర"}
-              </label>
-
-              {/* Clear History Button */}
-              {transactions.length > 0 && onClearHistory && (
-                <>
-                  {!showClearConfirm ? (
-                    <button
-                      id="btn-clear-wallet-history"
-                      type="button"
-                      onClick={() => setShowClearConfirm(true)}
-                      className="px-2 py-0.5 rounded-lg text-[10px] font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 transition-all cursor-pointer flex items-center gap-1 opacity-80 hover:opacity-100"
-                      title={isEn ? "Clear all transaction history" : "లావాదేవీల చరిత్రను తొలగించండి"}
-                    >
-                      <Icon icon="lucide:trash-2" className="w-3 h-3" />
-                      <span>{isEn ? "Clear" : "తొలగించు"}</span>
-                    </button>
-                  ) : (
-                    <div className="flex items-center gap-1.5 bg-rose-500/10 px-2 py-0.5 rounded-lg border border-rose-500/20">
-                      <span className="text-[10px] font-bold text-rose-500">
-                        {isEn ? "Confirm clear?" : "తొలగించాలా?"}
-                      </span>
-                      <button
-                        id="btn-confirm-clear-wallet-history"
-                        type="button"
-                        onClick={() => {
-                          onClearHistory();
-                          setShowClearConfirm(false);
-                        }}
-                        className="px-1.5 py-0.5 rounded bg-rose-500 text-white text-[9.5px] font-black hover:bg-rose-600 cursor-pointer"
-                      >
-                        {isEn ? "Yes" : "అవును"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setShowClearConfirm(false)}
-                        className="px-1 py-0.5 text-[9.5px] text-[var(--text-primary)] opacity-70 hover:opacity-100 cursor-pointer"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-
-            {/* Filter Tabs [All, Spent / Debits, Top-ups / Credits] */}
-            <div className="flex items-center p-1 rounded-xl nm-inset-sm gap-1 self-start sm:self-auto">
-              <button
-                id="btn-tx-tab-all"
-                type="button"
-                onClick={() => setHistoryTab("all")}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer ${
-                  historyTab === "all"
-                    ? "bg-accent text-white shadow-xs"
-                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                }`}
-              >
-                {isEn ? "All" : "అన్నీ"} ({transactions.length})
-              </button>
-              <button
-                id="btn-tx-tab-debit"
-                type="button"
-                onClick={() => setHistoryTab("debit")}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer ${
-                  historyTab === "debit"
-                    ? "bg-rose-500 text-white shadow-xs"
-                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                }`}
-              >
-                {isEn ? "Used" : "వాడినవి"} ({transactions.filter((t) => t.type === "debit").length})
-              </button>
-              <button
-                id="btn-tx-tab-credit"
-                type="button"
-                onClick={() => setHistoryTab("credit")}
-                className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer ${
-                  historyTab === "credit"
-                    ? "bg-emerald-500 text-white shadow-xs"
-                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                }`}
-              >
-                {isEn ? "Top-ups" : "రీఛార్జ్‌లు"} ({transactions.filter((t) => t.type === "credit").length})
-              </button>
-            </div>
-          </div>
-
-          {/* Date Range Filter Strip: [Last 7 Days, 30 Days, 90 Days, 180 Days, 365 Days, All] */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-1.5 sm:p-2 rounded-2xl nm-inset-sm bg-[var(--bg-panel)]/40">
-            <div className="flex items-center gap-1.5 shrink-0 px-1">
-              <Icon icon="lucide:calendar-range" className="w-3.5 h-3.5 text-accent shrink-0" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-[var(--text-primary)] opacity-70">
-                {isEn ? "Period:" : "కాలపరిమితి:"}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar pb-0.5 sm:pb-0 w-full sm:w-auto">
-              {DATE_FILTER_OPTIONS.map((opt) => {
-                const isSelected = dateFilter === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    id={`btn-date-filter-${opt.id}`}
-                    type="button"
-                    onClick={() => setDateFilter(opt.id)}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                      isSelected
-                        ? "bg-accent text-white shadow-xs scale-[1.02]"
-                        : "opacity-65 hover:opacity-100 text-[var(--text-primary)] hover:bg-black/5 dark:hover:bg-white/5"
-                    }`}
-                  >
-                    {isEn ? opt.labelEn : opt.labelTe}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Summary metrics info for active filter */}
-          <div className="flex items-center justify-between px-1 text-[10px] font-bold opacity-75">
-            <span className="flex items-center gap-1">
-              <Icon icon="lucide:filter" className="w-3 h-3 text-accent" />
-              {isEn
-                ? `Showing ${filteredTransactions.length} records (${selectedDateOption ? selectedDateOption.labelEn : "All"})`
-                : `${filteredTransactions.length} లావాదేవీలు చూపబడుతున్నాయి (${selectedDateOption ? selectedDateOption.labelTe : "అన్నీ"})`}
-            </span>
-            <div className="flex items-center gap-3 text-[9.5px]">
-              {filteredDebited > 0 && (
-                <span className="text-rose-500 font-mono font-black">
-                  -{formatCredits(filteredDebited)}
-                </span>
-              )}
-              {filteredCredited > 0 && (
-                <span className="text-emerald-500 font-mono font-black">
-                  +{formatCredits(filteredCredited)}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Transactions List Area */}
-          <div className="nm-inset rounded-2xl p-3 bg-[var(--bg-panel)]/30 max-h-56 overflow-y-auto custom-scrollbar flex flex-col gap-2">
-            {filteredTransactions.length === 0 ? (
-              <div className="py-8 text-center text-[var(--text-primary)] opacity-50 flex flex-col items-center gap-2">
-                <Icon icon="lucide:receipt-text" className="w-7 h-7 stroke-1" />
-                <span className="text-xs font-bold">
-                  {isEn
-                    ? `No transactions found in this period (${selectedDateOption?.labelEn || "All"})`
-                    : `ఈ కాలపరిమితిలో లావాదేవీలు లేవు (${selectedDateOption?.labelTe || "అన్నీ"})`}
-                </span>
-                {dateFilter !== "all" && (
-                  <button
-                    type="button"
-                    onClick={() => setDateFilter("all")}
-                    className="mt-1 px-3 py-1 rounded-lg text-[10px] font-extrabold text-accent bg-accent/10 hover:bg-accent/20 cursor-pointer"
-                  >
-                    {isEn ? "View All Time" : "అన్ని లావాదేవీలు చూడండి"}
-                  </button>
-                )}
-              </div>
-            ) : (
-              filteredTransactions.map((tx) => {
-                const isCredit = tx.type === "credit";
-                const txTime = getTxTimestamp(tx);
-                const displayDate =
-                  tx.date && tx.date !== "Just now"
-                    ? tx.date
-                    : new Date(txTime).toLocaleString(isEn ? "en-US" : "te-IN", {
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      });
-
-                return (
-                  <div
-                    key={tx.id}
-                    className="p-2.5 rounded-xl nm-outset-sm bg-[var(--bg-panel)] flex items-center justify-between gap-3 hover:scale-[1.005] transition-transform"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <div
-                        className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                          isCredit
-                            ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-                            : "bg-rose-500/15 text-rose-600 dark:text-rose-400"
-                        }`}
-                      >
-                        <Icon
-                          icon={
-                            isCredit
-                              ? "lucide:arrow-down-left"
-                              : "lucide:sparkles"
-                          }
-                          className="w-4 h-4"
-                        />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-black text-[var(--text-emphasis)] leading-snug">
-                          {isEn ? tx.title : tx.titleTe || tx.title}
-                        </h4>
-                        <div className="flex items-center gap-2 text-[9.5px] opacity-70 mt-0.5 font-medium">
-                          <span className="font-mono">{displayDate}</span>
-                          {tx.description && (
-                            <>
-                              <span>•</span>
-                              <span className="truncate max-w-[200px] sm:max-w-[280px]">
-                                {isEn ? tx.description : tx.descriptionTe || tx.description}
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-right shrink-0">
-                      <span
-                        className={`text-xs font-black font-mono ${
-                          isCredit
-                            ? "text-emerald-600 dark:text-emerald-400"
-                            : "text-rose-600 dark:text-rose-400"
-                        }`}
-                      >
-                        {isCredit ? "+" : "-"}
-                        {formatCredits(tx.amount)}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })
-            )}
           </div>
         </div>
 

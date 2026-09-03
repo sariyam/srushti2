@@ -1110,9 +1110,7 @@ export const Header: React.FC<HeaderProps> = ({
             onClose={() => setIsWalletOpen(false)}
             currency={currency}
             walletBalance={activeWalletBalance}
-            transactions={activeTransactions}
             onRecharge={handleWalletRecharge}
-            onClearHistory={handleClearTransactions}
             onResetWalletCache={handleResetWalletCache}
             lang={lang}
             usdToInrRate={usdToInrRate}
