@@ -697,15 +697,6 @@ export const Header: React.FC<HeaderProps> = ({
                       తెలుగు
                     </button>
                   </div>
-
-                  {/* Close button */}
-                  <button
-                    type="button"
-                    onClick={() => setIsOpen(false)}
-                    className="w-7 h-7 rounded-full nm-outset flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                  >
-                    <Icon icon="lucide:x" className="w-4 h-4" />
-                  </button>
                 </div>
               </div>
 
@@ -891,8 +882,33 @@ export const Header: React.FC<HeaderProps> = ({
                 )}
               </div>
 
-              {/* Confirm Button */}
-              <div className="pt-2 mt-auto">
+              {/* Confirm Button & Selection Summary */}
+              <div className="pt-2 mt-auto space-y-2.5">
+                {/* Active Selection Summary */}
+                <div className="flex items-center justify-between px-3.5 py-2 rounded-xl nm-inset-sm text-[11px] bg-[var(--bg-secondary)]/50">
+                  <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+                    {isEn ? "Selected" : "ఎంచుకున్నది"}:
+                  </span>
+                  <div className="flex items-center gap-1.5 font-black text-accent text-xs">
+                    <span>
+                      {tempWorkspace === "garment"
+                        ? (isEn ? "Garment" : "బట్టలు")
+                        : (isEn ? "Jewelry" : "నగలు")}
+                    </span>
+                    <span className="text-[var(--text-secondary)] opacity-40">•</span>
+                    <span>
+                      {(tempWorkspace === "garment" ? tempGarmentGender : tempJewelryGender) === "female"
+                        ? (isEn ? "Female" : "మహిళలు")
+                        : (isEn ? "Male" : "పురుషులు")}
+                    </span>
+                    <span className="text-[var(--text-secondary)] opacity-40">•</span>
+                    <span className="uppercase">
+                      {t[tempWorkspace === "garment" ? tempGarmentType : tempJewelryType] ||
+                        (tempWorkspace === "garment" ? tempGarmentType : tempJewelryType)?.replace("_", " ")}
+                    </span>
+                  </div>
+                </div>
+
                 <button
                   id="btn-confirm-business"
                   type="button"
@@ -906,10 +922,10 @@ export const Header: React.FC<HeaderProps> = ({
                     }
                     setIsOpen(false);
                   }}
-                  className="w-full py-3 rounded-2xl text-xs font-black tracking-wide nm-outset flex items-center justify-center gap-2 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+                  className="w-full py-3.5 rounded-2xl text-xs sm:text-sm font-black tracking-wide nm-outset flex items-center justify-center gap-2 text-accent hover:scale-[1.01] active:scale-[0.99] cursor-pointer bg-[var(--bg-secondary)] transition-all"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-accent animate-pulse" />
-                  {isEn ? "Confirm Selection" : "సెలక్షన్ నిర్ధారించండి"}
+                  <Sparkles className="w-4 h-4 text-accent animate-pulse" />
+                  <span>{isEn ? "Confirm Selection" : "సెలక్షన్ నిర్ధారించండి"}</span>
                 </button>
               </div>
             </motion.div>
