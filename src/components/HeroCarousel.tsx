@@ -127,7 +127,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-accent/40 text-[10px] sm:text-xs md:text-sm font-black text-accent shadow-xl"
+            className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-black/75 backdrop-blur-md text-[10px] sm:text-xs md:text-sm font-black text-accent shadow-xl"
           >
             <Sparkles className="w-3.5 h-3.5 text-accent animate-spin-slow shrink-0" />
             <span className="tracking-wide">{displayBadge}</span>

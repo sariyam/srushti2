@@ -12,7 +12,7 @@ export const Logo: React.FC = () => {
 
   return (
     <div
-      className="relative w-9 h-9 rounded-2xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center select-none shrink-0 cursor-default border border-accent/20 transition-all"
+      className="relative w-9 h-9 rounded-2xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center select-none shrink-0 cursor-default transition-all"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       title="Srushti AI Logo"

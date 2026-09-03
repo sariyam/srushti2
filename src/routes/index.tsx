@@ -200,8 +200,8 @@ function LandingPageComponent() {
         </p>
 
         {/* ₹1 Highlight Banner */}
-        <div className="max-w-xl mx-auto nm-outset rounded-2xl p-3.5 bg-[var(--bg-secondary)] border border-accent/25 flex items-center justify-center gap-3.5 text-left">
-          <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent border border-accent/30 flex items-center justify-center font-black text-sm shrink-0 shadow-sm">
+        <div className="max-w-xl mx-auto nm-outset rounded-2xl p-3.5 bg-[var(--bg-secondary)] flex items-center justify-center gap-3.5 text-left">
+          <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent flex items-center justify-center font-black text-sm shrink-0">
             ₹1
           </div>
           <div>
@@ -237,15 +237,15 @@ function LandingPageComponent() {
 
         {/* 3 Quick Value Stats */}
         <div className="grid grid-cols-3 gap-2.5 sm:gap-4 pt-4 max-w-2xl mx-auto">
-          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center border border-accent/15">
+          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center">
             <span className="text-sm sm:text-lg font-black text-accent block tracking-tight">{t.stat1Val}</span>
             <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stat1Lbl}</span>
           </div>
-          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center border border-accent/15">
+          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center">
             <span className="text-sm sm:text-lg font-black text-accent block tracking-tight">{t.stat2Val}</span>
             <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stat2Lbl}</span>
           </div>
-          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center border border-accent/15">
+          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center">
             <span className="text-sm sm:text-lg font-black text-accent block tracking-tight">{t.stat3Val}</span>
             <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stat3Lbl}</span>
           </div>
@@ -304,7 +304,7 @@ function LandingPageComponent() {
         </div>
 
         {/* Side by Side Interactive Visual */}
-        <div className="nm-outset rounded-3xl p-3 sm:p-5 bg-[var(--bg-secondary)] border border-accent/15">
+        <div className="nm-outset rounded-3xl p-3 sm:p-5 bg-[var(--bg-secondary)]">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
             {/* Left: Raw Phone Snapshot (The Problem) */}
@@ -317,7 +317,7 @@ function LandingPageComponent() {
                 <span className="px-2 py-0.5 rounded-lg nm-inset text-[8.5px] font-bold text-[var(--text-secondary)]">Raw / Home Light</span>
               </div>
 
-              <div className="aspect-[3/4] min-h-[220px] rounded-xl relative overflow-hidden bg-neutral-900 border border-black/10 dark:border-white/10">
+              <div className="aspect-[3/4] min-h-[220px] rounded-xl relative overflow-hidden bg-neutral-900">
                 {activeShowcase === "garment" && (
                   <img
                     src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800"
@@ -343,7 +343,7 @@ function LandingPageComponent() {
                   />
                 )}
 
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-white text-[8.5px] font-mono flex items-center gap-1 border border-white/10">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-white text-[8.5px] font-mono flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
                   <span>PHONE CAM • TABLE LAY</span>
                 </div>
@@ -362,16 +362,16 @@ function LandingPageComponent() {
             </div>
 
             {/* Right: Srushti AI Result (The Solution) */}
-            <div className="nm-inset rounded-2xl p-3 bg-[var(--bg-secondary)] space-y-2 border border-accent/30">
+            <div className="nm-inset rounded-2xl p-3 bg-[var(--bg-secondary)] space-y-2">
               <div className="flex items-center justify-between text-[10px] font-extrabold text-accent">
                 <div className="flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5 text-accent" />
                   <span>{lang === "en" ? "2. Srushti AI Studio Result" : "2. సృష్టి ఏఐ స్టూడియో ఫలితం"}</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-lg nm-outset text-accent text-[8.5px] font-black uppercase border border-accent/30">HD Studio</span>
+                <span className="px-2 py-0.5 rounded-lg nm-outset text-accent text-[8.5px] font-black uppercase">HD Studio</span>
               </div>
 
-              <div className="aspect-[3/4] min-h-[220px] rounded-xl relative overflow-hidden bg-neutral-900 border border-accent/40 shadow-md">
+              <div className="aspect-[3/4] min-h-[220px] rounded-xl relative overflow-hidden bg-neutral-900 shadow-md">
                 {activeShowcase === "garment" && (
                   <img
                     src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800"
@@ -397,7 +397,7 @@ function LandingPageComponent() {
                   />
                 )}
 
-                <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-accent text-[8.5px] font-black uppercase border border-accent/40 flex items-center gap-1">
+                <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-accent text-[8.5px] font-black uppercase flex items-center gap-1">
                   <Sparkles className="w-2.5 h-2.5 text-accent" />
                   <span>{activeShowcase === "lifestyle" ? "Marble Editorial" : "Indian Model Shoot"}</span>
                 </div>
@@ -421,7 +421,7 @@ function LandingPageComponent() {
           </div>
 
           {/* Quick Studio Trigger under preview */}
-          <div className="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="mt-4 pt-3 flex flex-col sm:flex-row items-center justify-between gap-3">
             <span className="text-xs font-bold text-[var(--text-secondary)]">
               {lang === "en" ? "Ready to transform your own collection?" : "మీ స్వంత ఉత్పత్తులకు ఇప్పుడే ఫోటోషూట్ చేయండి"}
             </span>
@@ -438,11 +438,11 @@ function LandingPageComponent() {
 
       {/* --- MINIMALIST EMOTIONAL & PSYCHOLOGICAL SUPPORT SECTION --- */}
       <section className="py-8 sm:py-14 px-4 sm:px-6 max-w-5xl mx-auto w-full">
-        <div className="nm-outset rounded-3xl p-5 sm:p-8 bg-[var(--bg-secondary)] border border-accent/15 space-y-6 sm:space-y-8">
+        <div className="nm-outset rounded-3xl p-5 sm:p-8 bg-[var(--bg-secondary)] space-y-6 sm:space-y-8">
           
           {/* Header */}
           <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full nm-inset bg-[var(--bg-secondary)] text-[10.5px] sm:text-xs font-black text-accent border border-accent/25">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full nm-inset bg-[var(--bg-secondary)] text-[10.5px] sm:text-xs font-black text-accent">
               <HeartHandshake className="w-3.5 h-3.5 text-accent shrink-0" />
               <span>{t.supportBadge}</span>
             </div>
@@ -460,9 +460,9 @@ function LandingPageComponent() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             
             {/* Pillar 1: Social Media Confidence */}
-            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] border border-accent/15 space-y-3 flex flex-col justify-between">
+            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
               <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent border border-accent/20">
+                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent">
                   <Share2Icon className="w-5 h-5 text-accent" />
                 </div>
                 <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
@@ -473,7 +473,7 @@ function LandingPageComponent() {
                 </p>
               </div>
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent bg-accent/10 px-2.5 py-1 rounded-lg border border-accent/20 nm-inset-sm">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg nm-inset-sm">
                   <BadgeCheck className="w-3 h-3 text-accent" />
                   <span>WhatsApp & Instagram Ready</span>
                 </span>
@@ -481,9 +481,9 @@ function LandingPageComponent() {
             </div>
 
             {/* Pillar 2: Conversion & Trust */}
-            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] border border-accent/15 space-y-3 flex flex-col justify-between">
+            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
               <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent border border-accent/20">
+                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent">
                   <TrendingUp className="w-5 h-5 text-accent" />
                 </div>
                 <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
@@ -494,7 +494,7 @@ function LandingPageComponent() {
                 </p>
               </div>
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent bg-accent/10 px-2.5 py-1 rounded-lg border border-accent/20 nm-inset-sm">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg nm-inset-sm">
                   <Sparkles className="w-3 h-3 text-accent" />
                   <span>High-Converting Catalogue</span>
                 </span>
@@ -502,9 +502,9 @@ function LandingPageComponent() {
             </div>
 
             {/* Pillar 3: Zero Financial Burden */}
-            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] border border-accent/15 space-y-3 flex flex-col justify-between">
+            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
               <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent border border-accent/20">
+                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent">
                   <ShieldCheck className="w-5 h-5 text-accent" />
                 </div>
                 <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
@@ -515,7 +515,7 @@ function LandingPageComponent() {
                 </p>
               </div>
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent bg-accent/10 px-2.5 py-1 rounded-lg border border-accent/20 nm-inset-sm">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg nm-inset-sm">
                   <Check className="w-3 h-3 text-accent" />
                   <span>Pay-as-you-go from ₹1</span>
                 </span>
@@ -540,24 +540,24 @@ function LandingPageComponent() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] border border-accent/15 space-y-2.5">
-            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center border border-accent/30 shadow-sm">
+          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] space-y-2.5">
+            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center">
               1
             </div>
             <h3 className="text-sm font-black text-[var(--text-emphasis)]">{t.step1}</h3>
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{t.step1Desc}</p>
           </div>
 
-          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] border border-accent/15 space-y-2.5">
-            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center border border-accent/30 shadow-sm">
+          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] space-y-2.5">
+            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center">
               2
             </div>
             <h3 className="text-sm font-black text-[var(--text-emphasis)]">{t.step2}</h3>
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{t.step2Desc}</p>
           </div>
 
-          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] border border-accent/15 space-y-2.5">
-            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center border border-accent/30 shadow-sm">
+          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] space-y-2.5">
+            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center">
               3
             </div>
             <h3 className="text-sm font-black text-[var(--text-emphasis)]">{t.step3}</h3>
@@ -568,8 +568,8 @@ function LandingPageComponent() {
 
       {/* --- MINIMAL PRICING / WALLET STATEMENT & DIRECT ACTION --- */}
       <section className="py-8 sm:py-12 px-4 sm:px-6 max-w-3xl mx-auto w-full text-center space-y-4">
-        <div className="nm-outset rounded-3xl p-6 sm:p-10 bg-[var(--bg-secondary)] border border-accent/25 space-y-4">
-          <span className="px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider nm-inset bg-[var(--bg-secondary)] text-accent border border-accent/25 inline-block">
+        <div className="nm-outset rounded-3xl p-6 sm:p-10 bg-[var(--bg-secondary)] space-y-4">
+          <span className="px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider nm-inset bg-[var(--bg-secondary)] text-accent inline-block">
             {lang === "en" ? "Simple UPI Recharge" : "సులభమైన యూపీఐ పేమెంట్"}
           </span>
 
