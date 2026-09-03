@@ -86,12 +86,12 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
   return (
     <div
       id="hero-fashion-carousel"
-      className="relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden nm-outset p-1.5 sm:p-2.5 bg-[var(--bg-panel)] border border-black/5 dark:border-white/10 group select-none shadow-2xl"
+      className="relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden nm-outset p-2 sm:p-3 bg-[var(--bg-secondary)] group select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* 16:9 Aspect Ratio Container with Stacked Text Overlay */}
-      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-neutral-950 flex items-center justify-center">
+      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-neutral-950 flex items-center justify-center nm-inset-sm">
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
@@ -153,7 +153,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
               aria-label={`Go to slide ${idx + 1}`}
               className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                 currentIndex === idx
-                  ? "w-6 sm:w-8 bg-amber-400 shadow-md"
+                  ? "w-6 sm:w-8 bg-accent shadow-md shadow-accent/50"
                   : "w-1.5 sm:w-2 bg-white/40 hover:bg-white/70"
               }`}
             />

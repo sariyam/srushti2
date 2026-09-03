@@ -72,7 +72,7 @@ export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
   return (
     <div
       id="quote-banner-slider"
-      className="relative nm-outset rounded-3xl p-6 sm:p-8 bg-[var(--bg-primary)] text-center max-w-4xl mx-auto border border-black/5 dark:border-white/5 select-none overflow-hidden transition-all shadow-md"
+      className="relative nm-outset rounded-3xl p-6 sm:p-8 bg-[var(--bg-secondary)] text-center max-w-4xl mx-auto select-none overflow-hidden transition-all"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
