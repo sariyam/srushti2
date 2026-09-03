@@ -55,21 +55,21 @@ export function useGestureProtection() {
       const deltaX = touch.clientX - startX;
       const deltaY = touch.clientY - startY;
 
-      // Check for swipe down to refresh (pulling down when at the top)
-      if (isAtTop && deltaY > MIN_SWIPE_PX && deltaY > Math.abs(deltaX) * 1.25) {
+      // Silently prevent swipe down to refresh (pulling down when at top of page)
+      if (isAtTop && deltaY > 8 && deltaY > Math.abs(deltaX)) {
         pendingGesture = "pull-to-refresh";
         if (e.cancelable) {
           e.preventDefault();
         }
       }
 
-      // Check for edge swipe to back (swiping inward from screen edges)
-      if (isLeftEdge && deltaX > MIN_SWIPE_PX && Math.abs(deltaX) > Math.abs(deltaY) * 1.1) {
+      // Silently prevent edge swipe to back (swiping inward from screen edges)
+      if (isLeftEdge && deltaX > 10 && Math.abs(deltaX) > Math.abs(deltaY)) {
         pendingGesture = "edge-back";
         if (e.cancelable) {
           e.preventDefault();
         }
-      } else if (isRightEdge && deltaX < -MIN_SWIPE_PX && Math.abs(deltaX) > Math.abs(deltaY) * 1.1) {
+      } else if (isRightEdge && deltaX < -10 && Math.abs(deltaX) > Math.abs(deltaY)) {
         pendingGesture = "edge-back";
         if (e.cancelable) {
           e.preventDefault();
@@ -78,10 +78,7 @@ export function useGestureProtection() {
     };
 
     const handleTouchEnd = () => {
-      if (pendingGesture) {
-        triggerInvalidOperation(pendingGesture);
-        pendingGesture = null;
-      }
+      pendingGesture = null;
       isAtTop = false;
       isLeftEdge = false;
       isRightEdge = false;
@@ -95,16 +92,15 @@ export function useGestureProtection() {
     }
 
     const handlePopState = () => {
-      // User performed browser back (e.g. edge swipe back or back button)
+      // User performed browser back (e.g. edge swipe back or back button) - silently trap
       try {
         window.history.pushState({ srushtiGuard: true }, "", window.location.href);
       } catch {
         // Ignore
       }
-      triggerInvalidOperation("edge-back");
     };
 
-    // Custom test/developer event listener
+    // Custom developer event listener
     const handleCustomEvent = (e: Event) => {
       const customEvent = e as CustomEvent<{ type: InvalidGestureType }>;
       if (customEvent.detail?.type) {
@@ -126,7 +122,6 @@ export function useGestureProtection() {
 
         if (accumulatedWheelUp > 130) {
           accumulatedWheelUp = 0;
-          triggerInvalidOperation("pull-to-refresh");
         }
       } else if (scrollY > 5) {
         accumulatedWheelUp = 0;
@@ -137,7 +132,6 @@ export function useGestureProtection() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.altKey && e.key === "ArrowLeft") {
         e.preventDefault();
-        triggerInvalidOperation("edge-back");
       }
     };
 

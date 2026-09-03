@@ -805,8 +805,8 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                   </h3>
                   <p className="text-[10px] opacity-70 mt-0.5">
                     {lang === "en" 
-                      ? "Prevents accidental refresh or back navigation while generating"
-                      : "ఫోటోషూట్ సమయంలో ప్రమాదవశాత్తు రిఫ్రెష్ లేదా బ్యాక్ వెళ్లకుండా కాపాడుతుంది"}
+                      ? "Silently prevents accidental refresh or back navigation to protect your active studio session"
+                      : "ఫోటోషూట్ సమయంలో ప్రమాదవశాత్తు రిఫ్రెష్ లేదా బ్యాక్ వెళ్లకుండా సైలెంట్‌గా కాపాడుతుంది"}
                   </p>
                 </div>
               </div>
@@ -821,19 +821,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                   <Icon icon="lucide:arrow-down" className="w-4 h-4 text-amber-500" />
                   <span className="font-bold">{lang === "en" ? "Swipe down to refresh" : "స్వైప్ డౌన్ రిఫ్రెష్"}</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    window.dispatchEvent(
-                      new CustomEvent("srushti:trigger-invalid-gesture", {
-                        detail: { type: "pull-to-refresh" },
-                      })
-                    );
-                  }}
-                  className="px-2.5 py-1 rounded-lg text-[10px] font-black text-amber-500 hover:text-amber-600 bg-amber-500/10 hover:bg-amber-500/20 cursor-pointer transition-all shrink-0"
-                >
-                  {lang === "en" ? "Test Popup" : "టెస్ట్ చేయండి"}
-                </button>
+                <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
+                  {lang === "en" ? "Blocked" : "బ్లాక్ చేయబడింది"}
+                </span>
               </div>
 
               <div className="p-3 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 flex items-center justify-between gap-2">
@@ -841,19 +831,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                   <Icon icon="lucide:arrow-left-from-line" className="w-4 h-4 text-rose-500" />
                   <span className="font-bold">{lang === "en" ? "Edge swipe to back" : "ఎడ్జ్ స్వైప్ టు బ్యాక్"}</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    window.dispatchEvent(
-                      new CustomEvent("srushti:trigger-invalid-gesture", {
-                        detail: { type: "edge-back" },
-                      })
-                    );
-                  }}
-                  className="px-2.5 py-1 rounded-lg text-[10px] font-black text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 cursor-pointer transition-all shrink-0"
-                >
-                  {lang === "en" ? "Test Popup" : "టెస్ట్ చేయండి"}
-                </button>
+                <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
+                  {lang === "en" ? "Blocked" : "బ్లాక్ చేయబడింది"}
+                </span>
               </div>
             </div>
           </div>
