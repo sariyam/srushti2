@@ -31,6 +31,8 @@ import { GarmentWorkspace } from "./components/GarmentWorkspace";
 import { JewelryWorkspace } from "./components/JewelryWorkspace";
 import { PRESET_FACES } from "./components/FaceGenerator";
 import { SplashScreen } from "./components/SplashScreen";
+import { InvalidOperationModal } from "./components/InvalidOperationModal";
+import { useGestureProtection } from "./hooks/useGestureProtection";
 
 const CheckCircle2 = (props: any) => <Icon icon="lucide:circle-check" {...props} />;
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
@@ -38,6 +40,9 @@ const AlertTriangle = (props: any) => <Icon icon="lucide:triangle-alert" {...pro
 const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
 
 export default function App() {
+  // --- Gesture Protection ([Invalid Operation] on swipe-down-to-refresh & edge-swipe-back) ---
+  const { invalidOperation, dismissInvalidOperation } = useGestureProtection();
+
   // --- Persistent & Local States ---
   const [showSplash, setShowSplash] = useState(true);
   const [lang, setLang] = useState<Language>(() => {
@@ -1211,6 +1216,13 @@ export default function App() {
           theme={theme} 
         />
       )}
+
+      {/* --- GESTURE PROTECTION MODAL ([Invalid Operation]) --- */}
+      <InvalidOperationModal
+        details={invalidOperation}
+        onClose={dismissInvalidOperation}
+        lang={lang}
+      />
 
     </div>
   );

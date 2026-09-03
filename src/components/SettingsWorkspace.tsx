@@ -793,6 +793,70 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
               </button>
             </div>
           </div>
+
+          {/* Gesture Protection & Navigation Safety Card */}
+          <div className="nm-outset rounded-[2rem] p-5 space-y-3.5 border border-emerald-500/20">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Icon icon="lucide:shield-check" className="w-5 h-5 text-emerald-500 shrink-0" />
+                <div>
+                  <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">
+                    {lang === "en" ? "Gesture Protection & Safety" : "సంజ్ఞ రక్షణ & సేఫ్టీ గార్డ్"}
+                  </h3>
+                  <p className="text-[10px] opacity-70 mt-0.5">
+                    {lang === "en" 
+                      ? "Prevents accidental refresh or back navigation while generating"
+                      : "ఫోటోషూట్ సమయంలో ప్రమాదవశాత్తు రిఫ్రెష్ లేదా బ్యాక్ వెళ్లకుండా కాపాడుతుంది"}
+                  </p>
+                </div>
+              </div>
+              <span className="text-[10px] font-black text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 shrink-0">
+                {lang === "en" ? "Active" : "యాక్టివ్"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-[11px]">
+              <div className="p-3 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Icon icon="lucide:arrow-down" className="w-4 h-4 text-amber-500" />
+                  <span className="font-bold">{lang === "en" ? "Swipe down to refresh" : "స్వైప్ డౌన్ రిఫ్రెష్"}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.dispatchEvent(
+                      new CustomEvent("srushti:trigger-invalid-gesture", {
+                        detail: { type: "pull-to-refresh" },
+                      })
+                    );
+                  }}
+                  className="px-2.5 py-1 rounded-lg text-[10px] font-black text-amber-500 hover:text-amber-600 bg-amber-500/10 hover:bg-amber-500/20 cursor-pointer transition-all shrink-0"
+                >
+                  {lang === "en" ? "Test Popup" : "టెస్ట్ చేయండి"}
+                </button>
+              </div>
+
+              <div className="p-3 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Icon icon="lucide:arrow-left-from-line" className="w-4 h-4 text-rose-500" />
+                  <span className="font-bold">{lang === "en" ? "Edge swipe to back" : "ఎడ్జ్ స్వైప్ టు బ్యాక్"}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.dispatchEvent(
+                      new CustomEvent("srushti:trigger-invalid-gesture", {
+                        detail: { type: "edge-back" },
+                      })
+                    );
+                  }}
+                  className="px-2.5 py-1 rounded-lg text-[10px] font-black text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 cursor-pointer transition-all shrink-0"
+                >
+                  {lang === "en" ? "Test Popup" : "టెస్ట్ చేయండి"}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </motion.section>
