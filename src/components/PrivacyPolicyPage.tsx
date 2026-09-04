@@ -122,12 +122,13 @@ export const PrivacyPolicyPage: React.FC = () => {
           </div>
           <p className="text-xs sm:text-sm leading-relaxed opacity-85 pt-1">
             {lang === "te"
-              ? "Srushti AI మీ వ్యక్తిగత సమాచారాన్ని, రేజర్‌పే లావాదేవీల రికార్డులను మరియు అప్‌లోడ్ చేసిన ఉత్పత్తి చిత్రాలను ఎలా సేకరిస్తుంది, భద్రపరుస్తుంది మరియు నిర్వహిస్తుందో వివరించే పారదర్శక విధానం."
-              : "At Srushti AI ('we', 'us', or 'our'), protecting user data and financial privacy is our highest priority. This Privacy Policy details how we collect, handle, process, and secure your information in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and the Information Technology Act, 2000."}
+              ? "Srushti AI (డొమైన్: srushtiai.in) మీ వ్యక్తిగత సమాచారాన్ని, రేజర్‌పే లావాదేవీల రికార్డులను మరియు అప్‌లోడ్ చేసిన ఉత్పత్తి చిత్రాలను ఎలా సేకరిస్తుంది, భద్రపరుస్తుంది మరియు నిర్వహిస్తుందో వివరించే పారదర్శక విధానం."
+              : "At Srushti AI ('we', 'us', or 'our', operating via the official domain srushtiai.in), protecting user data and financial privacy is our highest priority. This Privacy Policy details how we collect, handle, process, and secure your information in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and the Information Technology Act, 2000."}
           </p>
           <div className="text-xs font-medium opacity-75 pt-1 border-t border-black/5 dark:border-white/5 flex flex-wrap items-center gap-x-4 gap-y-1">
             <span>Operating Entity: <strong>Srushti AI</strong></span>
-            <span>Privacy Desk: <strong>hi@srushti-ai.com</strong></span>
+            <span>Official Domain: <strong>srushtiai.in</strong></span>
+            <span>Privacy Desk: <strong>hi@srushtiai.in</strong></span>
             <span>Payment Processor: <strong>Razorpay (PCI-DSS Level 1)</strong></span>
           </div>
         </div>
@@ -283,8 +284,8 @@ export const PrivacyPolicyPage: React.FC = () => {
               </p>
               <p>
                 {lang === "te"
-                  ? "• డేటా తొలగింపు హక్కు: మీ ఖాతా, మొబైల్ నంబర్ రికార్డులు లేదా అప్‌లోడ్ చేసిన చిత్రాలను పూర్తిగా తొలగించాలని కోరుతూ hi@srushti-ai.com కు ఇమెయిల్ పంపవచ్చు. చట్టబద్ధమైన పన్ను రికార్డులు మినహా మిగిలిన మొత్తం డేటా 30 రోజుల్లో తొలగించబడుతుంది."
-                  : "• Right to Erasure / Account Deletion: You can permanently delete your uploaded images, photoshoot history, and account profile by writing to hi@srushti-ai.com. We honor deletion requests within 30 days, retaining only statutory accounting logs mandated by taxation authorities."}
+                  ? "• డేటా తొలగింపు హక్కు: మీ ఖాతా, మొబైల్ నంబర్ రికార్డులు లేదా అప్‌లోడ్ చేసిన చిత్రాలను పూర్తిగా తొలగించాలని కోరుతూ hi@srushtiai.in కు ఇమెయిల్ పంపవచ్చు. చట్టబద్ధమైన పన్ను రికార్డులు మినహా మిగిలిన మొత్తం డేటా 30 రోజుల్లో తొలగించబడుతుంది."
+                  : "• Right to Erasure / Account Deletion: You can permanently delete your uploaded images, photoshoot history, and account profile by writing to hi@srushtiai.in. We honor deletion requests within 30 days, retaining only statutory accounting logs mandated by taxation authorities."}
               </p>
             </div>
           </section>
@@ -317,10 +318,10 @@ export const PrivacyPolicyPage: React.FC = () => {
               </p>
               <div className="p-4 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 space-y-1.5 font-medium">
                 <p><strong>Designation:</strong> Data Protection & Grievance Redressal Officer</p>
-                <p><strong>Platform:</strong> Srushti AI</p>
+                <p><strong>Platform:</strong> Srushti AI (srushtiai.in)</p>
                 <p className="flex items-center gap-1.5">
                   <MailIcon className="w-4 h-4 text-accent shrink-0" />
-                  <span><strong>Official Email:</strong> <a href="mailto:hi@srushti-ai.com" className="text-accent underline font-bold">hi@srushti-ai.com</a></span>
+                  <span><strong>Official Email:</strong> <a href="mailto:hi@srushtiai.in" className="text-accent underline font-bold">hi@srushtiai.in</a></span>
                 </p>
                 <p><strong>Hours:</strong> Monday to Saturday, 10:00 AM – 6:00 PM IST</p>
                 <p><strong>Response Timeline:</strong> Queries acknowledged within 24–48 hours; resolution completed within 15 working days.</p>
@@ -333,7 +334,7 @@ export const PrivacyPolicyPage: React.FC = () => {
       {/* Footer */}
       <footer className="border-t border-black/10 dark:border-white/10 py-6 px-4 sm:px-8 mt-auto bg-[var(--bg-primary)] text-center text-xs opacity-85">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© 2026 Srushti AI. All rights reserved.</p>
+          <p>© 2026 Srushti AI (srushtiai.in). All rights reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a href="/terms-and-conditions" className="hover:text-accent font-extrabold transition-colors">
               {lang === "te" ? "నిబంధనలు & షరతులు" : "Terms & Conditions"}
@@ -341,8 +342,8 @@ export const PrivacyPolicyPage: React.FC = () => {
             <a href="/privacy-policy" className="text-accent font-extrabold underline">
               {lang === "te" ? "గోప్యతా విధానం" : "Privacy Policy"}
             </a>
-            <a href="mailto:hi@srushti-ai.com" className="hover:text-accent font-extrabold transition-colors flex items-center gap-1.5">
-              <span>Contact: hi@srushti-ai.com</span>
+            <a href="mailto:hi@srushtiai.in" className="hover:text-accent font-extrabold transition-colors flex items-center gap-1.5">
+              <span>Contact: hi@srushtiai.in</span>
             </a>
           </div>
         </div>

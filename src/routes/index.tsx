@@ -109,7 +109,7 @@ function LandingPageComponent() {
       footerText: "Srushti AI — Helping home sellers and local shops take stunning model photos in seconds.",
       termsLabel: "Terms and Conditions",
       privacyLabel: "Privacy Policy",
-      contactLabel: "Contact: hi@srushti-ai.com",
+      contactLabel: "Contact: hi@srushtiai.in",
     },
     te: {
       badge: "హోమ్ బిజినెస్‌లు & చిన్న షాపుల కోసం ఏఐ ఫోటోషూట్",
@@ -149,7 +149,7 @@ function LandingPageComponent() {
       footerText: "సృష్టి ఏఐ — హోమ్ బిజినెస్‌లు మరియు లోకల్ షాపుల కోసం సులభమైన ఏఐ ఫోటోషూట్.",
       termsLabel: "Terms and Conditions",
       privacyLabel: "Privacy Policy",
-      contactLabel: "Contact: hi@srushti-ai.com",
+      contactLabel: "Contact: hi@srushtiai.in",
     }
   };
 
@@ -635,7 +635,7 @@ function LandingPageComponent() {
               {t.privacyLabel}
             </Link>
             <a
-              href="mailto:hi@srushti-ai.com"
+              href="mailto:hi@srushtiai.in"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl nm-inset-sm text-accent font-extrabold hover:opacity-80 transition-all border border-accent/20"
             >
               <MailIcon className="w-3.5 h-3.5 shrink-0" />

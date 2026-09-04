@@ -700,7 +700,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                 : "Note: The accuracy of generated images depends on the quality and clarity of the uploaded product image. If the source image is low-resolution, blurry, cropped, or lacks visible details, the generated image may vary from the original product."}
             </p>
             <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold text-[var(--text-primary)]">
-              <span>{lang === "te" ? "Srushti AI ని ఉపయోగించడం ద్వారా, మీరు మా" : "By using Srushti AI, you agree to our"}</span>
+              <span>{lang === "te" ? "Srushti AI (srushtiai.in) ని ఉపయోగించడం ద్వారా, మీరు మా" : "By using Srushti AI (srushtiai.in), you agree to our"}</span>
               <a
                 id="link-terms-and-conditions"
                 href="/termsandconditions"
@@ -721,6 +721,13 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                 {lang === "te" ? "గోప్యతా విధానం" : "Privacy Policy"}
               </a>
               <span>{lang === "te" ? "కు అంగీకరిస్తున్నారు." : ""}</span>
+              <span className="opacity-40">•</span>
+              <a
+                href="mailto:hi@srushtiai.in"
+                className="text-accent underline hover:opacity-80"
+              >
+                Support: hi@srushtiai.in
+              </a>
             </div>
           </div>
 

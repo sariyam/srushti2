@@ -123,12 +123,13 @@ export const TermsAndConditionsPage: React.FC = () => {
           </div>
           <p className="text-xs sm:text-sm leading-relaxed opacity-85 pt-1">
             {lang === "te"
-              ? "సృష్టి ఏఐ (Srushti AI) ప్లాట్‌ఫారమ్‌ను ఉపయోగించడానికి ప్రాథమిక నిబంధనలు. డిజిటల్ ఏఐ ఫోటోషూట్ సేవలు, రేజర్‌పే పేమెంట్లు, డెలివరీ విధానం మరియు క్యాన్సిలేషన్/రీఫండ్ నిబంధనలు ఇక్కడ వివరించబడ్డాయి."
-              : "Welcome to Srushti AI ('we', 'our', 'us'). These Terms and Conditions govern your access to and use of Srushti AI's generative AI photoshoot visualization software, digital wallet credit top-ups, and online payment services processed securely via Razorpay."}
+              ? "సృష్టి ఏఐ (Srushti AI, డొమైన్: srushtiai.in) ప్లాట్‌ఫారమ్‌ను ఉపయోగించడానికి ప్రాథమిక నిబంధనలు. డిజిటల్ ఏఐ ఫోటోషూట్ సేవలు, రేజర్‌పే పేమెంట్లు, డెలివరీ విధానం మరియు క్యాన్సిలేషన్/రీఫండ్ నిబంధనలు ఇక్కడ వివరించబడ్డాయి."
+              : "Welcome to Srushti AI ('we', 'our', 'us', operating via the official domain srushtiai.in). These Terms and Conditions govern your access to and use of Srushti AI's generative AI photoshoot visualization software, digital wallet credit top-ups, and online payment services processed securely via Razorpay."}
           </p>
           <div className="text-xs font-medium opacity-75 pt-1 border-t border-black/5 dark:border-white/5 flex flex-wrap items-center gap-x-4 gap-y-1">
             <span>Operating Entity: <strong>Srushti AI</strong></span>
-            <span>Support: <strong>hi@srushti-ai.com</strong></span>
+            <span>Official Domain: <strong>srushtiai.in</strong></span>
+            <span>Support: <strong>hi@srushtiai.in</strong></span>
             <span>Payment Gateway: <strong>Razorpay (RBI Regulated)</strong></span>
           </div>
         </div>
@@ -283,8 +284,8 @@ export const TermsAndConditionsPage: React.FC = () => {
               </p>
               <p>
                 {lang === "te"
-                  ? "• రీఫండ్ అభ్యర్థన విధానం: రీఫండ్ కోసం Razorpay Payment ID తో మా సపోర్ట్ ఇమెయిల్ (hi@srushti-ai.com) కి 7 రోజులలోపు వివరాలను పంపండి."
-                  : "• How to Claim a Refund: Users can write to our dedicated support desk at hi@srushti-ai.com with their registered mobile number and Razorpay Payment ID (pay_xxxx) within 7 days of the transaction."}
+                  ? "• రీఫండ్ అభ్యర్థన విధానం: రీఫండ్ కోసం Razorpay Payment ID తో మా సపోర్ట్ ఇమెయిల్ (hi@srushtiai.in) కి 7 రోజులలోపు వివరాలను పంపండి."
+                  : "• How to Claim a Refund: Users can write to our dedicated support desk at hi@srushtiai.in with their registered mobile number and Razorpay Payment ID (pay_xxxx) within 7 days of the transaction."}
               </p>
               <p>
                 {lang === "te"
@@ -357,10 +358,10 @@ export const TermsAndConditionsPage: React.FC = () => {
               </p>
               <div className="p-4 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 space-y-1.5 font-medium">
                 <p><strong>Designation:</strong> Customer Support & Grievance Officer</p>
-                <p><strong>Platform:</strong> Srushti AI</p>
+                <p><strong>Platform:</strong> Srushti AI (srushtiai.in)</p>
                 <p className="flex items-center gap-1.5">
                   <MailIcon className="w-4 h-4 text-accent shrink-0" />
-                  <span><strong>Official Email:</strong> <a href="mailto:hi@srushti-ai.com" className="text-accent underline font-bold">hi@srushti-ai.com</a></span>
+                  <span><strong>Official Email:</strong> <a href="mailto:hi@srushtiai.in" className="text-accent underline font-bold">hi@srushtiai.in</a></span>
                 </p>
                 <p><strong>Working Hours:</strong> Monday to Saturday, 10:00 AM – 6:00 PM IST</p>
                 <p><strong>Response Timeline:</strong> Queries acknowledged within 24–48 business hours; resolution provided within 15 working days.</p>
@@ -373,7 +374,7 @@ export const TermsAndConditionsPage: React.FC = () => {
       {/* Footer */}
       <footer className="border-t border-black/10 dark:border-white/10 py-6 px-4 sm:px-8 mt-auto bg-[var(--bg-primary)] text-center text-xs opacity-85">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© 2026 Srushti AI. All rights reserved.</p>
+          <p>© 2026 Srushti AI (srushtiai.in). All rights reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a href="/terms-and-conditions" className="text-accent font-extrabold underline">
               {lang === "te" ? "నిబంధనలు & షరతులు" : "Terms & Conditions"}
@@ -381,8 +382,8 @@ export const TermsAndConditionsPage: React.FC = () => {
             <a href="/privacy-policy" className="hover:text-accent font-extrabold transition-colors">
               {lang === "te" ? "గోప్యతా విధానం" : "Privacy Policy"}
             </a>
-            <a href="mailto:hi@srushti-ai.com" className="hover:text-accent font-extrabold transition-colors flex items-center gap-1.5">
-              <span>Contact: hi@srushti-ai.com</span>
+            <a href="mailto:hi@srushtiai.in" className="hover:text-accent font-extrabold transition-colors flex items-center gap-1.5">
+              <span>Contact: hi@srushtiai.in</span>
             </a>
           </div>
         </div>
