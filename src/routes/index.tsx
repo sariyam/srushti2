@@ -32,6 +32,7 @@ const HeartHandshake = (props: any) => <Icon icon="lucide:heart-handshake" {...p
 const Share2Icon = (props: any) => <Icon icon="lucide:share-2" {...props} />;
 const ShieldCheck = (props: any) => <Icon icon="lucide:shield-check" {...props} />;
 const TrendingUp = (props: any) => <Icon icon="lucide:trending-up" {...props} />;
+const MailIcon = (props: any) => <Icon icon="lucide:mail" {...props} />;
 
 function LandingPageComponent() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -106,6 +107,9 @@ function LandingPageComponent() {
       step3: "3. Download & Share",
       step3Desc: "Get crisp HD photos ready to share on WhatsApp and Instagram.",
       footerText: "Srushti AI — Helping home sellers and local shops take stunning model photos in seconds.",
+      termsLabel: "Terms and Conditions",
+      privacyLabel: "Privacy Policy",
+      contactLabel: "Contact: hi@srushti-ai.com",
     },
     te: {
       badge: "హోమ్ బిజినెస్‌లు & చిన్న షాపుల కోసం ఏఐ ఫోటోషూట్",
@@ -143,6 +147,9 @@ function LandingPageComponent() {
       step3: "3. డౌన్‌లోడ్ చేసి షేర్ చేసుకోండి",
       step3Desc: "సూపర్ క్లారిటీ ఫోటోను డౌన్‌లోడ్ చేసి వాట్సాప్, ఇన్‌స్టాలో పోస్ట్ చేయండి.",
       footerText: "సృష్టి ఏఐ — హోమ్ బిజినెస్‌లు మరియు లోకల్ షాపుల కోసం సులభమైన ఏఐ ఫోటోషూట్.",
+      termsLabel: "Terms and Conditions",
+      privacyLabel: "Privacy Policy",
+      contactLabel: "Contact: hi@srushti-ai.com",
     }
   };
 
@@ -596,26 +603,44 @@ function LandingPageComponent() {
         </div>
       </section>
 
-      {/* --- MINIMAL FOOTER --- */}
-      <footer className="mt-auto border-t border-black/10 dark:border-white/10 py-6 px-4 sm:px-6 bg-[var(--bg-primary)] text-center sm:text-left">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+      {/* --- FOOTER (COMPLIANCE & NAVIGATION) --- */}
+      <footer className="mt-auto border-t border-black/10 dark:border-white/10 py-8 px-4 sm:px-6 bg-[var(--bg-primary)]">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
             <Logo />
-            <span className="text-xs font-bold text-[var(--text-secondary)]">
-              {t.footerText}
-            </span>
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-[var(--text-secondary)]">
+                {t.footerText}
+              </span>
+              <span className="text-[11px] text-[var(--text-secondary)] opacity-60 mt-0.5">
+                © 2026 Srushti AI. All rights reserved.
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-bold text-[var(--text-secondary)]">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-5 gap-y-2.5 text-xs font-bold text-[var(--text-secondary)]">
             <Link to="/studio" className="hover:text-accent transition-colors">
               {lang === "en" ? "Studio" : "స్టూడియో"}
             </Link>
-            <Link to="/terms" className="hover:text-accent transition-colors">
-              {lang === "en" ? "Terms" : "నిబంధనలు"}
+            <Link
+              to="/terms-and-conditions"
+              className="hover:text-accent transition-colors underline-offset-4 hover:underline"
+            >
+              {t.termsLabel}
             </Link>
-            <Link to="/privacy" className="hover:text-accent transition-colors">
-              {lang === "en" ? "Privacy" : "గోప్యత"}
+            <Link
+              to="/privacy-policy"
+              className="hover:text-accent transition-colors underline-offset-4 hover:underline"
+            >
+              {t.privacyLabel}
             </Link>
+            <a
+              href="mailto:hi@srushti-ai.com"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl nm-inset-sm text-accent font-extrabold hover:opacity-80 transition-all border border-accent/20"
+            >
+              <MailIcon className="w-3.5 h-3.5 shrink-0" />
+              <span>{t.contactLabel}</span>
+            </a>
           </div>
         </div>
       </footer>

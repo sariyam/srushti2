@@ -14,9 +14,21 @@ const termsAndConditionsRoute = createRoute({
   component: TermsAndConditionsPage,
 });
 
+const termsAndConditionsHyphenRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/terms-and-conditions",
+  component: TermsAndConditionsPage,
+});
+
 const privacyPolicyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/privacypolicy",
+  component: PrivacyPolicyPage,
+});
+
+const privacyPolicyHyphenRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/privacy-policy",
   component: PrivacyPolicyPage,
 });
 
@@ -28,7 +40,9 @@ const routeTree = rootRoute.addChildren([
   termsRoute,
   privacyRoute,
   termsAndConditionsRoute,
+  termsAndConditionsHyphenRoute,
   privacyPolicyRoute,
+  privacyPolicyHyphenRoute,
 ]);
 
 // Create TanStack Router instance

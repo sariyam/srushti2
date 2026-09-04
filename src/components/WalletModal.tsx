@@ -349,16 +349,33 @@ export const WalletModal: React.FC<WalletModalProps> = ({
           </div>
         </div>
 
-        {/* Footer Security Badge */}
-        <div className="pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-[10px] text-[var(--text-primary)] opacity-70">
-          <div className="flex items-center gap-1.5">
-            <Icon icon="lucide:shield-check" className="w-3.5 h-3.5 text-accent" />
-            <span>{isEn ? "100% Secure Studio Credit System (Razorpay Ready)" : "100% సురక్షిత స్టూడియో క్రెడిట్ సిస్టమ్"}</span>
+        {/* Footer Security Badge & Compliance Links */}
+        <div className="pt-2 border-t border-black/5 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-[var(--text-primary)] opacity-80">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Icon icon="lucide:shield-check" className="w-3.5 h-3.5 text-accent shrink-0" />
+            <span>{isEn ? "100% Secure via Razorpay (PCI-DSS Level 1) •" : "Razorpay ద్వారా 100% సురక్షితం •"}</span>
+            <a
+              href="/terms-and-conditions"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent underline font-bold hover:opacity-80"
+            >
+              {isEn ? "Terms" : "నిబంధనలు"}
+            </a>
+            <span>&</span>
+            <a
+              href="/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent underline font-bold hover:opacity-80"
+            >
+              {isEn ? "Privacy" : "గోప్యత"}
+            </a>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="font-bold hover:text-accent cursor-pointer"
+            className="font-bold hover:text-accent cursor-pointer ml-auto"
           >
             {isEn ? "Done" : "పూర్తయింది"}
           </button>
