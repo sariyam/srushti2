@@ -21,6 +21,7 @@ import {
 import { 
   compressImage, 
   downloadImage, 
+  generateSrushtiFileName,
   shareImage
 } from "./utils/imageUtils";
 
@@ -723,8 +724,15 @@ export default function App() {
           console.log("Wallet deduction status info:", walletDeductErr);
         }
 
+        // Generate dynamic file name matching format: srtushtiAi_Select Businesstype_datetimeampm
+        const activeDownloadFileName = generateSrushtiFileName(
+          workspace === "garment" ? "Garment" : "Jewelry",
+          workspace === "garment" ? garmentType : jewelryType,
+          "png"
+        );
+
         try {
-          downloadImage(generatedImageUrl, `srushti_${workspace}_photography.png`);
+          downloadImage(generatedImageUrl, activeDownloadFileName);
         } catch (downloadErr) {
           console.log("Auto download status info:", downloadErr);
         }
@@ -747,7 +755,12 @@ export default function App() {
   const handleDownloadOutput = () => {
     const activeSrc = generatedImage || originalImage;
     if (!activeSrc) return;
-    downloadImage(activeSrc, `srushti_${workspace}_photography.png`);
+    const downloadFileName = generateSrushtiFileName(
+      workspace === "garment" ? "Garment" : "Jewelry",
+      workspace === "garment" ? garmentType : jewelryType,
+      "png"
+    );
+    downloadImage(activeSrc, downloadFileName);
   };
 
   // Share Output
@@ -851,6 +864,9 @@ export default function App() {
             generationError={generationError}
             aspectRatio={workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio}
             debugPayload={debugPayload}
+            workspace={workspace}
+            businessType={workspace === "garment" ? "Garment" : "Jewelry"}
+            subType={workspace === "garment" ? garmentType : jewelryType}
           />
 
           {/* RIGHT COLUMN: WORKSPACE DETAILS */}

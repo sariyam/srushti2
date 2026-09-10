@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
+import { generateSrushtiFileName } from "../utils/imageUtils";
 
 const Eye = (props: any) => <Icon icon="lucide:eye" {...props} />;
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
@@ -39,6 +40,9 @@ interface PreviewStageProps {
   generationError: string | null;
   aspectRatio?: string;
   debugPayload?: any;
+  workspace?: "garment" | "jewelry";
+  businessType?: string;
+  subType?: string;
 }
 
 const CROP_RATIOS = [
@@ -68,6 +72,9 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
   generationError,
   aspectRatio = "1:1",
   debugPayload,
+  workspace = "garment",
+  businessType,
+  subType,
   ...rest
 }) => {
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -865,7 +872,14 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                   <div className="p-4 border-t border-[var(--shadow-dark)]/20 flex items-center justify-end bg-[var(--bg-secondary)]/90 backdrop-blur-sm rounded-2xl">
                     <button
                       id="btn-download-cropped-output-view"
-                      onClick={() => handleDownloadEditorImage(croppedResult, "srushti-cropped-photo.jpg")}
+                      onClick={() => {
+                        const croppedFileName = generateSrushtiFileName(
+                          businessType || (workspace === "jewelry" ? "Jewelry" : "Garment"),
+                          subType ? `${subType}_Cropped` : "Cropped",
+                          "jpg"
+                        );
+                        handleDownloadEditorImage(croppedResult, croppedFileName);
+                      }}
                       className="px-6 py-2.5 rounded-xl nm-outset text-accent hover:text-accent font-extrabold text-xs flex items-center gap-2 transition-all cursor-pointer border border-accent/40 hover:scale-105 active:scale-95"
                     >
                       <Download className="w-4 h-4 text-accent" />

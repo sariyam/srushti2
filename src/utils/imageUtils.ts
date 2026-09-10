@@ -147,6 +147,49 @@ export function removeBackgroundPixels(
 }
 
 /**
+ * Generates an image download filename matching the pattern:
+ * srtushtiAi_[SelectedBusinessType]_[datetimeampm].png
+ * 
+ * Example:
+ * srtushtiAi_Garment_2026-09-10_01-45-20pm.png or srtushtiAi_Garment_Saree_2026-09-10_01-45-20pm.png
+ */
+export function generateSrushtiFileName(
+  businessType: string = "Garment",
+  subType?: string,
+  ext: string = "png"
+): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  let hours = now.getHours();
+  const ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // 0 becomes 12
+  const hoursStr = String(hours).padStart(2, "0");
+  const minutesStr = String(now.getMinutes()).padStart(2, "0");
+  const secondsStr = String(now.getSeconds()).padStart(2, "0");
+
+  const datetimeampm = `${year}-${month}-${day}_${hoursStr}-${minutesStr}-${secondsStr}${ampm}`;
+
+  // Format business type e.g. "Garment" or "Jewelry"
+  let cleanBusiness = businessType
+    ? businessType.charAt(0).toUpperCase() + businessType.slice(1)
+    : "Garment";
+
+  if (subType) {
+    const cleanSub = subType.charAt(0).toUpperCase() + subType.slice(1);
+    cleanBusiness = `${cleanBusiness}_${cleanSub}`;
+  }
+
+  // Remove any spaces or unsupported characters
+  cleanBusiness = cleanBusiness.replace(/[^a-zA-Z0-9_]/g, "_");
+
+  return `srtushtiAi_${cleanBusiness}_${datetimeampm}.${ext}`;
+}
+
+/**
  * Triggers a native system image file download in the browser.
  */
 export async function downloadImage(src: string, filename: string): Promise<void> {
