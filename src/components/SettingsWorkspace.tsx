@@ -44,7 +44,6 @@ interface SettingsWorkspaceProps {
   selectedProvider?: "all" | "openai" | "google";
   setSelectedProvider?: (val: "all" | "openai" | "google") => void;
   selectedImageModel?: string;
-  selectedVideoModel?: string;
   geminiApiKey?: string;
   geminiApiInput?: string;
   setGeminiApiInput?: (val: string) => void;
@@ -78,7 +77,6 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
   selectedProvider,
   setSelectedProvider,
   selectedImageModel,
-  selectedVideoModel,
   geminiApiKey,
   geminiApiInput,
   setGeminiApiInput,

@@ -833,21 +833,6 @@ export function compilePrompt(state: {
   }
 }
 
-// Pricing reference table rows
-export interface PricingRow {
-  model: string;
-  resolution: string;
-  price: string;
-}
-
-export const PRICING_DATA: PricingRow[] = [
-  {
-    model: "OpenAI GPT-Image-2.5 Sunburst (gpt-image-2.5-sunburst) ✨",
-    resolution: "1024x1024 | 1024x1536 | 1536x1024 | 2K | 4K (Low / Medium / High Quality)",
-    price: "$0.005 - $0.211 per image"
-  }
-];
-
 export const IMAGE_MODELS = [
   { 
     id: "gpt_image_2_5_sunburst", 

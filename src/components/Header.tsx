@@ -331,8 +331,6 @@ interface HeaderProps {
   setSelectedImageModel: (val: string) => void;
   gptImageQuality?: "low" | "medium" | "high";
   setGptImageQuality?: (val: "low" | "medium" | "high") => void;
-  selectedVideoModel: string;
-  setSelectedVideoModel: (val: string) => void;
   currency: "USD" | "INR";
   setCurrency: (val: "USD" | "INR") => void;
   usdToInrRate: number;
@@ -397,8 +395,6 @@ export const Header: React.FC<HeaderProps> = ({
   setSelectedImageModel,
   gptImageQuality,
   setGptImageQuality,
-  selectedVideoModel,
-  setSelectedVideoModel,
   currency,
   setCurrency,
   usdToInrRate,
@@ -986,8 +982,6 @@ export const Header: React.FC<HeaderProps> = ({
                   setSelectedImageModel={setSelectedImageModel}
                   gptImageQuality={gptImageQuality}
                   setGptImageQuality={setGptImageQuality}
-                  selectedVideoModel={selectedVideoModel}
-                  setSelectedVideoModel={setSelectedVideoModel}
                   selectedProvider={selectedProvider}
                   setSelectedProvider={setSelectedProvider}
                   currency={currency}
@@ -1080,7 +1074,6 @@ export const Header: React.FC<HeaderProps> = ({
                   selectedProvider={selectedProvider}
                   setSelectedProvider={setSelectedProvider}
                   selectedImageModel={selectedImageModel}
-                  selectedVideoModel={selectedVideoModel}
                   openaiApiKey={openaiApiKey}
                   openaiApiInput={openaiApiInput}
                   setOpenaiApiInput={setOpenaiApiInput}

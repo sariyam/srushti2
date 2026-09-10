@@ -2,37 +2,6 @@ export type Language = "en" | "te";
 
 export type Workspace = "garment" | "jewelry" | "billing" | "settings";
 
-export interface AppState {
-  language: Language;
-  theme: "light" | "dark";
-  workspace: Workspace;
-  apiKey: string;
-  originalImage: string | null; // base64
-  removedBgImage: string | null; // base64
-  generatedImage: string | null; // base64
-  isRemovingBg: boolean;
-  isGenerating: boolean;
-  generationError: string | null;
-  tolerance: number; // for custom bg removal keying
-  
-  // Garment photographic selections
-  garmentType: "saree" | "tshirt" | "jeans" | "shirt" | "western_wear" | "kurta" | "suit" | "salwar" | "lehenga" | "gown" | "skirt" | "crop_top" | "blouse" | "sherwani" | "dhoti" | "blazer" | "tracksuit" | "hoodie";
-  garmentPresentation: "model" | "partial_face" | "no_face" | "mannequin" | "hanger" | "ghost" | "flat_lay" | "folded" | "shelf" | "shopwindow";
-  garmentModelGender: "female" | "male";
-  garmentModelPose: string;
-  garmentBackground: "plain" | "studio" | "traditional" | "festival" | "luxury" | "royal" | "urban" | "vintage" | "modern_office";
-  garmentBgColor: string; // hex or color name for plain bg
-
-  // Jewelry photographic selections
-  jewelryType: "earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
-  jewelryPresentation: "model" | "bust" | "partial_face" | "no_face" | "body_part";
-  jewelryModelGender: "female" | "male";
-  jewelryModelPose: string;
-  jewelryBustRegion: "head" | "neck" | "wrist" | "ankle" | "finger" | "hand" | "naturally" | "ear";
-  jewelryBackground: "plain" | "studio" | "luxury" | "festival" | "traditional" | "wood" | "beach" | "velvet" | "silk" | "granite" | "mirror";
-  jewelryBgColor: string;
-}
-
 // Full-featured translations for English and Telugu
 export const TRANSLATIONS = {
   en: {
@@ -66,12 +35,7 @@ export const TRANSLATIONS = {
     // Canvas / Upload
     uploadTitle: "Product photo should be a clear front view with all details visible",
     uploadSubtitle: "Drag photo here or tap to capture",
-    removingBg: "Removing Background...",
-    removeBgSuccess: "Background Removed Successfully!",
-    removerTolerance: "Removal Tuning",
-    restoreOriginal: "See Original",
     originalLabel: "Original Photo",
-    noBgLabel: "Transparent Product",
     finalLabel: "Final AI Photo",
     generating: "Creating Photographic Magic...",
     generateBtn: "Create Photo",
@@ -417,12 +381,7 @@ export const TRANSLATIONS = {
     // Canvas / Upload
     uploadTitle: "ప్రొడక్ట్ ఫోటో స్పష్టమైన ఫ్రంట్ వ్యూలో అన్ని వివరాలతో ఉండాలి",
     uploadSubtitle: "ఇక్కడ ఫోటోను వేయండి లేదా కెమెరా కోసం నొక్కండి",
-    removingBg: "వెనుక బ్యాక్‌గ్రౌండ్ తీసివేయబడుతోంది...",
-    removeBgSuccess: "బ్యాక్‌గ్రౌండ్ విజయవంతంగా తీసివేయబడింది!",
-    removerTolerance: "తీసివేత సర్దుబాటు",
-    restoreOriginal: "అసలు ఫోటో చూడండి",
     originalLabel: "అసలు ఫోటో",
-    noBgLabel: "బ్యాక్‌గ్రౌండ్ లేని వస్తువు",
     finalLabel: "తయారైన ఏఐ ఫోటో",
     generating: "అందమైన ఏఐ ఫోటో తయారవుతోంది...",
     generateBtn: "ఫోటో సృష్టించు",

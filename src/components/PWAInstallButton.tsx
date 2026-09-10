@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Share2, PlusSquare, Smartphone, Check, Sparkles, Download } from 'lucide-react';
+import { Icon } from '@iconify/react';
+
+const X = (props: any) => <Icon icon="lucide:x" {...props} />;
+const Share2 = (props: any) => <Icon icon="lucide:share-2" {...props} />;
+const PlusSquare = (props: any) => <Icon icon="lucide:plus-square" {...props} />;
+const Smartphone = (props: any) => <Icon icon="lucide:smartphone" {...props} />;
+const Check = (props: any) => <Icon icon="lucide:check" {...props} />;
+const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
+const Download = (props: any) => <Icon icon="lucide:download" {...props} />;
 import { usePWAInstall } from '../hooks/usePWAInstall';
 import { LOGOS_BASE64 } from '../assets/logoBase64';
 import frontLogo from '../assets/front_logo.png';

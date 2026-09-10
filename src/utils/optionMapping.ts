@@ -165,35 +165,7 @@ export const JEWELRY_BUST_MAPPING: Record<string, readonly string[]> = {
   headband: ["head", "naturally"] as const
 };
 
-// 4. Garment Type to allowed presentation modes mapping
-export const GARMENT_PRESENTATION_MAPPING = {
-  saree: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  tshirt: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  jeans: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  shirt: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  western_wear: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  kurta: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  suit: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  salwar: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  lehenga: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  gown: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  skirt: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  crop_top: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  blouse: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  sherwani: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  dhoti: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  blazer: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  tracksuit: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const,
-  hoodie: ["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const
-};
-
-// 5. Allowed background categories per workspace
-export const BACKGROUND_STYLES = {
-  garment: ["plain", "studio", "traditional", "festival", "luxury", "royal", "urban", "vintage", "modern_office"] as const,
-  jewelry: ["plain", "studio", "luxury", "festival", "traditional", "wood", "beach", "velvet", "silk", "granite", "mirror"] as const
-};
-
-// 6. Allowed model poses/angles per item type
+// 4. Allowed model poses/angles per item type
 export const GARMENT_POSES_BY_CATEGORY = {
   full_wear: [
     "standing_front",
@@ -533,17 +505,7 @@ export function getJewelryPoses(jewelryType: string, presentationMode?: string):
   return JEWELRY_POSES_BY_CATEGORY.neck_ear;
 }
 
-// Legacy array for compatibility
-export const JEWELRY_MODEL_POSES = [
-  "neck_collarbone",
-  "side_ear_profile",
-  "hand_face_gesture",
-  "three_quarter_gaze",
-  "wrist_hand_display",
-  "front_direct_portrait"
-] as const;
-
-// 6. Validation and auto-correction utilities to prevent inconsistent states
+// 5. Validation and auto-correction utilities to prevent inconsistent states
 export const OptionValidator = {
   /**
    * Get valid jewelry bust region based on selected jewelry type.

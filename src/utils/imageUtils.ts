@@ -1,13 +1,7 @@
 /**
  * Reusable utility functions for client-side image processing,
- * compression, chroma key background removal, downloading, and sharing.
+ * compression, downloading, and sharing.
  */
-
-export interface ColorRGB {
-  r: number;
-  g: number;
-  b: number;
-}
 
 /**
  * Compresses an uploaded image file to a maximum dimension while maintaining aspect ratio.
@@ -48,101 +42,6 @@ export function compressImage(file: File, maxDim: number = 1200): Promise<string
     };
     reader.onerror = reject;
     reader.readAsDataURL(file);
-  });
-}
-
-/**
- * Removes the background of an image locally using an anti-aliased Euclidean chroma-keying algorithm.
- * If colorKey is null, it auto-detects background color by averaging the four extreme corners.
- */
-export function removeBackgroundPixels(
-  imageSrc: string,
-  tolerance: number,
-  colorKey: ColorRGB | null
-): Promise<string> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
-        resolve(imageSrc);
-        return;
-      }
-
-      // Keep dimensions responsive and extremely fast for local calculation
-      const maxDim = 600;
-      let w = img.width;
-      let h = img.height;
-      if (w > maxDim || h > maxDim) {
-        if (w > h) {
-          h = Math.round((h * maxDim) / w);
-          w = maxDim;
-        } else {
-          w = Math.round((w * maxDim) / h);
-          h = maxDim;
-        }
-      }
-
-      canvas.width = w;
-      canvas.height = h;
-      ctx.drawImage(img, 0, 0, w, h);
-
-      const imgData = ctx.getImageData(0, 0, w, h);
-      const pixels = imgData.data;
-
-      // Establish target key color
-      let rBg = 240, gBg = 240, bBg = 240;
-      if (colorKey) {
-        rBg = colorKey.r;
-        gBg = colorKey.g;
-        bBg = colorKey.b;
-      } else {
-        // Auto-detect by sampling corner pixels
-        const samplePoints = [
-          [0, 0],
-          [w - 1, 0],
-          [0, h - 1],
-          [w - 1, h - 1]
-        ];
-        let rSum = 0, gSum = 0, bSum = 0;
-        samplePoints.forEach(([sx, sy]) => {
-          const index = (sy * w + sx) * 4;
-          rSum += pixels[index];
-          gSum += pixels[index + 1];
-          bSum += pixels[index + 2];
-        });
-        rBg = Math.round(rSum / 4);
-        gBg = Math.round(gSum / 4);
-        bBg = Math.round(bSum / 4);
-      }
-
-      // Apply Euclidean color distance filter with soft feathered edge boundaries
-      for (let i = 0; i < pixels.length; i += 4) {
-        const r = pixels[i];
-        const g = pixels[i + 1];
-        const b = pixels[i + 2];
-
-        const dist = Math.sqrt(
-          (r - rBg) * (r - rBg) +
-          (g - gBg) * (g - gBg) +
-          (b - bBg) * (b - bBg)
-        );
-
-        if (dist < tolerance) {
-          pixels[i + 3] = 0; // Transparent
-        } else if (dist < tolerance + 15) {
-          // Linear feathering gradient for smooth edges
-          const fraction = (dist - tolerance) / 15;
-          pixels[i + 3] = Math.round(fraction * 255);
-        }
-      }
-
-      ctx.putImageData(imgData, 0, 0);
-      resolve(canvas.toDataURL("image/png"));
-    };
-    img.onerror = () => resolve(imageSrc);
-    img.src = imageSrc;
   });
 }
 
