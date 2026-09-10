@@ -429,19 +429,19 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                       </div>
                       <div className="font-mono text-[9px] opacity-75 text-center leading-none break-words">
                         {res === "1k" && (
-                          selectedImageModel === "gptimage_2" ? (
+                          (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             garmentAspectRatio === "1:1" ? "1024×1024" :
                             (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16" || garmentAspectRatio === "2:3") ? "1024×1536" : "1536×1024"
                           ) : "1024px"
                         )}
                         {res === "2k" && (
-                          selectedImageModel === "gptimage_2" ? (
+                          (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             garmentAspectRatio === "1:1" ? "2048×2048" :
                             (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16" || garmentAspectRatio === "2:3") ? "1152×2048" : "2048×1152"
                           ) : "2048px"
                         )}
                         {res === "4k" && (
-                          selectedImageModel === "gptimage_2" ? (
+                          (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             garmentAspectRatio === "1:1" ? "3840×3840" :
                             (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16" || garmentAspectRatio === "2:3") ? "2160×3840" : "3840×2160"
                           ) : "4096px"

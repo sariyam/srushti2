@@ -212,8 +212,9 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
 
   // Enforce resolution limits
   useEffect(() => {
-    if (selectedImageModel === "gptimage_2") {
-      if (selectedImageRes !== "1024x1024" && selectedImageRes !== "1024x1536" && selectedImageRes !== "1536x1024") {
+    if (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") {
+      const isValid = GPTIMAGE2_RESOLUTIONS.some(r => r.id === selectedImageRes);
+      if (!isValid) {
         setSelectedImageRes("1024x1024");
       }
     }
@@ -228,7 +229,7 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
   const currentImageModel = IMAGE_MODELS.find(m => m.id === selectedImageModel) || IMAGE_MODELS[0];
 
   // Fetch resolution settings
-  const currentImageResObj = selectedImageModel === "gptimage_2"
+  const currentImageResObj = (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2")
     ? (GPTIMAGE2_RESOLUTIONS.find(r => r.id === selectedImageRes) || GPTIMAGE2_RESOLUTIONS[0])
     : (IMAGE_RESOLUTIONS.find(r => r.id === selectedImageRes) || IMAGE_RESOLUTIONS[1]);
 
@@ -919,23 +920,30 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
           </p>
         </div>
 
-        {/* Quality Status for GPTImage-2 */}
-        {selectedImageModel === "gptimage_2" && (
+        {/* Quality & Model Status for GPT-Image-2.5 Sunburst */}
+        {(selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") && (
           <div className="flex items-center justify-between p-3 rounded-2xl bg-accent/5 border border-accent/20 nm-inset-sm text-xs">
             <div className="flex items-center gap-2">
               <LuSparklesIcon className="w-4 h-4 text-accent shrink-0" />
               <div>
                 <span className="font-bold text-[var(--text-emphasis)] block text-[11px]">
-                  {lang === "en" ? "Payload Quality" : "పేలోడ్ క్వాలిటీ"}
+                  {lang === "en" ? "Model & Payload Quality" : "మోడల్ & పేలోడ్ క్వాలిటీ"}
                 </span>
                 <span className="text-[9.5px] text-[var(--text-secondary)] opacity-80">
-                  {lang === "en" ? "Defaulted to [low] for fastest speed & lowest cost per image" : "తక్కువ ధర మరియు వేగవంతమైన డెలివరీ కోసం [low] డిఫాల్ట్"}
+                  {lang === "en" 
+                    ? "Model: gpt-image-2.5-sunburst • Defaulted to [low] for rapid artisan workflow & cost-efficiency" 
+                    : "మోడల్: gpt-image-2.5-sunburst • వేగవంతమైన వర్క్‌ఫ్లో కోసం [low] డిఫాల్ట్"}
                 </span>
               </div>
             </div>
-            <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-black uppercase tracking-wider bg-accent/20 text-accent border border-accent/30 shrink-0">
-              low
-            </span>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-accent/10 text-accent border border-accent/20">
+                sunburst
+              </span>
+              <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-black uppercase tracking-wider bg-accent/20 text-accent border border-accent/30 shrink-0">
+                low
+              </span>
+            </div>
           </div>
         )}
 
@@ -954,9 +962,9 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
               onChange={(e) => setSelectedImageRes(e.target.value)}
               className="w-full p-3 pr-10 rounded-2xl text-[11px] font-bold border-none outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] appearance-none cursor-pointer"
             >
-              {selectedImageModel === "gptimage_2" ? (
+              {(selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                 GPTIMAGE2_RESOLUTIONS.map((res) => {
-                  const finalPrice = getImagePrice("gptimage_2", res.id, gptImageQuality);
+                  const finalPrice = getImagePrice(selectedImageModel, res.id, gptImageQuality);
                   return (
                     <option key={res.id} value={res.id} className="bg-[var(--bg-panel)]">
                       {lang === "en" ? res.labelEn : res.labelTe} — {formatPrice(finalPrice, currency, usdToInrRate)}/img
@@ -1132,12 +1140,12 @@ export const AdminWorkspace: React.FC<AdminWorkspaceProps> = ({
               </table>
             </div>
 
-            {/* OpenAI gptimage-2 Quality & Size Pricing Matrix Table */}
+            {/* OpenAI GPT-Image-2.5 Sunburst Quality & Size Pricing Matrix Table */}
             <div className="mt-3 p-3 rounded-2xl bg-accent/5 border border-accent/20 nm-inset-sm space-y-2">
               <div className="flex items-center justify-between">
                 <h5 className="text-[10px] font-black uppercase tracking-wider text-accent flex items-center gap-1.5">
                   <LuSparklesIcon className="w-3.5 h-3.5 text-accent animate-pulse" />
-                  OpenAI gptimage-2 Quality & Size Pricing Matrix
+                  OpenAI GPT-Image-2.5 Sunburst Quality & Size Pricing Matrix
                 </h5>
                 <span className="text-[8.5px] font-extrabold text-accent bg-accent/10 border border-accent/20 px-2 py-0.5 rounded-md">
                   {currency} Pricing

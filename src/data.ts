@@ -842,14 +842,21 @@ export interface PricingRow {
 
 export const PRICING_DATA: PricingRow[] = [
   {
-    model: "OpenAI GPTImage-2 (gptimage-2) ✨",
-    resolution: "1024x1024 | 1024x1536 | 1536x1024 (Low / Medium / High Quality)",
+    model: "OpenAI GPT-Image-2.5 Sunburst (gpt-image-2.5-sunburst) ✨",
+    resolution: "1024x1024 | 1024x1536 | 1536x1024 | 2K | 4K (Low / Medium / High Quality)",
     price: "$0.005 - $0.211 per image"
   }
 ];
 
 export const IMAGE_MODELS = [
-  { id: "gptimage_2", provider: "openai", name: "OpenAI GPTImage-2 (gptimage-2)", price: 0.08, unit: "image", desc: "OpenAI next-gen image synthesis model with superior prompt adherence & studio photorealism" }
+  { 
+    id: "gpt_image_2_5_sunburst", 
+    provider: "openai", 
+    name: "OpenAI GPT-Image-2.5 Sunburst (gpt-image-2.5-sunburst)", 
+    price: 0.08, 
+    unit: "image", 
+    desc: "OpenAI flagship high-fidelity studio image synthesis & editing model with exceptional photorealism, texture preservation & precise composition control" 
+  }
 ];
 
 export const IMAGE_RESOLUTIONS = [
@@ -858,7 +865,7 @@ export const IMAGE_RESOLUTIONS = [
   { id: "4k", name: "4096 x 4096 px (Super Resolution / 4K)", multiplier: 2.6, labelEn: "4096 x 4096 px (Super Resolution / 4K)", labelTe: "4096 x 4096 పిక్సెల్స్ (సూపర్ రెజల్యూషన్ / 4K)" },
 ];
 
-export const GPTIMAGE2_RESOLUTIONS = [
+export const GPT_IMAGE_2_5_SUNBURST_RESOLUTIONS = [
   { id: "1024x1024", name: "1024 x 1024 px (1K Square)", multiplier: 1.0, labelEn: "1024 x 1024 px (1K Square)", labelTe: "1024 x 1024 పిక్సెల్స్ (1K స్క్వేర్)" },
   { id: "1536x1024", name: "1536 x 1024 px (1K Landscape)", multiplier: 1.0, labelEn: "1536 x 1024 px (1K Landscape)", labelTe: "1536 x 1024 పిక్సెల్స్ (1K ల్యాండ్‌స్కేప్)" },
   { id: "1024x1536", name: "1024 x 1536 px (1K Portrait)", multiplier: 1.0, labelEn: "1024 x 1536 px (1K Portrait)", labelTe: "1024 x 1536 పిక్సెల్స్ (1K పోర్ట్రెయిట్)" },
@@ -870,7 +877,9 @@ export const GPTIMAGE2_RESOLUTIONS = [
   { id: "3840x3840", name: "3840 x 3840 px (4K Square)", multiplier: 2.0, labelEn: "3840 x 3840 px (4K Square)", labelTe: "3840 x 3840 పిక్సెల్స్ (4K స్క్వేర్)" },
 ];
 
-export const GPTIMAGE2_PRICING_MATRIX = {
+export const GPTIMAGE2_RESOLUTIONS = GPT_IMAGE_2_5_SUNBURST_RESOLUTIONS;
+
+export const GPT_IMAGE_2_5_SUNBURST_PRICING_MATRIX = {
   low: {
     "1024x1024": 0.006,
     "1024x1536": 0.005,
@@ -888,7 +897,9 @@ export const GPTIMAGE2_PRICING_MATRIX = {
   }
 };
 
-export const getGptImage2SizeString = (resolutionId: string, aspectRatio: string = "1:1"): string => {
+export const GPTIMAGE2_PRICING_MATRIX = GPT_IMAGE_2_5_SUNBURST_PRICING_MATRIX;
+
+export const getGptImageSizeString = (resolutionId: string, aspectRatio: string = "1:1"): string => {
   if (
     resolutionId === "1024x1024" || resolutionId === "1536x1024" || resolutionId === "1024x1536" ||
     resolutionId === "2048x2048" || resolutionId === "2048x1152" || resolutionId === "1152x2048" ||
@@ -916,6 +927,8 @@ export const getGptImage2SizeString = (resolutionId: string, aspectRatio: string
   return "1024x1024";
 };
 
+export const getGptImage2SizeString = getGptImageSizeString;
+
 export const getImagePrice = (
   modelId: string, 
   resolutionId: string, 
@@ -927,7 +940,7 @@ export const getImagePrice = (
     return 0;
   }
 
-  if (modelId === "gptimage_2") {
+  if (modelId === "gpt_image_2_5_sunburst" || modelId === "gptimage_2" || modelId === "gpt-image-2.5-sunburst") {
     let multiplier = 1;
 
     if (resolutionId === "2k" || resolutionId === "2048x2048" || resolutionId === "2048x1152" || resolutionId === "1152x2048") {
@@ -951,7 +964,7 @@ export const getImagePrice = (
     }
 
     const q = (quality === "medium" || quality === "high") ? quality : "low";
-    const base1kPrice = GPTIMAGE2_PRICING_MATRIX[q][dimKey];
+    const base1kPrice = GPT_IMAGE_2_5_SUNBURST_PRICING_MATRIX[q][dimKey];
     return base1kPrice * multiplier;
   }
 

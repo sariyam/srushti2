@@ -132,7 +132,9 @@ export default function App() {
 
   // Selected AI Models (shared globally to calculate pricing on export tabs too)
   const [selectedImageModel, setSelectedImageModel] = useState<string>(() => {
-    return localStorage.getItem("srushti_selected_image_model") || "gptimage_2";
+    const saved = localStorage.getItem("srushti_selected_image_model");
+    if (!saved || saved === "gptimage_2") return "gpt_image_2_5_sunburst";
+    return saved;
   });
   const [gptImageQuality, setGptImageQuality] = useState<"low" | "medium" | "high">(
     () => (localStorage.getItem("srushti_gpt_image_quality") as "low" | "medium" | "high") || "low"
@@ -473,7 +475,7 @@ export default function App() {
     const activeAspectRatio = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
     const requiredCredits = calculateRequiredCredits(selectedImageModel, resId, "low", activeAspectRatio);
     const formatted = formatCredits(requiredCredits);
-    return `${formatted} (GPTImage-2 @ Low Quality)`;
+    return `${formatted} (GPT-Image-2.5 Sunburst @ Low Quality)`;
   };
 
   // Creative Photo Generation Trigger
@@ -571,7 +573,7 @@ export default function App() {
       const debugPayloadObj = {
         provider: "OpenAI",
         endpoint: "https://api.openai.com/v1/images/edits",
-        model: "gpt-image-2",
+        model: "gpt-image-2.5-sunburst",
         aspectRatio: workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio,
         resolution: resolution,
         productBase64Preview: originalImage ? `${originalImage.substring(0, 60)}... (${Math.round(originalImage.length / 1024)} KB)` : null,
@@ -592,7 +594,7 @@ export default function App() {
       const openAiEndpoint = "https://api.openai.com/v1/images/edits";
 
       const formData = new FormData();
-      formData.append("model", "gpt-image-2");
+      formData.append("model", "gpt-image-2.5-sunburst");
       formData.append("prompt", promptWithFace);
       formData.append("size", sizeString);
       formData.append("quality", "low");
@@ -640,12 +642,12 @@ export default function App() {
       const openAiDebugObj = {
         ...debugPayloadObj,
         endpoint: openAiEndpoint,
-        model: "gpt-image-2",
+        model: "gpt-image-2.5-sunburst",
         contentType: "multipart/form-data",
         quality: openAiQuality,
         calculatedSize: sizeString,
         rawPayloadFields: {
-          model: "gpt-image-2",
+          model: "gpt-image-2.5-sunburst",
           "image[]": imagePreviewsForDebug,
           prompt: promptWithFace,
           size: sizeString,
@@ -705,8 +707,8 @@ export default function App() {
             currency: currency,
             title: workspace === "garment" ? "Garment Model Shoot (AI Photo)" : "Jewelry Studio Shoot (AI Photo)",
             titleTe: workspace === "garment" ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
-            description: `GPTImage-2 (Low) • ${activeRes.toUpperCase()} • ${activeAspect}`,
-            descriptionTe: `GPTImage-2 (Low) • ${activeRes.toUpperCase()} • ${activeAspect}`,
+            description: `GPT-Image-2.5 Sunburst (Low) • ${activeRes.toUpperCase()} • ${activeAspect}`,
+            descriptionTe: `GPT-Image-2.5 సన్‌బరస్ట్ (Low) • ${activeRes.toUpperCase()} • ${activeAspect}`,
             date: new Date(now).toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
               month: "short",
               day: "numeric",
