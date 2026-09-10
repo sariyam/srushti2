@@ -4,6 +4,14 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/favicon.ico",
+      "destination": "/pwa-assets/favicon.ico"
+    },
+    {
+      "source": "/apple-touch-icon.png",
+      "destination": "/pwa-assets/icons/icon-180x180.png"
+    },
+    {
       "source": "/((?!assets/|pwa-.*|favicon.*|apple-touch-icon.*|screenshot-.*|manifest.*|sw.js|workbox-.*|.*\\..*).*)",
       "destination": "/index.html"
     }

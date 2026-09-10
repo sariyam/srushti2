@@ -128,17 +128,17 @@ export function PWAInstallButton() {
                 </div>
               ) : (
                 <img
-                  src={LOGOS_BASE64.front || frontLogo || "/pwa-192x192.png"}
+                  src={LOGOS_BASE64.front || frontLogo || "/pwa-assets/icons/icon-192x192.png"}
                   alt="Srushti AI PWA App Icon"
                   className="w-full h-full object-contain filter drop-shadow"
                   onError={(e) => {
                     const target = e.currentTarget as HTMLImageElement;
                     if (!target.dataset.failed) {
                       target.dataset.failed = "1";
-                      target.src = "/pwa-192x192.png";
+                      target.src = "/pwa-assets/icons/icon-192x192.png";
                     } else if (target.dataset.failed === "1") {
                       target.dataset.failed = "2";
-                      target.src = "/favicon.png";
+                      target.src = "/pwa-assets/favicon.ico";
                     }
                   }}
                 />
