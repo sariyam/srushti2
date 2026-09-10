@@ -18,6 +18,7 @@ const Gem = (props: any) => <Icon icon="lucide:gem" {...props} />;
 const CreditCard = (props: any) => <Icon icon="lucide:credit-card" {...props} />;
 const Settings = (props: any) => <Icon icon="lucide:settings" {...props} />;
 const UserIcon = (props: any) => <Icon icon="lucide:user" {...props} />;
+const Check = (props: any) => <Icon icon="lucide:check" {...props} />;
 
 const KurtaIcon = (props: any) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>
@@ -284,25 +285,53 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
 
   return (
     <div className="py-1 w-full">
-      <div className="flex flex-wrap items-center justify-center gap-2 py-1 px-1 w-full">
+      <div className="flex flex-wrap items-center justify-center gap-2.5 py-1 px-1 w-full">
         {items.map((id) => {
           const isSelected = selectedId === id;
+          const imageSrc = `/items/${id}.jpg`;
           return (
             <button
               key={id}
               type="button"
               onClick={() => onSelect(id)}
-              className={`min-w-[80px] sm:min-w-[90px] p-2 rounded-xl text-[11px] font-extrabold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
-                isSelected
-                  ? "nm-inset-sm text-accent scale-[0.98] font-black"
-                  : "nm-outset-sm hover:scale-[1.02]"
-              }`}
+              className={`relative overflow-hidden w-[84px] xs:w-[92px] sm:w-[100px] h-[96px] xs:h-[104px] sm:h-[114px] rounded-2xl flex flex-col justify-between p-2 transition-all duration-200 cursor-pointer group shrink-0 bg-[var(--bg-secondary)] ${isSelected
+                ? "ring-2 ring-accent ring-offset-2 ring-offset-[var(--bg-primary)] shadow-lg shadow-accent/25 scale-[0.98]"
+                : "border border-black/10 dark:border-white/10 shadow-xs hover:scale-[1.04] hover:shadow-md active:scale-[0.97]"
+                }`}
             >
-              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full nm-inset-sm flex items-center justify-center flex-shrink-0">
-                {getItemIcon(id)}
+              {/* Background Image from public/items */}
+              <img
+                src={imageSrc}
+                alt={t[id] || id}
+                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300 pointer-events-none"
+                onError={(e) => {
+                  (e.currentTarget as HTMLElement).style.display = "none";
+                }}
+              />
+
+              {/* Gradient Overlay for high text contrast and visual depth */}
+              <div
+                className={`absolute inset-0 transition-colors pointer-events-none ${isSelected
+                  ? "bg-gradient-to-t from-black/95 via-black/55 to-accent/25"
+                  : "bg-gradient-to-t from-black/85 via-black/45 to-black/20 group-hover:from-black/90 group-hover:via-black/55"
+                  }`}
+              />
+
+              {/* Top Row: Mini Icon Badge + Selected Checkmark Indicator */}
+              <div className="relative z-10 w-full flex items-center justify-between pointer-events-none">
+                <div className="w-6 h-6 rounded-full bg-black/60 backdrop-blur-xs border border-white/20 flex items-center justify-center text-white/90 shrink-0 shadow-xs">
+                  {getItemIcon(id)}
+                </div>
+                {isSelected && (
+                  <span className="w-4 h-4 rounded-full bg-accent text-white flex items-center justify-center shadow-xs">
+                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                  </span>
+                )}
               </div>
-              <span className="text-[8.5px] sm:text-[10px] font-bold text-center leading-tight break-words max-w-full whitespace-normal">
-                {t[id] || id}
+
+              {/* Bottom Label: Clear bold white typography with drop shadow */}
+              <span className="relative z-10 text-[9px] xs:text-[9.5px] sm:text-[10px] font-black text-white text-center leading-tight drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.95)] max-w-full px-0.5 line-clamp-2 uppercase tracking-tight pointer-events-none">
+                {t[id] || id.replace(/_/g, " ")}
               </span>
             </button>
           );
@@ -320,7 +349,7 @@ interface HeaderProps {
   jewelryModelGender: "female" | "male";
   onSelectBusiness: (category: "garment" | "jewelry", gender: "female" | "male") => void;
   lang: "en" | "te";
-  
+
   // Billing props
   apiKey: string;
   apiInput: string;
@@ -384,7 +413,7 @@ export const Header: React.FC<HeaderProps> = ({
   jewelryModelGender,
   onSelectBusiness,
   lang,
-  
+
   // Billing props
   apiKey,
   apiInput,
@@ -661,8 +690,8 @@ export const Header: React.FC<HeaderProps> = ({
                     {isEn ? "Select Business" : "బిజినెస్ ఎంచుకోండి"}
                   </h3>
                   <p className="text-[10px] opacity-75 mt-0.5 leading-relaxed">
-                    {isEn 
-                      ? "Choose product category & collection" 
+                    {isEn
+                      ? "Choose product category & collection"
                       : "ఫోటోగ్రఫీ కొరకు కేటగిరి మరియు కలెక్షన్ ఎంచుకోండి"}
                   </p>
                 </div>
@@ -673,22 +702,20 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => setLang("en")}
-                      className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                        lang === "en"
-                          ? "bg-accent text-white shadow-xs font-extrabold"
-                          : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                      }`}
+                      className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${lang === "en"
+                        ? "bg-accent text-white shadow-xs font-extrabold"
+                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                        }`}
                     >
                       English
                     </button>
                     <button
                       type="button"
                       onClick={() => setLang("te")}
-                      className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                        lang === "te"
-                          ? "bg-accent text-white shadow-xs font-extrabold"
-                          : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                      }`}
+                      className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${lang === "te"
+                        ? "bg-accent text-white shadow-xs font-extrabold"
+                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                        }`}
                     >
                       తెలుగు
                     </button>
@@ -713,11 +740,10 @@ export const Header: React.FC<HeaderProps> = ({
                         setTempGarmentType("saree");
                       }
                     }}
-                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${
-                      tempWorkspace === "garment" && tempGarmentGender === "female"
-                        ? "nm-inset text-accent font-extrabold"
-                        : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
-                    }`}
+                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${tempWorkspace === "garment" && tempGarmentGender === "female"
+                      ? "nm-inset text-accent font-extrabold"
+                      : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
+                      }`}
                   >
                     <span className="text-[11px] font-bold">
                       {isEn ? "Female Collection" : "మహిళల కలెక్షన్"}
@@ -733,11 +759,10 @@ export const Header: React.FC<HeaderProps> = ({
                         setTempGarmentType("shirt");
                       }
                     }}
-                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${
-                      tempWorkspace === "garment" && tempGarmentGender === "male"
-                        ? "nm-inset text-accent font-extrabold"
-                        : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
-                    }`}
+                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${tempWorkspace === "garment" && tempGarmentGender === "male"
+                      ? "nm-inset text-accent font-extrabold"
+                      : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
+                      }`}
                   >
                     <span className="text-[11px] font-bold">
                       {isEn ? "Male Collection" : "పురుషుల కలెక్షన్"}
@@ -762,11 +787,10 @@ export const Header: React.FC<HeaderProps> = ({
                         setTempJewelryType("necklace");
                       }
                     }}
-                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${
-                      tempWorkspace === "jewelry" && tempJewelryGender === "female"
-                        ? "nm-inset text-accent font-extrabold"
-                        : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
-                    }`}
+                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${tempWorkspace === "jewelry" && tempJewelryGender === "female"
+                      ? "nm-inset text-accent font-extrabold"
+                      : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
+                      }`}
                   >
                     <span className="text-[11px] font-bold">
                       {isEn ? "Female Collection" : "మహిళల కలెక్షన్"}
@@ -782,11 +806,10 @@ export const Header: React.FC<HeaderProps> = ({
                         setTempJewelryType("chain");
                       }
                     }}
-                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${
-                      tempWorkspace === "jewelry" && tempJewelryGender === "male"
-                        ? "nm-inset text-accent font-extrabold"
-                        : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
-                    }`}
+                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${tempWorkspace === "jewelry" && tempJewelryGender === "male"
+                      ? "nm-inset text-accent font-extrabold"
+                      : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
+                      }`}
                   >
                     <span className="text-[11px] font-bold">
                       {isEn ? "Male Collection" : "పురుషుల కలెక్షన్"}
@@ -812,11 +835,10 @@ export const Header: React.FC<HeaderProps> = ({
                           key={cat}
                           type="button"
                           onClick={() => setTempGarmentCategoryFilter(cat)}
-                          className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all text-center uppercase tracking-tight ${
-                            tempGarmentCategoryFilter === cat
-                              ? "bg-accent/10 text-accent font-black nm-outset-xs"
-                              : "text-[var(--text-primary)] text-opacity-60 hover:text-opacity-90"
-                          }`}
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all text-center uppercase tracking-tight ${tempGarmentCategoryFilter === cat
+                            ? "bg-accent/10 text-accent font-black nm-outset-xs"
+                            : "text-[var(--text-primary)] text-opacity-60 hover:text-opacity-90"
+                            }`}
                         >
                           {cat === "full_wear" && (isEn ? "Full" : "పూర్తి")}
                           {cat === "top_wear" && (isEn ? "Top" : "పై")}
@@ -847,11 +869,10 @@ export const Header: React.FC<HeaderProps> = ({
                           key={cat}
                           type="button"
                           onClick={() => setTempJewelryCategoryFilter(cat as any)}
-                          className={`px-2 py-1 rounded-lg text-[10px] font-extrabold transition-all text-center uppercase tracking-tight ${
-                            tempJewelryCategoryFilter === cat
-                              ? "bg-accent/10 text-accent font-black nm-outset-xs"
-                              : "text-[var(--text-primary)] text-opacity-60 hover:text-opacity-90"
-                          }`}
+                          className={`px-2 py-1 rounded-lg text-[10px] font-extrabold transition-all text-center uppercase tracking-tight ${tempJewelryCategoryFilter === cat
+                            ? "bg-accent/10 text-accent font-black nm-outset-xs"
+                            : "text-[var(--text-primary)] text-opacity-60 hover:text-opacity-90"
+                            }`}
                         >
                           {cat === "neck_ear" && (isEn ? "Neck" : "నెక్")}
                           {cat === "ear_wear" && (isEn ? "Ear" : "చెవి")}

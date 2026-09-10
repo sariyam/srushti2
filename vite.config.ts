@@ -25,6 +25,7 @@ export default defineConfig(() => {
           'back_logo.png',
           'faces/*.jpg',
           'showcase/*.jpg',
+          'items/*.jpg',
         ],
         manifest: {
           id: '/studio',
