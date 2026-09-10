@@ -7,142 +7,142 @@ export const SIMULATED_MOCKUPS = {
   garment: {
     saree: {
       model: {
-        female: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800",
-        male: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800" // Traditional drape/fabric focus
+        female: "/showcase/hero-saree.jpg",
+        male: "/showcase/hero-lehenga.jpg"
       },
-      mannequin: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
-      hanger: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
-      ghost: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800"
+      mannequin: "/showcase/showcase-garment-before.jpg",
+      hanger: "/showcase/showcase-garment-before.jpg",
+      ghost: "/showcase/hero-saree.jpg"
     },
     tshirt: {
       model: {
-        male: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=800",
-        female: "https://images.unsplash.com/photo-1554568218-0f1715e72254?auto=format&fit=crop&q=80&w=800"
+        male: "/showcase/hero-lehenga.jpg",
+        female: "/showcase/hero-saree.jpg"
       },
-      mannequin: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
-      hanger: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
-      ghost: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800"
+      mannequin: "/showcase/showcase-garment-before.jpg",
+      hanger: "/showcase/showcase-garment-before.jpg",
+      ghost: "/showcase/showcase-garment-after.jpg"
     },
     jeans: {
       model: {
-        male: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=800",
-        female: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=800"
+        male: "/showcase/hero-lehenga.jpg",
+        female: "/showcase/hero-saree.jpg"
       },
-      mannequin: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800",
-      hanger: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800",
-      ghost: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800"
+      mannequin: "/showcase/showcase-garment-before.jpg",
+      hanger: "/showcase/showcase-garment-before.jpg",
+      ghost: "/showcase/showcase-garment-after.jpg"
     },
     shirt: {
       model: {
-        male: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&q=80&w=800",
-        female: "https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=800"
+        male: "/showcase/hero-lehenga.jpg",
+        female: "/showcase/hero-saree.jpg"
       },
-      mannequin: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
-      hanger: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
-      ghost: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800"
+      mannequin: "/showcase/showcase-garment-before.jpg",
+      hanger: "/showcase/showcase-garment-before.jpg",
+      ghost: "/showcase/showcase-garment-after.jpg"
     },
     western_wear: {
       model: {
-        male: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=800",
-        female: "https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?auto=format&fit=crop&q=80&w=800"
+        male: "/showcase/hero-lehenga.jpg",
+        female: "/showcase/hero-saree.jpg"
       },
-      mannequin: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800",
-      hanger: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800",
-      ghost: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=800"
+      mannequin: "/showcase/showcase-garment-before.jpg",
+      hanger: "/showcase/showcase-garment-before.jpg",
+      ghost: "/showcase/showcase-garment-after.jpg"
     },
     kurta: {
       model: {
-        male: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800",
-        female: "https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800"
+        male: "/showcase/hero-lehenga.jpg",
+        female: "/showcase/hero-saree.jpg"
       },
-      mannequin: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
-      hanger: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
-      ghost: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800"
+      mannequin: "/showcase/showcase-garment-before.jpg",
+      hanger: "/showcase/showcase-garment-before.jpg",
+      ghost: "/showcase/showcase-garment-after.jpg"
     },
     suit: {
       model: {
-        male: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800",
-        female: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800"
+        male: "/showcase/hero-lehenga.jpg",
+        female: "/showcase/hero-saree.jpg"
       },
-      mannequin: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800",
-      hanger: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800",
-      ghost: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800"
+      mannequin: "/showcase/showcase-garment-before.jpg",
+      hanger: "/showcase/showcase-garment-before.jpg",
+      ghost: "/showcase/showcase-garment-after.jpg"
     },
     salwar: {
       model: {
-        male: "https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800",
-        female: "https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800"
+        male: "/showcase/hero-lehenga.jpg",
+        female: "/showcase/hero-saree.jpg"
       },
-      mannequin: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
-      hanger: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
-      ghost: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800"
+      mannequin: "/showcase/showcase-garment-before.jpg",
+      hanger: "/showcase/showcase-garment-before.jpg",
+      ghost: "/showcase/showcase-garment-after.jpg"
     }
   },
   jewelry: {
     earrings: {
       model: {
-        female: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800",
-        male: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=800"
+        female: "/showcase/hero-jewelry.jpg",
+        male: "/showcase/showcase-jewelry-after.jpg"
       },
       bust: {
-        head: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=800",
-        neck: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=800",
-        wrist: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&q=80&w=800"
+        head: "/showcase/hero-jewelry.jpg",
+        neck: "/showcase/showcase-jewelry-after.jpg",
+        wrist: "/showcase/showcase-jewelry-before.jpg"
       }
     },
     necklace: {
       model: {
-        female: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
-        male: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800"
+        female: "/showcase/showcase-jewelry-after.jpg",
+        male: "/showcase/hero-jewelry.jpg"
       },
       bust: {
-        head: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
-        neck: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
-        wrist: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800"
+        head: "/showcase/showcase-jewelry-after.jpg",
+        neck: "/showcase/showcase-jewelry-after.jpg",
+        wrist: "/showcase/showcase-jewelry-before.jpg"
       }
     },
     chain: {
       model: {
-        female: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
-        male: "https://images.unsplash.com/photo-1611085583191-a3b1a3a35d61?auto=format&fit=crop&q=80&w=800"
+        female: "/showcase/showcase-jewelry-after.jpg",
+        male: "/showcase/hero-jewelry.jpg"
       },
       bust: {
-        head: "https://images.unsplash.com/photo-1611085583191-a3b1a3a35d61?auto=format&fit=crop&q=80&w=800",
-        neck: "https://images.unsplash.com/photo-1611085583191-a3b1a3a35d61?auto=format&fit=crop&q=80&w=800",
-        wrist: "https://images.unsplash.com/photo-1611085583191-a3b1a3a35d61?auto=format&fit=crop&q=80&w=800"
+        head: "/showcase/showcase-jewelry-after.jpg",
+        neck: "/showcase/showcase-jewelry-after.jpg",
+        wrist: "/showcase/showcase-jewelry-before.jpg"
       }
     },
     ring: {
       model: {
-        female: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800",
-        male: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800"
+        female: "/showcase/hero-jewelry.jpg",
+        male: "/showcase/hero-jewelry.jpg"
       },
       bust: {
-        head: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800",
-        neck: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800",
-        wrist: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800"
+        head: "/showcase/hero-jewelry.jpg",
+        neck: "/showcase/hero-jewelry.jpg",
+        wrist: "/showcase/showcase-jewelry-before.jpg"
       }
     },
     bracelet: {
       model: {
-        female: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800",
-        male: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800"
+        female: "/showcase/showcase-jewelry-after.jpg",
+        male: "/showcase/hero-jewelry.jpg"
       },
       bust: {
-        head: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800",
-        neck: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800",
-        wrist: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800"
+        head: "/showcase/showcase-jewelry-after.jpg",
+        neck: "/showcase/showcase-jewelry-after.jpg",
+        wrist: "/showcase/showcase-jewelry-before.jpg"
       }
     },
     watch: {
       model: {
-        female: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&q=80&w=800",
-        male: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=800"
+        female: "/showcase/hero-jewelry.jpg",
+        male: "/showcase/hero-jewelry.jpg"
       },
       bust: {
-        head: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=800",
-        neck: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=800",
-        wrist: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&q=80&w=800"
+        head: "/showcase/hero-jewelry.jpg",
+        neck: "/showcase/hero-jewelry.jpg",
+        wrist: "/showcase/showcase-jewelry-before.jpg"
       }
     }
   }

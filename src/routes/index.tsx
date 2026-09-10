@@ -327,7 +327,7 @@ function LandingPageComponent() {
               <div className="aspect-[3/4] min-h-[220px] rounded-xl relative overflow-hidden bg-neutral-900">
                 {activeShowcase === "garment" && (
                   <img
-                    src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800"
+                    src="/showcase/showcase-garment-before.jpg"
                     alt="Raw Saree Snapshot"
                     className="w-full h-full object-cover filter saturate-[0.85] brightness-[0.92]"
                     loading="lazy"
@@ -335,7 +335,7 @@ function LandingPageComponent() {
                 )}
                 {activeShowcase === "jewelry" && (
                   <img
-                    src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800"
+                    src="/showcase/showcase-jewelry-before.jpg"
                     alt="Raw Jewelry Snapshot"
                     className="w-full h-full object-cover filter saturate-[0.8] brightness-[0.88]"
                     loading="lazy"
@@ -343,7 +343,7 @@ function LandingPageComponent() {
                 )}
                 {activeShowcase === "lifestyle" && (
                   <img
-                    src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&q=80&w=800"
+                    src="/showcase/showcase-lifestyle-before.jpg"
                     alt="Raw Product Snapshot"
                     className="w-full h-full object-cover filter saturate-[0.85] brightness-[0.9]"
                     loading="lazy"
@@ -381,7 +381,7 @@ function LandingPageComponent() {
               <div className="aspect-[3/4] min-h-[220px] rounded-xl relative overflow-hidden bg-neutral-900 shadow-md">
                 {activeShowcase === "garment" && (
                   <img
-                    src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800"
+                    src="/showcase/showcase-garment-after.jpg"
                     alt="AI Studio Model Saree"
                     className="w-full h-full object-cover object-top filter contrast-[1.05]"
                     loading="lazy"
@@ -389,7 +389,7 @@ function LandingPageComponent() {
                 )}
                 {activeShowcase === "jewelry" && (
                   <img
-                    src="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800"
+                    src="/showcase/showcase-jewelry-after.jpg"
                     alt="AI Studio Jewelry Velvet"
                     className="w-full h-full object-cover object-center filter contrast-[1.05]"
                     loading="lazy"
@@ -397,7 +397,7 @@ function LandingPageComponent() {
                 )}
                 {activeShowcase === "lifestyle" && (
                   <img
-                    src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=800"
+                    src="/showcase/showcase-lifestyle-after.jpg"
                     alt="AI Studio Marble Product"
                     className="w-full h-full object-cover object-center filter contrast-[1.05]"
                     loading="lazy"

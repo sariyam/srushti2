@@ -25,89 +25,89 @@ export interface ModelFace {
 export const DEFAULT_AVATAR_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e11d48' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E";
 
 export const FALLBACK_UNSPLASH_MAP: Record<string, string> = {
-  indian_f: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80",
-  indian_f2: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-  editorial_f: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=300&q=80",
-  indian_f4: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=300&q=80",
-  indian_f5: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=300&q=80",
-  indian_f6: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
+  indian_f: "/faces/indian_f.jpg",
+  indian_f2: "/faces/indian_f2.jpg",
+  editorial_f: "/faces/editorial_f.jpg",
+  indian_f4: "/faces/indian_f4.jpg",
+  indian_f5: "/faces/indian_f5.jpg",
+  indian_f6: "/faces/indian_f6.jpg",
 
-  indian_m: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80",
-  indian_m2: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
-  editorial_m: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80",
-  indian_m4: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80",
-  indian_m5: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-  indian_m6: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=300&q=80",
+  indian_m: "/faces/indian_m.jpg",
+  indian_m2: "/faces/indian_m2.jpg",
+  editorial_m: "/faces/editorial_m.jpg",
+  indian_m4: "/faces/indian_m4.jpg",
+  indian_m5: "/faces/indian_m5.jpg",
+  indian_m6: "/faces/indian_m6.jpg",
 
-  african_f: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=300&q=80",
-  african_f2: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?auto=format&fit=crop&w=300&q=80",
-  african_f3: "https://images.unsplash.com/photo-1523824921871-d6f1a15151f1?auto=format&fit=crop&w=300&q=80",
-  african_f4: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-  african_f5: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=300&q=80",
-  african_f6: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=300&q=80",
+  african_f: "/faces/african_f.jpg",
+  african_f2: "/faces/african_f2.jpg",
+  african_f3: "/faces/african_f3.jpg",
+  african_f4: "/faces/african_f4.jpg",
+  african_f5: "/faces/african_f5.jpg",
+  african_f6: "/faces/african_f6.jpg",
 
-  african_m: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-  african_m2: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&w=300&q=80",
-  african_m3: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?auto=format&fit=crop&w=300&q=80",
-  african_m4: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
-  african_m5: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80",
-  african_m6: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=300&q=80",
+  african_m: "/faces/african_m.jpg",
+  african_m2: "/faces/african_m2.jpg",
+  african_m3: "/faces/african_m3.jpg",
+  african_m4: "/faces/african_m4.jpg",
+  african_m5: "/faces/african_m5.jpg",
+  african_m6: "/faces/african_m6.jpg",
 
-  korean_f: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
-  asian_f2: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
-  asian_f3: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-  asian_f4: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=300&q=80",
-  asian_f5: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
-  asian_f6: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=300&q=80",
+  korean_f: "/faces/korean_f.jpg",
+  asian_f2: "/faces/asian_f2.jpg",
+  asian_f3: "/faces/asian_f3.jpg",
+  asian_f4: "/faces/asian_f4.jpg",
+  asian_f5: "/faces/asian_f5.jpg",
+  asian_f6: "/faces/asian_f6.jpg",
 
-  korean_m: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
-  asian_m2: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
-  asian_m3: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80",
-  asian_m4: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80",
-  asian_m5: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80",
-  asian_m6: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=300&q=80",
+  korean_m: "/faces/korean_m.jpg",
+  asian_m2: "/faces/asian_m2.jpg",
+  asian_m3: "/faces/asian_m3.jpg",
+  asian_m4: "/faces/asian_m4.jpg",
+  asian_m5: "/faces/asian_m5.jpg",
+  asian_m6: "/faces/asian_m6.jpg",
 
-  usa_f: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
-  nordic_f: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-  western_f3: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
-  western_f4: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=300&q=80",
-  western_f5: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
-  western_f6: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=300&q=80",
+  usa_f: "/faces/usa_f.jpg",
+  nordic_f: "/faces/nordic_f.jpg",
+  western_f3: "/faces/western_f3.jpg",
+  western_f4: "/faces/western_f4.jpg",
+  western_f5: "/faces/western_f5.jpg",
+  western_f6: "/faces/western_f6.jpg",
 
-  usa_m: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
-  nordic_m: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-  western_m3: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80",
-  western_m4: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80",
-  western_m5: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-  western_m6: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=300&q=80",
+  usa_m: "/faces/usa_m.jpg",
+  nordic_m: "/faces/nordic_m.jpg",
+  western_m3: "/faces/western_m3.jpg",
+  western_m4: "/faces/western_m4.jpg",
+  western_m5: "/faces/western_m5.jpg",
+  western_m6: "/faces/western_m6.jpg",
 
-  mideast_f: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
-  mideast_f2: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
-  mideast_f3: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=300&q=80",
-  mideast_f4: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=300&q=80",
-  mideast_f5: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
-  mideast_f6: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=300&q=80",
+  mideast_f: "/faces/mideast_f.jpg",
+  mideast_f2: "/faces/mideast_f2.jpg",
+  mideast_f3: "/faces/mideast_f3.jpg",
+  mideast_f4: "/faces/mideast_f4.jpg",
+  mideast_f5: "/faces/mideast_f5.jpg",
+  mideast_f6: "/faces/mideast_f6.jpg",
 
-  mideast_m: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-  mideast_m2: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
-  mideast_m3: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80",
-  mideast_m4: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80",
-  mideast_m5: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-  mideast_m6: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=300&q=80",
+  mideast_m: "/faces/mideast_m.jpg",
+  mideast_m2: "/faces/mideast_m2.jpg",
+  mideast_m3: "/faces/mideast_m3.jpg",
+  mideast_m4: "/faces/mideast_m4.jpg",
+  mideast_m5: "/faces/mideast_m5.jpg",
+  mideast_m6: "/faces/mideast_m6.jpg",
 
-  latina_f: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=300&q=80",
-  latina_f2: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=300&q=80",
-  latina_f3: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
-  latina_f4: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
-  latina_f5: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=300&q=80",
-  latina_f6: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+  latina_f: "/faces/latina_f.jpg",
+  latina_f2: "/faces/latina_f2.jpg",
+  latina_f3: "/faces/latina_f3.jpg",
+  latina_f4: "/faces/latina_f4.jpg",
+  latina_f5: "/faces/latina_f5.jpg",
+  latina_f6: "/faces/latina_f6.jpg",
 
-  latino_m: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80",
-  latina_m2: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80",
-  latina_m3: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80",
-  latina_m4: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80",
-  latina_m5: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-  latina_m6: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=300&q=80"
+  latino_m: "/faces/latino_m.jpg",
+  latina_m2: "/faces/latina_m2.jpg",
+  latina_m3: "/faces/latina_m3.jpg",
+  latina_m4: "/faces/latina_m4.jpg",
+  latina_m5: "/faces/latina_m5.jpg",
+  latina_m6: "/faces/latina_m6.jpg"
 };
 
 // Highly curated studio human model closeup headshots loaded directly from embedded Base64 strings or high quality studio photos
@@ -715,7 +715,7 @@ const RAW_PRESET_FACES: Omit<ModelFace, "url">[] = [
 
 export const PRESET_FACES: ModelFace[] = RAW_PRESET_FACES.map(face => ({
   ...face,
-  url: FALLBACK_UNSPLASH_MAP[face.id] || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
+  url: FALLBACK_UNSPLASH_MAP[face.id] || `/faces/${face.id}.jpg` || "/faces/indian_f.jpg"
 }));
 
 export type FaceSubtab = "indian" | "african" | "asian" | "western" | "mideast" | "latina" | "custom";
@@ -873,12 +873,12 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
           </h4>
 
           {/* Upload Custom Face Trigger */}
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            accept="image/*" 
-            onChange={handleCustomFaceUpload} 
-            className="hidden" 
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/*"
+            onChange={handleCustomFaceUpload}
+            className="hidden"
           />
           <button
             type="button"
@@ -901,18 +901,16 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveSubtab(tab.id)}
-                className={`px-2 py-1.5 rounded-xl text-[9.5px] sm:text-[10px] font-extrabold transition-all text-center leading-tight flex items-center justify-center gap-1 shrink-0 cursor-pointer ${
-                  isActive
+                className={`px-2 py-1.5 rounded-xl text-[9.5px] sm:text-[10px] font-extrabold transition-all text-center leading-tight flex items-center justify-center gap-1 shrink-0 cursor-pointer ${isActive
                     ? "nm-inset-sm text-accent scale-[0.98] bg-accent/10"
                     : "nm-outset-sm text-[var(--text-primary)] opacity-80 hover:opacity-100 hover:scale-[1.02]"
-                }`}
+                  }`}
               >
                 <span>{lang === "en" ? tab.en : tab.te}</span>
-                <span className={`px-1 py-0.2 rounded-full text-[8px] sm:text-[8.5px] shrink-0 font-extrabold ${
-                  isActive 
-                    ? "bg-accent/20 text-accent" 
+                <span className={`px-1 py-0.2 rounded-full text-[8px] sm:text-[8.5px] shrink-0 font-extrabold ${isActive
+                    ? "bg-accent/20 text-accent"
                     : "bg-black/5 dark:bg-white/10 text-[var(--text-muted)] opacity-80"
-                }`}>
+                  }`}>
                   {count}
                 </span>
               </button>
@@ -936,13 +934,12 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
                     setSelectedFaceId(face.id);
                     setSelectedFacePrompt(face.prompt);
                   }}
-                  className={`relative p-1.5 sm:p-2 rounded-2xl flex flex-col items-center justify-between gap-1 transition-all cursor-pointer ${
-                    isSelected ? "nm-inset-sm scale-95 text-accent font-black" : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.02]"
-                  }`}
+                  className={`relative p-1.5 sm:p-2 rounded-2xl flex flex-col items-center justify-between gap-1 transition-all cursor-pointer ${isSelected ? "nm-inset-sm scale-95 text-accent font-black" : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.02]"
+                    }`}
                 >
                   <div className="relative w-full aspect-square rounded-xl overflow-hidden nm-inset-xs bg-[var(--bg-secondary)] flex items-center justify-center shrink-0">
-                    <img 
-                      src={face.url} 
+                    <img
+                      src={face.url}
                       alt={face.nameEn}
                       className="w-full h-full object-cover pointer-events-none"
                       onError={(e) => {
@@ -950,7 +947,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
                         const stage = target.dataset.stage || "0";
                         if (stage === "0") {
                           target.dataset.stage = "1";
-                          target.src = face.fallbackUrl || FALLBACK_UNSPLASH_MAP[face.id] || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80";
+                          target.src = face.fallbackUrl || FALLBACK_UNSPLASH_MAP[face.id] || `/faces/${face.id}.jpg` || "/faces/indian_f.jpg";
                         } else if (stage === "1") {
                           target.dataset.stage = "2";
                           target.src = DEFAULT_AVATAR_SVG;
@@ -979,7 +976,7 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
           </div>
         </div>
       ) : (
-        <div 
+        <div
           onClick={() => fileInputRef.current?.click()}
           className="p-4 rounded-2xl border-2 border-dashed border-accent/40 hover:border-accent bg-[var(--color-accent)]/5 flex flex-col items-center justify-center text-center gap-2 cursor-pointer transition-all"
         >

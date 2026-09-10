@@ -14,8 +14,8 @@ const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 const SLIDES = [
   {
     id: "slide-saree",
-    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=85&w=1600&h=900",
-    fallback: "https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=85&w=1600&h=900",
+    image: "/showcase/hero-saree.jpg",
+    fallback: "/showcase/hero-saree-fallback.jpg",
     titleEn: "Royal Kanjeevaram Silk Saree Shoot",
     titleTe: "రాయల్ కాంచీపురం పట్టుచీరల స్టూడియో షూట్",
     tagEn: "Heritage Studio Lighting",
@@ -25,8 +25,8 @@ const SLIDES = [
   },
   {
     id: "slide-lehenga",
-    image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=85&w=1600&h=900",
-    fallback: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=85&w=1600&h=900",
+    image: "/showcase/hero-lehenga.jpg",
+    fallback: "/showcase/hero-lehenga-fallback.jpg",
     titleEn: "Designer Lehenga & Boutique Couture",
     titleTe: "డిజైనర్ లెహంగా & బోటిక్ ఫ్యాషన్ షూట్",
     tagEn: "Editorial Runway Lighting",
@@ -36,8 +36,8 @@ const SLIDES = [
   },
   {
     id: "slide-jewelry",
-    image: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=85&w=1600&h=900",
-    fallback: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=85&w=1600&h=900",
+    image: "/showcase/hero-jewelry.jpg",
+    fallback: "/showcase/hero-jewelry-fallback.jpg",
     titleEn: "Temple Jewelry & Luxury Gold Editorial",
     titleTe: "టెంపుల్ జ్యువెలరీ & గోల్డ్ ఆభరణాల ఫోటోషూట్",
     tagEn: "Velvet Macro Lighting",

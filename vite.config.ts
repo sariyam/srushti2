@@ -23,6 +23,8 @@ export default defineConfig(() => {
           'pwa-assets/splash/*.png',
           'front_logo.png',
           'back_logo.png',
+          'faces/*.jpg',
+          'showcase/*.jpg',
         ],
         manifest: {
           id: '/studio',
@@ -112,7 +114,8 @@ export default defineConfig(() => {
           categories: ['photo', 'business', 'productivity', 'utilities'],
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,json}'],
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,json,jpg,jpeg}'],
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         },
       }),
     ],
