@@ -227,6 +227,27 @@ button.nm-outset-lg:active,
   scrollbar-width: none;
 }
 
+/* Custom smooth, visible scrollbar for scrollable feeds and modals */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(140, 140, 140, 0.35);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 140, 140, 0.65);
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 140, 140, 0.35) transparent;
+}
+
 /* Custom Color Picker Styles (react-colorful) */
 .custom-color-picker-container .react-colorful {
   width: 100% !important;
@@ -248,3 +269,15 @@ button.nm-outset-lg:active,
   border-width: 2px;
 }
 
+/* Never show three dots (...) for long text: wrap to next line cleanly */
+.truncate,
+.text-ellipsis,
+[class*="truncate"],
+[class*="line-clamp"] {
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  -webkit-line-clamp: unset !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}

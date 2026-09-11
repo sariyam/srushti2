@@ -12,7 +12,6 @@ import {
   getInitialWalletTransactions, 
   saveWalletBalance, 
   saveWalletTransactions,
-  clearAllWalletCache,
   calculateRequiredCredits,
   formatCredits
 } from "./utils/wallet";
@@ -24,6 +23,12 @@ import {
   generateSrushtiFileName,
   shareImage
 } from "./utils/imageUtils";
+import { 
+  recordUsageApi, 
+  fetchUsageHistoryApi, 
+  fetchUsageBalanceApi,
+  getAuthToken 
+} from "./utils/api";
 
 // Reusable Components
 import { Header } from "./components/Header";
@@ -177,6 +182,62 @@ export default function App() {
     saveWalletTransactions(walletTransactions);
   }, [walletTransactions]);
 
+  // Synchronize wallet balance and usage history with backend if user is authenticated
+  useEffect(() => {
+    const syncBackendUsageAndBalance = async () => {
+      const token = getAuthToken();
+      if (!token) return;
+
+      try {
+        const balance = await fetchUsageBalanceApi();
+        if (typeof balance === "number") {
+          setWalletBalance(balance);
+        }
+
+        const historyLogs = await fetchUsageHistoryApi(50);
+        if (Array.isArray(historyLogs) && historyLogs.length > 0) {
+          const mappedTxs: WalletTransaction[] = historyLogs.map((log) => {
+            const dateObj = new Date(log.createdAt);
+            const ts = dateObj.getTime();
+            const isGarment = log.workspace === "garment";
+            return {
+              id: log.id,
+              timestamp: ts,
+              type: "debit",
+              amount: log.creditsDeducted,
+              currency: currency,
+              title: isGarment ? "Garment Model Shoot (AI Photo)" : "Jewelry Studio Shoot (AI Photo)",
+              titleTe: isGarment ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
+              description: `${log.itemType ? log.itemType.toUpperCase() : "AI Shoot"} • ${log.metadata?.resolution || "1024x1024"} • ${log.metadata?.aspectRatio || "1:1"}`,
+              descriptionTe: `${log.itemType ? log.itemType.toUpperCase() : "AI షూట్"} • ${log.metadata?.resolution || "1024x1024"} • ${log.metadata?.aspectRatio || "1:1"}`,
+              date: dateObj.toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              status: log.status === "failed" ? "failed" : "success",
+              category: "generation",
+              modelUsed: "GPT-Image-2.5 Sunburst",
+              resolution: log.metadata?.resolution,
+              aspectRatio: log.metadata?.aspectRatio,
+            };
+          });
+
+          setWalletTransactions((prev) => {
+            const recharges = prev.filter((t) => t.category === "recharge");
+            const combined = [...mappedTxs, ...recharges].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            return combined;
+          });
+        }
+      } catch (err) {
+        console.warn("Error syncing backend usage:", err);
+      }
+    };
+
+    syncBackendUsageAndBalance();
+  }, [lang, currency]);
+
   const handleRechargeWallet = (amount: number, bonus: number, note: string) => {
     const totalAdded = amount + bonus;
     setWalletBalance((prev) => {
@@ -216,12 +277,6 @@ export default function App() {
     saveWalletTransactions([]);
   };
 
-  const handleResetWalletCache = () => {
-    clearAllWalletCache();
-    setWalletBalance(0);
-    setWalletTransactions([]);
-  };
-
   // Persist selected models & quality
   useEffect(() => {
     localStorage.setItem("srushti_selected_image_model", selectedImageModel);
@@ -247,19 +302,34 @@ export default function App() {
   // Provider Selection state (default to OpenAI)
   const [selectedProvider, setSelectedProvider] = useState<"all" | "openai" | "google">("openai");
 
-  // OpenAI API Key state
+  // OpenAI API Key state - read directly from frontend environment VITE_OPENAI_API_KEY
+  const envDefaultKey = (import.meta.env.VITE_OPENAI_API_KEY || "").trim();
   const [rawOpenaiApiKey, setRawOpenaiApiKey] = useState<string>(() => {
-    return localStorage.getItem("srushti_openai_api_key") || localStorage.getItem("srushti_api_key") || "";
+    return (
+      envDefaultKey ||
+      localStorage.getItem("srushti_openai_api_key") ||
+      localStorage.getItem("srushti_api_key") ||
+      ""
+    );
   });
   const [openaiApiKey, setOpenaiApiKey] = useState<string>(() => {
-    const saved = localStorage.getItem("srushti_openai_api_key") || localStorage.getItem("srushti_api_key") || "";
+    const saved =
+      envDefaultKey ||
+      localStorage.getItem("srushti_openai_api_key") ||
+      localStorage.getItem("srushti_api_key") ||
+      "";
     if (saved) {
       return saved.length > 10 ? `${saved.substring(0, 6)}...${saved.substring(saved.length - 4)}` : "sk-proj...xxxx";
     }
     return "";
   });
   const [openaiApiInput, setOpenaiApiInput] = useState<string>(() => {
-    return localStorage.getItem("srushti_openai_api_key") || localStorage.getItem("srushti_api_key") || "";
+    return (
+      envDefaultKey ||
+      localStorage.getItem("srushti_openai_api_key") ||
+      localStorage.getItem("srushti_api_key") ||
+      ""
+    );
   });
 
   // Active Key resolver for legacy compatibility
@@ -488,10 +558,11 @@ export default function App() {
       return;
     }
 
-    if (!rawOpenaiApiKey) {
+    const openAiKeyToUse = (import.meta.env.VITE_OPENAI_API_KEY || rawOpenaiApiKey || "").trim();
+    if (!openAiKeyToUse) {
       setGenerationError(lang === "en" 
-        ? "Please enter and save your OpenAI API Key (starting with sk-) in Admin Panel." 
-        : "దయచేసి అడ్మిన్ ప్యానెల్‌లో మీ ఓపెన్ AI API కీని నమోదు చేయండి.");
+        ? "OpenAI API Key is missing. Please add VITE_OPENAI_API_KEY to your frontend .env file." 
+        : "OpenAI API కీ లేదు. దయచేసి మీ ఫ్రంట్‌ఎండ్ .env ఫైల్‌లో VITE_OPENAI_API_KEY ని జోడించండి.");
       setDebugPayload(null);
       setDebugPrompt(null);
       return;
@@ -518,6 +589,7 @@ export default function App() {
     setIsGenerating(true);
     setLoadingStep(0);
 
+    const generationStartTime = Date.now();
     let stepInterval: any = null;
 
     try {
@@ -557,7 +629,7 @@ export default function App() {
 
       const promptWithFace = activePrompt;
 
-      const openAiKeyToUse = rawOpenaiApiKey;
+      // Sourced directly from frontend env or state
       const resolution = workspace === "garment" ? garmentResolution : jewelryResolution;
 
       let cleanFaceBase64 = "";
@@ -697,6 +769,31 @@ export default function App() {
           const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
           const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
           const requiredCredits = calculateRequiredCredits(selectedImageModel, activeRes, gptImageQuality, activeAspect, creditSettings);
+          const latencyMs = Date.now() - generationStartTime;
+          const activeItemType = workspace === "garment" ? garmentType : jewelryType;
+
+          // Call backend usage recording endpoint to deduct credits and store audit record
+          recordUsageApi({
+            workspace: workspace as "garment" | "jewelry",
+            itemType: activeItemType,
+            creditsDeducted: requiredCredits,
+            prompt: promptWithFace,
+            status: "success",
+            latencyMs,
+            metadata: {
+              aspectRatio: activeAspect,
+              resolution: activeRes,
+              photoStyle: workspace === "garment" ? garmentPhotoStyle : jewelryPhotoStyle,
+              quality: gptImageQuality,
+              model: selectedImageModel,
+            },
+          }).then((res) => {
+            if (res && typeof res.remainingCredits === "number") {
+              setWalletBalance(res.remainingCredits);
+            }
+          }).catch((recordErr) => {
+            console.warn("recordUsageApi catch:", recordErr);
+          });
 
           setWalletBalance((prev) => Math.max(0, parseFloat((prev - requiredCredits).toFixed(1))));
           const now = Date.now();
@@ -708,8 +805,8 @@ export default function App() {
             currency: currency,
             title: workspace === "garment" ? "Garment Model Shoot (AI Photo)" : "Jewelry Studio Shoot (AI Photo)",
             titleTe: workspace === "garment" ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
-            description: `GPT-Image-2.5 Sunburst (Low) • ${activeRes.toUpperCase()} • ${activeAspect}`,
-            descriptionTe: `GPT-Image-2.5 సన్‌బరస్ట్ (Low) • ${activeRes.toUpperCase()} • ${activeAspect}`,
+            description: `${activeItemType.toUpperCase()} • ${activeRes.toUpperCase()} • ${activeAspect}`,
+            descriptionTe: `${activeItemType.toUpperCase()} • ${activeRes.toUpperCase()} • ${activeAspect}`,
             date: new Date(now).toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
               month: "short",
               day: "numeric",
@@ -718,6 +815,9 @@ export default function App() {
             }),
             status: "success",
             category: "generation",
+            modelUsed: selectedImageModel,
+            resolution: activeRes,
+            aspectRatio: activeAspect,
           };
           setWalletTransactions((prev) => [debitTx, ...prev]);
         } catch (walletDeductErr) {
@@ -743,6 +843,19 @@ export default function App() {
     } catch (err: any) {
       console.log("AI Photo Generation status info:", err?.message || err);
       setGenerationError(err.message || t.errGenFailed);
+
+      // Record failed generation in backend usage tracking
+      try {
+        const latencyMs = Date.now() - generationStartTime;
+        recordUsageApi({
+          workspace: workspace as "garment" | "jewelry",
+          itemType: workspace === "garment" ? garmentType : jewelryType,
+          creditsDeducted: 0,
+          status: "failed",
+          errorMessage: err?.message || "Generation failed",
+          latencyMs,
+        }).catch(() => {});
+      } catch {}
     } finally {
       if (stepInterval) {
         clearInterval(stepInterval);
@@ -830,7 +943,6 @@ export default function App() {
         walletTransactions={walletTransactions}
         onRecharge={handleRechargeWallet}
         onClearHistory={handleClearWalletHistory}
-        onResetWalletCache={handleResetWalletCache}
         isWalletOpen={isWalletModalOpen}
         setIsWalletOpen={setIsWalletModalOpen}
       />

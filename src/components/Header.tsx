@@ -5,6 +5,7 @@ import { GENDER_GARMENT_MAPPING, GENDER_JEWELRY_MAPPING, GARMENT_CATEGORY_MAPPIN
 import { AdminWorkspace } from "./AdminWorkspace";
 import { SettingsWorkspace } from "./SettingsWorkspace";
 import { WalletModal } from "./WalletModal";
+import { HistoryModal } from "./HistoryModal";
 import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions, formatCredits } from "../utils/wallet";
 import { Logo } from "./Logo";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
@@ -330,7 +331,7 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
               </div>
 
               {/* Bottom Label: Clear bold white typography with drop shadow */}
-              <span className="relative z-10 text-[9px] xs:text-[9.5px] sm:text-[10px] font-black text-white text-center leading-tight drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.95)] max-w-full px-0.5 line-clamp-2 uppercase tracking-tight pointer-events-none">
+              <span className="relative z-10 text-[9px] xs:text-[9.5px] sm:text-[10px] font-black text-white text-center leading-tight drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.95)] max-w-full px-0.5 uppercase tracking-tight pointer-events-none break-words whitespace-normal">
                 {t[id] || id.replace(/_/g, " ")}
               </span>
             </button>
@@ -400,7 +401,6 @@ interface HeaderProps {
   walletTransactions?: WalletTransaction[];
   onRecharge?: (amount: number, bonus: number, note: string) => void;
   onClearHistory?: () => void;
-  onResetWalletCache?: () => void;
   isWalletOpen?: boolean;
   setIsWalletOpen?: (val: boolean) => void;
 }
@@ -464,13 +464,13 @@ export const Header: React.FC<HeaderProps> = ({
   walletTransactions: propWalletTransactions,
   onRecharge: propOnRecharge,
   onClearHistory: propOnClearHistory,
-  onResetWalletCache: propOnResetWalletCache,
   isWalletOpen: propIsWalletOpen,
   setIsWalletOpen: propSetIsWalletOpen,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isBillingOpen, setIsBillingOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [internalIsWalletOpen, setInternalIsWalletOpen] = useState(false);
 
   const isWalletOpen = propIsWalletOpen !== undefined ? propIsWalletOpen : internalIsWalletOpen;
@@ -542,16 +542,6 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const handleResetWalletCache = () => {
-    if (propOnResetWalletCache) {
-      propOnResetWalletCache();
-    } else {
-      setInternalWalletBalance(0);
-      setInternalTransactions([]);
-      saveWalletBalance(currency, 0);
-      saveWalletTransactions([]);
-    }
-  };
   const [isSignedOut, setIsSignedOut] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("srushti_is_signed_out") === "true";
@@ -599,11 +589,16 @@ export const Header: React.FC<HeaderProps> = ({
     const handleOpenWalletModalEvent = () => {
       setIsWalletOpen(true);
     };
+    const handleOpenHistoryModalEvent = () => {
+      setIsHistoryOpen(true);
+    };
     window.addEventListener("srushti:open-business-modal", handleOpenBusinessModalEvent);
     window.addEventListener("srushti:open-wallet-modal", handleOpenWalletModalEvent);
+    window.addEventListener("srushti:open-history-modal", handleOpenHistoryModalEvent);
     return () => {
       window.removeEventListener("srushti:open-business-modal", handleOpenBusinessModalEvent);
       window.removeEventListener("srushti:open-wallet-modal", handleOpenWalletModalEvent);
+      window.removeEventListener("srushti:open-history-modal", handleOpenHistoryModalEvent);
     };
   }, [workspace, garmentModelGender, jewelryModelGender, garmentType, jewelryType, setIsWalletOpen]);
 
@@ -639,6 +634,17 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="text-xs font-black font-mono text-accent">
               {formatCredits(activeWalletBalance)}
             </span>
+          </button>
+
+          {/* Usage & Payment History trigger icon */}
+          <button
+            id="btn-trigger-history-modal"
+            type="button"
+            onClick={() => setIsHistoryOpen(true)}
+            className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
+            title={isEn ? "Usage & Payment History" : "వాడుక & చెల్లింపుల చరిత్ర"}
+          >
+            <Icon icon="lucide:history" className="w-4 h-4" />
           </button>
 
           {/* Admin Panel popup trigger icon */}
@@ -1053,8 +1059,9 @@ export const Header: React.FC<HeaderProps> = ({
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-4 sm:p-6 md:p-8 w-[90vw] max-w-[90vw] lg:max-w-4xl space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-xl transition-all"
+              className={`relative bg-[var(--bg-primary)] rounded-[2rem] p-4 sm:p-6 md:p-8 w-[90vw] max-w-[90vw] ${
+                isSignedOut ? "lg:max-w-4xl" : "lg:max-w-xl"
+              } space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-xl transition-all`}
             >
               {/* Header inside the popup card (hidden when signed out) */}
               {!isSignedOut && (
@@ -1108,7 +1115,6 @@ export const Header: React.FC<HeaderProps> = ({
                       handleOpenModal();
                     }, 100);
                   }}
-                  onResetWalletCache={handleResetWalletCache}
                 />
               </div>
             </motion.div>
@@ -1124,10 +1130,24 @@ export const Header: React.FC<HeaderProps> = ({
             onClose={() => setIsWalletOpen(false)}
             currency={currency}
             walletBalance={activeWalletBalance}
+            transactions={activeTransactions}
             onRecharge={handleWalletRecharge}
-            onResetWalletCache={handleResetWalletCache}
+            onOpenHistory={() => setIsHistoryOpen(true)}
             lang={lang}
             usdToInrRate={usdToInrRate}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Pop-up Dialog for Combined Usage & Payment History */}
+      <AnimatePresence>
+        {isHistoryOpen && (
+          <HistoryModal
+            isOpen={isHistoryOpen}
+            onClose={() => setIsHistoryOpen(false)}
+            lang={lang}
+            currency={currency}
+            onOpenWallet={() => setIsWalletOpen(true)}
           />
         )}
       </AnimatePresence>

@@ -3,6 +3,13 @@ import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
 import { WalletTransaction, getCreditSettings, formatCredits } from "../utils/wallet";
 import { formatPrice } from "../data";
+import {
+  getAuthToken,
+  createPaymentOrderApi,
+  verifyPaymentApi,
+  loadRazorpayCheckoutScript,
+  fetchCurrentUserApi,
+} from "../utils/api";
 
 interface WalletModalProps {
   isOpen: boolean;
@@ -12,7 +19,7 @@ interface WalletModalProps {
   transactions?: WalletTransaction[];
   onRecharge: (amount: number, bonus: number, note: string) => void;
   onClearHistory?: () => void;
-  onResetWalletCache?: () => void;
+  onOpenHistory?: () => void;
   lang: "en" | "te";
   usdToInrRate?: number;
 }
@@ -23,13 +30,12 @@ export const WalletModal: React.FC<WalletModalProps> = ({
   currency,
   walletBalance,
   onRecharge,
-  onResetWalletCache,
+  onOpenHistory,
   lang,
   usdToInrRate = 83.5,
 }) => {
   const isEn = lang === "en";
   const creditSettings = getCreditSettings();
-  const [showResetWalletConfirm, setShowResetWalletConfirm] = useState<boolean>(false);
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number>(
     currency === "INR" ? 500 : 25
   );
@@ -38,6 +44,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
   );
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [showSuccessNotice, setShowSuccessNotice] = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -79,11 +86,13 @@ export const WalletModal: React.FC<WalletModalProps> = ({
   const handleSelectPreset = (amount: number) => {
     setSelectedQuickAmount(amount);
     setCustomAmountInput(amount.toString());
+    setPaymentError(null);
   };
 
   const handleCustomInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setCustomAmountInput(val);
+    setPaymentError(null);
     const num = parseFloat(val);
     if (!isNaN(num)) {
       setSelectedQuickAmount(num);
@@ -92,28 +101,148 @@ export const WalletModal: React.FC<WalletModalProps> = ({
     }
   };
 
-  const handleExecuteRecharge = () => {
+  const handleExecuteRecharge = async () => {
     if (parsedCustomAmount <= 0) return;
 
+    setPaymentError(null);
+    const token = getAuthToken();
+
+    // Ensure user has an active session before initiating payment
+    if (!token) {
+      setPaymentError(
+        isEn
+          ? "Please sign in to your mobile account before recharging credits."
+          : "క్రెడిట్లను రీఛార్జ్ చేయడానికి దయచేసి ముందుగా మీ ఖాతాలోకి సైన్ ఇన్ అవ్వండి."
+      );
+      return;
+    }
+
     setIsProcessing(true);
-    setTimeout(() => {
-      onRecharge(
-        baseCredits,
-        calculatedBonus,
-        isEn
-          ? `Purchased ${totalCreditsToAdd} Credits via Razorpay (${currency === "INR" ? `₹${parsedCustomAmount}` : `$${parsedCustomAmount}`})`
-          : `రేజర్‌పే ద్వారా ${totalCreditsToAdd} క్రెడిట్స్ కొనుగోలు (${currency === "INR" ? `₹${parsedCustomAmount}` : `$${parsedCustomAmount}`})`
-      );
+
+    try {
+      // 1. Ensure Razorpay Checkout SDK is ready in browser
+      const scriptReady = await loadRazorpayCheckoutScript();
+      if (!scriptReady || !(window as any).Razorpay) {
+        throw new Error(
+          isEn
+            ? "Razorpay checkout gateway could not be loaded. Please check your network connection."
+            : "Razorpay గేట్‌వే లోడ్ కాలేదు. దయచేసి నెట్‌వర్క్ కనెక్షన్‌ను తనిఖీ చేయండి."
+        );
+      }
+
+      // 2. Request backend to create server-side Razorpay order
+      const packTitle = activePreset
+        ? `Pack ₹${activePreset.amount} (${activePreset.credits}+${activePreset.bonus} Credits)`
+        : `${totalCreditsToAdd} Credits Top-up`;
+
+      const orderRes = await createPaymentOrderApi({
+        amount: parsedCustomAmount,
+        credits: totalCreditsToAdd,
+        packName: packTitle,
+      });
+
+      const { order } = orderRes;
+      if (!order || !order.orderId) {
+        throw new Error(
+          isEn
+            ? "Failed to generate payment order from server."
+            : "సర్వర్ నుండి చెల్లింపు ఆర్డర్‌ను ప్రారంభించడం విఫలమైంది."
+        );
+      }
+
+      const userPhone = localStorage.getItem("srushti_user_phone") || "";
+
+      // 3. Configure Razorpay Standard Checkout with custom payment configuration
+      const customConfigId = order.configId || "config_SVPwn8f33zfhsP";
+      const options = {
+        key: order.keyId,
+        amount: order.amount, // in paise
+        currency: order.currency || "INR",
+        name: "Srushti AI",
+        description: `${totalCreditsToAdd} Studio Credits Top-up`,
+        image: "/assets/front_logo.png",
+        order_id: order.orderId,
+        checkout_config_id: customConfigId,
+        config_id: customConfigId,
+        prefill: {
+          contact: userPhone ? (userPhone.startsWith("+91") ? userPhone : `+91${userPhone}`) : "",
+        },
+        theme: {
+          color: "#32cf11",
+        },
+        modal: {
+          ondismiss: () => {
+            setIsProcessing(false);
+          },
+        },
+        handler: async (response: any) => {
+          try {
+            setIsProcessing(true);
+
+            // 4. Verify HMAC-SHA256 signature and atomically credit wallet in database
+            const verifyRes = await verifyPaymentApi({
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            });
+
+            if (verifyRes.success) {
+              onRecharge(
+                baseCredits,
+                calculatedBonus,
+                isEn
+                  ? `Purchased ${totalCreditsToAdd} Credits via Razorpay (${response.razorpay_payment_id})`
+                  : `రేజర్‌పే ద్వారా ${totalCreditsToAdd} క్రెడిట్స్ కొనుగోలు (${response.razorpay_payment_id})`
+              );
+
+              // Sync fresh balance from server
+              await fetchCurrentUserApi();
+
+              setShowSuccessNotice(
+                isEn
+                  ? `Payment Successful! Added ${totalCreditsToAdd} Credits. (ID: ${response.razorpay_payment_id})`
+                  : `చెల్లింపు విజయవంతమైంది! ${totalCreditsToAdd} క్రెడిట్స్ జమయ్యాయి. (ID: ${response.razorpay_payment_id})`
+              );
+
+              setTimeout(() => {
+                setShowSuccessNotice(null);
+              }, 5000);
+            }
+          } catch (verifyErr: any) {
+            console.error("Razorpay verification error:", verifyErr);
+            setPaymentError(
+              verifyErr.message ||
+                (isEn
+                  ? "Payment verification failed. Please contact support with your Payment ID."
+                  : "చెల్లింపు ధృవీకరణ విఫలమైంది. దయచేసి పేమెంట్ ఐడీతో సపోర్ట్‌ను సంప్రదించండి.")
+            );
+          } finally {
+            setIsProcessing(false);
+          }
+        },
+      };
+
+      const rzpInstance = new (window as any).Razorpay(options);
+      rzpInstance.on("payment.failed", (resp: any) => {
+        setIsProcessing(false);
+        setPaymentError(
+          resp.error?.description ||
+            (isEn
+              ? "Payment was declined or cancelled. Please try again."
+              : "చెల్లింపు విఫలమైంది లేదా రద్దు చేయబడింది. దయచేసి మళ్లీ ప్రయత్నించండి.")
+        );
+      });
+      rzpInstance.open();
+    } catch (err: any) {
+      console.error("Payment initiation error:", err);
       setIsProcessing(false);
-      setShowSuccessNotice(
-        isEn
-          ? `Successfully added ${totalCreditsToAdd} Credits to your studio wallet!`
-          : `మీ స్టూడియో వాలెట్‌కు ${totalCreditsToAdd} క్రెడిట్స్ విజయవంతంగా జోడించబడ్డాయి!`
+      setPaymentError(
+        err.message ||
+          (isEn
+            ? "Could not start payment. Please check your network and try again."
+            : "చెల్లింపు ప్రారంభించడం సాధ్యం కాలేదు. దయచేసి మళ్లీ ప్రయత్నించండి.")
       );
-      setTimeout(() => {
-        setShowSuccessNotice(null);
-      }, 3500);
-    }, 600);
+    }
   };
 
   return (
@@ -178,6 +307,30 @@ export const WalletModal: React.FC<WalletModalProps> = ({
           )}
         </AnimatePresence>
 
+        {/* Payment Error Alert Banner */}
+        <AnimatePresence>
+          {paymentError && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="p-3.5 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-bold flex items-center justify-between gap-2.5"
+            >
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <Icon icon="lucide:alert-circle" className="w-5 h-5 shrink-0 text-red-500" />
+                <span className="break-words leading-snug">{paymentError}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPaymentError(null)}
+                className="p-1 text-red-500 hover:opacity-80 cursor-pointer shrink-0"
+              >
+                <Icon icon="lucide:x" className="w-4 h-4" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Current Balance Neumorphic Showcase (Primary Credit Display) */}
         <div className="nm-inset rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 bg-[var(--bg-panel)]/50">
           <div className="flex items-center gap-3.5">
@@ -198,50 +351,9 @@ export const WalletModal: React.FC<WalletModalProps> = ({
               </div>
             </div>
           </div>
-
-          {/* Clean Cache (Reset Wallet to 0) Button */}
-          {onResetWalletCache && (
-            <div>
-              {!showResetWalletConfirm ? (
-                <button
-                  id="btn-clean-wallet-cache"
-                  type="button"
-                  onClick={() => setShowResetWalletConfirm(true)}
-                  className="px-3 py-1.5 rounded-xl text-[10px] font-extrabold text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
-                  title={isEn ? "Clean wallet cache & reset credits to 0" : "వాలెట్ కాష్ క్లీన్ చేసి క్రెడిట్స్ 0 చేయండి"}
-                >
-                  <Icon icon="lucide:trash-2" className="w-3.5 h-3.5" />
-                  <span>{isEn ? "Clean Cache" : "క్లీన్ కాష్"}</span>
-                </button>
-              ) : (
-                <div className="flex items-center gap-1.5 bg-rose-500/15 p-1 rounded-xl border border-rose-500/30">
-                  <span className="text-[9.5px] font-bold text-rose-500 px-1">
-                    {isEn ? "Reset to 0?" : "0 చేయాలా?"}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onResetWalletCache();
-                      setShowResetWalletConfirm(false);
-                    }}
-                    className="px-2 py-1 rounded-lg bg-rose-500 text-white text-[9.5px] font-black hover:bg-rose-600 cursor-pointer"
-                  >
-                    {isEn ? "Yes" : "అవును"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowResetWalletConfirm(false)}
-                    className="px-1.5 py-1 text-[9.5px] font-bold text-[var(--text-primary)] opacity-70 hover:opacity-100 cursor-pointer"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
-        {/* SECTION 1: QUICK RECHARGE CARDS (Credits Focus) */}
+        {/* Quick Recharge Section */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <label className="text-xs font-black uppercase tracking-wider text-[var(--text-emphasis)] flex items-center gap-1.5">
@@ -347,6 +459,36 @@ export const WalletModal: React.FC<WalletModalProps> = ({
               )}
             </button>
           </div>
+
+          {/* Direct Link to Usage & History Modal */}
+          {onOpenHistory && (
+            <div className="flex items-center justify-between p-3 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-xl flex items-center justify-center bg-accent/10 text-accent shrink-0">
+                  <Icon icon="lucide:history" className="w-4 h-4" />
+                </div>
+                <div className="text-left">
+                  <span className="text-xs font-bold text-[var(--text-emphasis)] block">
+                    {isEn ? "Usage & Payment History" : "వాడుక & చెల్లింపుల చరిత్ర"}
+                  </span>
+                  <span className="text-[10px] text-[var(--text-primary)] opacity-70">
+                    {isEn ? "View logs from AI generations & Razorpay payments" : "ఏఐ జనరేషన్‌లు & Razorpay చెల్లింపుల వివరాలు చూడండి"}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenHistory();
+                }}
+                className="px-3 py-1.5 rounded-xl nm-outset-sm bg-accent/10 hover:bg-accent text-accent hover:text-white text-xs font-black transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-2"
+              >
+                <span>{isEn ? "View Logs" : "చూడండి"}</span>
+                <Icon icon="lucide:arrow-right" className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Footer Security Badge & Compliance Links */}

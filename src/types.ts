@@ -8,8 +8,8 @@ export const TRANSLATIONS = {
     title: "Srushti AI",
     subtitle: "Business to Brand",
     languageToggle: "తెలుగు",
-    lightTheme: "Light Mode",
-    darkTheme: "Dark Mode",
+    lightTheme: "Light",
+    darkTheme: "Dark",
     
     // Bottom Nav
     navGarment: "Garments",
@@ -29,7 +29,7 @@ export const TRANSLATIONS = {
     adminSubtitle: "Configure AI models, pricing, and API keys",
     settingsTitle: "User Profile",
     settingsSubtitle: "Manage your profile details, theme, and preferences",
-    settingsThemeLabel: "Choose Theme / Appearance",
+    settingsThemeLabel: "Choose Theme / థీమ్ ఎంచుకోండి",
     settingsLanguageLabel: "Choose Language / భాష ఎంచుకోండి",
     
     // Canvas / Upload
@@ -346,7 +346,7 @@ export const TRANSLATIONS = {
     verifyGoogle: "Verify pricing on official Google AI pricing page",
     
     // Errors
-    errNoKey: "Please save your API key in the 'Admin Panel' tab or Settings first to generate AI photos.",
+    errNoKey: "Please configure your OpenAI API Key (VITE_OPENAI_API_KEY) in your frontend .env file first to generate AI photos.",
     errUploadFirst: "Please upload your product photo first!",
     errGenFailed: "Failed to generate photo. Please check your internet connection or API key.",
   },
@@ -354,8 +354,8 @@ export const TRANSLATIONS = {
     title: "Srushti AI",
     subtitle: "Business to Brand",
     languageToggle: "English",
-    lightTheme: "పగటి వెలుతురు",
-    darkTheme: "రాత్రి వెలుతురు",
+    lightTheme: "లైట్",
+    darkTheme: "డార్క్",
     
     // Bottom Nav
     navGarment: "బట్టల ఫోటోలు",
@@ -375,7 +375,7 @@ export const TRANSLATIONS = {
     adminSubtitle: "ఏఐ మోడల్ ధరలు మరియు ఏపీఐ అమరికలను నిర్వహించండి",
     settingsTitle: "యూజర్ ప్రొఫైల్ (Profile)",
     settingsSubtitle: "మీ ఖాతా వివరాలు, థీమ్ మరియు భాషల అమరికలు",
-    settingsThemeLabel: "థీమ్ / రంగు ఎంచుకోండి",
+    settingsThemeLabel: "థీమ్ ఎంచుకోండి (Choose Theme)",
     settingsLanguageLabel: "భాషను మార్చుకోండి (Choose Language)",
     
     // Canvas / Upload
@@ -692,7 +692,7 @@ export const TRANSLATIONS = {
     verifyGoogle: "గూగుల్ అధికారిక ధరల వెబ్‌సైట్‌లో సరిచూసుకోండి",
     
     // Errors
-    errNoKey: "ఏఐ ఫోటోలు చేయడానికి ముందు దయచేసి 'అడ్మిన్ ప్యానెల్' లేదా సెట్టింగ్‌లలో మీ ఏపీఐ కీని సేవ్ చేసుకోండి.",
+    errNoKey: "ఏఐ ఫోటోలు చేయడానికి ముందు దయచేసి మీ ఫ్రంట్‌ఎండ్ .env ఫైల్‌లో OpenAI API కీని (VITE_OPENAI_API_KEY) కాన్ఫిగర్ చేసుకోండి.",
     errUploadFirst: "ముందుగా మీ వస్తువు ఫోటోను అప్‌లోడ్ చేయండి!",
     errGenFailed: "ఫోటో తయారుచేయడం కుదరలేదు. దయచేసి ఇంటర్నెట్ లేదా ఏపీఐ కీని సరిచూసుకోండి.",
   }

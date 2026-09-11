@@ -3,28 +3,62 @@ import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
+import {
+  sendOtpApi,
+  verifyOtpApi,
+  fetchCurrentUserApi,
+  getStoredAuthUser,
+  removeAuthData,
+} from "../utils/api";
 
 const UserIcon = (props: any) => <Icon icon="lucide:user" {...props} />;
 const PhoneIcon = (props: any) => <Icon icon="lucide:phone" {...props} />;
-const MailIcon = (props: any) => <Icon icon="lucide:mail" {...props} />;
-const LockIcon = (props: any) => <Icon icon="lucide:lock" {...props} />;
 const CheckCircleIcon = (props: any) => <Icon icon="lucide:check-circle-2" {...props} />;
 const ShieldCheckIcon = (props: any) => <Icon icon="lucide:shield-check" {...props} />;
 const LogOutIcon = (props: any) => <Icon icon="lucide:log-out" {...props} />;
 const SunIcon = (props: any) => <Icon icon="lucide:sun" {...props} />;
 const MoonIcon = (props: any) => <Icon icon="lucide:moon" {...props} />;
 const LanguagesIcon = (props: any) => <Icon icon="lucide:languages" {...props} />;
-const SaveIcon = (props: any) => <Icon icon="lucide:save" {...props} />;
 const KeyRoundIcon = (props: any) => <Icon icon="lucide:key-round" {...props} />;
 const ArrowRightIcon = (props: any) => <Icon icon="lucide:arrow-right" {...props} />;
 const RefreshCwIcon = (props: any) => <Icon icon="lucide:refresh-cw" {...props} />;
 const SmartphoneIcon = (props: any) => <Icon icon="lucide:smartphone" {...props} />;
 const InfoIcon = (props: any) => <Icon icon="lucide:info" {...props} />;
 const FileTextIcon = (props: any) => <Icon icon="lucide:file-text" {...props} />;
-const ScaleIcon = (props: any) => <Icon icon="lucide:scale" {...props} />;
 const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
-const TrashIcon = (props: any) => <Icon icon="lucide:trash-2" {...props} />;
-const WalletIcon = (props: any) => <Icon icon="lucide:wallet" {...props} />;
+const EyeIcon = (props: any) => <Icon icon="lucide:eye" {...props} />;
+const EyeOffIcon = (props: any) => <Icon icon="lucide:eye-off" {...props} />;
+const LockIcon = (props: any) => <Icon icon="lucide:lock" {...props} />;
+
+const formatPhoneNumber = (phone: string): string => {
+  if (!phone) return "";
+  const cleaned = phone.replace(/[^\d+]/g, "");
+  if (cleaned.startsWith("+91") && cleaned.length === 13) {
+    return `+91 ${cleaned.slice(3, 8)} ${cleaned.slice(8)}`;
+  }
+  const digits = cleaned.replace(/\D/g, "");
+  if (digits.length === 10) {
+    return `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
+  }
+  if (digits.length === 12 && digits.startsWith("91")) {
+    return `+91 ${digits.slice(2, 7)} ${digits.slice(7)}`;
+  }
+  return phone;
+};
+
+const maskPhoneNumber = (phone: string): string => {
+  if (!phone) return "••••• •••••";
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length >= 10) {
+    const last4 = digits.slice(-4);
+    return `+91 ••••• •${last4}`;
+  }
+  if (digits.length >= 4) {
+    const last4 = digits.slice(-4);
+    return `•••• •${last4}`;
+  }
+  return "••••• •••••";
+};
 
 interface SettingsWorkspaceProps {
   apiKey?: string;
@@ -57,7 +91,6 @@ interface SettingsWorkspaceProps {
   setIsSignedOut?: (val: boolean) => void;
   onCloseModal?: () => void;
   onSignInSuccess?: () => void;
-  onResetWalletCache?: () => void;
 }
 
 export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
@@ -89,20 +122,14 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
   setIsSignedOut: propSetIsSignedOut,
   onCloseModal,
   onSignInSuccess,
-  onResetWalletCache,
 }) => {
   // Profile Field States
-  const [fullName, setFullName] = useState(() => {
-    return localStorage.getItem("srushti_user_fullname") || "Vijay Sariyam";
+  const [phoneNumber, setPhoneNumber] = useState(() => {
+    const stored = getStoredAuthUser();
+    if (stored?.phone) return stored.phone;
+    return localStorage.getItem("srushti_user_phone") || "";
   });
-  const [phoneNumber] = useState("+91 98765 43210");
-  const [email, setEmail] = useState("vijay.sariyam02@gmail.com");
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
-  const [verificationNotice, setVerificationNotice] = useState<string | null>(null);
-  const [isSaved, setIsSaved] = useState(false);
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [resetSuccessNotice, setResetSuccessNotice] = useState<string | null>(null);
+  const [isPhoneVisible, setIsPhoneVisible] = useState(false);
   const [internalSignedOut, setInternalSignedOut] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("srushti_is_signed_out") === "true";
@@ -126,12 +153,34 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
 
   const isEn = lang === "en";
 
+  // Sync profile from backend on mount if already authenticated
+  useEffect(() => {
+    const initUser = async () => {
+      const stored = getStoredAuthUser();
+      if (stored && stored.phone) {
+        setPhoneNumber(stored.phone);
+      }
+      try {
+        const liveUser = await fetchCurrentUserApi();
+        if (liveUser && liveUser.phone) {
+          setPhoneNumber(liveUser.phone);
+        }
+      } catch (e) {
+        // Silently ignore background refresh errors
+      }
+    };
+    initUser();
+  }, []);
+
+  const resendTimerRef = React.useRef<any>(null);
+
   const startResendTimer = () => {
-    setResendCooldown(30);
-    const interval = setInterval(() => {
+    if (resendTimerRef.current) clearInterval(resendTimerRef.current);
+    setResendCooldown(120);
+    resendTimerRef.current = setInterval(() => {
       setResendCooldown((prev) => {
         if (prev <= 1) {
-          clearInterval(interval);
+          if (resendTimerRef.current) clearInterval(resendTimerRef.current);
           return 0;
         }
         return prev - 1;
@@ -139,7 +188,13 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
     }, 1000);
   };
 
-  const handleSendOtp = (e?: React.FormEvent) => {
+  useEffect(() => {
+    return () => {
+      if (resendTimerRef.current) clearInterval(resendTimerRef.current);
+    };
+  }, []);
+
+  const handleSendOtp = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const cleanPhone = authPhone.replace(/\D/g, "");
     if (cleanPhone.length < 10) {
@@ -154,20 +209,31 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
     setOtpError(null);
     setIsSendingOtp(true);
 
-    setTimeout(() => {
+    try {
+      const formattedPhone = cleanPhone.length > 10 ? cleanPhone.slice(-10) : cleanPhone;
+      const res = await sendOtpApi(formattedPhone);
       setIsSendingOtp(false);
       setOtpStep("otp");
-      setOtpValue("849201"); // Auto-fill sample OTP for instant convenience
+      setOtpValue("");
+
       setOtpNotice(
         isEn
-          ? `OTP sent to ${authCountryCode} ${authPhone}. Demo code: 849201`
-          : `OTP ${authCountryCode} ${authPhone} కి పంపబడింది. డెమో కోడ్: 849201`
+          ? `OTP dispatched via SMS to ${authCountryCode} ${formattedPhone}.`
+          : `SMS ద్వారా ${authCountryCode} ${formattedPhone} కి OTP పంపబడింది.`
       );
       startResendTimer();
-    }, 900);
+    } catch (err: any) {
+      setIsSendingOtp(false);
+      setOtpError(
+        err?.message ||
+          (isEn
+            ? "Failed to dispatch OTP. Please check your network and try again."
+            : "OTP పంపడం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.")
+      );
+    }
   };
 
-  const handleVerifyOtp = (e?: React.FormEvent) => {
+  const handleVerifyOtp = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!otpValue || otpValue.trim().length !== 6) {
       setOtpError(
@@ -181,50 +247,43 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
     setOtpError(null);
     setIsVerifyingOtp(true);
 
-    setTimeout(() => {
+    try {
+      const cleanPhone = authPhone.replace(/\D/g, "");
+      const formattedPhone = cleanPhone.length > 10 ? cleanPhone.slice(-10) : cleanPhone;
+      const res = await verifyOtpApi(formattedPhone, otpValue);
+
       setIsVerifyingOtp(false);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("srushti_is_signed_out", "false");
+      const verifiedUser = (res as any)?.user || res.data?.user;
+      const verifiedPhone = verifiedUser?.phone || (cleanPhone.length === 10 ? cleanPhone : formattedPhone);
+      if (verifiedPhone) {
+        setPhoneNumber(verifiedPhone);
+        localStorage.setItem("srushti_user_phone", verifiedPhone);
       }
+
       setIsSignedOut(false);
       setOtpStep("phone");
       setOtpValue("");
       setOtpNotice(null);
+
       if (onSignInSuccess) {
         onSignInSuccess();
       } else if (onCloseModal) {
         onCloseModal();
       }
-    }, 800);
-  };
-
-  const handleSaveFullName = (val: string) => {
-    setFullName(val);
-    localStorage.setItem("srushti_user_fullname", val);
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 2000);
-  };
-
-  const handleVerifyEmail = () => {
-    if (isEmailVerified || isVerifyingEmail) return;
-    setIsVerifyingEmail(true);
-    setVerificationNotice(null);
-
-    setTimeout(() => {
-      setIsVerifyingEmail(false);
-      setIsEmailVerified(true);
-      setVerificationNotice(
-        isEn
-          ? `Verification email sent & confirmed for ${email}!`
-          : `సరిచూసే ఇమెయిల్ ${email} కి పంపబడింది మరియు నిర్ధారించబడింది!`
+    } catch (err: any) {
+      setIsVerifyingOtp(false);
+      setOtpError(
+        err?.message ||
+          (isEn
+            ? "Invalid or expired OTP. Please verify and try again."
+            : "చెల్లని లేదా గడువు ముగిసిన OTP. దయచేసి తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.")
       );
-    }, 1200);
+    }
   };
 
   const handleSignOut = () => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("srushti_is_signed_out", "true");
-    }
+    removeAuthData();
+    setPhoneNumber("");
     setIsSignedOut(true);
     setOtpStep("phone");
     setOtpValue("");
@@ -232,11 +291,61 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
     setOtpNotice(null);
   };
 
+  const renderNoteCard = (isEmbeddedInAccount = false) => (
+    <div
+      className={`${
+        isEmbeddedInAccount ? "rounded-2xl p-4 space-y-2.5" : "nm-outset rounded-[2rem] p-4 sm:p-5 space-y-3"
+      } bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/25`}
+    >
+      <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+        <InfoIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+        <h4 className="font-extrabold text-xs sm:text-sm tracking-tight">
+          {lang === "te" ? "గమనిక" : "Note"}
+        </h4>
+      </div>
+      <p className="text-[10.5px] sm:text-[11px] leading-relaxed text-[var(--text-primary)] opacity-90 font-medium break-words">
+        {lang === "te"
+          ? "గమనిక: జనరేట్ చేయబడిన చిత్రాల ఖచ్చితత్వం అప్‌లోడ్ చేసిన ప్రొడక్ట్ ఇమేజ్ యొక్క నాణ్యత మరియు స్పష్టతపై ఆధారపడి ఉంటుంది. సోర్స్ ఇమేజ్ తక్కువ రిజల్యూషన్, మసకగా, క్రాప్ చేయబడి లేదా కనిపించే వివరాలు లేనట్లయితే, జనరేట్ చేయబడిన చిత్రం అసలు ప్రొడక్ట్ కంటే భిన్నంగా ఉండవచ్చు."
+          : "Note: The accuracy of generated images depends on the quality and clarity of the uploaded product image. If the source image is low-resolution, blurry, cropped, or lacks visible details, the generated image may vary from the original product."}
+      </p>
+      <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center gap-x-2 gap-y-1 text-[9.5px] sm:text-[10px] font-bold text-[var(--text-primary)]">
+        <span>{lang === "te" ? "Srushti AI (srushtiai.in) ని ఉపయోగించడం ద్వారా, మీరు మా" : "By using Srushti AI (srushtiai.in), you agree to our"}</span>
+        <a
+          id="link-terms-and-conditions"
+          href="/termsandconditions"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 text-accent hover:opacity-80 transition-opacity cursor-pointer font-extrabold"
+        >
+          {lang === "te" ? "నిబంధనలు & షరతులు" : "Terms & Conditions"}
+        </a>
+        <span>{lang === "te" ? "మరియు" : "&"}</span>
+        <a
+          id="link-privacy-policy"
+          href="/privacypolicy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 text-accent hover:opacity-80 transition-opacity cursor-pointer font-extrabold"
+        >
+          {lang === "te" ? "గోప్యతా విధానం" : "Privacy Policy"}
+        </a>
+        <span>{lang === "te" ? "కు అంగీకరిస్తున్నారు." : ""}</span>
+        <span className="opacity-40">•</span>
+        <a
+          href="mailto:hi@srushtiai.in"
+          className="text-accent underline hover:opacity-80 font-bold"
+        >
+          Support: hi@srushtiai.in
+        </a>
+      </div>
+    </div>
+  );
+
   return (
     <motion.section 
       initial={{ opacity: 0 }} 
       animate={{ opacity: 1 }} 
-      className="space-y-5 w-full max-w-3xl mx-auto"
+      className={`space-y-5 w-full mx-auto ${isSignedOut ? "max-w-3xl" : "max-w-xl"}`}
     >
       {/* Title Header */}
       {!hideTitle && (
@@ -251,10 +360,10 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
         </div>
       )}
 
-      {/* Responsive 2-Column Grid: Stacks on mobile/tablet, side-by-side on desktop with equal height columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 items-start lg:items-stretch">
+      {/* Responsive Grid: 2-column grid when signed out, clean single column when signed in */}
+      <div className={isSignedOut ? "grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 items-start lg:items-stretch" : "w-full"}>
         {/* Left Side: Account Profile or Sign In Card */}
-        <div className="space-y-5 w-full lg:h-full lg:flex lg:flex-col">
+        <div className={`space-y-5 w-full ${isSignedOut ? "lg:h-full lg:flex lg:flex-col" : ""}`}>
           {isSignedOut ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
@@ -399,7 +508,6 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                   <label className="font-extrabold opacity-80 block">
                     {isEn ? "Enter 6-Digit OTP" : "6 అంకెల OTP నమోదు చేయండి"}
                   </label>
-                  <span className="text-[9px] sm:text-[10px] opacity-60 font-mono font-bold">Demo OTP: 849201</span>
                 </div>
 
                 <div className="relative flex items-center">
@@ -408,7 +516,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                     maxLength={6}
                     value={otpValue}
                     onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
-                    placeholder="849201"
+                    placeholder="• • • • • •"
                     className="w-full p-3 sm:p-3.5 pl-9 sm:pl-10 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-[0.2em] sm:tracking-[0.3em] border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] focus:ring-2 focus:ring-accent text-[var(--text-emphasis)]"
                   />
                   <KeyRoundIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 absolute left-3 sm:left-3.5 opacity-50 text-accent" />
@@ -476,374 +584,260 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                 {isEn ? "Account Profile" : "ఖాతా వివరాలు"}
               </h3>
             </div>
-            {isSaved && (
-              <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1 animate-fade-in">
-                <CheckCircleIcon className="w-3 h-3" />
-                {isEn ? "Saved" : "సేవ్ చేయబడింది"}
-              </span>
-            )}
+            <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
+              <CheckCircleIcon className="w-3 h-3" />
+              {isEn ? "Active" : "యాక్టివ్"}
+            </span>
           </div>
 
-          <div className="space-y-4 text-xs">
-            {/* Full Name */}
-            <div className="space-y-1.5">
-              <label className="font-extrabold opacity-80 flex items-center justify-between text-[11px]">
-                <span>{isEn ? "Full Name" : "పూర్తి పేరు"}</span>
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => handleSaveFullName(e.target.value)}
-                  placeholder={isEn ? "Enter your full name" : "మీ పూర్తి పేరు నమోదు చేయండి"}
-                  className="w-full p-3.5 pr-10 rounded-2xl text-xs font-semibold border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] focus:ring-2 focus:ring-accent text-[var(--text-emphasis)]"
-                />
-                <SaveIcon className="w-4 h-4 absolute right-3.5 opacity-40 text-accent" />
-              </div>
-            </div>
-
-            {/* Phone Number (Disabled) */}
+          <div className="space-y-3.5 text-xs">
+            {/* Registered Phone Number with Eye Security Toggle */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-[11px]">
-                <label className="font-extrabold opacity-80 flex items-center gap-1">
-                  <span>{isEn ? "Phone Number" : "ఫోన్ నంబర్"}</span>
+                <label className="font-extrabold opacity-80 flex items-center gap-1.5">
+                  <PhoneIcon className="w-3.5 h-3.5 text-accent" />
+                  <span>{isEn ? "Registered Phone Number" : "నమోదైన ఫోన్ నంబర్"}</span>
                 </label>
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-black/10 dark:bg-white/10 opacity-70 flex items-center gap-1">
-                  <LockIcon className="w-2.5 h-2.5" />
-                  {isEn ? "Disabled" : "అచేతనం"}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span
+                    className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full border flex items-center gap-1 transition-all ${
+                      isPhoneVisible
+                        ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                        : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                    }`}
+                  >
+                    <LockIcon className="w-2.5 h-2.5" />
+                    <span>{isPhoneVisible ? (isEn ? "Visible" : "కనిపిస్తోంది") : (isEn ? "Protected" : "రక్షించబడింది")}</span>
+                  </span>
+                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
+                    <CheckCircleIcon className="w-2.5 h-2.5" />
+                    <span>{isEn ? "Verified" : "ధృవీకరించబడింది"}</span>
+                  </span>
+                </div>
               </div>
               <div className="relative flex items-center">
                 <input
+                  id="profile-phone-input"
                   type="text"
-                  value={phoneNumber}
+                  value={
+                    phoneNumber
+                      ? (isPhoneVisible ? formatPhoneNumber(phoneNumber) : maskPhoneNumber(phoneNumber))
+                      : (isEn ? "No phone number linked" : "ఫోన్ నంబర్ లింక్ చేయబడలేదు")
+                  }
                   disabled
                   readOnly
-                  className="w-full p-3.5 pl-9 rounded-2xl text-xs font-mono font-bold border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] opacity-60 cursor-not-allowed text-[var(--text-primary)]"
+                  className="w-full p-3.5 pl-9 pr-12 rounded-2xl text-xs font-mono font-extrabold tracking-wider border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] cursor-default select-all"
                 />
                 <PhoneIcon className="w-4 h-4 absolute left-3 opacity-50 text-[var(--text-primary)]" />
-                <LockIcon className="w-3.5 h-3.5 absolute right-3.5 opacity-40 text-[var(--text-primary)]" />
-              </div>
-            </div>
-
-            {/* Email + Verify Button */}
-            <div className="space-y-1.5">
-              <label className="font-extrabold opacity-80 text-[11px] block">
-                {isEn ? "Email Address" : "ఇమెయిల్ అడ్రస్"}
-              </label>
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                <div className="relative flex-1 flex items-center">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setIsEmailVerified(false);
-                      setVerificationNotice(null);
-                    }}
-                    placeholder={isEn ? "Enter email address" : "ఇమెయిల్ అడ్రస్ నమోదు చేయండి"}
-                    className="w-full p-3.5 pl-9 rounded-2xl text-xs font-medium border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] focus:ring-2 focus:ring-accent text-[var(--text-emphasis)]"
-                  />
-                  <MailIcon className="w-4 h-4 absolute left-3 opacity-50 text-[var(--text-primary)]" />
-                </div>
-
                 <button
                   type="button"
-                  onClick={handleVerifyEmail}
-                  disabled={isEmailVerified || isVerifyingEmail}
-                  className={`px-4 py-3 sm:py-3.5 rounded-2xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 shrink-0 cursor-pointer ${
-                    isEmailVerified
-                      ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 cursor-default"
-                      : "nm-outset text-accent hover:scale-[1.02] active:scale-[0.98] bg-accent/10"
-                  } ${isVerifyingEmail ? "opacity-70 pointer-events-none" : ""}`}
+                  id="btn-toggle-phone-visibility"
+                  onClick={() => setIsPhoneVisible((prev) => !prev)}
+                  className="absolute right-2.5 p-2 rounded-xl nm-outset-sm hover:scale-105 active:scale-95 text-[var(--text-primary)] hover:text-accent transition-all cursor-pointer flex items-center justify-center bg-[var(--bg-panel)]"
+                  title={isPhoneVisible ? (isEn ? "Hide phone number" : "ఫోన్ నంబర్ దాచు") : (isEn ? "Show phone number" : "ఫోన్ నంబర్ చూపించు")}
+                  aria-label={isPhoneVisible ? "Hide phone number" : "Show phone number"}
                 >
-                  {isVerifyingEmail ? (
-                    <>
-                      <svg className="animate-spin h-3.5 w-3.5 text-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span>{isEn ? "Verifying..." : "పరిశీలిస్తోంది..."}</span>
-                    </>
-                  ) : isEmailVerified ? (
-                    <>
-                      <ShieldCheckIcon className="w-4 h-4 text-emerald-500" />
-                      <span>{isEn ? "Verified ✓" : "వెరిఫై చేయబడింది ✓"}</span>
-                    </>
+                  {isPhoneVisible ? (
+                    <EyeOffIcon className="w-3.5 h-3.5 text-accent" />
                   ) : (
-                    <>
-                      <ShieldCheckIcon className="w-4 h-4" />
-                      <span>{isEn ? "Verify Email" : "ఇమెయిల్ వెరిఫై"}</span>
-                    </>
+                    <EyeIcon className="w-3.5 h-3.5" />
                   )}
                 </button>
               </div>
-
-              {/* Verification Message Alert */}
-              {verificationNotice && (
-                <motion.p
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 pt-1 flex items-center gap-1.5"
-                >
-                  <CheckCircleIcon className="w-3.5 h-3.5 shrink-0" />
-                  <span>{verificationNotice}</span>
-                </motion.p>
-              )}
             </div>
-          </div>
 
-          {/* Clean Wallet Cache & Reset Action */}
-          <div className="pt-3 border-t border-black/5 dark:border-white/5 space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-emphasis)]">
-                <WalletIcon className="w-4 h-4 text-accent" />
-                <span>{isEn ? "Wallet & Credits Storage" : "వాలెట్ & క్రెడిట్స్ డేటా"}</span>
+            {/* Account Status Information Badge & Sign Out Action */}
+            <div className="p-3 rounded-2xl nm-inset-sm bg-[var(--bg-secondary)] flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <ShieldCheckIcon className="w-4 h-4 text-emerald-500 shrink-0 self-center" />
+                <div className="space-y-0.5 min-w-0 flex-1">
+                  <div className="text-[11px] font-extrabold text-[var(--text-emphasis)] leading-snug break-words whitespace-normal">
+                    {isEn ? "OTP Secure Account" : "OTP సురక్షిత ఖాతా"}
+                  </div>
+                  <div className="text-[10px] opacity-70 leading-normal break-words whitespace-normal">
+                    {isEn ? "Passwordless Mobile Login Active" : "పాస్‌వర్డ్‌లెస్ మొబైల్ లాగిన్ యాక్టివ్"}
+                  </div>
+                </div>
               </div>
-              
-              {!showResetConfirm ? (
-                <button
-                  id="settings-btn-clean-wallet-cache"
-                  type="button"
-                  onClick={() => setShowResetConfirm(true)}
-                  className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all flex items-center gap-1 cursor-pointer"
-                >
-                  <TrashIcon className="w-3.5 h-3.5" />
-                  <span>{isEn ? "Clean Wallet Cache" : "వాలెట్ కాష్ క్లీన్ చేయండి"}</span>
-                </button>
-              ) : (
-                <div className="flex items-center gap-1.5 bg-rose-500/15 p-1 rounded-xl border border-rose-500/30">
-                  <span className="text-[10px] font-bold text-rose-500 px-1">
-                    {isEn ? "Reset balance & history to 0?" : "బ్యాలెన్స్ & చరిత్ర 0 చేయాలా?"}
+              <button
+                type="button"
+                id="profile-btn-signout"
+                onClick={handleSignOut}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer shrink-0 self-center whitespace-nowrap"
+                title={isEn ? "Sign out of your account" : "మీ ఖాతా నుండి సైన్ అవుట్ అవ్వండి"}
+              >
+                <LogOutIcon className="w-3.5 h-3.5 shrink-0" />
+                <span>{isEn ? "Sign Out" : "సైన్ అవుట్"}</span>
+              </button>
+            </div>
+
+            {/* Preferences: Choose Theme & Choose Language Inside Account Profile Card */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5">
+              {/* Choose Theme */}
+              <div className="p-3.5 rounded-2xl nm-inset-sm bg-[var(--bg-secondary)] space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    {theme === "light" ? <SunIcon className="w-4 h-4 text-accent" /> : <MoonIcon className="w-4 h-4 text-accent" />}
+                    <span className="font-extrabold text-xs text-[var(--text-emphasis)]">{t.settingsThemeLabel}</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-accent capitalize">
+                    {theme === "light" ? t.lightTheme : t.darkTheme}
                   </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-black/5 dark:bg-white/5">
                   <button
                     type="button"
-                    onClick={() => {
-                      if (onResetWalletCache) {
-                        onResetWalletCache();
-                      } else {
-                        localStorage.removeItem("srushti_wallet_inr");
-                        localStorage.removeItem("srushti_wallet_usd");
-                        localStorage.removeItem("srushti_wallet_transactions");
-                        localStorage.setItem("srushti_wallet_inr", "0.00");
-                        localStorage.setItem("srushti_wallet_usd", "0.00");
-                        localStorage.setItem("srushti_wallet_transactions", JSON.stringify([]));
-                      }
-                      setShowResetConfirm(false);
-                      setResetSuccessNotice(
-                        isEn
-                          ? "Wallet cache cleaned! Amount reset to 0.00 and history cleared."
-                          : "వాలెట్ కాష్ క్లీన్ చేయబడింది! మొత్తం 0.00 మరియు చరిత్ర తొలగించబడింది."
-                      );
-                      setTimeout(() => setResetSuccessNotice(null), 3000);
-                    }}
-                    className="px-2 py-0.5 rounded-lg bg-rose-500 text-white text-[10px] font-black hover:bg-rose-600 cursor-pointer"
+                    id="profile-theme-light"
+                    onClick={() => setTheme("light")}
+                    className={`py-2 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      theme === "light" 
+                        ? "bg-[var(--bg-panel)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                    }`}
                   >
-                    {isEn ? "Yes, Clean" : "అవును, క్లీన్"}
+                    <SunIcon className="w-3.5 h-3.5" />
+                    <span>{t.lightTheme}</span>
                   </button>
+                  
                   <button
                     type="button"
-                    onClick={() => setShowResetConfirm(false)}
-                    className="px-1.5 py-0.5 rounded-lg text-[10px] font-bold opacity-70 hover:opacity-100 cursor-pointer"
+                    id="profile-theme-dark"
+                    onClick={() => setTheme("dark")}
+                    className={`py-2 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      theme === "dark" 
+                        ? "bg-[var(--bg-panel)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                    }`}
                   >
-                    {isEn ? "Cancel" : "రద్దు"}
+                    <MoonIcon className="w-3.5 h-3.5" />
+                    <span>{t.darkTheme}</span>
                   </button>
                 </div>
-              )}
+              </div>
+
+              {/* Choose Language */}
+              <div className="p-3.5 rounded-2xl nm-inset-sm bg-[var(--bg-secondary)] space-y-2.5">
+                <div className="flex items-center gap-2">
+                  <LanguagesIcon className="w-4 h-4 text-accent" />
+                  <span className="font-extrabold text-xs text-[var(--text-emphasis)]">{t.settingsLanguageLabel}</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-black/5 dark:bg-white/5">
+                  <button
+                    type="button"
+                    id="profile-lang-en"
+                    onClick={() => setLang("en")}
+                    className={`py-2 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      lang === "en" 
+                        ? "bg-[var(--bg-panel)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                    }`}
+                  >
+                    English
+                  </button>
+                  
+                  <button
+                    type="button"
+                    id="profile-lang-te"
+                    onClick={() => setLang("te")}
+                    className={`py-2 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      lang === "te" 
+                        ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                    }`}
+                  >
+                    తెలుగు
+                  </button>
+                </div>
+              </div>
             </div>
 
-            {resetSuccessNotice && (
-              <motion.p
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-2 rounded-xl border border-emerald-500/20 flex items-center gap-1.5"
-              >
-                <CheckCircleIcon className="w-3.5 h-3.5 shrink-0" />
-                <span>{resetSuccessNotice}</span>
-              </motion.p>
-            )}
-          </div>
-
-          {/* Sign Out Action Button */}
-          <div className="pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
-            <span className="text-[11px] opacity-60 font-semibold">
-              {isEn ? "Logged in as" : "లాగ్ ఇన్ అయ్యారు"}: <span className="font-extrabold text-[var(--text-emphasis)]">{fullName}</span>
-            </span>
-            <button
-              id="profile-btn-signout"
-              onClick={handleSignOut}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
-            >
-              <LogOutIcon className="w-3.5 h-3.5" />
-              <span>{isEn ? "Sign Out" : "సైన్ అవుట్"}</span>
-            </button>
+            {/* Note Card with embedded Terms & Conditions & Privacy Policy links */}
+            {renderNoteCard(true)}
           </div>
         </div>
       )}
     </div>
 
-    {/* Right Side: Theme / Appearance & Language Options */}
-    <div className="space-y-5 w-full lg:h-full lg:flex lg:flex-col lg:justify-between">
-          {/* Note Card with embedded Terms & Conditions & Privacy Policy links */}
-          <div className="nm-outset rounded-[2rem] p-4 sm:p-5 space-y-3 bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/25">
-            <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
-              <InfoIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-              <h4 className="font-extrabold text-xs sm:text-sm tracking-tight">
-                {lang === "te" ? "గమనిక" : "Note"}
-              </h4>
-            </div>
-            <p className="text-[11px] leading-relaxed text-[var(--text-primary)] opacity-90 font-medium break-words">
-              {lang === "te"
-                ? "గమనిక: జనరేట్ చేయబడిన చిత్రాల ఖచ్చితత్వం అప్‌లోడ్ చేసిన ప్రొడక్ట్ ఇమేజ్ యొక్క నాణ్యత మరియు స్పష్టతపై ఆధారపడి ఉంటుంది. సోర్స్ ఇమేజ్ తక్కువ రిజల్యూషన్, మసకగా, క్రాప్ చేయబడి లేదా కనిపించే వివరాలు లేనట్లయితే, జనరేట్ చేయబడిన చిత్రం అసలు ప్రొడక్ట్ కంటే భిన్నంగా ఉండవచ్చు."
-                : "Note: The accuracy of generated images depends on the quality and clarity of the uploaded product image. If the source image is low-resolution, blurry, cropped, or lacks visible details, the generated image may vary from the original product."}
-            </p>
-            <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold text-[var(--text-primary)]">
-              <span>{lang === "te" ? "Srushti AI (srushtiai.in) ని ఉపయోగించడం ద్వారా, మీరు మా" : "By using Srushti AI (srushtiai.in), you agree to our"}</span>
-              <a
-                id="link-terms-and-conditions"
-                href="/termsandconditions"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-2 text-accent hover:opacity-80 transition-opacity cursor-pointer font-extrabold"
-              >
-                {lang === "te" ? "నిబంధనలు & షరతులు" : "Terms & Conditions"}
-              </a>
-              <span>{lang === "te" ? "మరియు" : "&"}</span>
-              <a
-                id="link-privacy-policy"
-                href="/privacypolicy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-2 text-accent hover:opacity-80 transition-opacity cursor-pointer font-extrabold"
-              >
-                {lang === "te" ? "గోప్యతా విధానం" : "Privacy Policy"}
-              </a>
-              <span>{lang === "te" ? "కు అంగీకరిస్తున్నారు." : ""}</span>
-              <span className="opacity-40">•</span>
-              <a
-                href="mailto:hi@srushtiai.in"
-                className="text-accent underline hover:opacity-80"
-              >
-                Support: hi@srushtiai.in
-              </a>
-            </div>
+    {/* Right Side: Theme / Appearance & Language Options (during Sign In to Your Account) */}
+    {isSignedOut && (
+      <div className="space-y-5 w-full lg:h-full lg:flex lg:flex-col lg:justify-between">
+        {/* Show Note Card above Choose Theme during Sign In to Your Account */}
+        {renderNoteCard(false)}
+
+        {/* Choose Theme / Appearance Card */}
+        <div className="nm-outset rounded-[2rem] p-5 space-y-4">
+          <div className="flex items-center gap-2">
+            {theme === "light" ? <SunIcon className="w-5 h-5 text-accent" /> : <MoonIcon className="w-5 h-5 text-accent" />}
+            <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsThemeLabel}</h3>
           </div>
 
-          {/* Choose Theme / Appearance Card */}
-          <div className="nm-outset rounded-[2rem] p-5 space-y-4">
-            <div className="flex items-center gap-2">
-              {theme === "light" ? <SunIcon className="w-5 h-5 text-accent" /> : <MoonIcon className="w-5 h-5 text-accent" />}
-              <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsThemeLabel}</h3>
-            </div>
+          <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
+            <button
+              id="settings-theme-light"
+              onClick={() => setTheme("light")}
+              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                theme === "light" 
+                  ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                  : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+              }`}
+            >
+              <SunIcon className="w-4 h-4" />
+              <span>{t.lightTheme}</span>
+            </button>
+            
+            <button
+              id="settings-theme-dark"
+              onClick={() => setTheme("dark")}
+              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                theme === "dark" 
+                  ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                  : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+              }`}
+            >
+              <MoonIcon className="w-4 h-4" />
+              <span>{t.darkTheme}</span>
+            </button>
+          </div>
+        </div>
 
-            <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
-              <button
-                id="settings-theme-light"
-                onClick={() => setTheme("light")}
-                className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                  theme === "light" 
-                    ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                }`}
-              >
-                <SunIcon className="w-4 h-4" />
-                <span>{t.lightTheme}</span>
-              </button>
-              
-              <button
-                id="settings-theme-dark"
-                onClick={() => setTheme("dark")}
-                className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                  theme === "dark" 
-                    ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                }`}
-              >
-                <MoonIcon className="w-4 h-4" />
-                <span>{t.darkTheme}</span>
-              </button>
-            </div>
+        {/* Choose Language / భాష ఎంచుకోండి Card */}
+        <div className="nm-outset rounded-[2rem] p-5 space-y-4">
+          <div className="flex items-center gap-2">
+            <LanguagesIcon className="w-5 h-5 text-accent" />
+            <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsLanguageLabel}</h3>
           </div>
 
-          {/* Choose Language / భాష ఎంచుకోండి Card */}
-          <div className="nm-outset rounded-[2rem] p-5 space-y-4">
-            <div className="flex items-center gap-2">
-              <LanguagesIcon className="w-5 h-5 text-accent" />
-              <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsLanguageLabel}</h3>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
-              <button
-                id="settings-lang-en"
-                onClick={() => setLang("en")}
-                className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                  lang === "en" 
-                    ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                }`}
-              >
-                English
-              </button>
-              
-              <button
-                id="settings-lang-te"
-                onClick={() => setLang("te")}
-                className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                  lang === "te" 
-                    ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                    : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
-                }`}
-              >
-                తెలుగు
-              </button>
-            </div>
-          </div>
-
-          {/* Gesture Protection & Navigation Safety Card */}
-          <div className="nm-outset rounded-[2rem] p-5 space-y-3.5 border border-emerald-500/20">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <Icon icon="lucide:shield-check" className="w-5 h-5 text-emerald-500 shrink-0" />
-                <div>
-                  <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">
-                    {lang === "en" ? "Gesture Protection & Safety" : "సంజ్ఞ రక్షణ & సేఫ్టీ గార్డ్"}
-                  </h3>
-                  <p className="text-[10px] opacity-70 mt-0.5">
-                    {lang === "en" 
-                      ? "Silently prevents accidental refresh or back navigation to protect your active studio session"
-                      : "ఫోటోషూట్ సమయంలో ప్రమాదవశాత్తు రిఫ్రెష్ లేదా బ్యాక్ వెళ్లకుండా సైలెంట్‌గా కాపాడుతుంది"}
-                  </p>
-                </div>
-              </div>
-              <span className="text-[10px] font-black text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 shrink-0">
-                {lang === "en" ? "Active" : "యాక్టివ్"}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-[11px]">
-              <div className="p-3 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Icon icon="lucide:arrow-down" className="w-4 h-4 text-amber-500" />
-                  <span className="font-bold">{lang === "en" ? "Swipe down to refresh" : "స్వైప్ డౌన్ రిఫ్రెష్"}</span>
-                </div>
-                <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
-                  {lang === "en" ? "Blocked" : "బ్లాక్ చేయబడింది"}
-                </span>
-              </div>
-
-              <div className="p-3 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Icon icon="lucide:arrow-left-from-line" className="w-4 h-4 text-rose-500" />
-                  <span className="font-bold">{lang === "en" ? "Edge swipe to back" : "ఎడ్జ్ స్వైప్ టు బ్యాక్"}</span>
-                </div>
-                <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
-                  {lang === "en" ? "Blocked" : "బ్లాక్ చేయబడింది"}
-                </span>
-              </div>
-            </div>
+          <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
+            <button
+              id="settings-lang-en"
+              onClick={() => setLang("en")}
+              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                lang === "en" 
+                  ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                  : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+              }`}
+            >
+              English
+            </button>
+            
+            <button
+              id="settings-lang-te"
+              onClick={() => setLang("te")}
+              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                lang === "te" 
+                  ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                  : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+              }`}
+            >
+              తెలుగు
+            </button>
           </div>
         </div>
       </div>
-    </motion.section>
-  );
+    )}
+  </div>
+</motion.section>
+);
 };

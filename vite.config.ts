@@ -130,6 +130,13 @@ export default defineConfig(() => {
       port: 3000,
       hmr: process.env.DISABLE_HMR !== 'true',
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      proxy: {
+        '/api': {
+          target: (process.env.VITE_SERVER_BASE_URL || process.env.VITE_API_URL || 'http://localhost:4000').replace(/\/api\/?$/, ''),
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
   };
 });

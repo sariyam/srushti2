@@ -1,0 +1,33 @@
+{
+  "nodeModulesDir": "auto",
+  "compilerOptions": {
+    "lib": ["deno.window", "deno.ns"],
+    "strict": false
+  },
+  "imports": {
+    "express": "npm:express@^4.21.2",
+    "cors": "npm:cors@^2.8.5",
+    "helmet": "npm:helmet@^8.0.0",
+    "morgan": "npm:morgan@^1.10.0",
+    "dotenv": "npm:dotenv@^16.4.7",
+    "zod": "npm:zod@^3.24.2",
+    "postgres": "npm:postgres@^3.4.5",
+    "drizzle-orm": "npm:drizzle-orm@^0.39.3",
+    "drizzle-orm/pg-core": "npm:drizzle-orm@^0.39.3/pg-core",
+    "drizzle-orm/postgres-js": "npm:drizzle-orm@^0.39.3/postgres-js",
+    "jsonwebtoken": "npm:jsonwebtoken@^9.0.2",
+    "bcryptjs": "npm:bcryptjs@^3.0.2",
+    "razorpay": "npm:razorpay@^2.9.5",
+    "multer": "npm:multer@^1.4.5-lts.1",
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@^2.49.1",
+    "@supabase/functions-js": "jsr:@supabase/functions-js@^2",
+    "@supabase/server": "npm:@supabase/server@^1",
+    "path": "node:path",
+    "crypto": "node:crypto",
+    "buffer": "node:buffer",
+    "stream": "node:stream",
+    "events": "node:events",
+    "http": "node:http",
+    "util": "node:util"
+  }
+}

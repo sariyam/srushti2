@@ -129,24 +129,6 @@ export function saveWalletTransactions(txs: WalletTransaction[]): void {
 }
 
 /**
- * Clears all cached wallet and credits data
- */
-export function clearAllWalletCache(): void {
-  try {
-    localStorage.removeItem("srushti_wallet_credits");
-    localStorage.removeItem("srushti_wallet_inr");
-    localStorage.removeItem("srushti_wallet_usd");
-    localStorage.removeItem("srushti_wallet_transactions");
-    localStorage.setItem("srushti_wallet_credits", "0.0");
-    localStorage.setItem("srushti_wallet_inr", "0.00");
-    localStorage.setItem("srushti_wallet_usd", "0.00");
-    localStorage.setItem("srushti_wallet_transactions", JSON.stringify([]));
-  } catch (e) {
-    console.error("Failed to clear wallet cache:", e);
-  }
-}
-
-/**
  * Helper to calculate required credits for an AI Generation
  */
 export function calculateRequiredCredits(

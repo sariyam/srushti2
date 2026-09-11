@@ -1,0 +1,1 @@
+../run_supabaseserverless_local.sh

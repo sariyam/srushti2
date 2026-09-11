@@ -1,0 +1,368 @@
+================================================================================
+  SRUSHTI AI — SUPABASE + EXPRESS + SERVERLESS BACKEND
+  Complete Local Run, Migration, Seeding, and Cloud Deployment Guide
+================================================================================
+
+Quick Start Commands
+
+cd supabase-express-serverless
+
+# 1. Update .env with your Supabase DB URL and credentials
+# 2. Run migrations on your Supabase PostgreSQL database
+npm run db:migrate
+
+# 3. Seed your SuperAdmin user
+npm run db:seed
+
+# 4. Start local development server
+npm run dev
+
+
+
+
+
+
+TABLE OF CONTENTS
+-----------------
+1. Tech Stack Overview
+2. Prerequisites
+3. Local Setup & Installation
+4. Supabase Database Configuration (Drizzle ORM)
+5. Seeding the SuperAdmin User
+6. Supabase Storage Setup (Profile Pictures)
+7. Running the Server Locally
+8. Complete API Testing Guide (cURL & Examples)
+   - Custom OTP Service (Send & Verify)
+   - User Profile & Avatar Upload
+   - Razorpay Payment & Wallet Crediting
+   - AI Usage Tracking & Balance Deductions
+   - SuperAdmin Management & Analytics
+9. Cloud Deployment Guides
+   - Deploying to Vercel (Serverless)
+   - Deploying to Render / Railway / Fly.io (Standard Node.js)
+   - Deploying to AWS Lambda
+10. Production Security & Troubleshooting Tips
+
+
+================================================================================
+1. TECH STACK OVERVIEW
+================================================================================
+- Runtime / Framework: Node.js + Express (wrapped with serverless-http)
+- Database: Supabase PostgreSQL
+- ORM: Drizzle ORM + Drizzle Kit (Type-safe, zero overhead, edge/serverless ready)
+- Authentication: Custom OTP Service (bcrypt hashing, cooldown, attempt limits) + JWT
+- Storage: Supabase Storage (S3-compatible bucket for user avatars)
+- Payments: Razorpay Gateway (Orders, Webhooks, HMAC-SHA256 signature verification)
+- Language: TypeScript (Strict mode)
+
+
+================================================================================
+2. PREREQUISITES
+================================================================================
+- Node.js version 18.x or higher (recommended: 20.x LTS or 22.x)
+- A Supabase Project (https://supabase.com)
+  - Your PostgreSQL database connection string
+  - Your Project URL and Service Role Key
+- A Razorpay Account (https://razorpay.com) for Key ID & Secret (Test mode is fine)
+
+
+================================================================================
+3. LOCAL SETUP & INSTALLATION
+================================================================================
+1. Open your terminal and navigate to the project directory:
+   cd supabase-express-serverless
+
+2. Install dependencies:
+   npm install
+
+3. Configure your Environment Variables:
+   Copy `.env.example` to `.env`:
+   cp .env.example .env
+
+4. Open `.env` and fill in your actual credentials:
+   - `DATABASE_URL`: Your Supabase connection string.
+     * For transaction pooling (recommended for serverless): use port 6543
+     * Format: postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres?pgbouncer=true
+   - `SUPABASE_URL`: e.g. https://your-ref.supabase.co
+   - `SUPABASE_SERVICE_ROLE_KEY`: Found in Supabase Dashboard -> Project Settings -> API
+   - `JWT_SECRET`: Any random 64-character secret string
+   - `RAZORPAY_KEY_ID`: rzp_test_xxxxxxx
+   - `RAZORPAY_KEY_SECRET`: your_secret_key
+
+
+================================================================================
+4. SUPABASE DATABASE CONFIGURATION (DRIZZLE ORM)
+================================================================================
+1. Generate SQL migration files:
+   npm run db:generate
+
+2. Apply migrations to the database:
+   npm run db:migrate
+
+To view and manage your database visually via Drizzle Studio GUI:
+   npm run db:studio
+(Opens a local browser interface at https://local.drizzle.studio)
+
+
+================================================================================
+5. SEEDING THE SUPERADMIN USER
+================================================================================
+To create or update the default SuperAdmin user in your database:
+   npm run db:seed
+
+What this script does:
+- Looks up the user specified by `SUPERADMIN_PHONE` / `SUPERADMIN_EMAIL` in `.env`.
+- If found, elevates their role to `superadmin` and sets initial credits.
+- If not found, creates a new user record with:
+  * Role: "superadmin"
+  * Phone: "+919876543210" (configurable in .env)
+  * Email: "superadmin@srushti.ai"
+  * Wallet Balance: 1000 credits (configurable in .env)
+  * Active: true
+
+
+================================================================================
+6. SUPABASE STORAGE SETUP (PROFILE PICTURES)
+================================================================================
+1. Go to your Supabase Dashboard: https://supabase.com/dashboard
+2. Navigate to "Storage" in the left sidebar.
+3. Click "New Bucket".
+4. Name the bucket: `avatars`
+5. Turn ON "Public bucket" (this allows generated avatar URLs to be viewed in web/mobile apps).
+6. Click "Save bucket".
+
+Policy (Optional for extra security):
+By default, the backend uses `SUPABASE_SERVICE_ROLE_KEY`, which automatically has full
+read/write admin privileges to upload, overwrite, and delete files in the bucket.
+
+
+================================================================================
+7. RUNNING THE SERVER LOCALLY
+================================================================================
+To start the development server with live auto-reload:
+   npm run dev
+
+The server will listen at:
+   http://localhost:4000
+
+Health Check:
+   curl http://localhost:4000/api/health
+Response:
+   {"status":"healthy","service":"supabase-express-serverless",...}
+
+
+================================================================================
+8. COMPLETE API TESTING GUIDE (cURL & EXAMPLES)
+================================================================================
+
+A. AUTHENTICATION & CUSTOM OTP SERVICE
+--------------------------------------
+1. Request an OTP (Phone or Email):
+   curl -X POST http://localhost:4000/api/auth/otp/send \
+     -H "Content-Type: application/json" \
+     -d '{"identifier": "+919876543210", "purpose": "login"}'
+
+   * SMS is dispatched in real-time via Colourmoon SMS gateway to the user's mobile number.
+
+2. Verify OTP (Logs in or auto-registers user & returns JWT):
+   curl -X POST http://localhost:4000/api/auth/otp/verify \
+     -H "Content-Type: application/json" \
+     -d '{"identifier": "+919876543210", "code": "123456", "name": "Jane Doe"}'
+
+   Save the returned `accessToken` for subsequent requests:
+   export TOKEN="<your_access_token_here>"
+
+3. Get Current User Profile:
+   curl -X GET http://localhost:4000/api/auth/me \
+     -H "Authorization: Bearer $TOKEN"
+
+4. Upload Profile Picture (Avatar):
+   curl -X POST http://localhost:4000/api/auth/avatar \
+     -H "Authorization: Bearer $TOKEN" \
+     -F "avatar=@/path/to/your/photo.jpg"
+
+5. Delete Profile Picture:
+   curl -X DELETE http://localhost:4000/api/auth/avatar \
+     -H "Authorization: Bearer $TOKEN"
+
+
+B. RAZORPAY PAYMENT & WALLET CREDITING
+---------------------------------------
+1. Create a Razorpay Order:
+   curl -X POST http://localhost:4000/api/payments/create-order \
+     -H "Authorization: Bearer $TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "amount": 299,
+       "credits": 50,
+       "packName": "Starter Studio Pack"
+     }'
+
+   Returns: `orderId`, `amount`, `currency`, `keyId`.
+
+2. Verify Payment Signature (Automatically increments wallet balance):
+   curl -X POST http://localhost:4000/api/payments/verify \
+     -H "Authorization: Bearer $TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "razorpayOrderId": "order_xxxxxx",
+       "razorpayPaymentId": "pay_xxxxxx",
+       "razorpaySignature": "generated_signature_hex"
+     }'
+
+3. View User Payment History:
+   curl -X GET http://localhost:4000/api/payments/history \
+     -H "Authorization: Bearer $TOKEN"
+
+
+C. AI USAGE TRACKING & CREDIT DEDUCTIONS
+----------------------------------------
+1. Record an AI Generation Job (Atomically checks balance, deducts credits, and logs):
+   curl -X POST http://localhost:4000/api/usage/record \
+     -H "Authorization: Bearer $TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "workspace": "garment",
+       "itemType": "saree",
+       "creditsDeducted": 1,
+       "prompt": "Royal Kanjeevaram Silk Saree on Indian studio model",
+       "status": "success",
+       "latencyMs": 1420,
+       "metadata": { "resolution": "2048x2048", "lighting": "Heritage Studio" }
+     }'
+
+2. Check Wallet Credit Balance:
+   curl -X GET http://localhost:4000/api/usage/balance \
+     -H "Authorization: Bearer $TOKEN"
+
+3. View User AI Generation History:
+   curl -X GET http://localhost:4000/api/usage/history \
+     -H "Authorization: Bearer $TOKEN"
+
+
+D. SUPERADMIN ENDPOINTS
+-----------------------
+(Requires token from a user with role: 'admin' or 'superadmin')
+
+1. View All Registered Users:
+   curl -X GET http://localhost:4000/api/admin/users \
+     -H "Authorization: Bearer $SUPERADMIN_TOKEN"
+
+2. View System Stats (Total Users, Generations, Total Revenue):
+   curl -X GET http://localhost:4000/api/admin/stats \
+     -H "Authorization: Bearer $SUPERADMIN_TOKEN"
+
+3. Manually Adjust User Credits (SuperAdmin exclusive):
+   curl -X POST http://localhost:4000/api/admin/credits/adjust \
+     -H "Authorization: Bearer $SUPERADMIN_TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "userId": "<target-user-uuid>",
+       "creditChange": 100,
+       "reason": "Promotional bonus"
+     }'
+
+
+================================================================================
+9. CLOUD DEPLOYMENT GUIDES
+================================================================================
+
+OPTION 1: DEPLOYING TO VERCEL (SERVERLESS)
+------------------------------------------
+The project includes a ready-to-use `vercel.json` and `api/index.ts` adapter.
+
+1. Install Vercel CLI (if not already installed):
+   npm install -g vercel
+
+2. From inside `supabase-express-serverless`:
+   vercel
+
+3. In the Vercel Project Dashboard (Settings -> Environment Variables), add all
+   variables from your `.env` file:
+   - `DATABASE_URL`
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `SUPABASE_STORAGE_BUCKET`
+   - `JWT_SECRET`
+   - `RAZORPAY_KEY_ID`
+   - `RAZORPAY_KEY_SECRET`
+   - `SUPERADMIN_PHONE`
+
+4. Deploy to production:
+   vercel --prod
+
+All requests to `https://your-app.vercel.app/api/*` will route directly to your Express app!
+
+
+OPTION 2: DEPLOYING TO RENDER / RAILWAY / DIGITALOCEAN (NODE.JS SERVER)
+----------------------------------------------------------------------
+1. Set Build Command:
+   npm install && npm run build
+
+2. Set Start Command:
+   npm start
+
+3. Add your Environment Variables in the hosting provider dashboard.
+4. The service will run `dist/src/server.js` listening on the provided `PORT`.
+
+
+OPTION 3: DEPLOYING TO AWS LAMBDA
+---------------------------------
+Because `api/index.ts` exports `serverless(app)` via `serverless-http`, you can package
+and deploy this backend directly to AWS Lambda behind an API Gateway using the
+Serverless Framework or AWS SAM.
+
+
+OPTION 4: DEPLOYING TO SUPABASE EDGE FUNCTIONS (DENO 2)
+-------------------------------------------------------
+The server natively supports Supabase Edge Functions running on Deno 2 with
+full Express routing, automatic function slug prefix handling, and JSR edge runtime APIs.
+
+Entrypoint: `supabase/functions/api/index.ts`
+Import Map: `supabase/functions/api/deno.json`
+
+1. Quick Deploy Script:
+   ./deploy_edge_functions.sh
+
+2. Manual CLI Deployment:
+   # Link project if not already linked:
+   npx supabase link --project-ref <YOUR_PROJECT_REF>
+
+   # Push secrets to Supabase Cloud:
+   npx supabase secrets set \
+     DATABASE_URL="<YOUR_SUPABASE_TRANSACTION_POOLER_URL_PORT_6543>" \
+     SUPABASE_URL="https://<YOUR_PROJECT_REF>.supabase.co" \
+     SUPABASE_SERVICE_ROLE_KEY="<YOUR_KEY>" \
+     JWT_SECRET="<YOUR_SECRET>" \
+     NODE_ENV="production"
+
+   # Deploy the 'api' function without JWT verification (Express handles auth):
+   npx supabase functions deploy api --no-verify-jwt
+
+3. Endpoints in Production:
+   - Welcome:      https://<YOUR_PROJECT_REF>.supabase.co/functions/v1/api
+   - Health check: https://<YOUR_PROJECT_REF>.supabase.co/functions/v1/api/health
+   - Auth OTP:     https://<YOUR_PROJECT_REF>.supabase.co/functions/v1/api/auth/otp/send
+   - Razorpay:     https://<YOUR_PROJECT_REF>.supabase.co/functions/v1/api/payments/create-order
+
+
+
+================================================================================
+10. PRODUCTION SECURITY & TROUBLESHOOTING TIPS
+================================================================================
+1. Connection Pooling:
+   When deploying to serverless platforms (Vercel, AWS Lambda), always use Supabase's
+   Transaction Connection Pooler URL (port 6543) rather than the direct database port (5432).
+   This prevents opening thousands of concurrent idle database connections.
+
+2. Webhook Security:
+   In production, set `RAZORPAY_WEBHOOK_SECRET` in `.env`. The backend automatically
+   verifies HMAC SHA256 signatures on all incoming webhook calls to prevent spoofing.
+
+3. CORS Configuration:
+   Set `CORS_ORIGIN` in `.env` to your frontend domain(s) (e.g. `https://srushti.ai,https://admin.srushti.ai`).
+
+4. OTP Gateway in Production:
+   Switch `SMS_GATEWAY_PROVIDER` from `console` to `fast2sms` or your preferred SMS service
+   and provide your gateway API keys.
+================================================================================
