@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# ==============================================================================
+#==============================================================================
 # SRUSHTI AI — FIRST-TIME SETUP & INSTALLATION SCRIPT
 # Configures both React (Vite PWA) and Serverless (Supabase + Express) Projects
 # ==============================================================================
