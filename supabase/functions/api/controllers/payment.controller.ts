@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RazorpayService } from "../services/razorpay.service";
-import { db } from "../db";
-import { payments } from "../db/schema";
+import { db } from "../config";
+import { payments } from "../config/schema";
 import { eq, desc } from "drizzle-orm";
 import { z } from "zod";
 

@@ -22,7 +22,7 @@ if (!process.env.FUNCTION_SLUG && !process.env.SUPABASE_FUNCTION_SLUG) {
   process.env.SUPABASE_FUNCTION_SLUG = "api";
 }
 
-import { app } from "../../../src/app";
+import { app } from "./app";
 
 const port = Number(Deno?.env?.get?.("PORT")) || 8000;
 

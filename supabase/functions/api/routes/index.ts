@@ -3,7 +3,7 @@ import authRoutes from "./auth.routes";
 import paymentRoutes from "./payment.routes";
 import usageRoutes from "./usage.routes";
 import adminRoutes from "./admin.routes";
-import { checkDbConnection } from "../db";
+import { checkDbConnection } from "../config";
 
 const router = Router();
 
@@ -37,7 +37,7 @@ router.get("/health", async (req, res) => {
   const uptime = typeof process?.uptime === "function" ? Math.floor(process.uptime()) : 0;
   res.status(dbStatus.success ? 200 : 503).json({
     status: dbStatus.success ? "healthy" : "degraded",
-    service: "supabase-express-serverless",
+    service: "supabase",
     database: {
       connected: dbStatus.success,
       ...(dbStatus.database ? { name: dbStatus.database } : {}),

@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
-import { env } from "../config/env";
+import { env } from "./env";
 
 // In Supabase, if using transaction pooling (port 6543 / PgBouncer), prepared statements should be disabled
 const isPooler = env.DATABASE_URL.includes("6543") || env.DATABASE_URL.includes("pgbouncer");
@@ -40,4 +40,4 @@ export async function checkDbConnection(): Promise<{
   }
 }
 
-export { schema };
+export { schema, env };

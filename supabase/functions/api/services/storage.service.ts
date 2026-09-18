@@ -1,8 +1,7 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import { db } from "../db";
-import { users } from "../db/schema";
+import { db, env } from "../config";
+import { users } from "../config/schema";
 import { eq } from "drizzle-orm";
-import { env } from "../config/env";
 import path from "node:path";
 
 export interface UploadAvatarOptions {

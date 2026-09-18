@@ -1,5 +1,5 @@
-import { db } from "../db";
-import { usage, users, payments } from "../db/schema";
+import { db } from "../config";
+import { usage, users, payments } from "../config/schema";
 import { eq, and, gte, sql, desc } from "drizzle-orm";
 
 export interface RecordUsageParams {

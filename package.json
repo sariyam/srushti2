@@ -10,15 +10,14 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "install:all": "bash 1sttime_install.sh",
-    "server:local": "bash run_supabaseserverless_local.sh",
-    "server:dev": "npm --prefix supabase-express-serverless run dev",
-    "server:build": "npm --prefix supabase-express-serverless run build",
-    "server:start": "npm --prefix supabase-express-serverless run start",
-    "db:generate": "npm --prefix supabase-express-serverless run db:generate",
-    "db:migrate": "npm --prefix supabase-express-serverless run db:migrate",
-    "db:seed": "npm --prefix supabase-express-serverless run db:seed",
-    "db:studio": "npm --prefix supabase-express-serverless run db:studio"
+    "server:dev": "npm --prefix supabase run dev",
+    "server:build": "npm --prefix supabase run build",
+    "server:start": "npm --prefix supabase run start",
+    "server:deploy": "npm --prefix supabase run deploy",
+    "db:generate": "npm --prefix supabase run db:generate",
+    "db:migrate": "npm --prefix supabase run db:migrate",
+    "db:seed": "npm --prefix supabase run db:seed",
+    "db:studio": "npm --prefix supabase run db:studio"
   },
   "dependencies": {
     "@iconify/react": "^6.0.2",

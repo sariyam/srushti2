@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { OtpService } from "../services/otp.service";
 import { JwtService } from "../services/jwt.service";
 import { StorageService } from "../services/storage.service";
-import { db } from "../db";
-import { users } from "../db/schema";
+import { db } from "../config";
+import { users } from "../config/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 

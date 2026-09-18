@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import { env } from "./config/env";
+import { env } from "./config";
 import apiRoutes from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
 
@@ -65,39 +65,6 @@ export function createApp(): Express {
     }
     next();
   });
-
-  // Welcome response helper
-  const sendWelcome = (req: Request, res: Response) => {
-    res.status(200).json({
-      name: "Srushti AI API",
-      version: "1.0.0",
-      architecture: "Supabase Edge Functions (Deno 2) + Express + Serverless + Drizzle ORM",
-      slug: functionSlug,
-      endpoints: {
-        health: `/${functionSlug}/health`,
-        auth: `/${functionSlug}/auth`,
-        payments: `/${functionSlug}/payments`,
-        usage: `/${functionSlug}/usage`,
-        admin: `/${functionSlug}/admin`,
-      },
-      docs: `/${functionSlug}/health`,
-    });
-  };
-
-  // Root welcome routes
-  app.get("/", sendWelcome);
-  app.get(`/${functionSlug}`, sendWelcome);
-  app.get(`/${functionSlug}/`, sendWelcome);
-  if (functionSlug !== "api") {
-    app.get("/api", sendWelcome);
-    app.get("/api/", sendWelcome);
-  }
-
-  // Supabase Edge Functions regex routing pattern:
-  // https://supabase.com/docs/guides/functions/routing?queryGroups=framework&framework=expressjs
-  // Supports dynamic slug regex matching: /<slug>/(.*)/
-  const slugRegex = new RegExp(`^\\/${functionSlug}\\/?$`);
-  app.get(slugRegex, sendWelcome);
 
   // Mount API Routes:
   // 1. Mount at /<slug> for Supabase Edge Functions (e.g. /api/health or /<slug>/health)

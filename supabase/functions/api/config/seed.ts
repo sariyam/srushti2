@@ -1,12 +1,37 @@
 import { db, queryClient } from "./index";
 import { users } from "./schema";
-import { eq, or } from "drizzle-orm";
-import { env } from "../config/env";
+import { eq } from "drizzle-orm";
+import { env } from "./env";
+import path from "path";
+import fs from "fs";
 
-async function seedSuperAdmin() {
-  console.log("🌱 Starting SuperAdmin database seed...");
+async function runSeed() {
+  console.log("🌱 Starting database seeding process...");
 
   try {
+    // 1. Locate and run seed.sql if present
+    const possibleSeedSqlPaths = [
+      path.resolve(process.cwd(), "seed.sql"),
+      path.resolve(process.cwd(), "supabase/seed.sql"),
+      path.resolve(__dirname, "../../../seed.sql"),
+    ];
+
+    const seedSqlPath = possibleSeedSqlPaths.find((p) => fs.existsSync(p));
+
+    if (seedSqlPath) {
+      console.log(`📜 Found SQL seed script at: ${seedSqlPath}`);
+      console.log("⏳ Applying seed.sql to database...");
+      const sqlContent = fs.readFileSync(seedSqlPath, "utf-8");
+      
+      // Execute seed.sql queries safely
+      await queryClient.unsafe(sqlContent);
+      console.log("✅ seed.sql executed successfully!");
+    } else {
+      console.log("ℹ️ No seed.sql found. Proceeding with ORM SuperAdmin seed...");
+    }
+
+    // 2. Ensure SuperAdmin from current .env is upserted
+    console.log(`🔐 Verifying SuperAdmin for ${env.SUPERADMIN_PHONE}...`);
     const existing = await db
       .select()
       .from(users)
@@ -52,12 +77,12 @@ async function seedSuperAdmin() {
       });
     }
   } catch (error: any) {
-    console.error("❌ Failed to seed SuperAdmin:", error.message || error);
+    console.error("❌ Failed to complete database seeding:", error.message || error);
     process.exit(1);
   } finally {
     await queryClient.end();
-    console.log("🌱 Seed process finished.");
+    console.log("🌱 Seed process finished successfully.");
   }
 }
 
-seedSuperAdmin();
+runSeed();

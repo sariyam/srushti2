@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { db } from "../db";
-import { users, payments, usage } from "../db/schema";
+import { db } from "../config";
+import { users, payments, usage } from "../config/schema";
 import { eq, desc, sql } from "drizzle-orm";
 import { z } from "zod";
 import { UsageService } from "../services/usage.service";

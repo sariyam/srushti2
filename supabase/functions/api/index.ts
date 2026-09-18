@@ -4,85 +4,20 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// supabase/functions/api/entry.ts
+// functions/api/entry.ts
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
-// src/app.ts
+// functions/api/app.ts
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 
-// src/config/env.ts
-import * as dotenv from "dotenv";
-import { z } from "zod";
-if (typeof Deno !== "undefined" && typeof Deno?.env?.toObject === "function") {
-  try {
-    const denoEnv = Deno.env.toObject();
-    for (const [k, v] of Object.entries(denoEnv)) {
-      if (v !== void 0 && typeof v === "string") {
-        process.env[k] = v;
-      }
-    }
-  } catch (_err) {
-  }
-}
-try {
-  dotenv.config();
-} catch (_err) {
-}
-var envSchema = z.object({
-  PORT: z.coerce.number().default(4e3),
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-  CORS_ORIGIN: z.string().default("*"),
-  // Database
-  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  // Supabase
-  SUPABASE_URL: z.string().optional().default(""),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().optional().default(""),
-  SUPABASE_STORAGE_BUCKET: z.string().default("avatars"),
-  // JWT
-  JWT_SECRET: z.string().default("default_dev_secret_key_srushti"),
-  JWT_EXPIRES_IN: z.string().default("7d"),
-  JWT_REFRESH_SECRET: z.string().default("default_dev_refresh_secret_key_srushti"),
-  JWT_REFRESH_EXPIRES_IN: z.string().default("30d"),
-  // Razorpay
-  RAZORPAY_KEY_ID: z.string().default("rzp_test_placeholder"),
-  RAZORPAY_KEY_SECRET: z.string().default("rzp_test_secret_placeholder"),
-  RAZORPAY_WEBHOOK_SECRET: z.string().optional().default(""),
-  RAZORPAY_CHECKOUT_CONFIG_ID: z.string().optional().default("config_SVPwn8f33zfhsP"),
-  // OTP & SMS Gateway
-  OTP_EXPIRY_MINUTES: z.coerce.number().default(10),
-  OTP_MAX_ATTEMPTS: z.coerce.number().default(3),
-  OTP_COOLDOWN_SECONDS: z.coerce.number().default(120),
-  SMS_GATEWAY_PROVIDER: z.enum(["console", "fast2sms", "twilio", "colourmoon"]).default("colourmoon"),
-  COLOURMOON_USER_ID: z.string().default("invtechnologies"),
-  COLOURMOON_USERNAME: z.string().default("Srushti"),
-  COLOURMOON_SMS_URL: z.string().default("http://colourmoontraining.com/otp_sms/sendsms"),
-  FAST2SMS_API_KEY: z.string().optional(),
-  // SuperAdmin
-  SUPERADMIN_PHONE: z.string().default("+919876543210"),
-  SUPERADMIN_EMAIL: z.string().email().default("superadmin@srushti.ai"),
-  SUPERADMIN_NAME: z.string().default("Super Admin"),
-  SUPERADMIN_INITIAL_CREDITS: z.coerce.number().default(1e3)
-});
-var env = envSchema.parse(process.env);
-
-// src/routes/index.ts
-import { Router as Router5 } from "express";
-
-// src/routes/auth.routes.ts
-import { Router } from "express";
-
-// src/services/otp.service.ts
-import crypto from "node:crypto";
-import bcrypt from "bcryptjs";
-
-// src/db/index.ts
+// functions/api/config/index.ts
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-// src/db/schema.ts
+// functions/api/config/schema.ts
 var schema_exports = {};
 __export(schema_exports, {
   otps: () => otps,
@@ -192,7 +127,62 @@ var usageRelations = relations(usage, ({ one }) => ({
   })
 }));
 
-// src/db/index.ts
+// functions/api/config/env.ts
+import * as dotenv from "dotenv";
+import { z } from "zod";
+if (typeof Deno !== "undefined" && typeof Deno?.env?.toObject === "function") {
+  try {
+    const denoEnv = Deno.env.toObject();
+    for (const [k, v] of Object.entries(denoEnv)) {
+      if (v !== void 0 && typeof v === "string") {
+        process.env[k] = v;
+      }
+    }
+  } catch (_err) {
+  }
+}
+try {
+  dotenv.config();
+} catch (_err) {
+}
+var envSchema = z.object({
+  PORT: z.coerce.number().default(4e3),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  CORS_ORIGIN: z.string().default("*"),
+  // Database
+  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+  // Supabase
+  SUPABASE_URL: z.string().optional().default(""),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().optional().default(""),
+  SUPABASE_STORAGE_BUCKET: z.string().default("avatars"),
+  // JWT
+  JWT_SECRET: z.string().default("default_dev_secret_key_srushti"),
+  JWT_EXPIRES_IN: z.string().default("7d"),
+  JWT_REFRESH_SECRET: z.string().default("default_dev_refresh_secret_key_srushti"),
+  JWT_REFRESH_EXPIRES_IN: z.string().default("30d"),
+  // Razorpay
+  RAZORPAY_KEY_ID: z.string().default("rzp_test_placeholder"),
+  RAZORPAY_KEY_SECRET: z.string().default("rzp_test_secret_placeholder"),
+  RAZORPAY_WEBHOOK_SECRET: z.string().optional().default(""),
+  RAZORPAY_CHECKOUT_CONFIG_ID: z.string().optional().default("config_SVPwn8f33zfhsP"),
+  // OTP & SMS Gateway
+  OTP_EXPIRY_MINUTES: z.coerce.number().default(10),
+  OTP_MAX_ATTEMPTS: z.coerce.number().default(3),
+  OTP_COOLDOWN_SECONDS: z.coerce.number().default(120),
+  SMS_GATEWAY_PROVIDER: z.enum(["console", "fast2sms", "twilio", "colourmoon"]).default("colourmoon"),
+  COLOURMOON_USER_ID: z.string().default("invtechnologies"),
+  COLOURMOON_USERNAME: z.string().default("Srushti"),
+  COLOURMOON_SMS_URL: z.string().default("http://colourmoontraining.com/otp_sms/sendsms"),
+  FAST2SMS_API_KEY: z.string().optional(),
+  // SuperAdmin
+  SUPERADMIN_PHONE: z.string().default("+919876543210"),
+  SUPERADMIN_EMAIL: z.string().email().default("superadmin@srushti.ai"),
+  SUPERADMIN_NAME: z.string().default("Super Admin"),
+  SUPERADMIN_INITIAL_CREDITS: z.coerce.number().default(1e3)
+});
+var env = envSchema.parse(process.env);
+
+// functions/api/config/index.ts
 var isPooler = env.DATABASE_URL.includes("6543") || env.DATABASE_URL.includes("pgbouncer");
 var queryClient = postgres(env.DATABASE_URL, {
   prepare: !isPooler,
@@ -218,10 +208,18 @@ async function checkDbConnection() {
   }
 }
 
-// src/services/otp.service.ts
+// functions/api/routes/index.ts
+import { Router as Router5 } from "express";
+
+// functions/api/routes/auth.routes.ts
+import { Router } from "express";
+
+// functions/api/services/otp.service.ts
+import crypto from "node:crypto";
+import bcrypt from "bcryptjs";
 import { eq, and, desc, gt } from "drizzle-orm";
 
-// src/services/jwt.service.ts
+// functions/api/services/jwt.service.ts
 import jwt from "jsonwebtoken";
 var JwtService = class {
   /**
@@ -269,7 +267,7 @@ var JwtService = class {
   }
 };
 
-// src/services/otp.service.ts
+// functions/api/services/otp.service.ts
 var OtpService = class {
   /**
    * Generates a cryptographically strong 6-digit OTP
@@ -449,7 +447,7 @@ var OtpService = class {
   }
 };
 
-// src/services/storage.service.ts
+// functions/api/services/storage.service.ts
 import { createClient } from "@supabase/supabase-js";
 import { eq as eq2 } from "drizzle-orm";
 import path from "node:path";
@@ -533,7 +531,7 @@ var StorageService = class {
   }
 };
 
-// src/controllers/auth.controller.ts
+// functions/api/controllers/auth.controller.ts
 import { eq as eq3 } from "drizzle-orm";
 import { z as z2 } from "zod";
 var sendOtpSchema = z2.object({
@@ -643,7 +641,7 @@ var AuthController = class {
   }
 };
 
-// src/middlewares/auth.ts
+// functions/api/middlewares/auth.ts
 function authenticateToken(req, res, next) {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
@@ -682,7 +680,7 @@ function requireRole(allowedRoles) {
   };
 }
 
-// src/middlewares/validate.ts
+// functions/api/middlewares/validate.ts
 import { ZodError } from "zod";
 function validateBody(schema) {
   return (req, res, next) => {
@@ -705,7 +703,7 @@ function validateBody(schema) {
   };
 }
 
-// src/middlewares/upload.ts
+// functions/api/middlewares/upload.ts
 import multer from "multer";
 var storage = multer.memoryStorage();
 var allowedMimeTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
@@ -726,7 +724,7 @@ var avatarUploadMiddleware = multer({
   fileFilter
 }).single("avatar");
 
-// src/routes/auth.routes.ts
+// functions/api/routes/auth.routes.ts
 var router = Router();
 router.post("/otp/send", validateBody(sendOtpSchema), AuthController.sendOtp);
 router.post("/otp/verify", validateBody(verifyOtpSchema), AuthController.verifyOtp);
@@ -736,10 +734,10 @@ router.post("/avatar", authenticateToken, avatarUploadMiddleware, AuthController
 router.delete("/avatar", authenticateToken, AuthController.deleteAvatar);
 var auth_routes_default = router;
 
-// src/routes/payment.routes.ts
+// functions/api/routes/payment.routes.ts
 import { Router as Router2 } from "express";
 
-// src/services/razorpay.service.ts
+// functions/api/services/razorpay.service.ts
 import Razorpay from "razorpay";
 import crypto2 from "node:crypto";
 import { eq as eq4, sql } from "drizzle-orm";
@@ -870,7 +868,7 @@ var RazorpayService = class {
   }
 };
 
-// src/controllers/payment.controller.ts
+// functions/api/controllers/payment.controller.ts
 import { eq as eq5, desc as desc2 } from "drizzle-orm";
 import { z as z3 } from "zod";
 var createOrderSchema = z3.object({
@@ -945,7 +943,7 @@ var PaymentController = class {
   }
 };
 
-// src/routes/payment.routes.ts
+// functions/api/routes/payment.routes.ts
 var router2 = Router2();
 router2.post("/create-order", authenticateToken, validateBody(createOrderSchema), PaymentController.createOrder);
 router2.post("/verify", authenticateToken, validateBody(verifyPaymentSchema), PaymentController.verifyPayment);
@@ -953,10 +951,10 @@ router2.get("/history", authenticateToken, PaymentController.getHistory);
 router2.post("/webhook", PaymentController.handleWebhook);
 var payment_routes_default = router2;
 
-// src/routes/usage.routes.ts
+// functions/api/routes/usage.routes.ts
 import { Router as Router3 } from "express";
 
-// src/services/usage.service.ts
+// functions/api/services/usage.service.ts
 import { eq as eq6, and as and2, gte, sql as sql2, desc as desc3 } from "drizzle-orm";
 var UsageService = class {
   /**
@@ -1165,7 +1163,7 @@ var UsageService = class {
   }
 };
 
-// src/controllers/usage.controller.ts
+// functions/api/controllers/usage.controller.ts
 import { z as z4 } from "zod";
 var recordUsageSchema = z4.object({
   workspace: z4.enum(["garment", "jewelry", "face", "general"]),
@@ -1251,7 +1249,7 @@ var UsageController = class {
   }
 };
 
-// src/routes/usage.routes.ts
+// functions/api/routes/usage.routes.ts
 var router3 = Router3();
 router3.post("/record", authenticateToken, validateBody(recordUsageSchema), UsageController.recordUsage);
 router3.get("/history", authenticateToken, UsageController.getHistory);
@@ -1259,10 +1257,10 @@ router3.get("/balance", authenticateToken, UsageController.getBalance);
 router3.get("/timeline", authenticateToken, UsageController.getTimeline);
 var usage_routes_default = router3;
 
-// src/routes/admin.routes.ts
+// functions/api/routes/admin.routes.ts
 import { Router as Router4 } from "express";
 
-// src/controllers/admin.controller.ts
+// functions/api/controllers/admin.controller.ts
 import { eq as eq7, desc as desc4, sql as sql3 } from "drizzle-orm";
 import { z as z5 } from "zod";
 var adjustCreditsSchema = z5.object({
@@ -1364,7 +1362,7 @@ var AdminController = class {
   }
 };
 
-// src/routes/admin.routes.ts
+// functions/api/routes/admin.routes.ts
 var router4 = Router4();
 router4.get("/users", authenticateToken, requireRole(["admin", "superadmin"]), AdminController.getAllUsers);
 router4.get("/stats", authenticateToken, requireRole(["admin", "superadmin"]), AdminController.getStats);
@@ -1384,7 +1382,7 @@ router4.patch(
 );
 var admin_routes_default = router4;
 
-// src/routes/index.ts
+// functions/api/routes/index.ts
 var router5 = Router5();
 router5.use("/auth", auth_routes_default);
 router5.use("/payments", payment_routes_default);
@@ -1412,7 +1410,7 @@ router5.get("/health", async (req, res) => {
   const uptime = typeof process?.uptime === "function" ? Math.floor(process.uptime()) : 0;
   res.status(dbStatus.success ? 200 : 503).json({
     status: dbStatus.success ? "healthy" : "degraded",
-    service: "supabase-express-serverless",
+    service: "supabase",
     database: {
       connected: dbStatus.success,
       ...dbStatus.database ? { name: dbStatus.database } : {},
@@ -1425,11 +1423,11 @@ router5.get("/health", async (req, res) => {
 });
 var routes_default = router5;
 
-// src/middlewares/errorHandler.ts
+// functions/api/middlewares/errorHandler.ts
 import { ZodError as ZodError2 } from "zod";
 import { MulterError } from "multer";
 
-// src/utils/errors.ts
+// functions/api/utils/errors.ts
 var AppError = class extends Error {
   statusCode;
   errorCode;
@@ -1446,7 +1444,7 @@ var AppError = class extends Error {
   }
 };
 
-// src/middlewares/errorHandler.ts
+// functions/api/middlewares/errorHandler.ts
 function errorHandler(err, req, res, next) {
   const timestamp2 = (/* @__PURE__ */ new Date()).toISOString();
   if (err instanceof AppError) {
@@ -1560,7 +1558,7 @@ function errorHandler(err, req, res, next) {
   });
 }
 
-// src/app.ts
+// functions/api/app.ts
 function createApp() {
   const app2 = express();
   const functionSlug = process.env.FUNCTION_SLUG || process.env.SUPABASE_FUNCTION_SLUG || "api";
@@ -1602,31 +1600,6 @@ function createApp() {
     }
     next();
   });
-  const sendWelcome = (req, res) => {
-    res.status(200).json({
-      name: "Srushti AI API",
-      version: "1.0.0",
-      architecture: "Supabase Edge Functions (Deno 2) + Express + Serverless + Drizzle ORM",
-      slug: functionSlug,
-      endpoints: {
-        health: `/${functionSlug}/health`,
-        auth: `/${functionSlug}/auth`,
-        payments: `/${functionSlug}/payments`,
-        usage: `/${functionSlug}/usage`,
-        admin: `/${functionSlug}/admin`
-      },
-      docs: `/${functionSlug}/health`
-    });
-  };
-  app2.get("/", sendWelcome);
-  app2.get(`/${functionSlug}`, sendWelcome);
-  app2.get(`/${functionSlug}/`, sendWelcome);
-  if (functionSlug !== "api") {
-    app2.get("/api", sendWelcome);
-    app2.get("/api/", sendWelcome);
-  }
-  const slugRegex = new RegExp(`^\\/${functionSlug}\\/?$`);
-  app2.get(slugRegex, sendWelcome);
   app2.use(`/${functionSlug}`, routes_default);
   if (functionSlug !== "api") {
     app2.use("/api", routes_default);
@@ -1643,7 +1616,7 @@ function createApp() {
 }
 var app = createApp();
 
-// supabase/functions/api/entry.ts
+// functions/api/entry.ts
 if (typeof Deno !== "undefined" && typeof Deno?.env?.toObject === "function") {
   try {
     const allEnv = Deno.env.toObject();

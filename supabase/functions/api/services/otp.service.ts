@@ -1,9 +1,8 @@
 import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
-import { db } from "../db";
-import { otps, users } from "../db/schema";
+import { db, env } from "../config";
+import { otps, users } from "../config/schema";
 import { eq, and, desc, gt } from "drizzle-orm";
-import { env } from "../config/env";
 import { JwtService } from "./jwt.service";
 
 export interface SendOtpOptions {

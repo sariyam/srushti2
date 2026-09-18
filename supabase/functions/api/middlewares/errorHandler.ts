@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import { MulterError } from "multer";
 import { AppError } from "../utils/errors";
-import { env } from "../config/env";
+import { env } from "../config";
 
 export function errorHandler(
   err: any,

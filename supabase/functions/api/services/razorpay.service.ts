@@ -1,9 +1,8 @@
 import Razorpay from "razorpay";
 import crypto from "node:crypto";
-import { db } from "../db";
-import { payments, users } from "../db/schema";
+import { db, env } from "../config";
+import { payments, users } from "../config/schema";
 import { eq, sql } from "drizzle-orm";
-import { env } from "../config/env";
 
 export interface CreateOrderParams {
   userId: string;

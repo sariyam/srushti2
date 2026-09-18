@@ -1,17 +1,20 @@
 {
-  "name": "supabase-express-serverless",
+  "name": "srushti-supabase",
   "version": "1.0.0",
   "description": "Production-ready Supabase Postgres + Express + Serverless backend with Drizzle ORM, Custom OTP, Razorpay, Supabase Storage, and JWT Auth",
-  "main": "api/index.ts",
+  "main": "functions/api/serverless.ts",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch functions/api/server.ts",
+    "migrate": "tsx functions/api/config/migrate.ts",
+    "deploy": "npm run bundle:edge && npx -y supabase@latest functions deploy api --no-verify-jwt",
+    "seed": "tsx functions/api/config/seed.ts",
     "build": "rimraf dist && tsc",
-    "start": "node dist/src/server.js",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx src/db/migrate.ts",
-    "db:seed": "tsx src/db/seed.ts",
-    "db:studio": "drizzle-kit studio",
-    "bundle:edge": "esbuild supabase/functions/api/entry.ts --bundle --platform=node --format=esm --target=es2022 --external:express --external:cors --external:helmet --external:morgan --external:dotenv --external:zod --external:postgres --external:drizzle-orm --external:drizzle-orm/* --external:jsonwebtoken --external:bcryptjs --external:razorpay --external:multer --external:@supabase/* --external:path --external:node:* --external:jsr:* --outfile=supabase/functions/api/index.ts"
+    "start": "node dist/functions/api/server.js",
+    "db:generate": "drizzle-kit generate --config=functions/api/config/drizzle.config.ts",
+    "db:migrate": "npm run migrate",
+    "db:seed": "npm run seed",
+    "db:studio": "drizzle-kit studio --config=functions/api/config/drizzle.config.ts",
+    "bundle:edge": "esbuild functions/api/entry.ts --bundle --platform=node --format=esm --target=es2022 --external:express --external:cors --external:helmet --external:morgan --external:dotenv --external:zod --external:postgres --external:drizzle-orm --external:drizzle-orm/* --external:jsonwebtoken --external:bcryptjs --external:razorpay --external:multer --external:@supabase/* --external:path --external:node:* --external:jsr:* --outfile=functions/api/index.ts"
   },
   "keywords": [
     "supabase",

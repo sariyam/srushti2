@@ -1,6 +1,5 @@
 import { app } from "./app";
-import { env } from "./config/env";
-import { queryClient, checkDbConnection } from "./db";
+import { env, queryClient, checkDbConnection } from "./config";
 
 const PORT = env.PORT || 4000;
 
