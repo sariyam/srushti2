@@ -12,22 +12,87 @@ router.use("/payments", paymentRoutes);
 router.use("/usage", usageRoutes);
 router.use("/admin", adminRoutes);
 
+import {
+  getOpenApiDocument,
+  renderDocsHtml,
+  renderSwaggerDocsHtml,
+  renderScalarDocsHtml,
+} from "../docs";
+
+// OpenAPI Specification (JSON)
+router.get("/docs/openapi.json", (req, res) => {
+  const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
+  const baseUrl = req.baseUrl ? `${req.protocol}://${req.get("host")}${req.baseUrl}` : `/${functionSlug}`;
+  const spec = getOpenApiDocument(baseUrl);
+  res.setHeader("Content-Type", "application/json");
+  res.status(200).json(spec);
+});
+
+router.get("/openapi.json", (req, res) => {
+  const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
+  const baseUrl = req.baseUrl ? `${req.protocol}://${req.get("host")}${req.baseUrl}` : `/${functionSlug}`;
+  const spec = getOpenApiDocument(baseUrl);
+  res.setHeader("Content-Type", "application/json");
+  res.status(200).json(spec);
+});
+
+// Interactive API Documentation (Swagger UI - Primary)
+router.get(["/docs", "/docs/", "/docs/swagger"], (req, res) => {
+  // Prevent 304 Not Modified caching on docs so browser always re-evaluates
+  delete req.headers["if-none-match"];
+  delete req.headers["if-modified-since"];
+
+  const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
+  const baseUrl = req.baseUrl ? `${req.protocol}://${req.get("host")}${req.baseUrl}` : `/${functionSlug}`;
+  const spec = getOpenApiDocument(baseUrl);
+  const html = renderSwaggerDocsHtml(spec, "Srushti AI API Documentation");
+
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  res.setHeader("Surrogate-Control", "no-store");
+  res.status(200).send(html);
+});
+
+// Alternative Documentation View (Scalar UI)
+router.get(["/docs/scalar", "/docs/scalar/"], (req, res) => {
+  delete req.headers["if-none-match"];
+  delete req.headers["if-modified-since"];
+
+  const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
+  const baseUrl = req.baseUrl ? `${req.protocol}://${req.get("host")}${req.baseUrl}` : `/${functionSlug}`;
+  const spec = getOpenApiDocument(baseUrl);
+  const html = renderScalarDocsHtml(spec, "Srushti AI API Reference (Scalar)");
+
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  res.setHeader("Surrogate-Control", "no-store");
+  res.status(200).send(html);
+});
+
 // Root endpoint inside API router
 router.get("/", (req, res) => {
   const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
   res.status(200).json({
     name: "Srushti AI API",
     version: "1.0.0",
-    architecture: "Supabase Edge Functions (Deno 2) + Express + Serverless + Drizzle ORM",
+    architecture: "Supabase Edge Functions (Deno 2) + Express + Serverless + Drizzle ORM + OpenAPI",
     slug: functionSlug,
     endpoints: {
+      docs: `/${functionSlug}/docs`,
+      docs_swagger: `/${functionSlug}/docs`,
+      docs_scalar: `/${functionSlug}/docs/scalar`,
+      openapi: `/${functionSlug}/docs/openapi.json`,
       health: `/${functionSlug}/health`,
       auth: `/${functionSlug}/auth`,
       payments: `/${functionSlug}/payments`,
       usage: `/${functionSlug}/usage`,
       admin: `/${functionSlug}/admin`,
     },
-    docs: `/${functionSlug}/health`,
+    docs: `/${functionSlug}/docs`,
   });
 });
 

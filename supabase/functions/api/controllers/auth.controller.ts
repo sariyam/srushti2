@@ -1,142 +1,122 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { OtpService } from "../services/otp.service";
 import { JwtService } from "../services/jwt.service";
 import { StorageService } from "../services/storage.service";
 import { db } from "../config";
 import { users } from "../config/schema";
 import { eq } from "drizzle-orm";
-import { z } from "zod";
+import {
+  UnauthorizedError,
+  NotFoundError,
+  BadRequestError,
+  ForbiddenError,
+  asyncHandler,
+} from "../utils";
 
-export const sendOtpSchema = z.object({
-  identifier: z.string().min(3, "Phone number or email is required"),
-  purpose: z.enum(["login", "register", "recharge"]).optional(),
-});
-
-export const verifyOtpSchema = z.object({
-  identifier: z.string().min(3, "Phone number is required"),
-  code: z.string().length(6, "OTP must be exactly 6 digits"),
-  purpose: z.enum(["login", "register", "recharge"]).optional(),
-});
-
-export const refreshTokenSchema = z.object({
-  refreshToken: z.string().min(1, "Refresh token is required"),
-});
+export {
+  sendOtpSchema,
+  verifyOtpSchema,
+  refreshTokenSchema,
+  SendOtpSchema,
+  VerifyOtpSchema,
+  RefreshTokenSchema,
+} from "../schemas/auth.schema";
 
 export class AuthController {
-  static async sendOtp(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { identifier, purpose } = req.body;
-      const result = await OtpService.sendOtp({ identifier, purpose });
-      return res.status(200).json(result);
-    } catch (error: any) {
-      next(error);
+  static sendOtp = asyncHandler(async (req: Request, res: Response) => {
+    const { identifier, purpose } = req.body;
+    const result = await OtpService.sendOtp({ identifier, purpose });
+    return res.status(200).json(result);
+  });
+
+  static verifyOtp = asyncHandler(async (req: Request, res: Response) => {
+    const { identifier, code, purpose } = req.body;
+    const result = await OtpService.verifyOtp({ identifier, code, purpose });
+    return res.status(200).json({
+      success: true,
+      ...result,
+    });
+  });
+
+  static refreshToken = asyncHandler(async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+    const payload = JwtService.verifyRefreshToken(refreshToken);
+
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, payload.userId))
+      .limit(1);
+
+    if (!user) {
+      throw new UnauthorizedError("User associated with this token does not exist.", undefined, "USER_NOT_FOUND");
     }
-  }
 
-  static async verifyOtp(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { identifier, code, purpose } = req.body;
-      const result = await OtpService.verifyOtp({ identifier, code, purpose });
-      return res.status(200).json({
-        success: true,
-        ...result,
-      });
-    } catch (error: any) {
-      next(error);
+    if (!user.isActive) {
+      throw new ForbiddenError("User account is inactive or has been suspended.", undefined, "ACCOUNT_INACTIVE");
     }
-  }
 
-  static async refreshToken(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { refreshToken } = req.body;
-      const payload = JwtService.verifyRefreshToken(refreshToken);
+    const tokens = JwtService.generateTokens({
+      userId: user.id,
+      phone: user.phone,
+      role: user.role,
+    });
 
-      const [user] = await db
-        .select()
-        .from(users)
-        .where(eq(users.id, payload.userId))
-        .limit(1);
+    return res.status(200).json({ success: true, tokens });
+  });
 
-      if (!user || !user.isActive) {
-        return res.status(401).json({ success: false, error: "User is no longer active" });
-      }
-
-      const tokens = JwtService.generateTokens({
-        userId: user.id,
-        phone: user.phone,
-        role: user.role,
-      });
-
-      return res.status(200).json({ success: true, tokens });
-    } catch (error: any) {
-      next(error);
+  static getProfile = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
 
-  static async getProfile(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
+    const [user] = await db
+      .select({
+        id: users.id,
+        phone: users.phone,
+        avatarUrl: users.avatarUrl,
+        role: users.role,
+        walletBalance: users.walletBalance,
+        isActive: users.isActive,
+        createdAt: users.createdAt,
+      })
+      .from(users)
+      .where(eq(users.id, req.user.userId))
+      .limit(1);
 
-      const [user] = await db
-        .select({
-          id: users.id,
-          phone: users.phone,
-          avatarUrl: users.avatarUrl,
-          role: users.role,
-          walletBalance: users.walletBalance,
-          isActive: users.isActive,
-          createdAt: users.createdAt,
-        })
-        .from(users)
-        .where(eq(users.id, req.user.userId))
-        .limit(1);
-
-      if (!user) {
-        return res.status(404).json({ success: false, error: "User not found" });
-      }
-
-      return res.status(200).json({ success: true, user });
-    } catch (error: any) {
-      next(error);
+    if (!user) {
+      throw new NotFoundError("User profile was not found.", undefined, "PROFILE_NOT_FOUND");
     }
-  }
 
-  static async uploadAvatar(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
+    return res.status(200).json({ success: true, user });
+  });
 
-      const file = req.file;
-      if (!file) {
-        return res.status(400).json({ success: false, error: "No image file provided in field 'avatar'" });
-      }
-
-      const result = await StorageService.uploadUserAvatar({
-        userId: req.user.userId,
-        fileBuffer: file.buffer,
-        mimeType: file.mimetype,
-        originalName: file.originalname,
-      });
-
-      return res.status(200).json(result);
-    } catch (error: any) {
-      next(error);
+  static uploadAvatar = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
 
-  static async deleteAvatar(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
-
-      const result = await StorageService.deleteUserAvatar(req.user.userId);
-      return res.status(200).json(result);
-    } catch (error: any) {
-      next(error);
+    const file = req.file;
+    if (!file) {
+      throw new BadRequestError("No image file provided in field 'avatar'", undefined, "MISSING_FILE_FIELD");
     }
-  }
+
+    const result = await StorageService.uploadUserAvatar({
+      userId: req.user.userId,
+      fileBuffer: file.buffer,
+      mimeType: file.mimetype,
+      originalName: file.originalname,
+    });
+
+    return res.status(200).json(result);
+  });
+
+  static deleteAvatar = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
+    }
+
+    const result = await StorageService.deleteUserAvatar(req.user.userId);
+    return res.status(200).json(result);
+  });
 }

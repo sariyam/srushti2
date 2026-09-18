@@ -1,96 +1,77 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { RazorpayService } from "../services/razorpay.service";
 import { db } from "../config";
 import { payments } from "../config/schema";
 import { eq, desc } from "drizzle-orm";
-import { z } from "zod";
+import { UnauthorizedError, BadRequestError, asyncHandler } from "../utils";
 
-export const createOrderSchema = z.object({
-  amount: z.number().positive("Amount must be greater than 0"),
-  credits: z.number().int().positive("Credits must be greater than 0"),
-  packName: z.string().optional(),
-  notes: z.record(z.string()).optional(),
-});
-
-export const verifyPaymentSchema = z.object({
-  razorpayOrderId: z.string().min(1, "razorpayOrderId is required"),
-  razorpayPaymentId: z.string().min(1, "razorpayPaymentId is required"),
-  razorpaySignature: z.string().min(1, "razorpaySignature is required"),
-});
+export {
+  createOrderSchema,
+  verifyPaymentSchema,
+  CreateOrderSchema,
+  VerifyPaymentSchema,
+} from "../schemas/payment.schema";
 
 export class PaymentController {
-  static async createOrder(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
-
-      const { amount, credits, packName, notes } = req.body;
-      const order = await RazorpayService.createOrder({
-        userId: req.user.userId,
-        amount,
-        credits,
-        packName,
-        notes,
-      });
-
-      return res.status(200).json({ success: true, order });
-    } catch (error: any) {
-      next(error);
+  static createOrder = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
 
-  static async verifyPayment(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
+    const { amount, credits, packName, notes } = req.body;
+    const order = await RazorpayService.createOrder({
+      userId: req.user.userId,
+      amount,
+      credits,
+      packName,
+      notes,
+    });
 
-      const { razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
-      const result = await RazorpayService.verifyPayment({
-        userId: req.user.userId,
-        razorpayOrderId,
-        razorpayPaymentId,
-        razorpaySignature,
-      });
+    return res.status(200).json({ success: true, order });
+  });
 
-      return res.status(200).json(result);
-    } catch (error: any) {
-      next(error);
+  static verifyPayment = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
 
-  static async getHistory(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
+    const { razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
+    const result = await RazorpayService.verifyPayment({
+      userId: req.user.userId,
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature,
+    });
 
-      const limit = Number(req.query.limit) || 20;
-      const offset = Number(req.query.offset) || 0;
+    return res.status(200).json(result);
+  });
 
-      const records = await db
-        .select()
-        .from(payments)
-        .where(eq(payments.userId, req.user.userId))
-        .orderBy(desc(payments.createdAt))
-        .limit(limit)
-        .offset(offset);
-
-      return res.status(200).json({ success: true, payments: records });
-    } catch (error: any) {
-      next(error);
+  static getHistory = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
 
-  static async handleWebhook(req: Request, res: Response, next: NextFunction) {
-    try {
-      const signature = req.headers["x-razorpay-signature"] as string;
-      const result = await RazorpayService.handleWebhook(req.body, signature || "");
-      return res.status(200).json(result);
-    } catch (error: any) {
-      console.error("Webhook processing error:", error.message);
-      return res.status(400).json({ error: error.message });
+    const limit = Math.min(Math.max(1, Number(req.query.limit) || 20), 100);
+    const offset = Math.max(0, Number(req.query.offset) || 0);
+
+    const records = await db
+      .select()
+      .from(payments)
+      .where(eq(payments.userId, req.user.userId))
+      .orderBy(desc(payments.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    return res.status(200).json({ success: true, payments: records });
+  });
+
+  static handleWebhook = asyncHandler(async (req: Request, res: Response) => {
+    const signature = req.headers["x-razorpay-signature"] as string;
+    if (!signature) {
+      throw new BadRequestError("Missing 'x-razorpay-signature' header in webhook request", undefined, "MISSING_WEBHOOK_SIGNATURE");
     }
-  }
+
+    const result = await RazorpayService.handleWebhook(req.body, signature);
+    return res.status(200).json(result);
+  });
 }

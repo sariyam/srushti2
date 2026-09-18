@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { env } from "../config";
+import { UnauthorizedError } from "../utils/errors";
 
 export interface JwtUserPayload {
   userId: string;
@@ -35,10 +36,18 @@ export class JwtService {
     try {
       return jwt.verify(token, env.JWT_SECRET) as JwtUserPayload;
     } catch (error: any) {
-      if (error.name === "TokenExpiredError") {
-        throw new Error("Access token expired");
+      if (error?.name === "TokenExpiredError") {
+        throw new UnauthorizedError(
+          "Access token has expired. Please refresh your session using /auth/refresh.",
+          undefined,
+          "TOKEN_EXPIRED"
+        );
       }
-      throw new Error("Invalid access token");
+      throw new UnauthorizedError(
+        "Invalid, malformed, or signature-mismatched access token.",
+        undefined,
+        "INVALID_TOKEN"
+      );
     }
   }
 
@@ -49,10 +58,18 @@ export class JwtService {
     try {
       return jwt.verify(token, env.JWT_REFRESH_SECRET) as JwtUserPayload;
     } catch (error: any) {
-      if (error.name === "TokenExpiredError") {
-        throw new Error("Refresh token expired");
+      if (error?.name === "TokenExpiredError") {
+        throw new UnauthorizedError(
+          "Refresh token has expired. Please log in again via OTP.",
+          undefined,
+          "REFRESH_TOKEN_EXPIRED"
+        );
       }
-      throw new Error("Invalid refresh token");
+      throw new UnauthorizedError(
+        "Invalid or malformed refresh token.",
+        undefined,
+        "INVALID_REFRESH_TOKEN"
+      );
     }
   }
 }

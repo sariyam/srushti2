@@ -3,6 +3,7 @@ import { db, env } from "../config";
 import { users } from "../config/schema";
 import { eq } from "drizzle-orm";
 import path from "node:path";
+import { ServiceUnavailableError, ExternalServiceError } from "../utils/errors";
 
 export interface UploadAvatarOptions {
   userId: string;
@@ -17,8 +18,8 @@ export class StorageService {
   private static getClient(): SupabaseClient {
     if (!this.supabase) {
       if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
-        throw new Error(
-          "Supabase storage credentials missing. Please define SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env"
+        throw new ServiceUnavailableError(
+          "Supabase storage credentials missing. Please define SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in environment variables."
         );
       }
       this.supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
@@ -55,7 +56,7 @@ export class StorageService {
       });
 
     if (uploadError) {
-      throw new Error(`Supabase Storage upload failed: ${uploadError.message}`);
+      throw new ExternalServiceError("SupabaseStorage", `Avatar file upload failed: ${uploadError.message}`);
     }
 
     // Get public URL

@@ -1,101 +1,79 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { UsageService } from "../services/usage.service";
-import { z } from "zod";
+import { UnauthorizedError, asyncHandler } from "../utils";
 
-export const recordUsageSchema = z.object({
-  workspace: z.enum(["garment", "jewelry", "face", "general"]),
-  itemType: z.string().min(1, "itemType is required (e.g. saree, necklace)"),
-  creditsDeducted: z.number().int().min(0).default(1),
-  prompt: z.string().optional(),
-  status: z.enum(["pending", "success", "failed"]).default("success"),
-  errorMessage: z.string().optional(),
-  latencyMs: z.number().optional(),
-  metadata: z.record(z.any()).optional(),
-});
+export {
+  recordUsageSchema,
+  RecordUsageSchema,
+} from "../schemas/usage.schema";
 
 export class UsageController {
-  static async recordUsage(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
-
-      const result = await UsageService.recordUsage({
-        userId: req.user.userId,
-        ...req.body,
-      });
-
-      return res.status(200).json({
-        success: true,
-        ...result,
-      });
-    } catch (error: any) {
-      next(error);
+  static recordUsage = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
 
-  static async getHistory(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
+    const result = await UsageService.recordUsage({
+      userId: req.user.userId,
+      ...req.body,
+    });
 
-      const limit = Number(req.query.limit) || 20;
-      const offset = Number(req.query.offset) || 0;
+    return res.status(200).json({
+      success: true,
+      ...result,
+    });
+  });
 
-      const history = await UsageService.getUserUsageHistory(req.user.userId, limit, offset);
-
-      return res.status(200).json({
-        success: true,
-        history,
-      });
-    } catch (error: any) {
-      next(error);
+  static getHistory = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
 
-  static async getBalance(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
+    const limit = Math.min(Math.max(1, Number(req.query.limit) || 20), 100);
+    const offset = Math.max(0, Number(req.query.offset) || 0);
 
-      const balance = await UsageService.getUserBalance(req.user.userId);
+    const history = await UsageService.getUserUsageHistory(req.user.userId, limit, offset);
 
-      return res.status(200).json({
-        success: true,
-        balance,
-      });
-    } catch (error: any) {
-      next(error);
+    return res.status(200).json({
+      success: true,
+      history,
+    });
+  });
+
+  static getBalance = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
 
-  static async getTimeline(req: Request, res: Response, next: NextFunction) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
+    const balance = await UsageService.getUserBalance(req.user.userId);
 
-      const limit = Number(req.query.limit) || 50;
-      const offset = Number(req.query.offset) || 0;
-      const type = (req.query.type as "payment" | "usage") || undefined;
-      const period = (req.query.period as string) || undefined;
+    return res.status(200).json({
+      success: true,
+      balance,
+    });
+  });
 
-      const result = await UsageService.getCombinedTimeline(
-        req.user.userId,
-        limit,
-        offset,
-        type,
-        period
-      );
-
-      return res.status(200).json({
-        success: true,
-        ...result,
-      });
-    } catch (error: any) {
-      next(error);
+  static getTimeline = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-  }
+
+    const limit = Math.min(Math.max(1, Number(req.query.limit) || 50), 100);
+    const offset = Math.max(0, Number(req.query.offset) || 0);
+    const type = (req.query.type as "payment" | "usage") || undefined;
+    const period = (req.query.period as string) || undefined;
+
+    const result = await UsageService.getCombinedTimeline(
+      req.user.userId,
+      limit,
+      offset,
+      type,
+      period
+    );
+
+    return res.status(200).json({
+      success: true,
+      ...result,
+    });
+  });
 }

@@ -3,6 +3,7 @@ node_modules/
 
 # Production build
 dist/
+functions/api/bundle.ts
 
 # Environment files
 .env

@@ -1,6 +1,7 @@
 import { db } from "../config";
 import { usage, users, payments } from "../config/schema";
 import { eq, and, gte, sql, desc } from "drizzle-orm";
+import { NotFoundError, PaymentRequiredError } from "../utils/errors";
 
 export interface RecordUsageParams {
   userId: string;
@@ -38,12 +39,18 @@ export class UsageService {
         .limit(1);
 
       if (!user) {
-        throw new Error("User not found");
+        throw new NotFoundError(`User with ID '${userId}' not found.`);
       }
 
       if (user.walletBalance < creditsDeducted) {
-        throw new Error(
-          `Insufficient wallet credits. You have ${user.walletBalance} credits, but ${creditsDeducted} is required.`
+        throw new PaymentRequiredError(
+          `Insufficient wallet credits. You have ${user.walletBalance} credit${user.walletBalance === 1 ? "" : "s"}, but ${creditsDeducted} is required to generate this item.`,
+          {
+            availableCredits: user.walletBalance,
+            requiredCredits: creditsDeducted,
+            workspace,
+            itemType,
+          }
         );
       }
 

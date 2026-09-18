@@ -15,5 +15,5 @@
     "declaration": false
   },
   "include": ["functions/**/*"],
-  "exclude": ["node_modules", "dist", "functions/api/index.ts"]
+  "exclude": ["node_modules", "dist", "functions/api/bundle.ts"]
 }

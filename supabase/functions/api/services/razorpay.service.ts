@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { db, env } from "../config";
 import { payments, users } from "../config/schema";
 import { eq, sql } from "drizzle-orm";
+import { BadRequestError, NotFoundError, ExternalServiceError } from "../utils/errors";
 
 export interface CreateOrderParams {
   userId: string;
@@ -24,6 +25,9 @@ export class RazorpayService {
 
   private static getClient(): Razorpay {
     if (!this.instance) {
+      if (!env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) {
+        throw new ExternalServiceError("Razorpay", "Razorpay credentials (RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET) are missing.");
+      }
       this.instance = new Razorpay({
         key_id: env.RAZORPAY_KEY_ID,
         key_secret: env.RAZORPAY_KEY_SECRET,
@@ -41,44 +45,49 @@ export class RazorpayService {
 
     const receipt = `rcpt_${Date.now()}_${userId.slice(0, 5)}`;
 
-    const rzpOrder = await rzp.orders.create({
-      amount: amountInPaise,
-      currency: "INR",
-      receipt,
-      notes: {
-        userId,
-        credits: credits.toString(),
-        packName: packName || "Credit Recharge",
-        ...notes,
-      },
-    });
-
-    // Save pending payment record in database
-    const [paymentRecord] = await db
-      .insert(payments)
-      .values({
-        userId,
-        razorpayOrderId: rzpOrder.id,
+    try {
+      const rzpOrder = await rzp.orders.create({
         amount: amountInPaise,
         currency: "INR",
-        status: "created",
-        creditsAdded: credits,
-        metadata: {
-          packName,
-          notes,
+        receipt,
+        notes: {
+          userId,
+          credits: credits.toString(),
+          packName: packName || "Credit Recharge",
+          ...notes,
         },
-      })
-      .returning();
+      });
 
-    return {
-      orderId: rzpOrder.id,
-      amount: rzpOrder.amount,
-      currency: rzpOrder.currency,
-      keyId: env.RAZORPAY_KEY_ID,
-      configId: env.RAZORPAY_CHECKOUT_CONFIG_ID || "config_SVPwn8f33zfhsP",
-      credits,
-      paymentId: paymentRecord.id,
-    };
+      // Save pending payment record in database
+      const [paymentRecord] = await db
+        .insert(payments)
+        .values({
+          userId,
+          razorpayOrderId: rzpOrder.id,
+          amount: amountInPaise,
+          currency: "INR",
+          status: "created",
+          creditsAdded: credits,
+          metadata: {
+            packName,
+            notes,
+          },
+        })
+        .returning();
+
+      return {
+        orderId: rzpOrder.id,
+        amount: rzpOrder.amount,
+        currency: rzpOrder.currency,
+        keyId: env.RAZORPAY_KEY_ID,
+        configId: env.RAZORPAY_CHECKOUT_CONFIG_ID || "config_SVPwn8f33zfhsP",
+        credits,
+        paymentId: paymentRecord.id,
+      };
+    } catch (err: any) {
+      if (err instanceof ExternalServiceError) throw err;
+      throw new ExternalServiceError("Razorpay", err?.error?.description || err?.message || "Failed to create order with Razorpay.");
+    }
   }
 
   /**
@@ -103,7 +112,11 @@ export class RazorpayService {
         .set({ status: "failed", razorpayPaymentId, razorpaySignature })
         .where(eq(payments.razorpayOrderId, razorpayOrderId));
 
-      throw new Error("Invalid payment signature. Verification failed.");
+      throw new BadRequestError(
+        "Invalid payment signature. Verification failed.",
+        { razorpayOrderId, razorpayPaymentId },
+        "PAYMENT_SIGNATURE_MISMATCH"
+      );
     }
 
     // 2. Fetch payment record
@@ -114,7 +127,11 @@ export class RazorpayService {
       .limit(1);
 
     if (!existingPayment) {
-      throw new Error("Order not found in records.");
+      throw new NotFoundError(
+        `Payment order with Razorpay ID '${razorpayOrderId}' was not found.`,
+        undefined,
+        "PAYMENT_ORDER_NOT_FOUND"
+      );
     }
 
     if (existingPayment.status === "paid") {

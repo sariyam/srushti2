@@ -4,6 +4,12 @@ import { db, env } from "../config";
 import { otps, users } from "../config/schema";
 import { eq, and, desc, gt } from "drizzle-orm";
 import { JwtService } from "./jwt.service";
+import {
+  BadRequestError,
+  RateLimitError,
+  ForbiddenError,
+  ExternalServiceError,
+} from "../utils/errors";
 
 export interface SendOtpOptions {
   identifier: string; // phone number (e.g. +919876543210)
@@ -64,7 +70,11 @@ export class OtpService {
       const waitSeconds = Math.ceil(
         (recentOtp.createdAt.getTime() + env.OTP_COOLDOWN_SECONDS * 1000 - Date.now()) / 1000
       );
-      throw new Error(`Please wait ${waitSeconds}s before requesting a new OTP.`);
+      throw new RateLimitError(
+        `Please wait ${waitSeconds}s before requesting a new OTP.`,
+        waitSeconds,
+        { cooldownSeconds: env.OTP_COOLDOWN_SECONDS }
+      );
     }
 
     // 2. Generate and hash OTP
@@ -117,7 +127,11 @@ export class OtpService {
       .limit(1);
 
     if (!otpRecord) {
-      throw new Error("Invalid or expired OTP. Please request a new one.");
+      throw new BadRequestError(
+        "Invalid or expired OTP. Please request a new verification code.",
+        undefined,
+        "OTP_NOT_FOUND_OR_EXPIRED"
+      );
     }
 
     // 2. Check max failed attempts
@@ -126,18 +140,27 @@ export class OtpService {
         .update(otps)
         .set({ isUsed: true })
         .where(eq(otps.id, otpRecord.id));
-      throw new Error("Too many failed attempts. This OTP has been invalidated.");
+      throw new BadRequestError(
+        "Too many failed attempts. This OTP has been permanently invalidated. Please request a new one.",
+        { maxAttempts: env.OTP_MAX_ATTEMPTS },
+        "OTP_ATTEMPTS_EXCEEDED"
+      );
     }
 
     // 3. Verify bcrypt hash
     const isValid = await bcrypt.compare(cleanCode, otpRecord.codeHash);
 
     if (!isValid) {
+      const attemptsRemaining = Math.max(0, env.OTP_MAX_ATTEMPTS - (otpRecord.attempts + 1));
       await db
         .update(otps)
         .set({ attempts: otpRecord.attempts + 1 })
         .where(eq(otps.id, otpRecord.id));
-      throw new Error(`Incorrect OTP. ${env.OTP_MAX_ATTEMPTS - (otpRecord.attempts + 1)} attempts remaining.`);
+      throw new BadRequestError(
+        `Incorrect verification code. ${attemptsRemaining} attempt${attemptsRemaining === 1 ? "" : "s"} remaining.`,
+        { attemptsRemaining, maxAttempts: env.OTP_MAX_ATTEMPTS },
+        "INCORRECT_OTP_CODE"
+      );
     }
 
     // 4. Invalidate OTP to prevent replay
@@ -168,7 +191,11 @@ export class OtpService {
     }
 
     if (!user.isActive) {
-      throw new Error("Your account has been deactivated. Please contact support.");
+      throw new ForbiddenError(
+        "Your user account is suspended or inactive. Please contact Srushti AI support.",
+        undefined,
+        "ACCOUNT_INACTIVE"
+      );
     }
 
     // 6. Issue JWT Tokens

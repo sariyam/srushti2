@@ -2,19 +2,19 @@
   "name": "srushti-supabase",
   "version": "1.0.0",
   "description": "Production-ready Supabase Postgres + Express + Serverless backend with Drizzle ORM, Custom OTP, Razorpay, Supabase Storage, and JWT Auth",
-  "main": "functions/api/serverless.ts",
+  "main": "functions/api/index.ts",
   "scripts": {
-    "dev": "tsx watch functions/api/server.ts",
+    "dev": "tsx watch functions/api/index.ts",
     "migrate": "tsx functions/api/config/migrate.ts",
-    "deploy": "npm run bundle:edge && npx -y supabase@latest functions deploy api --no-verify-jwt",
+    "deploy": "npm run bundle:edge && npx -y supabase@latest functions deploy api --project-ref xfooqaqjeaqcoddihphl --no-verify-jwt",
     "seed": "tsx functions/api/config/seed.ts",
     "build": "rimraf dist && tsc",
-    "start": "node dist/functions/api/server.js",
+    "start": "node dist/functions/api/index.js",
     "db:generate": "drizzle-kit generate --config=functions/api/config/drizzle.config.ts",
     "db:migrate": "npm run migrate",
     "db:seed": "npm run seed",
     "db:studio": "drizzle-kit studio --config=functions/api/config/drizzle.config.ts",
-    "bundle:edge": "esbuild functions/api/entry.ts --bundle --platform=node --format=esm --target=es2022 --external:express --external:cors --external:helmet --external:morgan --external:dotenv --external:zod --external:postgres --external:drizzle-orm --external:drizzle-orm/* --external:jsonwebtoken --external:bcryptjs --external:razorpay --external:multer --external:@supabase/* --external:path --external:node:* --external:jsr:* --outfile=functions/api/index.ts"
+    "bundle:edge": "esbuild functions/api/index.ts --bundle --platform=node --format=esm --target=es2022 --external:express --external:cors --external:helmet --external:morgan --external:dotenv --external:zod --external:postgres --external:drizzle-orm '--external:drizzle-orm/*' --external:jsonwebtoken --external:bcryptjs --external:razorpay --external:multer --external:@supabase/* --external:hono '--external:@hono/*' --external:serverless-http --external:path '--external:node:*' '--external:jsr:*' --outfile=functions/api/bundle.ts"
   },
   "keywords": [
     "supabase",
@@ -29,6 +29,7 @@
   "author": "Srushti AI Team",
   "license": "ISC",
   "dependencies": {
+    "@hono/zod-openapi": "^0.19.10",
     "@supabase/supabase-js": "^2.49.1",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -36,6 +37,7 @@
     "drizzle-orm": "^0.39.3",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
+    "hono": "^4.13.8",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
