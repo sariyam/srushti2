@@ -162,7 +162,7 @@ function LandingPageComponent() {
       <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--bg-primary)]/90 border-b border-black/5 dark:border-white/5 py-3 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
-            <Logo />
+            <Logo theme="dark" />
             <div>
               <span className="text-base sm:text-lg font-black tracking-tight text-[var(--text-emphasis)] block leading-none">
                 Srushti AI

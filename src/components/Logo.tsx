@@ -4,15 +4,37 @@ import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
 import backLogo from "../assets/back_logo.png";
 
-export const Logo: React.FC = () => {
+export interface LogoProps {
+  theme?: "light" | "dark";
+  invertTheme?: boolean;
+  className?: string;
+}
+
+export const Logo: React.FC<LogoProps> = ({ theme, invertTheme, className = "" }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  let effectiveTheme = theme;
+  if (invertTheme) {
+    if (theme) {
+      effectiveTheme = theme === "light" ? "dark" : "light";
+    } else if (typeof document !== "undefined") {
+      effectiveTheme = document.documentElement.classList.contains("dark") ? "light" : "dark";
+    }
+  }
+
+  const themeClasses =
+    effectiveTheme === "dark"
+      ? "bg-[#353535] border border-white/10 shadow-[3px_3px_7px_var(--shadow-dark),-3px_-3px_7px_var(--shadow-light)]"
+      : effectiveTheme === "light"
+      ? "bg-[#e5e5e5] border border-black/10 shadow-[3px_3px_7px_var(--shadow-dark),-3px_-3px_7px_var(--shadow-light)]"
+      : "nm-outset bg-[var(--bg-secondary)]";
 
   const backLogoSrc = LOGOS_BASE64.back || backLogo || "/assets/back_logo.png";
   const frontLogoSrc = LOGOS_BASE64.front || frontLogo || "/assets/front_logo.png";
 
   return (
     <div
-      className="relative w-9 h-9 rounded-2xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center select-none shrink-0 cursor-default transition-all"
+      className={`relative w-9 h-9 rounded-2xl flex items-center justify-center select-none shrink-0 cursor-default transition-all ${themeClasses} ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       title="Srushti AI Logo"

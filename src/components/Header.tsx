@@ -651,7 +651,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="nm-outset rounded-2xl px-4 py-2.5 flex items-center justify-between gap-3 w-full">
         {/* Brand title */}
         <div className="flex items-center gap-2 select-none">
-          <Logo />
+          <Logo theme="dark" />
           <div>
             <h1 className="text-base font-bold tracking-tight text-[var(--text-emphasis)] leading-none font-sans">
               {title}
