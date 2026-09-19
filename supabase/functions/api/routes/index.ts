@@ -3,6 +3,7 @@ import authRoutes from "./auth.routes";
 import paymentRoutes from "./payment.routes";
 import usageRoutes from "./usage.routes";
 import adminRoutes from "./admin.routes";
+import aiRoutes from "./ai.routes";
 import { checkDbConnection } from "../config";
 
 const router = Router();
@@ -11,6 +12,7 @@ router.use("/auth", authRoutes);
 router.use("/payments", paymentRoutes);
 router.use("/usage", usageRoutes);
 router.use("/admin", adminRoutes);
+router.use("/ai", aiRoutes);
 
 import {
   getOpenApiDocument,
@@ -91,6 +93,7 @@ router.get("/", (req, res) => {
       payments: `/${functionSlug}/payments`,
       usage: `/${functionSlug}/usage`,
       admin: `/${functionSlug}/admin`,
+      ai: `/${functionSlug}/ai`,
     },
     docs: `/${functionSlug}/docs`,
   });

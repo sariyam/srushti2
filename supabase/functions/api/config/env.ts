@@ -1,26 +1,76 @@
 import * as dotenv from "dotenv";
 import { z } from "zod";
 
-// Bridge Deno.env to process.env if running in Deno / Supabase Edge Functions
 declare const Deno: any;
-if (typeof Deno !== "undefined" && typeof Deno?.env?.toObject === "function") {
-  try {
-    const denoEnv = Deno.env.toObject();
-    for (const [k, v] of Object.entries(denoEnv)) {
-      if (v !== undefined && typeof v === "string") {
-        process.env[k] = v;
+
+// 1. In Deno runtime, read and parse .env file directly into Deno.env if available
+if (typeof Deno !== "undefined") {
+  const envCandidates = [
+    ".env",
+    "functions/.env",
+    "supabase/functions/.env",
+    "../.env",
+    "../../.env",
+    "../../../.env",
+  ];
+
+  for (const candidate of envCandidates) {
+    try {
+      if (typeof Deno.readTextFileSync === "function") {
+        const text = Deno.readTextFileSync(candidate);
+        for (const line of text.split(/\r?\n/)) {
+          const trimmed = line.trim();
+          if (!trimmed || trimmed.startsWith("#")) continue;
+          const eqIdx = trimmed.indexOf("=");
+          if (eqIdx > 0) {
+            const key = trimmed.slice(0, eqIdx).trim();
+            let val = trimmed.slice(eqIdx + 1).trim();
+            if (
+              (val.startsWith('"') && val.endsWith('"')) ||
+              (val.startsWith("'") && val.endsWith("'"))
+            ) {
+              val = val.slice(1, -1);
+            }
+            if (typeof Deno.env?.get === "function" && !Deno.env.get(key)) {
+              Deno.env.set(key, val);
+            }
+          }
+        }
+        break;
       }
+    } catch (_err) {
+      // File not found or read permission not granted, try next
     }
-  } catch (_err) {
-    // Ignore if permission is denied
   }
 }
 
-// In standard Node.js environments, safely load local .env
+// 2. In standard Node.js environments, safely load local .env
 try {
   dotenv.config();
+  dotenv.config({ path: "functions/.env" });
+  dotenv.config({ path: "supabase/functions/.env" });
+  dotenv.config({ path: "../.env" });
 } catch (_err) {
   // Ignore in cloud edge environments without filesystem access
+}
+
+/**
+ * Reads an environment variable using Deno.env first (for Deno / Supabase Edge Functions)
+ * with fallback to process.env (for standard Node.js runtime)
+ */
+export function getEnv(key: string, defaultValue = ""): string {
+  if (typeof Deno !== "undefined" && typeof Deno?.env?.get === "function") {
+    try {
+      const val = Deno.env.get(key);
+      if (val !== undefined && val !== null) return String(val);
+    } catch (_err) {
+      // Ignore if permission denied
+    }
+  }
+  if (typeof process !== "undefined" && process?.env && process.env[key] !== undefined) {
+    return String(process.env[key]);
+  }
+  return defaultValue;
 }
 
 const envSchema = z.object({
@@ -48,6 +98,9 @@ const envSchema = z.object({
   RAZORPAY_WEBHOOK_SECRET: z.string().optional().default(""),
   RAZORPAY_CHECKOUT_CONFIG_ID: z.string().optional().default("config_SVPwn8f33zfhsP"),
 
+  // OpenAI Server-Side Key
+  OPENAI_API_KEY: z.string().optional().default(""),
+
   // OTP & SMS Gateway
   OTP_EXPIRY_MINUTES: z.coerce.number().default(10),
   OTP_MAX_ATTEMPTS: z.coerce.number().default(3),
@@ -65,4 +118,42 @@ const envSchema = z.object({
   SUPERADMIN_INITIAL_CREDITS: z.coerce.number().default(1000),
 });
 
-export const env = envSchema.parse(process.env);
+// Build environment data object prioritizing Deno.env
+const rawEnv: Record<string, any> = {};
+
+if (typeof process !== "undefined" && process?.env) {
+  Object.assign(rawEnv, process.env);
+}
+
+if (typeof Deno !== "undefined" && typeof Deno?.env?.toObject === "function") {
+  try {
+    Object.assign(rawEnv, Deno.env.toObject());
+  } catch (_err) {
+    // Ignore if permission denied
+  }
+}
+
+// Explicitly query Deno.env.get for each declared schema field
+if (typeof Deno !== "undefined" && typeof Deno?.env?.get === "function") {
+  for (const key of Object.keys(envSchema.shape)) {
+    try {
+      const val = Deno.env.get(key);
+      if (val !== undefined) {
+        rawEnv[key] = val;
+      }
+    } catch (_err) {
+      // Ignore if permission denied
+    }
+  }
+}
+
+// Sync back to process.env so dependencies relying on process.env (Express, pg, etc.) function smoothly
+if (typeof process !== "undefined" && process?.env) {
+  for (const [k, v] of Object.entries(rawEnv)) {
+    if (v !== undefined && process.env[k] === undefined) {
+      process.env[k] = v;
+    }
+  }
+}
+
+export const env = envSchema.parse(rawEnv);

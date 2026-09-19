@@ -76,9 +76,9 @@ export function createApp(): Express {
     app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
   }
 
-  // Body Parsing
-  app.use(express.json({ limit: "10mb" }));
-  app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+  // Body Parsing (allow 25mb for high-res AI image payloads)
+  app.use(express.json({ limit: "25mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 
   // Gateway URL Normalizer:
   // If request arrives from Supabase Edge Functions Gateway (/functions/v1/<slug>/*),

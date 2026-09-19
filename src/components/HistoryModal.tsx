@@ -178,7 +178,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
       {/* Backdrop Overlay */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -194,7 +194,8 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 16 }}
         transition={{ duration: 0.2, ease: "easeOut" }}
-        className="relative w-full max-w-2xl bg-[var(--bg-panel)] rounded-3xl nm-outset p-4 sm:p-6 flex flex-col z-10 border border-black/5 dark:border-white/10 max-h-[90vh] sm:max-h-[85vh] shadow-2xl overflow-hidden my-auto"
+        style={{ height: "90dvh", maxHeight: "90dvh" }}
+        className="relative w-full max-w-2xl bg-[var(--bg-panel)] rounded-3xl nm-outset p-4 sm:p-6 flex flex-col z-10 border border-black/5 dark:border-white/10 h-[90vh] h-[90dvh] max-h-[90vh] max-h-[90dvh] shadow-2xl overflow-hidden my-auto"
       >
         {/* Header Bar */}
         <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3.5 shrink-0">
@@ -327,7 +328,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
           {/* Loading Skeletons */}
           {isLoading && timeline.length === 0 ? (
             <div className="space-y-2.5 py-2">
-              {[1, 2, 3].map((n) => (
+              {[1, 2, 3, 4, 5].map((n) => (
                 <div
                   key={n}
                   className="p-4 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 animate-pulse flex items-center justify-between"
@@ -345,7 +346,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
             </div>
           ) : filteredItems.length === 0 ? (
             /* Empty State */
-            <div className="p-10 rounded-2xl nm-inset-sm text-center flex flex-col items-center justify-center gap-2.5 text-[var(--text-primary)] my-4">
+            <div className="p-8 sm:p-10 rounded-2xl nm-inset-sm text-center flex flex-col items-center justify-center gap-2.5 text-[var(--text-primary)] my-auto min-h-[280px] h-full">
               <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent nm-inset-sm">
                 <Icon icon={filter === "payment" ? "lucide:credit-card" : "lucide:camera"} className="w-6 h-6" />
               </div>

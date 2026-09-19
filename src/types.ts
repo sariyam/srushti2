@@ -346,9 +346,9 @@ export const TRANSLATIONS = {
     verifyGoogle: "Verify pricing on official Google AI pricing page",
     
     // Errors
-    errNoKey: "Please configure your OpenAI API Key (VITE_OPENAI_API_KEY) in your frontend .env file first to generate AI photos.",
+    errNoKey: "Please sign in with your phone number to generate AI photos using your studio credits.",
     errUploadFirst: "Please upload your product photo first!",
-    errGenFailed: "Failed to generate photo. Please check your internet connection or API key.",
+    errGenFailed: "Failed to generate photo. Please check your internet connection or server status.",
   },
   te: {
     title: "Srushti AI",
@@ -692,9 +692,9 @@ export const TRANSLATIONS = {
     verifyGoogle: "గూగుల్ అధికారిక ధరల వెబ్‌సైట్‌లో సరిచూసుకోండి",
     
     // Errors
-    errNoKey: "ఏఐ ఫోటోలు చేయడానికి ముందు దయచేసి మీ ఫ్రంట్‌ఎండ్ .env ఫైల్‌లో OpenAI API కీని (VITE_OPENAI_API_KEY) కాన్ఫిగర్ చేసుకోండి.",
+    errNoKey: "మీ స్టూడియో క్రెడిట్లను ఉపయోగించి ఏఐ ఫోటోలు రూపొందించడానికి దయచేసి ముందుగా మీ ఫోన్ నంబర్‌తో సైన్ ఇన్ అవ్వండి.",
     errUploadFirst: "ముందుగా మీ వస్తువు ఫోటోను అప్‌లోడ్ చేయండి!",
-    errGenFailed: "ఫోటో తయారుచేయడం కుదరలేదు. దయచేసి ఇంటర్నెట్ లేదా ఏపీఐ కీని సరిచూసుకోండి.",
+    errGenFailed: "ఫోటో తయారుచేయడం కుదరలేదు. దయచేసి ఇంటర్నెట్ లేదా సర్వర్ కనెక్షన్‌ను సరిచూసుకోండి.",
   }
 };
 

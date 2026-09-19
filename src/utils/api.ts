@@ -617,4 +617,61 @@ export async function fetchCombinedTimelineApi(
   }
 }
 
+export interface GenerateAiImageParams {
+  workspace: "garment" | "jewelry" | "face" | "general";
+  itemType: string;
+  requiredCredits: number;
+  prompt: string;
+  size?: string;
+  quality?: string;
+  model?: string;
+  productImage: string;
+  faceImage?: string;
+  metadata?: Record<string, any>;
+}
 
+export interface GenerateAiImageResponse {
+  success: boolean;
+  imageUrl?: string;
+  remainingCredits?: number;
+  usageLog?: any;
+  latencyMs?: number;
+  error?: string;
+}
+
+/**
+ * Calls the secure server-side AI generation proxy endpoint (/api/ai/generate).
+ * The OpenAI API key is stored exclusively on the server, safely isolated from client browsers.
+ */
+export async function generateAiImageApi(params: GenerateAiImageParams): Promise<GenerateAiImageResponse> {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error("Please sign in with your phone number before generating AI photos.");
+  }
+
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/ai/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(params),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    const errorMsg =
+      data?.error ||
+      data?.message ||
+      (Array.isArray(data?.details) && data.details.map((d: any) => d.message).join(". ")) ||
+      `AI Generation failed (Status ${res.status})`;
+    throw new Error(errorMsg);
+  }
+
+  if (typeof data.remainingCredits === "number") {
+    localStorage.setItem("srushti_wallet_credits", String(data.remainingCredits));
+  }
+
+  return data;
+}

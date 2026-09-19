@@ -27,7 +27,8 @@ import {
   recordUsageApi, 
   fetchUsageHistoryApi, 
   fetchUsageBalanceApi,
-  getAuthToken 
+  getAuthToken,
+  generateAiImageApi
 } from "./utils/api";
 
 // Reusable Components
@@ -302,11 +303,10 @@ export default function App() {
   // Provider Selection state (default to OpenAI)
   const [selectedProvider, setSelectedProvider] = useState<"all" | "openai" | "google">("openai");
 
-  // OpenAI API Key state - read directly from frontend environment VITE_OPENAI_API_KEY
-  const envDefaultKey = (import.meta.env.VITE_OPENAI_API_KEY || "").trim();
+  // OpenAI API Key state — server-side managed, with optional legacy override
+  const envDefaultKey = "";
   const [rawOpenaiApiKey, setRawOpenaiApiKey] = useState<string>(() => {
     return (
-      envDefaultKey ||
       localStorage.getItem("srushti_openai_api_key") ||
       localStorage.getItem("srushti_api_key") ||
       ""
@@ -314,14 +314,13 @@ export default function App() {
   });
   const [openaiApiKey, setOpenaiApiKey] = useState<string>(() => {
     const saved =
-      envDefaultKey ||
       localStorage.getItem("srushti_openai_api_key") ||
       localStorage.getItem("srushti_api_key") ||
       "";
     if (saved) {
       return saved.length > 10 ? `${saved.substring(0, 6)}...${saved.substring(saved.length - 4)}` : "sk-proj...xxxx";
     }
-    return "";
+    return "Server Managed (Secure)";
   });
   const [openaiApiInput, setOpenaiApiInput] = useState<string>(() => {
     return (
@@ -558,11 +557,15 @@ export default function App() {
       return;
     }
 
-    const openAiKeyToUse = (import.meta.env.VITE_OPENAI_API_KEY || rawOpenaiApiKey || "").trim();
-    if (!openAiKeyToUse) {
-      setGenerationError(lang === "en" 
-        ? "OpenAI API Key is missing. Please add VITE_OPENAI_API_KEY to your frontend .env file." 
-        : "OpenAI API కీ లేదు. దయచేసి మీ ఫ్రంట్‌ఎండ్ .env ఫైల్‌లో VITE_OPENAI_API_KEY ని జోడించండి.");
+    // Require authentication before spending server AI credits
+    const token = getAuthToken();
+    if (!token) {
+      setGenerationError(
+        lang === "en"
+          ? "Please sign in with your phone number to generate AI photos using your studio credits."
+          : "మీ స్టూడియో క్రెడిట్లను ఉపయోగించి ఏఐ ఫోటోలు రూపొందించడానికి దయచేసి మీ ఫోన్ నంబర్‌తో సైన్ ఇన్ అవ్వండి."
+      );
+      setIsSettingsOpen(true);
       setDebugPayload(null);
       setDebugPrompt(null);
       return;
@@ -571,7 +574,7 @@ export default function App() {
     // Pre-generation balance check for Studio Credits
     const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
     const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
-    const requiredCredits = calculateRequiredCredits(selectedImageModel, activeRes, gptImageQuality, activeAspect);
+    const requiredCredits = calculateRequiredCredits(selectedImageModel, activeRes, gptImageQuality, activeAspect, creditSettings);
 
     if (walletBalance < requiredCredits) {
       setLowBalanceInfo({
@@ -628,9 +631,8 @@ export default function App() {
       });
 
       const promptWithFace = activePrompt;
-
-      // Sourced directly from frontend env or state
-      const resolution = workspace === "garment" ? garmentResolution : jewelryResolution;
+      const sizeString = getGptImage2SizeString(activeRes, activeAspect);
+      const activeItemType = workspace === "garment" ? garmentType : jewelryType;
 
       let cleanFaceBase64 = "";
       let faceMime = "image/jpeg";
@@ -642,187 +644,85 @@ export default function App() {
         }
       }
 
-      // Construct a clean, safe representation of the payload to print in the UI debug block
+      // Construct safe debug representation (no secrets exposed)
       const debugPayloadObj = {
-        provider: "OpenAI",
-        endpoint: "https://api.openai.com/v1/images/edits",
-        model: "gpt-image-2.5-sunburst",
-        aspectRatio: workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio,
-        resolution: resolution,
+        provider: "OpenAI (Server-Side Managed Gateway)",
+        endpoint: "/api/ai/generate",
+        model: selectedImageModel || "gpt-image-2.5-sunburst",
+        aspectRatio: activeAspect,
+        resolution: activeRes,
+        calculatedSize: sizeString,
         productBase64Preview: originalImage ? `${originalImage.substring(0, 60)}... (${Math.round(originalImage.length / 1024)} KB)` : null,
         faceBase64Preview: cleanFaceBase64 ? `data:${faceMime};base64,${cleanFaceBase64.substring(0, 50)}... (${Math.round(cleanFaceBase64.length / 1024)} KB)` : null,
         promptJSON: JSON.parse(promptWithFace),
-        rawPayloadStructure: null
+        security: "100% Server-Side Authenticated & Protected Key"
       };
 
       setDebugPrompt(promptWithFace);
       setDebugPayload(debugPayloadObj);
 
-      // --- OPENAI API IMAGE GENERATION ---
-      const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
-      const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
-      const sizeString = getGptImage2SizeString(activeRes, activeAspect);
-
-      const openAiQuality = "low";
-      const openAiEndpoint = "https://api.openai.com/v1/images/edits";
-
-      const formData = new FormData();
-      formData.append("model", "gpt-image-2.5-sunburst");
-      formData.append("prompt", promptWithFace);
-      formData.append("size", sizeString);
-      formData.append("quality", "low");
-      formData.append("n", "1");
-
-      // Helper to convert data URL or http URL to Blob
-      const urlToBlob = async (url: string): Promise<Blob> => {
-        if (url.startsWith("data:")) {
-          const parts = url.split(",");
-          const mime = parts[0].match(/:(.*?);/)?.[1] || "image/jpeg";
-          const bstr = atob(parts[1]);
-          let n = bstr.length;
-          const u8arr = new Uint8Array(n);
-          while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-          }
-          return new Blob([u8arr], { type: mime });
-        }
-        const fetchRes = await fetch(url);
-        return await fetchRes.blob();
-      };
-
-      const imagePreviewsForDebug: string[] = [];
-
-      if (originalImage) {
-        try {
-          const productBlob = await urlToBlob(originalImage);
-          formData.append("image[]", productBlob, "product_image.png");
-          imagePreviewsForDebug.push(`<product image bytes (~${Math.round(productBlob.size / 1024)} KB)>`);
-        } catch (blobErr) {
-          console.error("Error converting original product image to Blob:", blobErr);
-        }
-      }
-
-      if (activeFaceUrl) {
-        try {
-          const faceBlob = await urlToBlob(activeFaceUrl);
-          formData.append("image[]", faceBlob, "face_reference.png");
-          imagePreviewsForDebug.push(`<face reference image bytes (~${Math.round(faceBlob.size / 1024)} KB)>`);
-        } catch (blobErr) {
-          console.error("Error converting face reference image to Blob:", blobErr);
-        }
-      }
-
-      const openAiDebugObj = {
-        ...debugPayloadObj,
-        endpoint: openAiEndpoint,
-        model: "gpt-image-2.5-sunburst",
-        contentType: "multipart/form-data",
-        quality: openAiQuality,
-        calculatedSize: sizeString,
-        rawPayloadFields: {
-          model: "gpt-image-2.5-sunburst",
-          "image[]": imagePreviewsForDebug,
-          prompt: promptWithFace,
-          size: sizeString,
-          quality: openAiQuality,
-          n: "1"
-        }
-      };
-
-      setDebugPayload(openAiDebugObj);
-
-      let res = await fetch(openAiEndpoint, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${openAiKeyToUse}`
+      // --- SERVER-SIDE SECURE AI GENERATION PROXY ---
+      const genResponse = await generateAiImageApi({
+        workspace: workspace as "garment" | "jewelry",
+        itemType: activeItemType,
+        requiredCredits,
+        prompt: promptWithFace,
+        size: sizeString,
+        quality: gptImageQuality === "standard" ? "standard" : "low",
+        model: selectedImageModel || "gpt-image-2.5-sunburst",
+        productImage: originalImage,
+        faceImage: activeFaceUrl || undefined,
+        metadata: {
+          aspectRatio: activeAspect,
+          resolution: activeRes,
+          photoStyle: workspace === "garment" ? garmentPhotoStyle : jewelryPhotoStyle,
+          quality: gptImageQuality,
+          model: selectedImageModel,
         },
-        body: formData
       });
-
-      if (!res.ok) {
-        const errJson = await res.json().catch(() => ({}));
-        const errMsg = errJson?.error?.message || `OpenAI API Error (${res.status}): ${res.statusText}`;
-        throw new Error(errMsg);
-      }
-
-      const data = await res.json();
-      let generatedImageUrl: string | null = null;
-      if (data.data?.[0]?.b64_json) {
-        generatedImageUrl = `data:image/png;base64,${data.data[0].b64_json}`;
-      } else if (data.data?.[0]?.url) {
-        generatedImageUrl = data.data[0].url;
-      }
 
       if (stepInterval) {
         clearInterval(stepInterval);
         stepInterval = null;
       }
 
-      if (generatedImageUrl) {
-        setGeneratedImage(generatedImageUrl);
+      if (genResponse.imageUrl) {
+        setGeneratedImage(genResponse.imageUrl);
         setActivePreviewTab("generated");
         setShowSuccessToast(true);
         setTimeout(() => setShowSuccessToast(false), 4000);
 
-        // Deduct generated photo cost from studio wallet in Credits & record transaction
-        try {
-          const activeRes = workspace === "garment" ? garmentResolution : jewelryResolution;
-          const activeAspect = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
-          const requiredCredits = calculateRequiredCredits(selectedImageModel, activeRes, gptImageQuality, activeAspect, creditSettings);
-          const latencyMs = Date.now() - generationStartTime;
-          const activeItemType = workspace === "garment" ? garmentType : jewelryType;
-
-          // Call backend usage recording endpoint to deduct credits and store audit record
-          recordUsageApi({
-            workspace: workspace as "garment" | "jewelry",
-            itemType: activeItemType,
-            creditsDeducted: requiredCredits,
-            prompt: promptWithFace,
-            status: "success",
-            latencyMs,
-            metadata: {
-              aspectRatio: activeAspect,
-              resolution: activeRes,
-              photoStyle: workspace === "garment" ? garmentPhotoStyle : jewelryPhotoStyle,
-              quality: gptImageQuality,
-              model: selectedImageModel,
-            },
-          }).then((res) => {
-            if (res && typeof res.remainingCredits === "number") {
-              setWalletBalance(res.remainingCredits);
-            }
-          }).catch((recordErr) => {
-            console.warn("recordUsageApi catch:", recordErr);
-          });
-
+        // Update wallet credits balance from server's atomic deduction
+        if (typeof genResponse.remainingCredits === "number") {
+          setWalletBalance(genResponse.remainingCredits);
+        } else {
           setWalletBalance((prev) => Math.max(0, parseFloat((prev - requiredCredits).toFixed(1))));
-          const now = Date.now();
-          const debitTx: WalletTransaction = {
-            id: `tx-${now}`,
-            timestamp: now,
-            type: "debit",
-            amount: requiredCredits,
-            currency: currency,
-            title: workspace === "garment" ? "Garment Model Shoot (AI Photo)" : "Jewelry Studio Shoot (AI Photo)",
-            titleTe: workspace === "garment" ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
-            description: `${activeItemType.toUpperCase()} • ${activeRes.toUpperCase()} • ${activeAspect}`,
-            descriptionTe: `${activeItemType.toUpperCase()} • ${activeRes.toUpperCase()} • ${activeAspect}`,
-            date: new Date(now).toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
-              month: "short",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-            status: "success",
-            category: "generation",
-            modelUsed: selectedImageModel,
-            resolution: activeRes,
-            aspectRatio: activeAspect,
-          };
-          setWalletTransactions((prev) => [debitTx, ...prev]);
-        } catch (walletDeductErr) {
-          console.log("Wallet deduction status info:", walletDeductErr);
         }
+
+        const now = Date.now();
+        const debitTx: WalletTransaction = {
+          id: `tx-${now}`,
+          timestamp: now,
+          type: "debit",
+          amount: requiredCredits,
+          currency: currency,
+          title: workspace === "garment" ? "Garment Model Shoot (AI Photo)" : "Jewelry Studio Shoot (AI Photo)",
+          titleTe: workspace === "garment" ? "బట్టల మోడల్ ఫోటో షూట్" : "నగల స్టూడియో ఫోటో షూట్",
+          description: `${activeItemType.toUpperCase()} • ${activeRes.toUpperCase()} • ${activeAspect}`,
+          descriptionTe: `${activeItemType.toUpperCase()} • ${activeRes.toUpperCase()} • ${activeAspect}`,
+          date: new Date(now).toLocaleDateString(lang === "te" ? "te-IN" : "en-US", {
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          status: "success",
+          category: "generation",
+          modelUsed: selectedImageModel,
+          resolution: activeRes,
+          aspectRatio: activeAspect,
+        };
+        setWalletTransactions((prev) => [debitTx, ...prev]);
 
         // Generate dynamic file name matching format: srtushtiAi_Select Businesstype_datetimeampm
         const activeDownloadFileName = generateSrushtiFileName(
@@ -832,7 +732,7 @@ export default function App() {
         );
 
         try {
-          downloadImage(generatedImageUrl, activeDownloadFileName);
+          downloadImage(genResponse.imageUrl, activeDownloadFileName);
         } catch (downloadErr) {
           console.log("Auto download status info:", downloadErr);
         }
