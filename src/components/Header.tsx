@@ -10,6 +10,7 @@ import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransaction
 import { Logo } from "./Logo";
 import { LOGOS_BASE64 } from "../assets/logoBase64";
 import frontLogo from "../assets/front_logo.png";
+import { getStoredAuthUser, getAuthToken, fetchCurrentUserApi, AuthUser } from "../utils/api";
 
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 const Pencil = (props: any) => <Icon icon="lucide:pencil" {...props} />;
@@ -403,6 +404,7 @@ interface HeaderProps {
   onClearHistory?: () => void;
   isWalletOpen?: boolean;
   setIsWalletOpen?: (val: boolean) => void;
+  isSuperAdmin?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -466,12 +468,54 @@ export const Header: React.FC<HeaderProps> = ({
   onClearHistory: propOnClearHistory,
   isWalletOpen: propIsWalletOpen,
   setIsWalletOpen: propSetIsWalletOpen,
+  isSuperAdmin: propIsSuperAdmin,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isBillingOpen, setIsBillingOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [internalIsWalletOpen, setInternalIsWalletOpen] = useState(false);
+
+  // Authenticated user state for role verification
+  const [authUser, setAuthUser] = useState<AuthUser | null>(() => getStoredAuthUser());
+
+  useEffect(() => {
+    const syncUser = async () => {
+      const stored = getStoredAuthUser();
+      if (stored) {
+        setAuthUser(stored);
+      }
+      const token = getAuthToken();
+      if (token) {
+        try {
+          const liveUser = await fetchCurrentUserApi();
+          if (liveUser) {
+            setAuthUser(liveUser);
+          }
+        } catch {
+          // Keep stored user on network error
+        }
+      } else {
+        setAuthUser(null);
+      }
+    };
+
+    syncUser();
+
+    const handleAuthChange = () => {
+      setAuthUser(getStoredAuthUser());
+    };
+
+    window.addEventListener("srushti:auth-changed", handleAuthChange);
+    window.addEventListener("storage", handleAuthChange);
+    return () => {
+      window.removeEventListener("srushti:auth-changed", handleAuthChange);
+      window.removeEventListener("storage", handleAuthChange);
+    };
+  }, []);
+
+  const effectiveIsSuperAdmin =
+    propIsSuperAdmin !== undefined ? propIsSuperAdmin : authUser?.role === "superadmin";
 
   const isWalletOpen = propIsWalletOpen !== undefined ? propIsWalletOpen : internalIsWalletOpen;
   const setIsWalletOpen = propSetIsWalletOpen !== undefined ? propSetIsWalletOpen : setInternalIsWalletOpen;
@@ -647,15 +691,17 @@ export const Header: React.FC<HeaderProps> = ({
             <Icon icon="lucide:history" className="w-4 h-4" />
           </button>
 
-          {/* Admin Panel popup trigger icon */}
-          <button
-            id="btn-trigger-admin-modal"
-            onClick={() => setIsBillingOpen(true)}
-            className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
-            title={isEn ? "Admin Panel" : "అడ్మిన్ ప్యానెల్"}
-          >
-            <CreditCard className="w-4 h-4" />
-          </button>
+          {/* Admin Panel popup trigger icon - exclusively shown for superadmin role */}
+          {effectiveIsSuperAdmin && (
+            <button
+              id="btn-trigger-admin-modal"
+              onClick={() => setIsBillingOpen(true)}
+              className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
+              title={isEn ? "Admin Panel" : "అడ్మిన్ ప్యానెల్"}
+            >
+              <CreditCard className="w-4 h-4" />
+            </button>
+          )}
 
           {/* Profile popup trigger icon */}
           <button
@@ -956,9 +1002,9 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Pop-up Dialog for Billing */}
+      {/* Pop-up Dialog for Billing / Admin Panel */}
       <AnimatePresence>
-        {isBillingOpen && (
+        {isBillingOpen && effectiveIsSuperAdmin && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop Overlay */}
             <motion.div

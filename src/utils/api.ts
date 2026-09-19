@@ -104,6 +104,7 @@ export function setStoredAuthUser(user: AuthUser): void {
     localStorage.setItem("srushti_wallet_credits", String(user.walletBalance));
   }
   localStorage.setItem("srushti_is_signed_out", "false");
+  window.dispatchEvent(new Event("srushti:auth-changed"));
 }
 
 export function removeAuthData(): void {
@@ -113,6 +114,7 @@ export function removeAuthData(): void {
   localStorage.removeItem("srushti_user_phone");
   localStorage.removeItem("srushti_user_fullname");
   localStorage.setItem("srushti_is_signed_out", "true");
+  window.dispatchEvent(new Event("srushti:auth-changed"));
 }
 
 /**
