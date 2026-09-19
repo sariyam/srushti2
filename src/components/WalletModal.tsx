@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
 import { WalletTransaction, getCreditSettings, formatCredits } from "../utils/wallet";
-import { formatPrice } from "../data";
 import {
   getAuthToken,
   createPaymentOrderApi,

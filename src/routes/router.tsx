@@ -1,42 +1,70 @@
+import React, { Suspense, lazy } from "react";
 import { createRouter, createRoute } from "@tanstack/react-router";
 import { Route as rootRoute } from "./__root";
 import { Route as indexRoute } from "./index";
 import { Route as studioRoute } from "./studio";
-import { Route as appRoute } from "./app";
 import { Route as termsRoute } from "./terms";
 import { Route as privacyRoute } from "./privacy";
-import { TermsAndConditionsPage } from "../components/TermsAndConditionsPage";
-import { PrivacyPolicyPage } from "../components/PrivacyPolicyPage";
+
+const TermsAndConditionsPage = lazy(() =>
+  import("../components/TermsAndConditionsPage").then((m) => ({ default: m.TermsAndConditionsPage }))
+);
+const PrivacyPolicyPage = lazy(() =>
+  import("../components/PrivacyPolicyPage").then((m) => ({ default: m.PrivacyPolicyPage }))
+);
+
+const LazyTerms = () => (
+  <Suspense
+    fallback={
+      <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+      </div>
+    }
+  >
+    <TermsAndConditionsPage />
+  </Suspense>
+);
+
+const LazyPrivacy = () => (
+  <Suspense
+    fallback={
+      <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+      </div>
+    }
+  >
+    <PrivacyPolicyPage />
+  </Suspense>
+);
 
 const termsAndConditionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/termsandconditions",
-  component: TermsAndConditionsPage,
+  component: LazyTerms,
 });
 
 const termsAndConditionsHyphenRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/terms-and-conditions",
-  component: TermsAndConditionsPage,
+  component: LazyTerms,
 });
 
 const privacyPolicyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/privacypolicy",
-  component: PrivacyPolicyPage,
+  component: LazyPrivacy,
 });
 
 const privacyPolicyHyphenRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/privacy-policy",
-  component: PrivacyPolicyPage,
+  component: LazyPrivacy,
 });
 
 // Assemble the route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
   studioRoute,
-  appRoute,
   termsRoute,
   privacyRoute,
   termsAndConditionsRoute,

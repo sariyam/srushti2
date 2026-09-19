@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodSchema, ZodError } from "zod";
-import { ValidationError, BadRequestError } from "../utils/errors";
+import { ZodSchema } from "zod";
+import { BadRequestError } from "../utils/errors";
 
 /**
  * Validates req.body against a Zod schema.

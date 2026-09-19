@@ -1,6 +1,6 @@
 import { z } from "@hono/zod-openapi";
 import { OtpPurposeEnum } from "../models/otp.model";
-import { UserModel, UserProfileModel } from "../models/user.model";
+import { UserProfileModel } from "../models/user.model";
 
 export const SendOtpSchema = z
   .object({

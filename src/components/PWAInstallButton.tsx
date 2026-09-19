@@ -12,7 +12,6 @@ const Download = (props: any) => <Icon icon="lucide:download" {...props} />;
 import { usePWAInstall } from '../hooks/usePWAInstall';
 import { LOGOS_BASE64 } from '../assets/logoBase64';
 import frontLogo from '../assets/front_logo.png';
-import backLogo from '../assets/back_logo.png';
 
 export function PWAInstallButton() {
   const { isStandalone, canPrompt, isIOS, triggerInstall } = usePWAInstall();

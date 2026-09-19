@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
 import { GENDER_GARMENT_MAPPING, GENDER_JEWELRY_MAPPING, GARMENT_CATEGORY_MAPPING, JEWELRY_CATEGORY_MAPPING } from "../utils/optionMapping";
-import { AdminWorkspace } from "./AdminWorkspace";
-import { SettingsWorkspace } from "./SettingsWorkspace";
-import { WalletModal } from "./WalletModal";
-import { HistoryModal } from "./HistoryModal";
+
+const AdminWorkspace = lazy(() =>
+  import("./AdminWorkspace").then((m) => ({ default: m.AdminWorkspace }))
+);
+const SettingsWorkspace = lazy(() =>
+  import("./SettingsWorkspace").then((m) => ({ default: m.SettingsWorkspace }))
+);
+const WalletModal = lazy(() =>
+  import("./WalletModal").then((m) => ({ default: m.WalletModal }))
+);
+const HistoryModal = lazy(() =>
+  import("./HistoryModal").then((m) => ({ default: m.HistoryModal }))
+);
 import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions, formatCredits } from "../utils/wallet";
 import { Logo } from "./Logo";
-import { LOGOS_BASE64 } from "../assets/logoBase64";
-import frontLogo from "../assets/front_logo.png";
 import { getStoredAuthUser, getAuthToken, fetchCurrentUserApi, AuthUser } from "../utils/api";
+import { JewelryType } from "../types";
 
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 const Pencil = (props: any) => <Icon icon="lucide:pencil" {...props} />;
@@ -394,7 +402,7 @@ interface HeaderProps {
   // Moved item selections props
   garmentType: "saree" | "tshirt" | "jeans" | "shirt" | "western_wear" | "kurta" | "suit" | "salwar" | "lehenga" | "gown" | "skirt" | "crop_top" | "blouse" | "sherwani" | "dhoti" | "blazer" | "tracksuit" | "hoodie";
   setGarmentType: (val: any) => void;
-  jewelryType: "earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
+  jewelryType: JewelryType;
   setJewelryType: (val: any) => void;
 
   // Wallet props
@@ -636,13 +644,18 @@ export const Header: React.FC<HeaderProps> = ({
     const handleOpenHistoryModalEvent = () => {
       setIsHistoryOpen(true);
     };
+    const handleOpenSettingsModalEvent = () => {
+      setIsSettingsOpen(true);
+    };
     window.addEventListener("srushti:open-business-modal", handleOpenBusinessModalEvent);
     window.addEventListener("srushti:open-wallet-modal", handleOpenWalletModalEvent);
     window.addEventListener("srushti:open-history-modal", handleOpenHistoryModalEvent);
+    window.addEventListener("srushti:open-settings-modal", handleOpenSettingsModalEvent);
     return () => {
       window.removeEventListener("srushti:open-business-modal", handleOpenBusinessModalEvent);
       window.removeEventListener("srushti:open-wallet-modal", handleOpenWalletModalEvent);
       window.removeEventListener("srushti:open-history-modal", handleOpenHistoryModalEvent);
+      window.removeEventListener("srushti:open-settings-modal", handleOpenSettingsModalEvent);
     };
   }, [workspace, garmentModelGender, jewelryModelGender, garmentType, jewelryType, setIsWalletOpen]);
 
@@ -1043,40 +1056,49 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Admin Workspace Component */}
               <div className="pt-2">
-                <AdminWorkspace
-                  apiKey={apiKey}
-                  apiInput={apiInput}
-                  setApiInput={setApiInput}
-                  onSaveApiKey={onSaveApiKey}
-                  estimatedCost={estimatedCost}
-                  lang={lang}
-                  t={t}
-                  selectedImageModel={selectedImageModel}
-                  setSelectedImageModel={setSelectedImageModel}
-                  gptImageQuality={gptImageQuality}
-                  setGptImageQuality={setGptImageQuality}
-                  selectedProvider={selectedProvider}
-                  setSelectedProvider={setSelectedProvider}
-                  currency={currency}
-                  setCurrency={setCurrency}
-                  usdToInrRate={usdToInrRate}
-                  setUsdToInrRate={setUsdToInrRate}
-                  onRefreshLiveRate={onRefreshLiveRate}
-                  isFetchingRate={isFetchingRate}
-                  rateFetchStatus={rateFetchStatus}
-                  hideTitle={true}
-                  isValidatingKey={isValidatingKey}
-                  keyValidationError={keyValidationError}
-                  setKeyValidationError={setKeyValidationError}
-                  openaiApiKey={openaiApiKey}
-                  openaiApiInput={openaiApiInput}
-                  setOpenaiApiInput={setOpenaiApiInput}
-                  onSaveOpenaiApiKey={onSaveOpenaiApiKey}
-                  geminiApiKey={geminiApiKey}
-                  geminiApiInput={geminiApiInput}
-                  setGeminiApiInput={setGeminiApiInput}
-                  onSaveGeminiApiKey={onSaveGeminiApiKey}
-                />
+                <Suspense
+                  fallback={
+                    <div className="min-h-[300px] flex flex-col items-center justify-center space-y-3">
+                      <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+                      <span className="text-xs font-bold text-accent">Loading Admin Workspace...</span>
+                    </div>
+                  }
+                >
+                  <AdminWorkspace
+                    apiKey={apiKey}
+                    apiInput={apiInput}
+                    setApiInput={setApiInput}
+                    onSaveApiKey={onSaveApiKey}
+                    estimatedCost={estimatedCost}
+                    lang={lang}
+                    t={t}
+                    selectedImageModel={selectedImageModel}
+                    setSelectedImageModel={setSelectedImageModel}
+                    gptImageQuality={gptImageQuality}
+                    setGptImageQuality={setGptImageQuality}
+                    selectedProvider={selectedProvider}
+                    setSelectedProvider={setSelectedProvider}
+                    currency={currency}
+                    setCurrency={setCurrency}
+                    usdToInrRate={usdToInrRate}
+                    setUsdToInrRate={setUsdToInrRate}
+                    onRefreshLiveRate={onRefreshLiveRate}
+                    isFetchingRate={isFetchingRate}
+                    rateFetchStatus={rateFetchStatus}
+                    hideTitle={true}
+                    isValidatingKey={isValidatingKey}
+                    keyValidationError={keyValidationError}
+                    setKeyValidationError={setKeyValidationError}
+                    openaiApiKey={openaiApiKey}
+                    openaiApiInput={openaiApiInput}
+                    setOpenaiApiInput={setOpenaiApiInput}
+                    onSaveOpenaiApiKey={onSaveOpenaiApiKey}
+                    geminiApiKey={geminiApiKey}
+                    geminiApiInput={geminiApiInput}
+                    setGeminiApiInput={setGeminiApiInput}
+                    onSaveGeminiApiKey={onSaveGeminiApiKey}
+                  />
+                </Suspense>
               </div>
             </motion.div>
           </div>
@@ -1131,37 +1153,46 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Settings Workspace Component */}
               <div className="pt-2">
-                <SettingsWorkspace
-                  apiKey={apiKey}
-                  apiInput={apiInput}
-                  setApiInput={setApiInput}
-                  onSaveApiKey={onSaveApiKey}
-                  theme={theme}
-                  setTheme={setTheme}
-                  lang={lang}
-                  setLang={setLang}
-                  t={t}
-                  hideTitle={true}
-                  isValidatingKey={isValidatingKey}
-                  keyValidationError={keyValidationError}
-                  setKeyValidationError={setKeyValidationError}
-                  selectedProvider={selectedProvider}
-                  setSelectedProvider={setSelectedProvider}
-                  selectedImageModel={selectedImageModel}
-                  openaiApiKey={openaiApiKey}
-                  openaiApiInput={openaiApiInput}
-                  setOpenaiApiInput={setOpenaiApiInput}
-                  onSaveOpenaiApiKey={onSaveOpenaiApiKey}
-                  isSignedOut={isSignedOut}
-                  setIsSignedOut={setIsSignedOut}
-                  onCloseModal={() => setIsSettingsOpen(false)}
-                  onSignInSuccess={() => {
-                    setIsSettingsOpen(false);
-                    setTimeout(() => {
-                      handleOpenModal();
-                    }, 100);
-                  }}
-                />
+                <Suspense
+                  fallback={
+                    <div className="min-h-[300px] flex flex-col items-center justify-center space-y-3">
+                      <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+                      <span className="text-xs font-bold text-accent">Loading Profile...</span>
+                    </div>
+                  }
+                >
+                  <SettingsWorkspace
+                    apiKey={apiKey}
+                    apiInput={apiInput}
+                    setApiInput={setApiInput}
+                    onSaveApiKey={onSaveApiKey}
+                    theme={theme}
+                    setTheme={setTheme}
+                    lang={lang}
+                    setLang={setLang}
+                    t={t}
+                    hideTitle={true}
+                    isValidatingKey={isValidatingKey}
+                    keyValidationError={keyValidationError}
+                    setKeyValidationError={setKeyValidationError}
+                    selectedProvider={selectedProvider}
+                    setSelectedProvider={setSelectedProvider}
+                    selectedImageModel={selectedImageModel}
+                    openaiApiKey={openaiApiKey}
+                    openaiApiInput={openaiApiInput}
+                    setOpenaiApiInput={setOpenaiApiInput}
+                    onSaveOpenaiApiKey={onSaveOpenaiApiKey}
+                    isSignedOut={isSignedOut}
+                    setIsSignedOut={setIsSignedOut}
+                    onCloseModal={() => setIsSettingsOpen(false)}
+                    onSignInSuccess={() => {
+                      setIsSettingsOpen(false);
+                      setTimeout(() => {
+                        handleOpenModal();
+                      }, 100);
+                    }}
+                  />
+                </Suspense>
               </div>
             </motion.div>
           </div>
@@ -1171,30 +1202,46 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Pop-up Dialog for Studio Wallet & Credits */}
       <AnimatePresence>
         {isWalletOpen && (
-          <WalletModal
-            isOpen={isWalletOpen}
-            onClose={() => setIsWalletOpen(false)}
-            currency={currency}
-            walletBalance={activeWalletBalance}
-            transactions={activeTransactions}
-            onRecharge={handleWalletRecharge}
-            onOpenHistory={() => setIsHistoryOpen(true)}
-            lang={lang}
-            usdToInrRate={usdToInrRate}
-          />
+          <Suspense
+            fallback={
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+                <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+              </div>
+            }
+          >
+            <WalletModal
+              isOpen={isWalletOpen}
+              onClose={() => setIsWalletOpen(false)}
+              currency={currency}
+              walletBalance={activeWalletBalance}
+              transactions={activeTransactions}
+              onRecharge={handleWalletRecharge}
+              onOpenHistory={() => setIsHistoryOpen(true)}
+              lang={lang}
+              usdToInrRate={usdToInrRate}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 
       {/* Pop-up Dialog for Combined Usage & Payment History */}
       <AnimatePresence>
         {isHistoryOpen && (
-          <HistoryModal
-            isOpen={isHistoryOpen}
-            onClose={() => setIsHistoryOpen(false)}
-            lang={lang}
-            currency={currency}
-            onOpenWallet={() => setIsWalletOpen(true)}
-          />
+          <Suspense
+            fallback={
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+                <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+              </div>
+            }
+          >
+            <HistoryModal
+              isOpen={isHistoryOpen}
+              onClose={() => setIsHistoryOpen(false)}
+              lang={lang}
+              currency={currency}
+              onOpenWallet={() => setIsWalletOpen(true)}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 

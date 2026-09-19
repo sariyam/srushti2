@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 import { HexColorPicker } from "react-colorful";
 import { PRESET_COLORS } from "../data";
 import { calculateRequiredCredits, formatCredits, getCreditSettings, CreditSettings } from "../utils/wallet";
-import { GENDER_GARMENT_MAPPING, GARMENT_CATEGORY_MAPPING, getGarmentPoses } from "../utils/optionMapping";
+import { getGarmentPoses } from "../utils/optionMapping";
 import { FaceGenerator, ModelFace } from "./FaceGenerator";
 import { PresentationSlider } from "./PresentationSlider";
 import { HorizontalSliderTrack } from "./HorizontalSliderTrack";
@@ -431,19 +431,19 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                         {res === "1k" && (
                           (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             garmentAspectRatio === "1:1" ? "1024×1024" :
-                            (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16" || garmentAspectRatio === "2:3") ? "1024×1536" : "1536×1024"
+                            (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16") ? "1024×1536" : "1536×1024"
                           ) : "1024px"
                         )}
                         {res === "2k" && (
                           (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             garmentAspectRatio === "1:1" ? "2048×2048" :
-                            (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16" || garmentAspectRatio === "2:3") ? "1152×2048" : "2048×1152"
+                            (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16") ? "1152×2048" : "2048×1152"
                           ) : "2048px"
                         )}
                         {res === "4k" && (
                           (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             garmentAspectRatio === "1:1" ? "3840×3840" :
-                            (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16" || garmentAspectRatio === "2:3") ? "2160×3840" : "3840×2160"
+                            (garmentAspectRatio === "3:4" || garmentAspectRatio === "9:16") ? "2160×3840" : "3840×2160"
                           ) : "4096px"
                         )}
                       </div>

@@ -2,6 +2,41 @@ export type Language = "en" | "te";
 
 export type Workspace = "garment" | "jewelry" | "billing" | "settings";
 
+export type JewelryType =
+  | "earrings"
+  | "necklace"
+  | "chain"
+  | "ring"
+  | "bracelet"
+  | "watch"
+  | "anklet"
+  | "payal"
+  | "toe_ring"
+  | "toe"
+  | "nose_ring"
+  | "nose_pin"
+  | "nath"
+  | "nose"
+  | "noise"
+  | "bangles"
+  | "choker"
+  | "cufflinks"
+  | "pendant"
+  | "kada"
+  | "waistband"
+  | "hip_chain"
+  | "kamarbandh"
+  | "finger_ring"
+  | "thumb_ring"
+  | "solitaire"
+  | "maang_tikka"
+  | "matha_patti"
+  | "borla"
+  | "passa"
+  | "headband";
+
+export type JewelryPresentationMode = "model" | "bust" | "partial_face" | "no_face" | "body_part";
+
 // Full-featured translations for English and Telugu
 export const TRANSLATIONS = {
   en: {

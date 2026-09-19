@@ -4,10 +4,11 @@ import { Icon } from "@iconify/react";
 import { HexColorPicker } from "react-colorful";
 import { PRESET_COLORS } from "../data";
 import { calculateRequiredCredits, formatCredits, getCreditSettings, CreditSettings } from "../utils/wallet";
-import { GENDER_JEWELRY_MAPPING, JEWELRY_BUST_MAPPING, JEWELRY_CATEGORY_MAPPING, getJewelryPoses } from "../utils/optionMapping";
+import { JEWELRY_BUST_MAPPING, getJewelryPoses } from "../utils/optionMapping";
 import { FaceGenerator, ModelFace } from "./FaceGenerator";
 import { PresentationSlider } from "./PresentationSlider";
 import { HorizontalSliderTrack } from "./HorizontalSliderTrack";
+import { JewelryType } from "../types";
 
 const Gem = (props: any) => <Icon icon="lucide:gem" {...props} />;
 const User = (props: any) => <Icon icon="lucide:user" {...props} />;
@@ -57,7 +58,7 @@ function isDarkColor(hex: string): boolean {
 interface JewelryWorkspaceProps {
   jewelryTab: "setup" | "studio" | "background";
   setJewelryTab: (tab: "setup" | "studio" | "background") => void;
-  jewelryType: "earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "nose_ring" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband";
+  jewelryType: JewelryType;
   setJewelryType: (type: any) => void;
   jewelryPresentation: "model" | "bust" | "partial_face" | "no_face" | "body_part";
   setJewelryPresentation: (mode: "model" | "bust" | "partial_face" | "no_face" | "body_part") => void;
@@ -424,19 +425,19 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                         {res === "1k" && (
                           (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             jewelryAspectRatio === "1:1" ? "1024×1024" :
-                            (jewelryAspectRatio === "3:4" || jewelryAspectRatio === "9:16" || jewelryAspectRatio === "2:3") ? "1024×1536" : "1536×1024"
+                            (jewelryAspectRatio === "3:4" || jewelryAspectRatio === "9:16") ? "1024×1536" : "1536×1024"
                           ) : "1024px"
                         )}
                         {res === "2k" && (
                           (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             jewelryAspectRatio === "1:1" ? "2048×2048" :
-                            (jewelryAspectRatio === "3:4" || jewelryAspectRatio === "9:16" || jewelryAspectRatio === "2:3") ? "1152×2048" : "2048×1152"
+                            (jewelryAspectRatio === "3:4" || jewelryAspectRatio === "9:16") ? "1152×2048" : "2048×1152"
                           ) : "2048px"
                         )}
                         {res === "4k" && (
                           (selectedImageModel === "gpt_image_2_5_sunburst" || selectedImageModel === "gptimage_2") ? (
                             jewelryAspectRatio === "1:1" ? "3840×3840" :
-                            (jewelryAspectRatio === "3:4" || jewelryAspectRatio === "9:16" || jewelryAspectRatio === "2:3") ? "2160×3840" : "3840×2160"
+                            (jewelryAspectRatio === "3:4" || jewelryAspectRatio === "9:16") ? "2160×3840" : "3840×2160"
                           ) : "4096px"
                         )}
                       </div>

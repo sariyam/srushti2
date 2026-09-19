@@ -16,25 +16,36 @@ router.use("/ai", aiRoutes);
 
 import {
   getOpenApiDocument,
-  renderDocsHtml,
   renderSwaggerDocsHtml,
   renderScalarDocsHtml,
 } from "../docs";
+
+// Cache for OpenAPI document to avoid recomputing on every request
+const specCache = new Map<string, any>();
+
+function getCachedOpenApiDocument(baseUrl: string) {
+  if (!specCache.has(baseUrl)) {
+    specCache.set(baseUrl, getOpenApiDocument(baseUrl));
+  }
+  return specCache.get(baseUrl);
+}
 
 // OpenAPI Specification (JSON)
 router.get("/docs/openapi.json", (req, res) => {
   const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
   const baseUrl = req.baseUrl ? `${req.protocol}://${req.get("host")}${req.baseUrl}` : `/${functionSlug}`;
-  const spec = getOpenApiDocument(baseUrl);
+  const spec = getCachedOpenApiDocument(baseUrl);
   res.setHeader("Content-Type", "application/json");
+  res.setHeader("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
   res.status(200).json(spec);
 });
 
 router.get("/openapi.json", (req, res) => {
   const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
   const baseUrl = req.baseUrl ? `${req.protocol}://${req.get("host")}${req.baseUrl}` : `/${functionSlug}`;
-  const spec = getOpenApiDocument(baseUrl);
+  const spec = getCachedOpenApiDocument(baseUrl);
   res.setHeader("Content-Type", "application/json");
+  res.setHeader("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
   res.status(200).json(spec);
 });
 
@@ -46,7 +57,7 @@ router.get(["/docs", "/docs/", "/docs/swagger"], (req, res) => {
 
   const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
   const baseUrl = req.baseUrl ? `${req.protocol}://${req.get("host")}${req.baseUrl}` : `/${functionSlug}`;
-  const spec = getOpenApiDocument(baseUrl);
+  const spec = getCachedOpenApiDocument(baseUrl);
   const html = renderSwaggerDocsHtml(spec, "Srushti AI API Documentation");
 
   res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -64,7 +75,7 @@ router.get(["/docs/scalar", "/docs/scalar/"], (req, res) => {
 
   const functionSlug = process.env.SUPABASE_FUNCTION_SLUG || "api";
   const baseUrl = req.baseUrl ? `${req.protocol}://${req.get("host")}${req.baseUrl}` : `/${functionSlug}`;
-  const spec = getOpenApiDocument(baseUrl);
+  const spec = getCachedOpenApiDocument(baseUrl);
   const html = renderScalarDocsHtml(spec, "Srushti AI API Reference (Scalar)");
 
   res.setHeader("Content-Type", "text/html; charset=utf-8");

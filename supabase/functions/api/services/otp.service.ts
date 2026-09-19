@@ -8,7 +8,6 @@ import {
   BadRequestError,
   RateLimitError,
   ForbiddenError,
-  ExternalServiceError,
 } from "../utils/errors";
 
 export interface SendOtpOptions {

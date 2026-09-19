@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { createRoute } from "@tanstack/react-router";
 import { Route as rootRoute } from "./__root";
-import App from "../App";
+
+const App = lazy(() => import("../App"));
 
 export const Route = createRoute({
   getParentRoute: () => rootRoute,
@@ -10,5 +11,19 @@ export const Route = createRoute({
 });
 
 function StudioRouteComponent() {
-  return <App />;
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center p-6 text-center space-y-4">
+          <div className="w-10 h-10 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+          <div className="text-xs font-bold text-accent tracking-wider uppercase animate-pulse">
+            Loading Studio...
+          </div>
+        </div>
+      }
+    >
+      <App />
+    </Suspense>
+  );
 }
+

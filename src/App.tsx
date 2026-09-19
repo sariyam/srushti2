@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from "motion/react";
-import { TRANSLATIONS, Workspace, Language } from "./types";
+import { TRANSLATIONS, Workspace, Language, JewelryType, JewelryPresentationMode } from "./types";
 import { compilePrompt, getGptImage2SizeString } from "./data";
 import { OptionValidator } from "./utils/optionMapping";
 import { 
@@ -367,8 +367,8 @@ export default function App() {
   const [garmentPhotoStyle, setGarmentPhotoStyle] = useState<"editorial" | "campaign">("editorial");
 
   // Jewelry Selections
-  const [jewelryType, setJewelryType] = useState<"earrings" | "necklace" | "chain" | "ring" | "bracelet" | "watch" | "anklet" | "payal" | "toe_ring" | "toe" | "nose_ring" | "nose_pin" | "nath" | "nose" | "noise" | "bangles" | "choker" | "cufflinks" | "pendant" | "kada" | "waistband" | "hip_chain" | "kamarbandh" | "finger_ring" | "thumb_ring" | "solitaire" | "maang_tikka" | "matha_patti" | "borla" | "passa" | "headband">("necklace");
-  const [jewelryPresentation, setJewelryPresentation] = useState<"model" | "bust" | "partial_face" | "no_face">("model");
+  const [jewelryType, setJewelryType] = useState<JewelryType>("necklace");
+  const [jewelryPresentation, setJewelryPresentation] = useState<JewelryPresentationMode>("model");
   const [jewelryModelGender, setJewelryModelGender] = useState<"female" | "male">("female");
   const [jewelryModelPose, setJewelryModelPose] = useState<"neck_collarbone" | "side_ear_profile" | "hand_face_gesture" | "three_quarter_gaze" | "wrist_hand_display" | "front_direct_portrait">("neck_collarbone");
   const [jewelryBustRegion, setJewelryBustRegion] = useState<"head" | "neck" | "wrist" | "ankle" | "finger" | "hand" | "naturally" | "ear">("neck");
@@ -539,14 +539,14 @@ export default function App() {
     await handleSaveOpenaiApiKey();
   };
 
-  // Cost calculation based on selected parameters in Credits
-  const getEstimatedCost = () => {
+  // Cost calculation based on selected parameters in Credits (memoized)
+  const estimatedCost = useMemo(() => {
     const resId = workspace === "garment" ? garmentResolution : jewelryResolution;
     const activeAspectRatio = workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio;
     const requiredCredits = calculateRequiredCredits(selectedImageModel, resId, "low", activeAspectRatio);
     const formatted = formatCredits(requiredCredits);
     return `${formatted} (GPT-Image-2.5 Sunburst @ Low Quality)`;
-  };
+  }, [workspace, garmentResolution, jewelryResolution, garmentAspectRatio, jewelryAspectRatio, selectedImageModel]);
 
   // Creative Photo Generation Trigger
   const handleGenerateClick = async () => {
@@ -565,7 +565,9 @@ export default function App() {
           ? "Please sign in with your phone number to generate AI photos using your studio credits."
           : "మీ స్టూడియో క్రెడిట్లను ఉపయోగించి ఏఐ ఫోటోలు రూపొందించడానికి దయచేసి మీ ఫోన్ నంబర్‌తో సైన్ ఇన్ అవ్వండి."
       );
-      setIsSettingsOpen(true);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("srushti:open-settings-modal"));
+      }
       setDebugPayload(null);
       setDebugPrompt(null);
       return;
@@ -668,7 +670,7 @@ export default function App() {
         requiredCredits,
         prompt: promptWithFace,
         size: sizeString,
-        quality: gptImageQuality === "standard" ? "standard" : "low",
+        quality: gptImageQuality,
         model: selectedImageModel || "gpt-image-2.5-sunburst",
         productImage: originalImage,
         faceImage: activeFaceUrl || undefined,
@@ -810,7 +812,7 @@ export default function App() {
         apiInput={apiInput}
         setApiInput={setApiInput}
         onSaveApiKey={handleSaveApiKey}
-        estimatedCost={getEstimatedCost()}
+        estimatedCost={estimatedCost}
         selectedImageModel={selectedImageModel}
         setSelectedImageModel={setSelectedImageModel}
         gptImageQuality={gptImageQuality}
@@ -876,7 +878,7 @@ export default function App() {
             generationError={generationError}
             aspectRatio={workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio}
             debugPayload={debugPayload}
-            workspace={workspace}
+            workspace={workspace === "garment" || workspace === "jewelry" ? workspace : undefined}
             businessType={workspace === "garment" ? "Garment" : "Jewelry"}
             subType={workspace === "garment" ? garmentType : jewelryType}
           />
