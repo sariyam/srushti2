@@ -13,7 +13,6 @@ const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 
 
 
-
 const SLIDES = [
   {
     id: "slide-dress",
