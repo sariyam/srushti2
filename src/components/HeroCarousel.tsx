@@ -11,10 +11,35 @@ interface HeroCarouselProps {
 
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 
+
+
+
 const SLIDES = [
   {
+    id: "slide-dress",
+    image: "/showcase/tryons/3.png",
+    fallback: "/showcase/hero-dress-fallback.jpg",
+    titleEn: "Designer Dress & Fashion Studio Shoot",
+    titleTe: "డిజైనర్ డ్రెస్ & ఫ్యాషన్ స్టూడియో షూట్",
+    tagEn: "Professional Fashion Lighting",
+    tagTe: "ప్రొఫెషనల్ ఫ్యాషన్ లైటింగ్",
+    highlightEn: "Authentic Indian Model • 100% Studio Clarity",
+    highlightTe: "భారతీయ మోడల్ • పర్ఫెక్ట్ స్టూడియో క్వాలిటీ",
+  },
+  {
+    id: "slide-watch",
+    image: "/showcase/tryons/10.png",
+    fallback: "/showcase/hero-watch-fallback.jpg",
+    titleEn: "Luxury Watch & Premium Product Shoot",
+    titleTe: "లగ్జరీ వాచ్ & ప్రీమియం ప్రొడక్ట్ షూట్",
+    tagEn: "Luxury Product Lighting",
+    tagTe: "లగ్జరీ ప్రొడక్ట్ లైటింగ్",
+    highlightEn: "Premium Details • Instant Catalog Ready",
+    highlightTe: "ప్రీమియం డిటైల్స్ • క్యాటలాగ్ రెడీ",
+  },
+  {
     id: "slide-saree",
-    image: "/showcase/hero-saree.jpg",
+    image: "/showcase/tryons/3.png",
     fallback: "/showcase/hero-saree-fallback.jpg",
     titleEn: "Royal Kanjeevaram Silk Saree Shoot",
     titleTe: "రాయల్ కాంచీపురం పట్టుచీరల స్టూడియో షూట్",
@@ -23,29 +48,8 @@ const SLIDES = [
     highlightEn: "Authentic Indian Model • 100% Studio Clarity",
     highlightTe: "భారతీయ మోడల్ • పర్ఫెక్ట్ స్టూడియో క్వాలిటీ",
   },
-  {
-    id: "slide-lehenga",
-    image: "/showcase/hero-lehenga.jpg",
-    fallback: "/showcase/hero-lehenga-fallback.jpg",
-    titleEn: "Designer Lehenga & Boutique Couture",
-    titleTe: "డిజైనర్ లెహంగా & బోటిక్ ఫ్యాషన్ షూట్",
-    tagEn: "Editorial Runway Lighting",
-    tagTe: "ఎడిటోరియల్ రన్‌వే లైటింగ్",
-    highlightEn: "Vibrant Fabric Textures • Instant Catalog Ready",
-    highlightTe: "స్పష్టమైన ఫ్యాబ్రిక్ డిటైల్స్ • క్యాటలాగ్ రెడీ",
-  },
-  {
-    id: "slide-jewelry",
-    image: "/showcase/hero-jewelry.jpg",
-    fallback: "/showcase/hero-jewelry-fallback.jpg",
-    titleEn: "Temple Jewelry & Luxury Gold Editorial",
-    titleTe: "టెంపుల్ జ్యువెలరీ & గోల్డ్ ఆభరణాల ఫోటోషూట్",
-    tagEn: "Velvet Macro Lighting",
-    tagTe: "లగ్జరీ వెల్వెట్ లైటింగ్",
-    highlightEn: "Glint & Micro Refraction • Zero Studio Setup",
-    highlightTe: "మెరిసే గోల్డ్ రిఫ్లెక్షన్ • జీరో స్టూడియో ఖర్చు",
-  },
 ];
+
 
 export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -151,11 +155,10 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
               key={slide.id}
               onClick={() => setCurrentIndex(idx)}
               aria-label={`Go to slide ${idx + 1}`}
-              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                currentIndex === idx
-                  ? "w-6 sm:w-8 bg-accent shadow-md shadow-accent/50"
-                  : "w-1.5 sm:w-2 bg-white/40 hover:bg-white/70"
-              }`}
+              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${currentIndex === idx
+                ? "w-6 sm:w-8 bg-accent shadow-md shadow-accent/50"
+                : "w-1.5 sm:w-2 bg-white/40 hover:bg-white/70"
+                }`}
             />
           ))}
         </div>

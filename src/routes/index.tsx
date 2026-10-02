@@ -52,7 +52,19 @@ function LandingPageComponent() {
     return "en";
   });
 
-  const [activeShowcase, setActiveShowcase] = useState<"garment" | "jewelry" | "lifestyle">("garment");
+  type ShowcaseCategory =
+    | "saree"
+    | "dress"
+    | "shirt"
+    | "watch"
+    | "earrings"
+    | "bangle"
+    | "jeans"
+    | "trouser"
+    | "necklace"
+    | "chain";
+
+  const [activeShowcase, setActiveShowcase] = useState<ShowcaseCategory>("saree");
 
   useEffect(() => {
     const root = document.documentElement;
@@ -155,9 +167,154 @@ function LandingPageComponent() {
 
   const t = content[lang];
 
+  const showcaseTabs: {
+    id: ShowcaseCategory;
+    label: { en: string; te: string };
+    thumb: string;
+  }[] = [
+      { id: "saree", label: { en: "Saree", te: "చీరలు" }, thumb: "/items/saree.jpg" },
+      { id: "dress", label: { en: "Dress", te: "డ్రెస్" }, thumb: "/items/gown.jpg" },
+      { id: "shirt", label: { en: "Shirt", te: "షర్ట్" }, thumb: "/items/shirt.jpg" },
+      { id: "watch", label: { en: "Watch", te: "వాచ్" }, thumb: "/items/watch.jpg" },
+      { id: "earrings", label: { en: "Earrings", te: "చెవి కమ్మలు" }, thumb: "/items/earrings.jpg" },
+      { id: "bangle", label: { en: "Bangle", te: "గాజులు" }, thumb: "/items/bangles.jpg" },
+      { id: "jeans", label: { en: "Jeans", te: "జీన్స్" }, thumb: "/items/jeans.jpg" },
+      { id: "trouser", label: { en: "Trouser", te: "ట్రౌజర్" }, thumb: "/items/suit.jpg" },
+      { id: "necklace", label: { en: "Necklace", te: "నెక్లెస్" }, thumb: "/items/necklace.jpg" },
+      { id: "chain", label: { en: "Chain", te: "చైన్" }, thumb: "/items/chain.jpg" },
+    ];
+
+  const showcaseData: Record<
+    ShowcaseCategory,
+    {
+      img: string;
+      title: string;
+      desc: string;
+      tag: string;
+      sourceTag: string;
+      lightingTag: string;
+      bullet1: string;
+      bullet2: string;
+      bullet3: string;
+    }
+  > = {
+    saree: {
+      img: "/showcase/tryons/1.png",
+      title: lang === "en" ? "Royal Saree Drape on Indian Model" : "రాయల్ ఇండియన్ మోడల్ క్యాటలాగ్ డ్రేప్",
+      desc: lang === "en" ? "Transformed from a flat-lay phone photo on bed into a high-fashion model shoot" : "మంచంపై తీసిన ఫోటో నుంచి క్షణాల్లో రాయల్ మోడల్ షూట్‌గా మారింది",
+      tag: lang === "en" ? "Saree & Traditional Wear" : "చీరలు & సాంప్రదాయ దుస్తులు",
+      sourceTag: lang === "en" ? "Source: Phone camera on bed" : "ఇన్‌పుట్: బెడ్‌పై ఫోన్ ఫోటో",
+      lightingTag: lang === "en" ? "Studio Lighting • Realistic Fall & Pleating" : "స్టూడియో లైటింగ్ • రియలిస్టిక్ డ్రేపింగ్",
+      bullet1: lang === "en" ? "Snap a quick photo of your flat saree on your bed or table with your phone." : "మీ ఇంట్లోని టేబుల్ లేదా బెడ్‌పై పెట్టి ఫోన్‌తో ఒక సాధారణ ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Accurately drapes it on real Indian models with authentic pleats & fabric sheen." : "చీర రంగు, జరీ మెరుపు మారకుండా సహజమైన కుచ్చిళ్ళు & ఫాల్ వస్తుంది.",
+      bullet3: lang === "en" ? "Instantly ready to share on WhatsApp Status, Catalog, and Instagram reels." : "వాట్సాప్ స్టేటస్, క్యాటలాగ్, ఇన్‌స్టాలో పోస్ట్ చేయడానికి 30 సెకన్లలో రెడీ.",
+    },
+    dress: {
+      img: "/showcase/tryons/3.png",
+      title: lang === "en" ? "High-Fashion Editorial Model Dress Shoot" : "హై-ఫ్యాషన్ ఎడిటోరియల్ మోడల్ డ్రెస్ షూట్",
+      desc: lang === "en" ? "Transformed from a hanger snap into a stunning studio fashion editorial" : "హ్యాంగర్‌పై తీసిన ఫోటో నుంచి అద్భుతమైన స్టూడియో ఫ్యాషన్ షూట్‌గా మారింది",
+      tag: lang === "en" ? "Designer Dresses & Gowns" : "డిజైనర్ డ్రెస్సెస్ & గౌన్లు",
+      sourceTag: lang === "en" ? "Source: Phone snap on hanger" : "ఇన్‌పుట్: హ్యాంగర్‌పై ఫోన్ ఫోటో",
+      lightingTag: lang === "en" ? "Warm Editorial • Flowing Silhouette & Flare" : "ఎడిటోరియల్ లైటింగ్ • అందమైన ఫ్లేర్ & సిల్హౌట్",
+      bullet1: lang === "en" ? "Hang your frock, gown, or boutique dress on a wall or door and take a photo." : "మీ గౌన్ లేదా బొటిక్ డ్రెస్‌ను గోడపై లేదా హ్యాంగర్‌పై ఉంచి ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Renders onto runway-caliber fashion models with natural fabric flow and fit." : "సహజమైన ఫ్యాబ్రిక్ మూవ్‌మెంట్‌తో టాప్ ఫ్యాషన్ మోడల్స్‌పై డిస్‌ప్లే అవుతుంది.",
+      bullet3: lang === "en" ? "Drives 5x more clicks and direct buyer inquiries on WhatsApp & Instagram." : "వాట్సాప్ మరియు ఇన్‌స్టాగ్రామ్‌లో కస్టమర్ల నుంచి రెట్టింపు ఎంక్వైరీలు వస్తాయి.",
+    },
+    shirt: {
+      img: "/showcase/tryons/2.png",
+      title: lang === "en" ? "Tailored Menswear Studio Catalogue" : "టైలర్డ్ మెన్స్‌వేర్ స్టూడియో క్యాటలాగ్",
+      desc: lang === "en" ? "Transformed from a flat-lay on table into a tailored menswear studio shoot" : "టేబుల్‌పై తీసిన ఫ్లాట్ ఫోటో నుంచి ప్రొఫెషనల్ మెన్స్ స్టూడియో షూట్‌గా మారింది",
+      tag: lang === "en" ? "Men's Shirts & Casuals" : "మెన్స్ షర్ట్స్ & క్యాజువల్స్",
+      sourceTag: lang === "en" ? "Source: Flat lay on table" : "ఇన్‌పుట్: టేబుల్‌పై ఫ్లాట్ ఫోటో",
+      lightingTag: lang === "en" ? "Clean Daylight • Sharp Collar & Fabric Texture" : "స్టూడియో డేలైట్ • షార్ప్ కాలర్ & ఫ్యాబ్రిక్ ఫిట్",
+      bullet1: lang === "en" ? "Lay any formal, casual, or linen shirt flat on your counter or table." : "మీ షాపులోని లేదా ఇంట్లోని టేబుల్‌పై షర్ట్ ఉంచి సాధారణ ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Creates a perfectly fitted studio model shoot with sharp collar and real texture." : "షార్ప్ కాలర్ మరియు పర్ఫెక్ట్ ఫిట్టింగ్‌తో కూడిన స్టూడియో మోడల్ షూట్ వస్తుంది.",
+      bullet3: lang === "en" ? "Elevates your boutique or tailor shop into an elite menswear brand." : "మీ లోకల్ టైలర్ లేదా మెన్స్ వేర్ షాపుకి ఆన్‌లైన్ బ్రాండెడ్ లుక్ ఇస్తుంది.",
+    },
+    watch: {
+      img: "/showcase/tryons/4.png",
+      title: lang === "en" ? "Dark Marble Pedestal Luxury Watch Shoot" : "డార్క్ మార్బుల్ పెడెస్టల్ లగ్జరీ వాచ్ షూట్",
+      desc: lang === "en" ? "Transformed from a shop counter snap into elite commercial product photography" : "గ్లాస్ కౌంటర్‌పై తీసిన ఫోటో నుంచి హై-ఎండ్ కమర్షియల్ ప్రొడక్ట్ ఫోటోగా మారింది",
+      tag: lang === "en" ? "Luxury Watches & Timepieces" : "లగ్జరీ వాచ్‌లు & టైమ్‌పీసెస్",
+      sourceTag: lang === "en" ? "Source: Phone photo on counter" : "ఇన్‌పుట్: కౌంటర్‌పై ఫోన్ ఫోటో",
+      lightingTag: lang === "en" ? "Dramatic Rim Light • Glare-Free Dial Reflections" : "రిమ్ లైటింగ్ • డయల్ & బెజెల్ క్లియర్ రిఫ్లెక్షన్స్",
+      bullet1: lang === "en" ? "Place any watch on a table or counter and capture a quick phone picture." : "వాచ్‌ని టేబుల్‌పై ఉంచి మీ ఫోన్ కెమెరాతో సింపుల్‌గా ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Removes glaring reflections, lighting up the dial details and metallic sheen." : "గ్లాస్ రిఫ్లెక్షన్స్ తొలగించి, డయల్ నంబర్లు, మెటల్ మెరుపును అద్భుతంగా చూపుతుంది.",
+      bullet3: lang === "en" ? "Gives your watch store or resale business an international luxury catalog feel." : "మీ వాచ్ షోరూమ్ లేదా రీసేల్ బిజినెస్‌కి ఇంటర్నేషనల్ లగ్జరీ లుక్ అందిస్తుంది.",
+    },
+    earrings: {
+      img: "/showcase/tryons/5.png",
+      title: lang === "en" ? "Editorial Portrait Shoot with Sparkling Jhumkas" : "మెరిసే జుంకాలతో ఎడిటోరియల్ మోడల్ పోర్ట్రెయిట్",
+      desc: lang === "en" ? "Transformed from a simple box photo into a glowing model portrait photoshoot" : "బాక్స్‌లో తీసిన సాధారణ ఫోటో నుంచి మెరిసే మోడల్ ఫోటోషూట్‌గా మారింది",
+      tag: lang === "en" ? "Earrings & Jhumkas" : "చెవి కమ్మలు & జుంకాలు",
+      sourceTag: lang === "en" ? "Source: Phone snapshot in box" : "ఇన్‌పుట్: బాక్స్‌లో ఫోన్ ఫోటో",
+      lightingTag: lang === "en" ? "Warm Portrait Keylight • Prismatic Gemstone Glow" : "వార్మ్ పోర్ట్రెయిట్ లైటింగ్ • రత్నాల సహజ మెరుపు",
+      bullet1: lang === "en" ? "Photograph earrings inside their box or resting on a plain paper." : "చెవి కమ్మలు లేదా జుంకాలను బాక్స్‌లో పెట్టి ఫోన్‌తో ఒక ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Seamlessly places them on gorgeous Indian models showing realistic size and shine." : "కరెక్ట్ సైజు మరియు మెరుపుతో అందమైన ఇండియన్ మోడల్స్‌పై చూపిస్తుంది.",
+      bullet3: lang === "en" ? "Customers visualize the exact look immediately without asking for try-on pictures." : "పెట్టుకుంటే ఎలా ఉంటుందో క్లియర్‌గా చూసి కస్టమర్లు వెంటనే ఆర్డర్ చేస్తారు.",
+    },
+    bangle: {
+      img: "/showcase/tryons/10.png",
+      title: lang === "en" ? "Bridal Mehendi Silk Studio Bangle Showcase" : "బ్రైడల్ మెహందీ సిల్క్ స్టూడియో బ్యాంగిల్ షోకేస్",
+      desc: lang === "en" ? "Transformed from a flat velvet tray snap into an opulent bridal photoshoot" : "ట్రేలో తీసిన ఫోటో నుంచి వైభవోపేతమైన బ్రైడల్ ఫోటోషూట్‌గా మారింది",
+      tag: lang === "en" ? "Bangles & Kadas" : "గాజులు & కడాలు",
+      sourceTag: lang === "en" ? "Source: Tray snap on display" : "ఇన్‌పుట్: ట్రేపై ఫోన్ ఫోటో",
+      lightingTag: lang === "en" ? "Warm Gold Ambient • Intricate Kundan & Ruby Details" : "గోల్డ్ యాంబియంట్ లైటింగ్ • కుందన్ & రూబీ వర్క్ క్లారిటీ",
+      bullet1: lang === "en" ? "Take a picture of single bangles, sets, or kadas on your display velvet." : "గాజుల సెట్ లేదా కడాలను మీ షోకేస్ ట్రేపై ఉంచి ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Arranges them naturally on adorned bridal hands with authentic silk backdrop." : "పట్టు వస్త్రాల బ్యాక్‌డ్రాప్‌తో చేతులకు అందంగా అలంకరించినట్లు చూపిస్తుంది.",
+      bullet3: lang === "en" ? "Perfect for festive and wedding season sales on WhatsApp and Instagram." : "పెళ్ళిళ్ళు, పండుగల సీజన్‌లో వాట్సాప్ సేల్స్ పెంచడానికి సూపర్ టూల్.",
+    },
+    jeans: {
+      img: "/showcase/tryons/8.png",
+      title: lang === "en" ? "Contemporary Studio Denim Editorial Shoot" : "మోడ్రన్ స్టూడియో డెనిమ్ ఎడిటోరియల్ షూట్",
+      desc: lang === "en" ? "Transformed from a folded shelf snap into a high-fashion denim model shoot" : "మడతపెట్టిన ఫోటో నుంచి హై-ఫ్యాషన్ డెనిమ్ మోడల్ షూట్‌గా మారింది",
+      tag: lang === "en" ? "Denim & Casual Jeans" : "డెనిమ్ & క్యాజువల్ జీన్స్",
+      sourceTag: lang === "en" ? "Source: Folded on shop shelf" : "ఇన్‌పుట్: షాపు షెల్ఫ్‌పై ఫోటో",
+      lightingTag: lang === "en" ? "Commercial Diffused Studio • Authentic Denim Wash" : "డిఫ్యూజ్డ్ స్టూడియో లైటింగ్ • రియల్ డెనిమ్ వాష్ అండ్ ఫిట్",
+      bullet1: lang === "en" ? "Take a phone snap of folded or hung jeans right in your shop or home." : "మీ షాపులో లేదా ఇంట్లో మడతపెట్టిన జీన్స్ ప్యాంట్‌ను ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Models wear it in natural flattering poses showcasing the true fit and denim wash." : "జీన్స్ కటింగ్, వాష్ మరియు ఫిట్టింగ్ స్పష్టంగా తెలిసేలా మోడల్‌పై చూపిస్తుంది.",
+      bullet3: lang === "en" ? "Increases conversions for clothing stores, D2C brands, and reselling groups." : "క్లాత్ స్టోర్లు మరియు రీసెల్లింగ్ గ్రూపుల్లో ఆర్డర్లు గణనీయంగా పెరుగుతాయి.",
+    },
+    trouser: {
+      img: "/showcase/tryons/9.png",
+      title: lang === "en" ? "Tailored Trousers Minimalist Studio Shoot" : "టైలర్డ్ ట్రౌజర్స్ మినిమలిస్ట్ స్టూడియో షూట్",
+      desc: lang === "en" ? "Transformed from a hanger snap into a sleek architectural studio catalogue" : "హ్యాంగర్ ఫోటో నుంచి క్లాసిక్ ఆర్కిటెక్చరల్ స్టూడియో క్యాటలాగ్‌గా మారింది",
+      tag: lang === "en" ? "Trousers & Formal Pants" : "ట్రౌజర్స్ & ఫార్మల్ ప్యాంట్స్",
+      sourceTag: lang === "en" ? "Source: Hanger snap on wall" : "ఇన్‌పుట్: గోడ హ్యాంగర్‌పై ఫోటో",
+      lightingTag: lang === "en" ? "Minimalist Soft Daylight • Clean Pleat & Crease Line" : "సాఫ్ట్ మినిమలిస్ట్ డేలైట్ • పర్ఫెక్ట్ క్రీజ్ & ప్లీట్ లైన్",
+      bullet1: lang === "en" ? "Photograph your tailored formal trousers or casual slacks on a simple hanger." : "మీ ఫార్మల్ ట్రౌజర్స్ లేదా కాటన్ ప్యాంట్లను హ్యాంగర్‌పై పెట్టి ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Renders crisp crease lines, perfect fall, and comfortable waist fit on models." : "నీట్ క్రీజ్ లైన్స్, సహజమైన ఫాల్ మరియు పర్ఫెక్ట్ ఫిట్‌తో డిస్‌ప్లే చేస్తుంది.",
+      bullet3: lang === "en" ? "Gives boutique custom tailors and retailers high-end brand credibility." : "టైలరింగ్ బొటిక్‌లు మరియు బట్టల దుకాణాలకు ప్రీమియం బ్రాండ్ గుర్తింపు వస్తుంది.",
+    },
+    necklace: {
+      img: "/showcase/tryons/7.png",
+      title: lang === "en" ? "Royal Emerald Velvet Bust Jewelry Shoot" : "రాయల్ ఎమరాల్డ్ వెల్వెట్ బస్ట్ జ్యువెలరీ షూట్",
+      desc: lang === "en" ? "Transformed from a flat counter photo into a royal high-jewelry exhibition" : "కౌంటర్‌పై తీసిన ఫోటో నుంచి రాయల్ హై-జ్యువెలరీ ఎగ్జిబిషన్‌గా మారింది",
+      tag: lang === "en" ? "Luxury Necklaces & Chokers" : "లగ్జరీ నెక్లెసెస్ & చోకర్స్",
+      sourceTag: lang === "en" ? "Source: Flat counter snap" : "ఇన్‌పుట్: కౌంటర్‌పై ఫ్లాట్ ఫోటో",
+      lightingTag: lang === "en" ? "Jeweler Spotlights • Glare-Free Emerald & Diamond Sparkle" : "జ్యువెలర్స్ స్పాట్‌లైట్స్ • రత్నాలు & వజ్రాల స్పార్కిల్",
+      bullet1: lang === "en" ? "Place heavy bridal chokers or necklaces flat on velvet or a clean sheet." : "నెక్లెస్ లేదా చోకర్‌ని టేబుల్‌పై ఉంచి సాధారణ ఫోన్‌తో ఫోటో తీయండి.",
+      bullet2: lang === "en" ? "Creates a luxury dark velvet bust exhibition highlighting every intricate stone." : "రిచ్ వెల్వెట్ స్టాండ్‌పై ప్రతి రాయి మెరిసేలా ప్రొఫెషనల్ లుక్ క్రియేట్ చేస్తుంది.",
+      bullet3: lang === "en" ? "Customers trust the craftsmanship instantly and book orders without doubts." : "కస్టమర్లు డిజైన్ నైపుణ్యాన్ని చూసి ఎలాంటి సంకోచం లేకుండా ఆర్డర్ చేస్తారు.",
+    },
+    chain: {
+      img: "/showcase/tryons/6.png",
+      title: lang === "en" ? "Sculpted Dark Pedestal 22k Gold Chain Shoot" : "స్కల్ప్టెడ్ డార్క్ పెడెస్టల్ 22k గోల్డ్ చైన్ షూట్",
+      desc: lang === "en" ? "Transformed from a plain box photo into an elite precious metal showcase" : "బాక్స్‌లో తీసిన ఫోటో నుంచి ఎలైట్ గోల్డ్ షోకేస్‌గా మారింది",
+      tag: lang === "en" ? "Gold Chains & Mangalsutras" : "గోల్డ్ చైన్స్ & మంగళసూత్రాలు",
+      sourceTag: lang === "en" ? "Source: Phone snap in box" : "ఇన్‌పుట్: బాక్స్‌లో ఫోన్ ఫోటో",
+      lightingTag: lang === "en" ? "Directional Rim Light • Rich 22k Yellow Gold Speculars" : "డైరెక్షనల్ రిమ్ లైట్ • 22k గోల్డ్ సహజ పసుపు మెరుపు",
+      bullet1: lang === "en" ? "Take a close photo of gold chains, chains with pendants, or mangalsutras." : "గోల్డ్ చైన్స్, పెండెంట్స్ లేదా మంగళసూత్రాలను ఫోన్ కెమెరాతో క్లోజప్‌గా తీయండి.",
+      bullet2: lang === "en" ? "Displays intricate link patterns and lustrous gold finish on sleek pedestals." : "లింక్ డిజైన్, స్వచ్ఛమైన బంగారు రంగు స్పష్టంగా కనిపించేలా చూపిస్తుంది.",
+      bullet3: lang === "en" ? "Ideal for daily gold rate updates and festival offers on WhatsApp status." : "డైలీ గోల్డ్ రేట్ అప్‌డేట్స్ మరియు వాట్సాప్ ఆఫర్స్ పోస్టింగ్ కోసం ఉత్తమం.",
+    },
+  };
+
+  const curShowcase = showcaseData[activeShowcase];
+
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200 flex flex-col font-sans">
-      
+
       {/* --- MINIMAL HEADER --- */}
       <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--bg-primary)]/90 border-b border-black/5 dark:border-white/5 py-3 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -195,7 +352,7 @@ function LandingPageComponent() {
 
       {/* --- HERO: PROBLEM & SOLUTION AGENDA --- */}
       <section className="pt-2 pb-8 sm:pt-4 sm:pb-12 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-4 sm:space-y-6">
-        
+
         {/* Landscape Fashion Carousel Slider with Stacked Text Overlay */}
         <div className="mb-2 sm:mb-4">
           <HeroCarousel lang={lang} badge={t.badge} tagline={t.tagline} />
@@ -259,194 +416,187 @@ function LandingPageComponent() {
         </div>
       </section>
 
-      {/* --- LIVE PROBLEM VS SOLUTION TRANSFORMATION (INTERACTIVE) --- */}
-      <section id="live-transformation" className="py-8 sm:py-12 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+      {/* --- LIVE PROBLEM VS SOLUTION TRANSFORMATION (SINGLE LANDSCAPE PHOTO SLOT) --- */}
+      <section id="live-transformation" className="py-8 sm:py-14 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+        {/* Section Header */}
         <div className="text-center space-y-2 mb-6">
-          <h2 className="text-xl sm:text-3xl font-black text-[var(--text-emphasis)]">
+          <h2 className="text-xl sm:text-3xl font-black text-[var(--text-emphasis)] tracking-tight">
             {t.showcaseHeading}
           </h2>
           <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-lg mx-auto font-medium">
             {t.showcaseDesc}
           </p>
 
-          {/* Category Tabs */}
-          <div className="inline-flex rounded-2xl nm-inset p-1 mt-2 flex-wrap justify-center gap-1 bg-[var(--bg-secondary)]">
-            <button
-              id="tab-sarees-fashion"
-              onClick={() => setActiveShowcase("garment")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
-                activeShowcase === "garment"
-                  ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm"
-                  : "text-[var(--text-secondary)] hover:text-accent"
-              }`}
-            >
-              <ShirtIcon className={`w-3.5 h-3.5 ${activeShowcase === "garment" ? "text-accent" : ""}`} />
-              <span>{t.garmentTab}</span>
-            </button>
-            <button
-              id="tab-jewelry-ornaments"
-              onClick={() => setActiveShowcase("jewelry")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
-                activeShowcase === "jewelry"
-                  ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm"
-                  : "text-[var(--text-secondary)] hover:text-accent"
-              }`}
-            >
-              <GemIcon className={`w-3.5 h-3.5 ${activeShowcase === "jewelry" ? "text-accent" : ""}`} />
-              <span>{t.jewelryTab}</span>
-            </button>
-            <button
-              id="tab-home-handmade"
-              onClick={() => setActiveShowcase("lifestyle")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
-                activeShowcase === "lifestyle"
-                  ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm"
-                  : "text-[var(--text-secondary)] hover:text-accent"
-              }`}
-            >
-              <PackageIcon className={`w-3.5 h-3.5 ${activeShowcase === "lifestyle" ? "text-accent" : ""}`} />
-              <span>{t.lifestyleTab}</span>
-            </button>
+          {/* 10 Category Tabs */}
+          <div className="w-full flex justify-center pt-2">
+            <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-2xl nm-inset bg-[var(--bg-secondary)] max-w-4xl">
+              {showcaseTabs.map((tab) => {
+                const isActive = activeShowcase === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    id={`tab-${tab.id}`}
+                    onClick={() => setActiveShowcase(tab.id)}
+                    className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-black flex items-center gap-2 whitespace-nowrap transition-all select-none ${isActive
+                      ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm border border-accent/30"
+                      : "text-[var(--text-secondary)] hover:text-accent hover:bg-black/5 dark:hover:bg-white/5"
+                      }`}
+                  >
+                    <img
+                      src={tab.thumb}
+                      alt={tab.label[lang]}
+                      className={`w-4 h-4 rounded-full object-cover shrink-0 transition-transform ${isActive ? "ring-2 ring-accent scale-105" : "opacity-75"
+                        }`}
+                    />
+                    <span>{tab.label[lang]}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Side by Side Interactive Visual */}
-        <div className="nm-outset rounded-3xl p-3 sm:p-5 bg-[var(--bg-secondary)]">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            
-            {/* Left: Raw Phone Snapshot (The Problem) */}
-            <div className="nm-inset rounded-2xl p-3 bg-[var(--bg-secondary)] space-y-2">
-              <div className="flex items-center justify-between text-[10px] font-extrabold text-[var(--text-secondary)]">
-                <div className="flex items-center gap-1">
-                  <SmartphoneIcon className="w-3.5 h-3.5" />
-                  <span>{lang === "en" ? "1. Your Phone Snapshot" : "1. మీ ఫోన్ ఫోటో"}</span>
-                </div>
-                <span className="px-2 py-0.5 rounded-lg nm-inset text-[8.5px] font-bold text-[var(--text-secondary)]">Raw / Home Light</span>
+        {/* Showcase Container with SINGLE LANDSCAPE PHOTO SLOT */}
+        <div className="nm-outset rounded-3xl p-4 sm:p-6 lg:p-7 bg-[var(--bg-secondary)] space-y-6">
+
+          {/* Top Bar inside card */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-black/5 dark:border-white/5">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg nm-inset bg-[var(--bg-secondary)] text-[10.5px] font-black text-accent">
+                <BadgeCheck className="w-3.5 h-3.5 text-accent" />
+                <span>{curShowcase.tag}</span>
               </div>
-
-              <div className="aspect-[3/4] min-h-[220px] rounded-xl relative overflow-hidden bg-neutral-900">
-                {activeShowcase === "garment" && (
-                  <img
-                    src="/showcase/showcase-garment-before.jpg"
-                    alt="Raw Saree Snapshot"
-                    className="w-full h-full object-cover filter saturate-[0.85] brightness-[0.92]"
-                    loading="lazy"
-                  />
-                )}
-                {activeShowcase === "jewelry" && (
-                  <img
-                    src="/showcase/showcase-jewelry-before.jpg"
-                    alt="Raw Jewelry Snapshot"
-                    className="w-full h-full object-cover filter saturate-[0.8] brightness-[0.88]"
-                    loading="lazy"
-                  />
-                )}
-                {activeShowcase === "lifestyle" && (
-                  <img
-                    src="/showcase/showcase-lifestyle-before.jpg"
-                    alt="Raw Product Snapshot"
-                    className="w-full h-full object-cover filter saturate-[0.85] brightness-[0.9]"
-                    loading="lazy"
-                  />
-                )}
-
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-white text-[8.5px] font-mono flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
-                  <span>PHONE CAM • TABLE LAY</span>
-                </div>
-
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-2.5 pt-6 text-white text-left">
-                  <span className="text-xs font-bold block">
-                    {activeShowcase === "garment" && "Handloom Silk Saree on Bed"}
-                    {activeShowcase === "jewelry" && "Temple Necklace on Countertop"}
-                    {activeShowcase === "lifestyle" && "Handmade Soap & Candle on Table"}
-                  </span>
-                  <span className="text-[9px] text-neutral-300">
-                    {lang === "en" ? "Casual indoor room lighting" : "గదిలో టేబుల్‌పై తీసిన సాధారణ ఫోటో"}
-                  </span>
-                </div>
-              </div>
+              <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                {curShowcase.title}
+              </h3>
             </div>
 
-            {/* Right: Srushti AI Result (The Solution) */}
-            <div className="nm-inset rounded-2xl p-3 bg-[var(--bg-secondary)] space-y-2">
-              <div className="flex items-center justify-between text-[10px] font-extrabold text-accent">
-                <div className="flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 text-accent" />
-                  <span>{lang === "en" ? "2. Srushti AI Studio Result" : "2. సృష్టి ఏఐ స్టూడియో ఫలితం"}</span>
-                </div>
-                <span className="px-2 py-0.5 rounded-lg nm-outset text-accent text-[8.5px] font-black uppercase">HD Studio</span>
-              </div>
-
-              <div className="aspect-[3/4] min-h-[220px] rounded-xl relative overflow-hidden bg-neutral-900 shadow-md">
-                {activeShowcase === "garment" && (
-                  <img
-                    src="/showcase/showcase-garment-after.jpg"
-                    alt="AI Studio Model Saree"
-                    className="w-full h-full object-cover object-top filter contrast-[1.05]"
-                    loading="lazy"
-                  />
-                )}
-                {activeShowcase === "jewelry" && (
-                  <img
-                    src="/showcase/showcase-jewelry-after.jpg"
-                    alt="AI Studio Jewelry Velvet"
-                    className="w-full h-full object-cover object-center filter contrast-[1.05]"
-                    loading="lazy"
-                  />
-                )}
-                {activeShowcase === "lifestyle" && (
-                  <img
-                    src="/showcase/showcase-lifestyle-after.jpg"
-                    alt="AI Studio Marble Product"
-                    className="w-full h-full object-cover object-center filter contrast-[1.05]"
-                    loading="lazy"
-                  />
-                )}
-
-                <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-accent text-[8.5px] font-black uppercase flex items-center gap-1">
-                  <Sparkles className="w-2.5 h-2.5 text-accent" />
-                  <span>{activeShowcase === "lifestyle" ? "Marble Editorial" : "Indian Model Shoot"}</span>
-                </div>
-
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-2.5 pt-6 text-white text-left space-y-0.5">
-                  <div className="flex items-center gap-1">
-                    <BadgeCheck className="w-3.5 h-3.5 text-accent shrink-0" />
-                    <span className="text-xs font-black text-white">
-                      {activeShowcase === "garment" && "Royal Model Runway Drape"}
-                      {activeShowcase === "jewelry" && "Luxury Velvet Bust Shoot"}
-                      {activeShowcase === "lifestyle" && "Sunlit Marble Pedestal Scene"}
-                    </span>
-                  </div>
-                  <p className="text-[9px] text-neutral-200 font-semibold">
-                    {lang === "en" ? "Studio Lighting • Ready for Social Media" : "స్టూడియో లైటింగ్ • సోషల్ మీడియా రెడీ"}
-                  </p>
-                </div>
-              </div>
+            <div className="flex items-center gap-2 text-xs font-bold text-[var(--text-secondary)]">
+              <span className="px-2.5 py-1 rounded-xl nm-inset text-[10px] sm:text-xs font-mono font-bold text-accent">
+                {lang === "en" ? "From ₹1/photo" : "రూ. 1/- నుంచే"}
+              </span>
+              <span className="px-2.5 py-1 rounded-xl nm-inset text-[10px] sm:text-xs font-mono font-bold text-[var(--text-secondary)]">
+                {lang === "en" ? "Ready in 30s" : "30 సెకన్లలో రెడీ"}
+              </span>
             </div>
-
           </div>
 
-          {/* Quick Studio Trigger under preview */}
-          <div className="mt-4 pt-3 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <span className="text-xs font-bold text-[var(--text-secondary)]">
-              {lang === "en" ? "Ready to transform your own collection?" : "మీ స్వంత ఉత్పత్తులకు ఇప్పుడే ఫోటోషూట్ చేయండి"}
-            </span>
+          {/* THE SINGLE LANDSCAPE PHOTO SLOT */}
+          <div className="nm-inset rounded-2xl p-2 sm:p-3 bg-[var(--bg-secondary)]">
+            <div className="relative aspect-[16/10] sm:aspect-[16/9] md:aspect-[21/10] w-full rounded-xl overflow-hidden bg-neutral-950 shadow-md select-none group">
+
+              {/* Single Landscape Image */}
+              <img
+                src={curShowcase.img}
+                alt={curShowcase.title}
+                className="w-full h-full object-cover object-center filter contrast-[1.03] transition-all duration-300 group-hover:scale-[1.01]"
+                loading="lazy"
+              />
+
+              {/* Floating Badge Top-Left: Transformation Origin */}
+              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-white text-[10px] sm:text-xs font-mono font-bold flex items-center gap-2 border border-white/10 shadow-lg">
+                <SmartphoneIcon className="w-3.5 h-3.5 text-neutral-300" />
+                <span>{curShowcase.sourceTag}</span>
+              </div>
+
+              {/* Floating Badge Top-Right: Studio Result Quality */}
+              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 px-3 py-1.5 rounded-xl bg-black/85 backdrop-blur-md text-accent text-[10px] sm:text-xs font-black uppercase flex items-center gap-1.5 border border-accent/20 shadow-lg">
+                <Sparkles className="w-3.5 h-3.5 text-accent" />
+                <span>{lang === "en" ? "SRUSHTI AI STUDIO" : "సృష్టి ఏఐ స్టూడియో ఫలితం"}</span>
+              </div>
+
+              {/* Floating Bottom Information Overlay */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/75 to-transparent p-4 sm:p-6 pt-12 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-3 pointer-events-none">
+                <div className="space-y-1">
+                  <span className="text-sm sm:text-lg font-black text-white block tracking-tight">
+                    {curShowcase.title}
+                  </span>
+                  <span className="text-xs sm:text-sm text-neutral-300 block">
+                    {curShowcase.desc}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="px-3 py-1 rounded-xl bg-accent/20 border border-accent/40 text-[9.5px] sm:text-xs font-mono font-bold text-accent uppercase tracking-wider">
+                    {curShowcase.lightingTag}
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* 3 Step Workflow / Value Cards (Under Landscape Photo) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 pt-1">
+            <div className="nm-inset rounded-2xl p-3.5 sm:p-4 bg-[var(--bg-secondary)] flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center shrink-0 text-accent">
+                <SmartphoneIcon className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs font-black text-[var(--text-emphasis)] block">
+                  {lang === "en" ? "1. Simple Phone Click" : "1. మీ ఫోన్‌తో ఒక ఫోటో"}
+                </span>
+                <p className="text-[10.5px] sm:text-[11px] text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {curShowcase.bullet1}
+                </p>
+              </div>
+            </div>
+
+            <div className="nm-inset rounded-2xl p-3.5 sm:p-4 bg-[var(--bg-secondary)] flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center shrink-0 text-accent">
+                <Sparkles className="w-4 h-4 text-accent" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs font-black text-accent block">
+                  {lang === "en" ? "2. AI Studio Model Shoot" : "2. రాయల్ మోడల్ షూట్"}
+                </span>
+                <p className="text-[10.5px] sm:text-[11px] text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {curShowcase.bullet2}
+                </p>
+              </div>
+            </div>
+
+            <div className="nm-inset rounded-2xl p-3.5 sm:p-4 bg-[var(--bg-secondary)] flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center shrink-0 text-accent">
+                <ZapIcon className="w-4 h-4 text-accent" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs font-black text-[var(--text-emphasis)] block">
+                  {lang === "en" ? "3. Orders on WhatsApp" : "3. వాట్సాప్ & ఇన్‌స్టా ఆర్డర్లు"}
+                </span>
+                <p className="text-[10.5px] sm:text-[11px] text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {curShowcase.bullet3}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Studio Trigger & Value Bar */}
+          <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-black/5 dark:border-white/5">
+            <div className="space-y-0.5 text-center sm:text-left">
+              <span className="text-xs sm:text-sm font-black text-[var(--text-emphasis)] block">
+                {lang === "en" ? "Ready to transform your own collection?" : "మీ స్వంత ఉత్పత్తులకు ఇప్పుడే ఫోటోషూట్ చేయండి"}
+              </span>
+              <span className="text-[10.5px] text-[var(--text-secondary)] font-medium block">
+                {lang === "en" ? "From ₹1/photo • No monthly subscriptions • Ready in 30 seconds" : "కేవలం ₹1 నుంచే • ఎలాంటి నెలవారీ ఫీజులు లేవు • 30 సెకన్లలో రెడీ"}
+              </span>
+            </div>
             <Link
               to="/studio"
-              className="px-5 py-2.5 rounded-xl nm-outset bg-[var(--bg-secondary)] text-accent text-xs font-black flex items-center gap-2 hover:scale-105 active:scale-95 transition-all group"
+              className="px-6 py-3 rounded-2xl nm-outset bg-[var(--bg-secondary)] text-accent text-xs sm:text-sm font-black flex items-center gap-2 hover:scale-105 active:scale-95 transition-all group shrink-0 shadow-md"
             >
-              <span className="text-accent">Launch Srushti</span>
-              <ArrowRight className="w-3.5 h-3.5 text-accent transition-transform group-hover:translate-x-0.5" />
+              <Sparkles className="w-4 h-4 text-accent" />
+              <span>{t.ctaPrimary}</span>
+              <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
+
         </div>
       </section>
 
       {/* --- MINIMALIST EMOTIONAL & PSYCHOLOGICAL SUPPORT SECTION --- */}
       <section className="py-8 sm:py-14 px-4 sm:px-6 max-w-5xl mx-auto w-full">
         <div className="nm-outset rounded-3xl p-5 sm:p-8 bg-[var(--bg-secondary)] space-y-6 sm:space-y-8">
-          
+
           {/* Header */}
           <div className="text-center space-y-3 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full nm-inset bg-[var(--bg-secondary)] text-[10.5px] sm:text-xs font-black text-accent">
@@ -465,7 +615,7 @@ function LandingPageComponent() {
 
           {/* 3 Emotional Pillars */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            
+
             {/* Pillar 1: Social Media Confidence */}
             <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
               <div className="space-y-2.5">
