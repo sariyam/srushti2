@@ -64,7 +64,33 @@ function LandingPageComponent() {
     | "necklace"
     | "chain";
 
+  const SHOWCASE_CATEGORIES: ShowcaseCategory[] = [
+    "saree",
+    "dress",
+    "shirt",
+    "watch",
+    "earrings",
+    "bangle",
+    "jeans",
+    "trouser",
+    "necklace",
+    "chain",
+  ];
+
   const [activeShowcase, setActiveShowcase] = useState<ShowcaseCategory>("saree");
+
+  // Auto click next tab one by one after every 2 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveShowcase((prev) => {
+        const idx = SHOWCASE_CATEGORIES.indexOf(prev);
+        const nextIdx = (idx + 1) % SHOWCASE_CATEGORIES.length;
+        return SHOWCASE_CATEGORIES[nextIdx];
+      });
+    }, 2000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -438,14 +464,14 @@ function LandingPageComponent() {
                     id={`tab-${tab.id}`}
                     onClick={() => setActiveShowcase(tab.id)}
                     className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-black flex items-center gap-2 whitespace-nowrap transition-all select-none ${isActive
-                      ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm border border-accent/30"
+                      ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm"
                       : "text-[var(--text-secondary)] hover:text-accent hover:bg-black/5 dark:hover:bg-white/5"
                       }`}
                   >
                     <img
                       src={tab.thumb}
                       alt={tab.label[lang]}
-                      className={`w-4 h-4 rounded-full object-cover shrink-0 transition-transform ${isActive ? "ring-2 ring-accent scale-105" : "opacity-75"
+                      className={`w-4 h-4 rounded-full object-cover shrink-0 transition-transform ${isActive ? "scale-105" : "opacity-75"
                         }`}
                     />
                     <span>{tab.label[lang]}</span>
@@ -459,27 +485,6 @@ function LandingPageComponent() {
         {/* Showcase Container with SINGLE LANDSCAPE PHOTO SLOT */}
         <div className="nm-outset rounded-3xl p-4 sm:p-6 lg:p-7 bg-[var(--bg-secondary)] space-y-6">
 
-          {/* Top Bar inside card */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-black/5 dark:border-white/5">
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg nm-inset bg-[var(--bg-secondary)] text-[10.5px] font-black text-accent">
-                <BadgeCheck className="w-3.5 h-3.5 text-accent" />
-                <span>{curShowcase.tag}</span>
-              </div>
-              <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
-                {curShowcase.title}
-              </h3>
-            </div>
-
-            <div className="flex items-center gap-2 text-xs font-bold text-[var(--text-secondary)]">
-              <span className="px-2.5 py-1 rounded-xl nm-inset text-[10px] sm:text-xs font-mono font-bold text-accent">
-                {lang === "en" ? "From ₹1/photo" : "రూ. 1/- నుంచే"}
-              </span>
-              <span className="px-2.5 py-1 rounded-xl nm-inset text-[10px] sm:text-xs font-mono font-bold text-[var(--text-secondary)]">
-                {lang === "en" ? "Ready in 30s" : "30 సెకన్లలో రెడీ"}
-              </span>
-            </div>
-          </div>
 
           {/* THE SINGLE LANDSCAPE PHOTO SLOT */}
           <div className="nm-inset rounded-2xl p-2 sm:p-3 bg-[var(--bg-secondary)]">
@@ -492,36 +497,6 @@ function LandingPageComponent() {
                 className="w-full h-full object-cover object-center filter contrast-[1.03] transition-all duration-300 group-hover:scale-[1.01]"
                 loading="lazy"
               />
-
-              {/* Floating Badge Top-Left: Transformation Origin */}
-              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-white text-[10px] sm:text-xs font-mono font-bold flex items-center gap-2 border border-white/10 shadow-lg">
-                <SmartphoneIcon className="w-3.5 h-3.5 text-neutral-300" />
-                <span>{curShowcase.sourceTag}</span>
-              </div>
-
-              {/* Floating Badge Top-Right: Studio Result Quality */}
-              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 px-3 py-1.5 rounded-xl bg-black/85 backdrop-blur-md text-accent text-[10px] sm:text-xs font-black uppercase flex items-center gap-1.5 border border-accent/20 shadow-lg">
-                <Sparkles className="w-3.5 h-3.5 text-accent" />
-                <span>{lang === "en" ? "SRUSHTI AI STUDIO" : "సృష్టి ఏఐ స్టూడియో ఫలితం"}</span>
-              </div>
-
-              {/* Floating Bottom Information Overlay */}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/75 to-transparent p-4 sm:p-6 pt-12 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-3 pointer-events-none">
-                <div className="space-y-1">
-                  <span className="text-sm sm:text-lg font-black text-white block tracking-tight">
-                    {curShowcase.title}
-                  </span>
-                  <span className="text-xs sm:text-sm text-neutral-300 block">
-                    {curShowcase.desc}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="px-3 py-1 rounded-xl bg-accent/20 border border-accent/40 text-[9.5px] sm:text-xs font-mono font-bold text-accent uppercase tracking-wider">
-                    {curShowcase.lightingTag}
-                  </span>
-                </div>
-              </div>
-
             </div>
           </div>
 
