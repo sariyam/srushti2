@@ -14,6 +14,7 @@ export interface GenerateImageServiceParams {
   quality?: string;
   model?: string;
   productImage: string;
+  presentationMode?: string;
   faceImage?: string;
   metadata?: Record<string, any>;
 }
@@ -74,6 +75,7 @@ export class AiService {
     quality = "low",
     model = "gpt-image-2.5-sunburst",
     productImage,
+    presentationMode,
     faceImage,
     metadata,
   }: GenerateImageServiceParams) {
@@ -108,10 +110,29 @@ export class AiService {
       );
     }
 
-    // 3. Prepare Form Data with images
+    // 3. Face Reference and 100% Face Identity Replication Mandate
+    // Only attach face reference when in human model or partial face presentation mode
+    const isModelPresentation = !presentationMode || ["model", "partial_face"].includes(presentationMode);
+    const shouldAttachFace = Boolean(faceImage && faceImage.trim() && isModelPresentation);
+
+    let activePrompt = prompt;
+    if (shouldAttachFace) {
+      const faceFidelityPrefix =
+        `[CRITICAL MANDATE: 100% IDENTICAL FACE FIDELITY REQUIRED]\n` +
+        `The second attached image ('face_reference.png') is the authoritative face reference of the human model. ` +
+        `You MUST replicate the exact same person's face with 100% photographic fidelity (identical facial bone structure, eyes, iris, eyebrows, nose, lips, jawline, skin tone, and ethnic identity). ` +
+        `Strictly ZERO facial morphing, ZERO generic AI face replacement, and ZERO facial altering. ` +
+        `The output model MUST be unmistakably the EXACT same person as in the reference image.\n\n`;
+
+      if (!activePrompt.includes("100% IDENTICAL FACE FIDELITY")) {
+        activePrompt = faceFidelityPrefix + activePrompt;
+      }
+    }
+
+    // 4. Prepare Form Data with images
     const formData = new FormData();
     formData.append("model", model || "gpt-image-2.5-sunburst");
-    formData.append("prompt", prompt);
+    formData.append("prompt", activePrompt);
     formData.append("size", size || "1024x1024");
     formData.append("quality", quality || "low");
     formData.append("n", "1");
@@ -123,7 +144,7 @@ export class AiService {
       throw new BadRequestError(`Invalid product image payload: ${err?.message || err}`);
     }
 
-    if (faceImage && faceImage.trim()) {
+    if (shouldAttachFace && faceImage) {
       try {
         const faceBlob = await convertImageInputToBlob(faceImage, "face_reference.png");
         formData.append("image[]", faceBlob, "face_reference.png");

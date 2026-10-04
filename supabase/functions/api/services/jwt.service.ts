@@ -5,7 +5,7 @@ import { UnauthorizedError } from "../utils/errors";
 export interface JwtUserPayload {
   userId: string;
   phone: string;
-  role: "user" | "admin" | "superadmin";
+  role: "user" | "admin";
 }
 
 export class JwtService {

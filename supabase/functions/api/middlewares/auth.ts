@@ -62,7 +62,7 @@ export function authenticateToken(req: Request, _res: Response, next: NextFuncti
  * Middleware to enforce role-based permissions (e.g. admin or superadmin).
  * Throws structured ForbiddenError if user's role is insufficient.
  */
-export function requireRole(allowedRoles: ("user" | "admin" | "superadmin")[]) {
+export function requireRole(allowedRoles: ("user" | "admin")[]) {
   return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.user) {
       return next(

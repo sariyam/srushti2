@@ -40,6 +40,7 @@ import { PRESET_FACES } from "./components/FaceGenerator";
 import { SplashScreen } from "./components/SplashScreen";
 import { InvalidOperationModal } from "./components/InvalidOperationModal";
 import { useGestureProtection } from "./hooks/useGestureProtection";
+import { useStudioConfig, WorkspaceTab } from "./context/StudioConfigContext";
 
 const CheckCircle2 = (props: any) => <Icon icon="lucide:circle-check" {...props} />;
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
@@ -47,6 +48,8 @@ const AlertTriangle = (props: any) => <Icon icon="lucide:triangle-alert" {...pro
 const XIcon = (props: any) => <Icon icon="lucide:x" {...props} />;
 
 export default function App() {
+  const studioConfig = useStudioConfig();
+
   // --- Gesture Protection ([Invalid Operation] on swipe-down-to-refresh & edge-swipe-back) ---
   const { invalidOperation, dismissInvalidOperation } = useGestureProtection();
 
@@ -68,9 +71,9 @@ export default function App() {
 
   const [workspace, setWorkspace] = useState<Workspace>("garment");
   
-  // Tab states within Workspace panels
-  const [garmentTab, setGarmentTab] = useState<"setup" | "studio" | "background">("setup");
-  const [jewelryTab, setJewelryTab] = useState<"setup" | "studio" | "background">("setup");
+  // Tab states within Workspace panels [Setup , Studio , Bg]
+  const [garmentTab, setGarmentTab] = useState<WorkspaceTab>("setup");
+  const [jewelryTab, setJewelryTab] = useState<WorkspaceTab>("setup");
 
   // Export Settings
   const [garmentOrientation, setGarmentOrientation] = useState<"square" | "portrait" | "landscape">("square");
@@ -391,45 +394,60 @@ export default function App() {
     localStorage.setItem("srushti_custom_faces", JSON.stringify(customFaces));
   }, [customFaces]);
 
+  // Combined custom, backend Supabase model faces, and fallback preset faces
+  const allAvailableFaces = useMemo(() => {
+    const backendFaces = (studioConfig?.modelFaces || []).map((f) => ({
+      id: f.id,
+      nameEn: f.nameEn,
+      nameTe: f.nameTe || f.nameEn,
+      gender: ((f.metadata as any)?.gender === "male" || f.genderTarget === "male" ? "male" : "female") as "male" | "female",
+      url: f.previewImageUrl || f.previewUrl || f.thumbnailUrl || `/faces/${f.id}.jpg`,
+      prompt: f.promptDirective,
+    }));
+    const backendIds = new Set(backendFaces.map((b) => b.id));
+    const fallbackStatic = PRESET_FACES.filter((f) => !backendIds.has(f.id));
+    return [...customFaces, ...backendFaces, ...fallbackStatic];
+  }, [customFaces, studioConfig?.modelFaces]);
+
   // Auto-align face gender for Garments
   useEffect(() => {
-    const currentFace = [...customFaces, ...PRESET_FACES].find(f => f.id === selectedGarmentFaceId);
+    const currentFace = allAvailableFaces.find((f) => f.id === selectedGarmentFaceId);
     if (!currentFace || currentFace.gender !== garmentModelGender) {
-      const firstMatched = [...customFaces, ...PRESET_FACES].find(f => f.gender === garmentModelGender);
+      const firstMatched = allAvailableFaces.find((f) => f.gender === garmentModelGender);
       if (firstMatched) {
         setSelectedGarmentFaceId(firstMatched.id);
         setSelectedGarmentFacePrompt(firstMatched.prompt);
       }
     }
-  }, [garmentModelGender, selectedGarmentFaceId, customFaces]);
+  }, [garmentModelGender, selectedGarmentFaceId, allAvailableFaces]);
 
   // Auto-align face gender for Jewelry
   useEffect(() => {
-    const currentFace = [...customFaces, ...PRESET_FACES].find(f => f.id === selectedJewelryFaceId);
+    const currentFace = allAvailableFaces.find((f) => f.id === selectedJewelryFaceId);
     if (!currentFace || currentFace.gender !== jewelryModelGender) {
-      const firstMatched = [...customFaces, ...PRESET_FACES].find(f => f.gender === jewelryModelGender);
+      const firstMatched = allAvailableFaces.find((f) => f.gender === jewelryModelGender);
       if (firstMatched) {
         setSelectedJewelryFaceId(firstMatched.id);
         setSelectedJewelryFacePrompt(firstMatched.prompt);
       }
     }
-  }, [jewelryModelGender, selectedJewelryFaceId, customFaces]);
+  }, [jewelryModelGender, selectedJewelryFaceId, allAvailableFaces]);
 
   // Auto-align garment type based on gender selection
   useEffect(() => {
-    const validGarment = OptionValidator.getValidGarmentType(garmentModelGender, garmentType);
+    const validGarment = OptionValidator.getValidGarmentType(garmentModelGender, garmentType, studioConfig?.catalogItems);
     if (validGarment !== garmentType) {
       setGarmentType(validGarment as any);
     }
-  }, [garmentModelGender, garmentType]);
+  }, [garmentModelGender, garmentType, studioConfig?.catalogItems]);
 
   // Auto-align jewelry type based on gender selection
   useEffect(() => {
-    const validJewelry = OptionValidator.getValidJewelryType(jewelryModelGender, jewelryType);
+    const validJewelry = OptionValidator.getValidJewelryType(jewelryModelGender, jewelryType, studioConfig?.catalogItems);
     if (validJewelry !== jewelryType) {
       setJewelryType(validJewelry as any);
     }
-  }, [jewelryModelGender, jewelryType]);
+  }, [jewelryModelGender, jewelryType, studioConfig?.catalogItems]);
 
   // Auto-correct jewelry bust region whenever jewelryType changes
   useEffect(() => {
@@ -442,7 +460,7 @@ export default function App() {
   // Progress Loading cycle phrases
   const [loadingStep, setLoadingStep] = useState(0);
 
-  const t = TRANSLATIONS[lang];
+  const t = studioConfig?.translations?.[lang] || TRANSLATIONS[lang];
 
   // Apply Theme Toggle Class
   useEffect(() => {
@@ -476,15 +494,23 @@ export default function App() {
     }
   };
 
-  // Save key locally
-  const handleSelectBusiness = (newWorkspace: "garment" | "jewelry", gender: "female" | "male") => {
+  // Select Business and Collection
+  const handleSelectBusiness = (newWorkspace: "garment" | "jewelry", gender: "female" | "male", selectedItem?: string) => {
     setWorkspace(newWorkspace);
     if (newWorkspace === "garment") {
       setGarmentModelGender(gender);
-      setGarmentType(OptionValidator.getValidGarmentType(gender, garmentType) as any);
+      if (selectedItem) {
+        setGarmentType(selectedItem as any);
+      } else {
+        setGarmentType(OptionValidator.getValidGarmentType(gender, garmentType, studioConfig?.catalogItems) as any);
+      }
     } else if (newWorkspace === "jewelry") {
       setJewelryModelGender(gender);
-      setJewelryType(OptionValidator.getValidJewelryType(gender, jewelryType) as any);
+      if (selectedItem) {
+        setJewelryType(selectedItem as any);
+      } else {
+        setJewelryType(OptionValidator.getValidJewelryType(gender, jewelryType, studioConfig?.catalogItems) as any);
+      }
     }
   };
 
@@ -605,9 +631,12 @@ export default function App() {
 
       // Find the face reference image URL
       const activeFaceId = workspace === "garment" ? selectedGarmentFaceId : selectedJewelryFaceId;
-      const activeFace = [...customFaces, ...PRESET_FACES].find(f => f.id === activeFaceId);
-      const isModelPresentation = workspace === "garment" ? (garmentPresentation === "model" || garmentPresentation === "partial_face" || garmentPresentation === "no_face") : (jewelryPresentation === "model" || jewelryPresentation === "partial_face");
+      const activeFace = allAvailableFaces.find((f) => f.id === activeFaceId);
+      const isModelPresentation = workspace === "garment"
+        ? (garmentPresentation === "model" || garmentPresentation === "partial_face")
+        : (jewelryPresentation === "model" || jewelryPresentation === "partial_face");
       const activeFaceUrl = isModelPresentation && activeFace ? activeFace.url : null;
+      const activePresentation = workspace === "garment" ? garmentPresentation : jewelryPresentation;
 
       const activePrompt = compilePrompt({
         workspace: workspace as "garment" | "jewelry",
@@ -629,7 +658,8 @@ export default function App() {
         hasFaceRef: !!activeFaceUrl,
         photoStyle: workspace === "garment" ? garmentPhotoStyle : jewelryPhotoStyle,
         aspectRatio: workspace === "garment" ? garmentAspectRatio : jewelryAspectRatio,
-        resolution: workspace === "garment" ? garmentResolution : jewelryResolution
+        resolution: workspace === "garment" ? garmentResolution : jewelryResolution,
+        dynamicConfig: studioConfig.config,
       });
 
       const promptWithFace = activePrompt;
@@ -667,6 +697,7 @@ export default function App() {
       const genResponse = await generateAiImageApi({
         workspace: workspace as "garment" | "jewelry",
         itemType: activeItemType,
+        presentationMode: activePresentation,
         requiredCredits,
         prompt: promptWithFace,
         size: sizeString,

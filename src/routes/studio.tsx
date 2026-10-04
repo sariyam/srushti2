@@ -2,6 +2,8 @@ import React, { Suspense, lazy } from "react";
 import { createRoute } from "@tanstack/react-router";
 import { Route as rootRoute } from "./__root";
 
+import { useStudioConfig } from "../context/StudioConfigContext";
+
 const App = lazy(() => import("../App"));
 
 export const Route = createRoute({
@@ -11,6 +13,12 @@ export const Route = createRoute({
 });
 
 function StudioRouteComponent() {
+  const { refetch } = useStudioConfig();
+
+  React.useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <Suspense
       fallback={

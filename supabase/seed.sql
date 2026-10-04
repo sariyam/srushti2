@@ -62,3 +62,30 @@ BEGIN
         ON CONFLICT (id) DO UPDATE SET public = true;
     END IF;
 END $$;
+
+-- 5. Enforce Presentation Face Visibility Rules
+UPDATE "presentations" SET "face_visibility_rule" = 'full_face', "updated_at" = now() WHERE "id" = 'model';
+UPDATE "presentations" SET "face_visibility_rule" = 'partial_face', "updated_at" = now() WHERE "id" = 'partial_face';
+UPDATE "presentations" SET "face_visibility_rule" = 'no_face', "updated_at" = now() WHERE "id" NOT IN ('model', 'partial_face');
+
+-- 6. Seed Face Matching and 100% Identity Fidelity Directives
+INSERT INTO "system_settings" ("key", "category", "value", "description", "updated_at")
+VALUES (
+  'face_matching_rules',
+  'fidelity',
+  '{
+    "enforce_100_percent_fidelity": true,
+    "allowed_presentation_modes": ["model", "partial_face"],
+    "prohibited_presentation_modes": ["no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow", "bust", "body_part"],
+    "face_visibility_ui_title_en": "Select Human Model Face",
+    "face_visibility_ui_title_te": "మానవ మోడల్ ముఖాన్ని ఎంచుకోండి",
+    "face_fidelity_instruction": "The reference image of the human model (second uploaded image) is for 100% FACE IDENTITY REPLICATION. Maintain identical facial structure, eyes, nose, lips, jawline, skin tone, and ethnic identity from the face reference image with zero morphing."
+  }'::jsonb,
+  'Face reference UI visibility rules and 100% face identity replication guardrails',
+  now()
+)
+ON CONFLICT ("key") DO UPDATE SET
+  "value" = EXCLUDED."value",
+  "description" = EXCLUDED."description",
+  "updated_at" = now();
+

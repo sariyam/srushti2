@@ -1,152 +1,7 @@
 import { PROMPT_FRAGMENTS } from "./types";
 import { getGarmentCategoryLabel, getJewelryCategoryLabel } from "./utils/optionMapping";
+import type { StudioConfigResponse } from "./utils/api";
 
-// High quality themed mockups of Indian garments and jewelry
-// These guarantee a stunning presentation even if no API key is set yet
-export const SIMULATED_MOCKUPS = {
-  garment: {
-    saree: {
-      model: {
-        female: "/showcase/hero-saree.jpg",
-        male: "/showcase/hero-lehenga.jpg"
-      },
-      mannequin: "/showcase/showcase-garment-before.jpg",
-      hanger: "/showcase/showcase-garment-before.jpg",
-      ghost: "/showcase/hero-saree.jpg"
-    },
-    tshirt: {
-      model: {
-        male: "/showcase/hero-lehenga.jpg",
-        female: "/showcase/hero-saree.jpg"
-      },
-      mannequin: "/showcase/showcase-garment-before.jpg",
-      hanger: "/showcase/showcase-garment-before.jpg",
-      ghost: "/showcase/showcase-garment-after.jpg"
-    },
-    jeans: {
-      model: {
-        male: "/showcase/hero-lehenga.jpg",
-        female: "/showcase/hero-saree.jpg"
-      },
-      mannequin: "/showcase/showcase-garment-before.jpg",
-      hanger: "/showcase/showcase-garment-before.jpg",
-      ghost: "/showcase/showcase-garment-after.jpg"
-    },
-    shirt: {
-      model: {
-        male: "/showcase/hero-lehenga.jpg",
-        female: "/showcase/hero-saree.jpg"
-      },
-      mannequin: "/showcase/showcase-garment-before.jpg",
-      hanger: "/showcase/showcase-garment-before.jpg",
-      ghost: "/showcase/showcase-garment-after.jpg"
-    },
-    western_wear: {
-      model: {
-        male: "/showcase/hero-lehenga.jpg",
-        female: "/showcase/hero-saree.jpg"
-      },
-      mannequin: "/showcase/showcase-garment-before.jpg",
-      hanger: "/showcase/showcase-garment-before.jpg",
-      ghost: "/showcase/showcase-garment-after.jpg"
-    },
-    kurta: {
-      model: {
-        male: "/showcase/hero-lehenga.jpg",
-        female: "/showcase/hero-saree.jpg"
-      },
-      mannequin: "/showcase/showcase-garment-before.jpg",
-      hanger: "/showcase/showcase-garment-before.jpg",
-      ghost: "/showcase/showcase-garment-after.jpg"
-    },
-    suit: {
-      model: {
-        male: "/showcase/hero-lehenga.jpg",
-        female: "/showcase/hero-saree.jpg"
-      },
-      mannequin: "/showcase/showcase-garment-before.jpg",
-      hanger: "/showcase/showcase-garment-before.jpg",
-      ghost: "/showcase/showcase-garment-after.jpg"
-    },
-    salwar: {
-      model: {
-        male: "/showcase/hero-lehenga.jpg",
-        female: "/showcase/hero-saree.jpg"
-      },
-      mannequin: "/showcase/showcase-garment-before.jpg",
-      hanger: "/showcase/showcase-garment-before.jpg",
-      ghost: "/showcase/showcase-garment-after.jpg"
-    }
-  },
-  jewelry: {
-    earrings: {
-      model: {
-        female: "/showcase/hero-jewelry.jpg",
-        male: "/showcase/showcase-jewelry-after.jpg"
-      },
-      bust: {
-        head: "/showcase/hero-jewelry.jpg",
-        neck: "/showcase/showcase-jewelry-after.jpg",
-        wrist: "/showcase/showcase-jewelry-before.jpg"
-      }
-    },
-    necklace: {
-      model: {
-        female: "/showcase/showcase-jewelry-after.jpg",
-        male: "/showcase/hero-jewelry.jpg"
-      },
-      bust: {
-        head: "/showcase/showcase-jewelry-after.jpg",
-        neck: "/showcase/showcase-jewelry-after.jpg",
-        wrist: "/showcase/showcase-jewelry-before.jpg"
-      }
-    },
-    chain: {
-      model: {
-        female: "/showcase/showcase-jewelry-after.jpg",
-        male: "/showcase/hero-jewelry.jpg"
-      },
-      bust: {
-        head: "/showcase/showcase-jewelry-after.jpg",
-        neck: "/showcase/showcase-jewelry-after.jpg",
-        wrist: "/showcase/showcase-jewelry-before.jpg"
-      }
-    },
-    ring: {
-      model: {
-        female: "/showcase/hero-jewelry.jpg",
-        male: "/showcase/hero-jewelry.jpg"
-      },
-      bust: {
-        head: "/showcase/hero-jewelry.jpg",
-        neck: "/showcase/hero-jewelry.jpg",
-        wrist: "/showcase/showcase-jewelry-before.jpg"
-      }
-    },
-    bracelet: {
-      model: {
-        female: "/showcase/showcase-jewelry-after.jpg",
-        male: "/showcase/hero-jewelry.jpg"
-      },
-      bust: {
-        head: "/showcase/showcase-jewelry-after.jpg",
-        neck: "/showcase/showcase-jewelry-after.jpg",
-        wrist: "/showcase/showcase-jewelry-before.jpg"
-      }
-    },
-    watch: {
-      model: {
-        female: "/showcase/hero-jewelry.jpg",
-        male: "/showcase/hero-jewelry.jpg"
-      },
-      bust: {
-        head: "/showcase/hero-jewelry.jpg",
-        neck: "/showcase/hero-jewelry.jpg",
-        wrist: "/showcase/showcase-jewelry-before.jpg"
-      }
-    }
-  }
-};
 
 // Colors for plain background choice
 export const PRESET_COLORS = [
@@ -419,6 +274,7 @@ export function compilePrompt(state: {
   photoStyle: "editorial" | "campaign";
   aspectRatio?: string;
   resolution?: string;
+  dynamicConfig?: StudioConfigResponse | null;
 }): string {
   const activeAspect = state.aspectRatio || "1:1";
   const activeRes = state.resolution || "1k";
@@ -439,8 +295,29 @@ export function compilePrompt(state: {
     framing_and_cropping_guide: framingGuide
   };
 
+  const dynamicFidelitySettings = state.dynamicConfig?.settings?.["fidelity_directives"] || (state.dynamicConfig as any)?.systemSettings?.fidelityRules;
+  const dynamicNegativeExclusions = state.dynamicConfig?.settings?.["negative_exclusions"] || (state.dynamicConfig as any)?.systemSettings?.negativeExclusions;
+  const dynamicMandatory = Array.isArray(dynamicFidelitySettings?.mandatory_replications)
+    ? dynamicFidelitySettings.mandatory_replications
+    : Array.isArray(dynamicFidelitySettings) && dynamicFidelitySettings.length > 0
+    ? dynamicFidelitySettings
+    : null;
+  const dynamicProhibitions = Array.isArray(dynamicNegativeExclusions?.prohibitions)
+    ? dynamicNegativeExclusions.prohibitions
+    : Array.isArray(dynamicNegativeExclusions) && dynamicNegativeExclusions.length > 0
+    ? dynamicNegativeExclusions
+    : null;
+  const dynamicFaceRules = state.dynamicConfig?.settings?.["face_matching_rules"] || (state.dynamicConfig as any)?.systemSettings?.faceMatchingRules;
+  const dynamicFaceMandatory = Array.isArray(dynamicFidelitySettings?.mandatory_face_replications)
+    ? dynamicFidelitySettings.mandatory_face_replications
+    : null;
+
   if (state.workspace === "garment") {
-    const garmentFrag = PROMPT_FRAGMENTS.garment.types[state.garmentType as keyof typeof PROMPT_FRAGMENTS.garment.types] || state.garmentType;
+    const dynamicItem = state.dynamicConfig?.catalogItems?.find(
+      (item) => item.id === state.garmentType && item.workspace === "garment"
+    );
+    const fallbackGarmentFrag = PROMPT_FRAGMENTS.garment.types[state.garmentType as keyof typeof PROMPT_FRAGMENTS.garment.types] || state.garmentType;
+    const garmentFrag = dynamicItem?.promptDirective || fallbackGarmentFrag;
     const isHumanModel = state.garmentPresentation === "model" || state.garmentPresentation === "partial_face" || state.garmentPresentation === "no_face";
     
     let presentationFrag = "";
@@ -448,7 +325,8 @@ export function compilePrompt(state: {
     let poseDescription = "";
     
     if (isHumanModel) {
-      poseDescription = (PROMPT_FRAGMENTS.garment as any).poses[state.garmentModelPose] || getCameraFramingAndAngle(state.garmentModelPose, state.garmentType, "garment");
+      const dynamicPose = state.dynamicConfig?.presets?.poses?.find((p) => p.id === state.garmentModelPose);
+      poseDescription = dynamicPose?.promptDirective || (PROMPT_FRAGMENTS.garment as any).poses[state.garmentModelPose] || getCameraFramingAndAngle(state.garmentModelPose, state.garmentType, "garment");
       const isFemale = state.garmentModelGender === "female";
       const expression = state.photoStyle === "campaign" 
         ? "warm, confident commercial expression" 
@@ -482,14 +360,16 @@ export function compilePrompt(state: {
     } else if (state.garmentPresentation === "mannequin") {
       presentationFrag = (PROMPT_FRAGMENTS.garment.presentations.mannequin as any)[state.garmentModelGender as "female" | "male"] || "";
     } else {
-      presentationFrag = (PROMPT_FRAGMENTS.garment.presentations as any)[state.garmentPresentation] || state.garmentPresentation;
+      const dynamicPres = state.dynamicConfig?.presets?.presentations?.find((p) => p.id === state.garmentPresentation);
+      presentationFrag = dynamicPres?.promptDirective || (PROMPT_FRAGMENTS.garment.presentations as any)[state.garmentPresentation] || state.garmentPresentation;
     }
 
     let bgFrag = "";
+    const dynamicBg = state.dynamicConfig?.presets?.backgrounds?.find((b) => b.id === state.garmentBackground);
     if (state.garmentBackground === "plain") {
       bgFrag = PROMPT_FRAGMENTS.garment.backgrounds.plain(state.garmentBgColor);
     } else {
-      bgFrag = (PROMPT_FRAGMENTS.garment.backgrounds as any)[state.garmentBackground] || state.garmentBackground;
+      bgFrag = dynamicBg?.promptDirective || (PROMPT_FRAGMENTS.garment.backgrounds as any)[state.garmentBackground] || state.garmentBackground;
     }
 
     let placementDirective = "";
@@ -566,7 +446,7 @@ export function compilePrompt(state: {
         auto_detect_material_and_fabric_properties: "AUTOMATIC MATERIAL & FABRIC DETECTION: Automatically analyze and detect the fabric and material properties of the uploaded product reference image (such as silk, cotton, denim, velvet, chiffon, satin, leather, linen, wool, jacquard, organza, georgette, lace, embroidery thread, sequin finish, or knitwear), including its weave structure, thread count, thickness, weight, drape, surface sheen, and light reflectance, and apply the exact same material and fabric properties to the generated output product.",
         core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (garment) shown in the reference image. Automatically detect and analyze the item's exact material and fabric properties, applying the same fabric characteristics to the generated output. The design, artwork, patterns, fabric motifs, exact length, physical size, proportions, and visual features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
         input_image_guideline: "The input image is the authentic reference of the garment product. Automatically detect and replicate its exact material/fabric properties, design layout, pattern layout, garment length (full-length, knee-length, cropped, short, long-sleeve, 3/4-sleeve), and size proportions precisely.",
-        mandatory_replications: [
+        mandatory_replications: dynamicMandatory || [
           "Automatic detection and 1:1 application of the uploaded product's exact fabric and material properties (fabric composition, weave density, surface texture, weight, fall/drape, stiffness or fluidity, matte vs lustrous sheen)",
           "Exact product design, artwork, motifs, prints, embroidery, and weave patterns replicated 1:1 in scale and position",
           "Exact garment length and cut (e.g., full length, ankle-length, knee-length, waist-length, cropped, floor-length drape)",
@@ -582,6 +462,7 @@ export function compilePrompt(state: {
       exclusion_directives: {
         highest_priority_exclusion_rule: "STRICTLY NO PRICE TAGS, HANGTAGS, BRAND TAGS, COMPANY LOGOS, OR TEXT OVERLAYS",
         instruction: "The output image must be a clean, pristine studio fashion photograph completely FREE of price tags, store price stickers, barcode tags, paper hangtags, security tags, brand labels, company logos, store tags, watermarks, text labels, sale badges, or graphic overlays anywhere on the garment, display mount, or background. If the input reference image has any visible price tag, hanging paper tag, barcode sticker, or brand label attached to the product, digitally remove and omit it entirely, rendering the item clean and pristine.",
+        ...(dynamicProhibitions && dynamicProhibitions.length > 0 ? { system_negative_exclusions: dynamicProhibitions } : {}),
         ...(!isHumanModel && {
           strict_no_human_rule: "STRICTLY NO HUMAN MODEL, NO PERSON, NO HUMAN FACE, NO BODY PARTS, NO HANDS, NO SKIN",
           strict_no_human_instruction: `CRITICAL: This is a NON-HUMAN product display presentation mode (${state.garmentPresentation}). There must be STRICTLY NO HUMAN BEING, NO LIVE MODEL, NO PERSON, NO HUMAN FACE, NO HEAD, NO EYES, NO NECK, NO HANDS, NO LEGS, NO SKIN anywhere in the final output image. Render ONLY the product displayed on its non-human setup (${state.garmentPresentation}). The entire image MUST be 100% human-free.`
@@ -602,8 +483,11 @@ export function compilePrompt(state: {
       }),
       ...(isHumanModel && state.hasFaceRef && {
         face_matching_directive: {
-          highest_priority_rule: "HUMAN FACE IDENTITY REFERENCE ONLY - DYNAMIC POSE, ANGLE & HEAD ROTATION ALLOWED",
-          instruction: "CRITICAL FACE REFERENCE DIRECTIVE: The reference image of the human model (second uploaded image) is for FACE IDENTITY REFERENCE PURPOSE ONLY. You MUST maintain the exact same face identity, facial features, facial structure, skin tone, eye shape, nose shape, hairstyle, and ethnic identity from the face reference image. However, the human head rotation, head turn angle, body pose, camera perspective, and expression CAN and SHOULD be altered/adapted dynamically according to the item type, framing, and selected Model Pose / Camera Angle."
+          highest_priority_rule: dynamicFidelitySettings?.highest_priority_face_rule || "100% IDENTICAL FACE IDENTITY REPLICATION MANDATE - ZERO DRIFT, EXACT SAME PERSON",
+          instruction: dynamicFaceRules?.face_fidelity_instruction || "CRITICAL 100% FACE IDENTITY PRESERVATION: The reference image of the human model (second uploaded image) is the authoritative reference for the human model's exact face identity. You MUST replicate 100% of this specific person's facial features with complete photographic fidelity. Maintain identical facial bone structure, jawline, eye contours, iris color, eyelid shape, eyebrow arches, nose bridge and tip proportions, philtrum, lip shape and volume, skin undertone, natural melanin, and facial landmarks without beautification or alteration. Strictly ZERO facial morphing, ZERO generic face substitution, and ZERO face blending. While the head orientation, gaze direction, body posture, and lighting naturally adjust to match the chosen pose and presentation, the identity MUST remain 100% recognizably and unmistakably the EXACT same person as in the reference photo.",
+          face_visibility_mode: state.garmentPresentation === "partial_face" ? "PARTIAL_FACE_MACRO_CLOSEUP" : "FULL_FACE_PORTRAIT",
+          fidelity_directive: "100% IDENTICAL BONE STRUCTURE, EYES, NOSE, LIPS, AND COMPLEXION",
+          ...(dynamicFaceMandatory ? { mandatory_face_replications: dynamicFaceMandatory } : {})
         }
       })
     };
@@ -612,31 +496,39 @@ export function compilePrompt(state: {
   } else {
     const rawType = state.jewelryType;
     const normalizedType = (rawType === "noise" || rawType === "nose") ? "nose_ring" : rawType;
-    const jewelryFrag = PROMPT_FRAGMENTS.jewelry.types[rawType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
+    const dynamicItem = state.dynamicConfig?.catalogItems?.find(
+      (item) => (item.id === rawType || item.id === normalizedType) && item.workspace === "jewelry"
+    );
+    const fallbackJewelryFrag = PROMPT_FRAGMENTS.jewelry.types[rawType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
       || PROMPT_FRAGMENTS.jewelry.types[normalizedType as keyof typeof PROMPT_FRAGMENTS.jewelry.types] 
       || state.jewelryType;
+    const jewelryFrag = dynamicItem?.promptDirective || fallbackJewelryFrag;
     const isHumanModel = state.jewelryPresentation === "model" || state.jewelryPresentation === "partial_face" || state.jewelryPresentation === "no_face" || state.jewelryPresentation === "body_part";
 
     let presentationFrag = "";
     let defaultFaceDescription = "";
     let poseDescription = "";
 
+    const dynamicPose = state.dynamicConfig?.presets?.poses?.find((p) => p.id === state.jewelryModelPose);
+    const defaultPoseDesc = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || getCameraFramingAndAngle(state.jewelryModelPose, normalizedType, "jewelry");
+    const activePoseDesc = dynamicPose?.promptDirective || defaultPoseDesc;
+
     if (state.jewelryPresentation === "body_part") {
-      poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || getCameraFramingAndAngle(state.jewelryModelPose, normalizedType, "jewelry");
+      poseDescription = activePoseDesc;
       const bodyPartBase = "macro close-up shot focused on the jewelry item placed cleanly and naturally on a real human body part (such as neck, ear, wrist, finger, waist, nose, or ankle depending on item type) with smooth authentic skin texture and natural pores. This mode strictly uses NO face reference and does NOT generate any face identity, head, eyes, nose, or lips";
       presentationFrag = `${bodyPartBase}, ${poseDescription}`;
     } else if (state.jewelryPresentation === "no_face") {
-      poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || getCameraFramingAndAngle(state.jewelryModelPose, normalizedType, "jewelry");
+      poseDescription = activePoseDesc;
       const noFaceBase = "worn on an authentic live human model skin backdrop, with primary macro camera focus and razor-sharp depth-of-field centered strictly on the jewelry item product details, metal luster, and gemstone brilliance, while the human face is strictly cropped out of frame, turned away, or headless (showing NO human eyes, nose, lips, or face)";
       const skinDescription = state.jewelryModelFacePrompt ? `human model skin tone and body features (${state.jewelryModelFacePrompt})` : "young female human model body with smooth skin tone";
       presentationFrag = `${noFaceBase}, ${skinDescription}, ${poseDescription}`;
     } else if (state.jewelryPresentation === "partial_face") {
-      poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || getCameraFramingAndAngle(state.jewelryModelPose, normalizedType, "jewelry");
+      poseDescription = activePoseDesc;
       const partialFaceBase = "worn on authentic human skin with a human skin partial face macro close-up framing, showing clean skin texture, natural pores, and soft studio lighting while cropping full facial identity";
       const faceDescription = state.jewelryModelFacePrompt ? `human model with features (${state.jewelryModelFacePrompt})` : "young female human model with smooth flawless skin tone";
       presentationFrag = `${partialFaceBase}, ${faceDescription}, ${poseDescription}`;
     } else if (isHumanModel) {
-      poseDescription = (PROMPT_FRAGMENTS.jewelry as any).poses[state.jewelryModelPose] || "";
+      poseDescription = activePoseDesc;
       const rawDefault = PROMPT_FRAGMENTS.jewelry.presentations.model[state.jewelryModelGender as "female" | "male"] || "";
       if (state.photoStyle === "campaign") {
         defaultFaceDescription = rawDefault.replace("neutral high-fashion expression, never smiling", "warm, confident commercial expression");
@@ -646,7 +538,8 @@ export function compilePrompt(state: {
       const faceDescription = state.jewelryModelFacePrompt || defaultFaceDescription;
       presentationFrag = `${faceDescription}, ${poseDescription}`;
     } else {
-      presentationFrag = PROMPT_FRAGMENTS.jewelry.presentations.bust[state.jewelryBustRegion as keyof typeof PROMPT_FRAGMENTS.jewelry.presentations.bust] || state.jewelryBustRegion;
+      const dynamicPres = state.dynamicConfig?.presets?.presentations?.find((p) => p.id === state.jewelryPresentation);
+      presentationFrag = dynamicPres?.promptDirective || PROMPT_FRAGMENTS.jewelry.presentations.bust[state.jewelryBustRegion as keyof typeof PROMPT_FRAGMENTS.jewelry.presentations.bust] || state.jewelryBustRegion;
     }
 
     const effectiveJewelryBg = (isHumanModel && !["plain", "studio"].includes(state.jewelryBackground))
@@ -654,10 +547,11 @@ export function compilePrompt(state: {
       : state.jewelryBackground;
 
     let bgFrag = "";
+    const dynamicBg = state.dynamicConfig?.presets?.backgrounds?.find((b) => b.id === effectiveJewelryBg);
     if (effectiveJewelryBg === "plain") {
       bgFrag = PROMPT_FRAGMENTS.jewelry.backgrounds.plain(state.jewelryBgColor);
     } else {
-      bgFrag = (PROMPT_FRAGMENTS.jewelry.backgrounds as any)[effectiveJewelryBg] || effectiveJewelryBg;
+      bgFrag = dynamicBg?.promptDirective || (PROMPT_FRAGMENTS.jewelry.backgrounds as any)[effectiveJewelryBg] || effectiveJewelryBg;
     }
 
     let placementDirective = "";
@@ -781,7 +675,7 @@ export function compilePrompt(state: {
         single_item_instruction: `CRITICAL SINGLE ITEM DIRECTIVE: The final generated image MUST ONLY feature the exact uploaded input jewelry item (${jCategory} / ${state.jewelryType}). DO NOT generate, add, or synthesize ANY other jewelry items, ornaments, or accessories that were NOT present in the input reference image. For example, if the user uploaded a necklace, DO NOT add unrequested earrings, nose rings, bangles, rings, or maang tikka to the model or display; if the user uploaded earrings, DO NOT add an unrequested necklace or head ornaments; if the user uploaded a ring, DO NOT add unrequested bracelets or necklaces. The model's skin, ears, neck, wrists, fingers, nose, forehead, hair, and clothing must remain COMPLETELY BARE and devoid of any secondary or unuploaded jewelry.`,
         core_instruction: "The final AI-generated image must EXACTLY REPLICATE and reproduce the input product (jewelry) shown in the reference image. Automatically detect and analyze the item's exact material, metal composition, polish, and gemstone properties, applying the same material characteristics to the generated output. The design, gemstone settings, intricate patterns, chain length, piece dimensions, physical size, and craftsmanship features must be 100% faithful and identical to the uploaded item. Do not generate a creative, inspired, redesigned, modified, or re-proportioned version of the product.",
         input_image_guideline: "The input image is the authentic reference of the jewelry product. Automatically detect and replicate its exact material/metal properties, design, pattern details, chain/necklace length, gemstone sizes, and overall dimensions precisely.",
-        mandatory_replications: [
+        mandatory_replications: dynamicMandatory || [
           "Automatic detection and 1:1 application of the uploaded product's exact material/metal/gemstone properties (metal type, polish, surface texture, finish, metallic luster, gemstone brilliance, and transparency)",
           "Observe the jewelry first and determine whether it is closed or intentionally open. Keep the original design: do not close an open jewelry loop or open a closed one",
           "Strict 1:1 single-item focus: generate ONLY the uploaded input jewelry item (or exact pair if uploaded as a pair of earrings/bangles). Absolutely NO additional or unrequested jewelry items (no extra necklaces, earrings, rings, nose pins, waist chains, or headpieces) on the model or display stand",
@@ -799,6 +693,7 @@ export function compilePrompt(state: {
         strict_no_extra_jewelry_rule: "STRICTLY PROHIBIT GENERATING UNREQUESTED SECONDARY JEWELRY",
         strict_no_extra_jewelry_instruction: "DO NOT add any extra jewelry pieces, accessories, or complementary ornaments. Only render the single uploaded product (or pair). The model's skin, ears, neck, wrists, fingers, nose, forehead, hair, and clothing must remain completely bare and free of any other unrequested jewelry or accessories.",
         instruction: "The output image must be a clean, pristine studio jewelry photograph completely FREE of price tags, store price stickers, barcode tags, paper hangtags, security tags, brand labels, company logos, store tags, watermarks, text labels, sale badges, or graphic overlays anywhere on the jewelry, display mount, or background. If the input reference image has any visible price tag, hanging paper tag, barcode sticker, or brand label attached to the product, digitally remove and omit it entirely, rendering the item clean and pristine.",
+        ...(dynamicProhibitions && dynamicProhibitions.length > 0 ? { system_negative_exclusions: dynamicProhibitions } : {}),
         ...(state.jewelryPresentation === "no_face" && {
           strict_no_face_rule: "STRICTLY NO HUMAN FACE FEATURES AND PRIMARY FOCUS ON JEWELRY ITEM",
           strict_no_face_instruction: "CRITICAL: This is a Human Model (No Face) presentation mode. The camera MUST BE TIGHTLY FOCUSED ON THE JEWELRY ITEM ITSELF as the primary hero subject, with razor-sharp macro detail on the product. The human model body/skin serves only as a natural background canvas. The human face MUST BE STRICTLY CROPPED OUT of the frame, turned completely away, or headless. DO NOT generate human eyes, nose, lips, or full facial features."
@@ -823,8 +718,11 @@ export function compilePrompt(state: {
       }),
       ...(isHumanModel && state.hasFaceRef && {
         face_matching_directive: {
-          highest_priority_rule: "HUMAN FACE IDENTITY REFERENCE ONLY - DYNAMIC POSE, ANGLE & HEAD ROTATION ALLOWED",
-          instruction: "CRITICAL FACE REFERENCE DIRECTIVE: The reference image of the human model (second uploaded image) is for FACE IDENTITY REFERENCE PURPOSE ONLY. You MUST maintain the exact same face identity, facial features, facial structure, skin tone, eye shape, nose shape, hairstyle, and ethnic identity from the face reference image. However, the human head rotation, head turn angle, body pose, camera perspective, and expression CAN and SHOULD be altered/adapted dynamically according to the item type, framing, and selected Model Pose / Camera Angle."
+          highest_priority_rule: dynamicFidelitySettings?.highest_priority_face_rule || "100% IDENTICAL FACE IDENTITY REPLICATION MANDATE - ZERO DRIFT, EXACT SAME PERSON",
+          instruction: dynamicFaceRules?.face_fidelity_instruction || "CRITICAL 100% FACE IDENTITY PRESERVATION: The reference image of the human model (second uploaded image) is for the authoritative human model exact face identity reference. You MUST replicate 100% of this specific person's facial features with complete photographic fidelity. Maintain identical facial bone structure, jawline, eye contours, iris color, eyelid shape, eyebrow arches, nose bridge and tip proportions, philtrum, lip shape and volume, skin undertone, natural melanin, and facial landmarks without beautification or alteration. Strictly ZERO facial morphing, ZERO generic face substitution, and ZERO face blending. While the head orientation, gaze direction, body posture, and lighting naturally adjust to match the chosen pose and jewelry presentation, the identity MUST remain 100% recognizably and unmistakably the EXACT same person as in the reference photo.",
+          face_visibility_mode: state.jewelryPresentation === "partial_face" ? "PARTIAL_FACE_MACRO_CLOSEUP" : "FULL_FACE_PORTRAIT",
+          fidelity_directive: "100% IDENTICAL BONE STRUCTURE, EYES, NOSE, LIPS, AND COMPLEXION",
+          ...(dynamicFaceMandatory ? { mandatory_face_replications: dynamicFaceMandatory } : {})
         }
       })
     };

@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
 import { Language } from "../types";
+import { useStudioConfig } from "../context/StudioConfigContext";
 
 interface QuoteSliderProps {
   lang: Language;
@@ -47,12 +48,21 @@ const QUOTES = [
 ];
 
 export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
+  const { config } = useStudioConfig();
+  const quotes = useMemo(() => {
+    const remote = config?.settings?.landing_quotes;
+    if (Array.isArray(remote) && remote.length > 0) {
+      return remote;
+    }
+    return QUOTES;
+  }, [config]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const nextQuote = () => {
-    setCurrentIndex((prev) => (prev + 1) % QUOTES.length);
+    setCurrentIndex((prev) => (prev + 1) % quotes.length);
   };
 
   useEffect(() => {
@@ -65,9 +75,10 @@ export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [currentIndex, isPaused]);
+  }, [currentIndex, isPaused, quotes.length]);
 
-  const currentQuote = QUOTES[currentIndex][lang];
+  const activeQuote = quotes[currentIndex] || quotes[0] || QUOTES[0];
+  const currentQuote = activeQuote[lang] || activeQuote.en || QUOTES[0].en;
 
   return (
     <div
@@ -87,7 +98,7 @@ export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
       <div className="relative min-h-[95px] sm:min-h-[85px] flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.div
-            key={QUOTES[currentIndex].id + "-" + lang}
+            key={activeQuote.id + "-" + lang}
             initial={{ opacity: 0, y: 8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -107,9 +118,9 @@ export const QuoteSlider: React.FC<QuoteSliderProps> = ({ lang }) => {
 
       {/* Slide Navigation Dots */}
       <div className="flex items-center justify-center gap-1.5 mt-4 pt-1">
-        {QUOTES.map((quote, idx) => (
+        {quotes.map((quote: any, idx: number) => (
           <button
-            key={quote.id}
+            key={quote.id || `quote-${idx}`}
             onClick={() => setCurrentIndex(idx)}
             aria-label={`Go to quote ${idx + 1}`}
             className={`h-1.5 rounded-full transition-all duration-300 ${

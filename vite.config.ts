@@ -145,22 +145,20 @@ export default defineConfig(() => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
-                return 'vendor-react';
-              }
-              if (id.includes('@tanstack/react-router') || id.includes('@tanstack/router-core')) {
-                return 'vendor-router';
-              }
-              if (id.includes('motion') || id.includes('framer-motion')) {
-                return 'vendor-motion';
-              }
-              if (id.includes('@iconify') || id.includes('lucide-react')) {
+              if (id.includes('@iconify')) {
                 return 'vendor-icons';
               }
               if (id.includes('react-colorful')) {
-                return 'vendor-colorful';
+                return 'vendor-colorpicker';
               }
-              return 'vendor-misc';
+              if (
+                id.includes('react') ||
+                id.includes('scheduler') ||
+                id.includes('@tanstack') ||
+                id.includes('motion')
+              ) {
+                return 'vendor-framework';
+              }
             }
           },
         },

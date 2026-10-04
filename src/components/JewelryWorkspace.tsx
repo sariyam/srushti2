@@ -9,6 +9,7 @@ import { FaceGenerator, ModelFace } from "./FaceGenerator";
 import { PresentationSlider } from "./PresentationSlider";
 import { HorizontalSliderTrack } from "./HorizontalSliderTrack";
 import { JewelryType } from "../types";
+import { useStudioConfig, WorkspaceTab } from "../context/StudioConfigContext";
 
 const Gem = (props: any) => <Icon icon="lucide:gem" {...props} />;
 const User = (props: any) => <Icon icon="lucide:user" {...props} />;
@@ -56,8 +57,8 @@ function isDarkColor(hex: string): boolean {
 }
 
 interface JewelryWorkspaceProps {
-  jewelryTab: "setup" | "studio" | "background";
-  setJewelryTab: (tab: "setup" | "studio" | "background") => void;
+  jewelryTab: WorkspaceTab;
+  setJewelryTab: (tab: WorkspaceTab) => void;
   jewelryType: JewelryType;
   setJewelryType: (type: any) => void;
   jewelryPresentation: "model" | "bust" | "partial_face" | "no_face" | "body_part";
@@ -174,33 +175,103 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const {
+    poses: dynamicPoses,
+    backgrounds: dynamicBackgrounds,
+    presentationModes: dynamicPresentations,
+    backgroundTypes,
+    getJewelryBustMapping,
+    optionMappings,
+    presetColors: dynamicPresetColors,
+    catalogItems,
+    businesses,
+    workspacesList,
+  } = useStudioConfig();
+
+  const currentCatalogItem = React.useMemo(() => {
+    return catalogItems?.find((i) => i.id === jewelryType);
+  }, [catalogItems, jewelryType]);
+
+  const availablePresentations = React.useMemo(() => {
+    if (dynamicPresentations && dynamicPresentations.length > 0) {
+      const activeJewelryPres = dynamicPresentations.filter(
+        (p) => p.isActive && (p.workspace === "jewelry" || p.workspace === "all")
+      );
+      if (currentCatalogItem?.presentationIds && currentCatalogItem.presentationIds.length > 0) {
+        const itemPresSet = new Set(currentCatalogItem.presentationIds);
+        const linked = activeJewelryPres.filter((p) => itemPresSet.has(p.id));
+        if (linked.length > 0) {
+          return linked.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+        }
+      }
+      if (activeJewelryPres.length > 0) {
+        return activeJewelryPres.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+      }
+    }
+    return [
+      { id: "model", nameEn: "Live Human Model", nameTe: "మనిషి మోడల్", faceVisibilityRule: "full_face" },
+      { id: "partial_face", nameEn: "Human Model (Partial Face)", nameTe: "మానవ మోడల్ (పాక్షిక ముఖం)", faceVisibilityRule: "partial_face" },
+      { id: "body_part", nameEn: "Body Part Close-Up", nameTe: "శరీర భాగం (క్లోజప్ షాట్)", faceVisibilityRule: "no_face" },
+      { id: "no_face", nameEn: "Human Model (No Face)", nameTe: "మానవ మోడల్ (ముఖం లేకుండా)", faceVisibilityRule: "no_face" },
+      { id: "bust", nameEn: "Jewelry Display Stand / Bust", nameTe: "ఆభరణాల స్టాండ్", faceVisibilityRule: "no_face" },
+    ];
+  }, [dynamicPresentations, currentCatalogItem]);
+
+  React.useEffect(() => {
+    if (availablePresentations.length > 0 && !availablePresentations.some(p => p.id === jewelryPresentation)) {
+      setJewelryPresentation(availablePresentations[0].id as any);
+    }
+  }, [availablePresentations, jewelryPresentation, setJewelryPresentation]);
+
+  const allowedPoses = React.useMemo(() => {
+    const staticPoses = getJewelryPoses(jewelryType, jewelryPresentation);
+    if (dynamicPoses && dynamicPoses.length > 0) {
+      const activeDynamic = dynamicPoses
+        .filter((p) => (p.workspace === "jewelry" || p.workspace === "all") && p.isActive);
+
+      if (currentCatalogItem?.poseIds && currentCatalogItem.poseIds.length > 0) {
+        const itemPoseSet = new Set(currentCatalogItem.poseIds);
+        const linked = activeDynamic.filter((p) => itemPoseSet.has(p.id));
+        if (linked.length > 0) {
+          return linked.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)).map((p) => p.id);
+        }
+      }
+
+      const activePoseIdSet = new Set(activeDynamic.map((p) => p.id));
+      const validStatic = staticPoses.filter((id) => !dynamicPoses.some((p) => p.id === id) || activePoseIdSet.has(id));
+      const matchingDynamic = activeDynamic.map((p) => p.id);
+      return Array.from(new Set([...validStatic, ...matchingDynamic]));
+    }
+    return staticPoses;
+  }, [jewelryType, jewelryPresentation, dynamicPoses, currentCatalogItem]);
+
   // Keep model pose valid when jewelryType or jewelryPresentation changes
   React.useEffect(() => {
-    const allowed = getJewelryPoses(jewelryType, jewelryPresentation);
-    if (!allowed.includes(jewelryModelPose)) {
-      setJewelryModelPose(allowed[0]);
+    if (!allowedPoses.includes(jewelryModelPose)) {
+      setJewelryModelPose(allowedPoses[0]);
     }
-  }, [jewelryType, jewelryPresentation]);
+  }, [allowedPoses, jewelryModelPose, setJewelryModelPose]);
 
-  // Define background compatibility per jewelry presentation mode
-  const JEWELRY_BG_COMPATIBILITY: Record<string, { indoor: string[]; outdoor: string[] }> = {
-    model: {
-      indoor: ["plain", "studio"],
-      outdoor: []
-    },
-    partial_face: {
-      indoor: ["plain", "studio", "luxury", "silk", "mirror"],
-      outdoor: []
-    },
-    no_face: {
-      indoor: ["plain", "studio", "luxury", "silk", "mirror"],
-      outdoor: []
-    },
-    bust: {
-      indoor: ["plain", "studio", "luxury", "traditional", "wood", "velvet", "silk", "granite", "mirror"],
-      outdoor: ["beach"]
-    }
-  };
+  // Define background compatibility per jewelry presentation mode (backed by dynamic DB configuration)
+  const JEWELRY_BG_COMPATIBILITY: Record<string, { indoor: string[]; outdoor: string[] }> =
+    optionMappings?.jewelryBgCompatibility || {
+      model: {
+        indoor: ["plain", "studio"],
+        outdoor: [],
+      },
+      partial_face: {
+        indoor: ["plain", "studio", "luxury", "silk", "mirror"],
+        outdoor: [],
+      },
+      no_face: {
+        indoor: ["plain", "studio", "luxury", "silk", "mirror"],
+        outdoor: [],
+      },
+      bust: {
+        indoor: ["plain", "studio", "luxury", "traditional", "wood", "velvet", "silk", "granite", "mirror"],
+        outdoor: ["beach"],
+      },
+    };
 
   const comp = JEWELRY_BG_COMPATIBILITY[jewelryPresentation] || JEWELRY_BG_COMPATIBILITY.model;
   const hasIndoor = comp.indoor.length > 0;
@@ -262,10 +333,10 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
           <span className="break-words">{lang === "en" ? "Studio" : "స్టూడియో"}</span>
         </button>
         <button
-          id="tab-jewelry-background"
-          onClick={() => setJewelryTab("background")}
+          id="tab-jewelry-bg"
+          onClick={() => setJewelryTab("bg")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            jewelryTab === "background" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
+            jewelryTab === "bg" || jewelryTab === "background" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
           }`}
         >
           <Palette className="w-3.5 h-3.5 flex-shrink-0" />
@@ -286,16 +357,25 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
             </label>
             <div className="flex items-center justify-between p-2.5 px-3 rounded-2xl nm-inset-sm border border-black/5 dark:border-white/5 bg-[var(--bg-secondary)]/40 gap-2">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[var(--text-emphasis)] flex-wrap">
-                <span className="capitalize">{lang === "en" ? "jewelry" : "నగలు"}</span>
+                <span className="capitalize">
+                  {(() => {
+                    const wsRec = (workspacesList || []).find((w) => w.id === "jewelry");
+                    return wsRec ? (lang === "te" ? (wsRec.nameTe || wsRec.nameEn) : wsRec.nameEn) : (lang === "en" ? "jewelry" : "నగలు");
+                  })()}
+                </span>
                 <ChevronRight className="w-3.5 h-3.5 text-accent opacity-80 shrink-0" />
                 <span>
-                  {jewelryModelGender === "female" 
-                    ? (lang === "en" ? "female" : "స్త్రీల") 
-                    : (lang === "en" ? "male" : "పురుషుల")}
+                  {(() => {
+                    const bizRec = (businesses || []).find((b) => b.workspace === "jewelry" && b.genderTarget === jewelryModelGender);
+                    return bizRec ? (lang === "te" ? (bizRec.nameTe || bizRec.nameEn) : bizRec.nameEn) : (jewelryModelGender === "female" ? (lang === "en" ? "female" : "స్త్రీల") : (lang === "en" ? "male" : "పురుషుల"));
+                  })()}
                 </span>
                 <ChevronRight className="w-3.5 h-3.5 text-accent opacity-80 shrink-0" />
                 <span className="text-accent font-black uppercase">
-                  {t[jewelryType] || jewelryType}
+                  {(() => {
+                    const catRec = (catalogItems || []).find((i) => i.id === jewelryType);
+                    return catRec ? (lang === "te" ? (catRec.nameTe || catRec.nameEn) : catRec.nameEn) : (t[jewelryType] || jewelryType);
+                  })()}
                 </span>
               </div>
               <button
@@ -473,33 +553,22 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
               {t.presentationMode}
             </label>
             <PresentationSlider
-              items={[
-                {
-                  id: "model" as const,
-                  label: t.model,
-                  icon: <User className="w-4 h-4" />,
-                },
-                {
-                  id: "partial_face" as const,
-                  label: (t as any).partialFace || "Human Model(Partial Face)",
-                  icon: <ScanFace className="w-4 h-4" />,
-                },
-                {
-                  id: "body_part" as const,
-                  label: (t as any).bodyPart || "Body Part Close-Up",
-                  icon: <ScanFace className="w-4 h-4" />,
-                },
-                {
-                  id: "no_face" as const,
-                  label: (t as any).noFace || "Human Model (No Face)",
-                  icon: <UserX className="w-4 h-4" />,
-                },
-                {
-                  id: "bust" as const,
-                  label: t.bust,
-                  icon: <UserRound className="w-4 h-4" />,
-                },
-              ]}
+              items={availablePresentations.map((mode) => ({
+                id: mode.id,
+                label: lang === "te" ? (mode.nameTe || mode.nameEn) : mode.nameEn,
+                icon: (
+                  <>
+                    {mode.id === "model" && <User className="w-4 h-4" />}
+                    {mode.id === "partial_face" && <ScanFace className="w-4 h-4" />}
+                    {mode.id === "body_part" && <ScanFace className="w-4 h-4" />}
+                    {mode.id === "no_face" && <UserX className="w-4 h-4" />}
+                    {mode.id === "bust" && <UserRound className="w-4 h-4" />}
+                    {!["model", "partial_face", "body_part", "no_face", "bust"].includes(mode.id) && (
+                      <Icon icon="lucide:layers" className="w-4 h-4" />
+                    )}
+                  </>
+                ),
+              }))}
               selectedId={jewelryPresentation}
               onSelect={(mode) => setJewelryPresentation(mode as any)}
             />
@@ -523,7 +592,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
             <div className="space-y-2">
               <label className="text-xs font-bold text-[var(--text-emphasis)]">{t.bustDisplay}</label>
               <div className="grid gap-1.5 grid-cols-2 sm:grid-cols-4">
-                {(JEWELRY_BUST_MAPPING[jewelryType] || ["head", "neck", "wrist", "ankle", "finger", "hand", "naturally", "ear"]).map((region) => (
+                {(getJewelryBustMapping(jewelryType)).map((region) => (
                   <button
                     key={region}
                     onClick={() => setJewelryBustRegion(region)}
@@ -551,7 +620,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
       )}
 
       {/* Tab 3 Content: Background selections */}
-      {jewelryTab === "background" && (
+      {(jewelryTab === "bg" || jewelryTab === "background") && (
         <div 
           className="nm-outset nm-panel rounded-3xl p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
@@ -567,70 +636,90 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 </span>
               </div>
               
-              {/* Indoor / Outdoor Segmented Filter */}
+              {/* Dynamic Indoor / Outdoor Segmented Filter from System Lookups */}
               {hasIndoor && hasOutdoor && (
                 <div className="flex p-0.5 rounded-xl nm-inset-sm gap-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setBgCategory("indoor");
-                      if (comp.outdoor.includes(jewelryBackground)) {
-                        setJewelryBackground(comp.indoor[0] || "luxury");
-                      }
-                    }}
-                    className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 ${
-                      bgCategory === "indoor" 
-                        ? "nm-inset-sm text-accent scale-[1.02]" 
-                        : "border-transparent text-[var(--text-emphasis)] text-opacity-60 hover:text-opacity-90"
-                    }`}
-                  >
-                    <LuHomeIcon className="w-3 h-3 text-inherit" />
-                    {lang === "en" ? "Indoor" : "ఇంటి లోపల"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setBgCategory("outdoor");
-                      if (comp.indoor.includes(jewelryBackground)) {
-                        setJewelryBackground(comp.outdoor[0] || "beach");
-                      }
-                    }}
-                    className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 ${
-                      bgCategory === "outdoor" 
-                        ? "nm-inset-sm text-accent scale-[1.02]" 
-                        : "border-transparent text-[var(--text-emphasis)] text-opacity-60 hover:text-opacity-90"
-                    }`}
-                  >
-                    <LuTreesIcon className="w-3 h-3 text-inherit" />
-                    {lang === "en" ? "Outdoor" : "బయట (ప్రకృతి)"}
-                  </button>
+                  {(backgroundTypes || []).map((bgType) => {
+                    const isSelected = bgCategory === bgType.code;
+                    return (
+                      <button
+                        key={bgType.id || bgType.code}
+                        type="button"
+                        onClick={() => {
+                          const target = bgType.code as "indoor" | "outdoor";
+                          setBgCategory(target);
+                          const currentPool = target === "indoor" ? comp.indoor : comp.outdoor;
+                          const otherPool = target === "indoor" ? comp.outdoor : comp.indoor;
+                          if (otherPool.includes(jewelryBackground)) {
+                            setJewelryBackground(currentPool[0] || (target === "indoor" ? "luxury" : "beach"));
+                          }
+                        }}
+                        className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 ${
+                          isSelected 
+                            ? "nm-inset-sm text-accent scale-[1.02]" 
+                            : "border-transparent text-[var(--text-emphasis)] text-opacity-60 hover:text-opacity-90"
+                        }`}
+                      >
+                        {bgType.code === "indoor" ? (
+                          <LuHomeIcon className="w-3 h-3 text-inherit" />
+                        ) : (
+                          <LuTreesIcon className="w-3 h-3 text-inherit" />
+                        )}
+                        {lang === "te" ? bgType.nameTe : bgType.nameEn}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
 
             <PresentationSlider
-              items={(hasIndoor && hasOutdoor
-                ? (bgCategory === "indoor" ? comp.indoor : comp.outdoor)
-                : [...comp.indoor, ...comp.outdoor]
-              ).map((bg) => ({
-                id: bg,
-                label: t[`bg_${bg}`] || bg,
-                icon: (
-                  <>
-                    {bg === "plain" && <Icon icon="lucide:square" className="w-3.5 h-3.5" />}
-                    {bg === "studio" && <Camera className="w-3.5 h-3.5" />}
-                    {bg === "luxury" && <Gem className="w-3.5 h-3.5" />}
-                    {bg === "festival" && <Flame className="w-3.5 h-3.5" />}
-                    {bg === "traditional" && <Flower className="w-3.5 h-3.5" />}
-                    {bg === "wood" && <Icon icon="lucide:tree-pine" className="w-3.5 h-3.5" />}
-                    {bg === "beach" && <Sun className="w-3.5 h-3.5" />}
-                    {bg === "velvet" && <Icon icon="ph:sparkle-bold" className="w-3.5 h-3.5" />}
-                    {bg === "silk" && <Icon icon="ph:waves-bold" className="w-3.5 h-3.5" />}
-                    {bg === "granite" && <Icon icon="lucide:box" className="w-3.5 h-3.5" />}
-                    {bg === "mirror" && <LuSparklesIcon className="w-3.5 h-3.5" />}
-                  </>
-                ),
-              }))}
+              items={(() => {
+                const baseList = (hasIndoor && hasOutdoor
+                  ? (bgCategory === "indoor" ? comp.indoor : comp.outdoor)
+                  : [...comp.indoor, ...comp.outdoor]
+                );
+                const activeDynamic = (dynamicBackgrounds || [])
+                  .filter((b) => (b.workspace === "jewelry" || b.workspace === "all") && b.isActive && (!b.subCategory || b.subCategory === bgCategory));
+                
+                let dynamicList = activeDynamic.map((b) => b.id);
+                if (currentCatalogItem?.backgroundIds && currentCatalogItem.backgroundIds.length > 0) {
+                  const itemBgSet = new Set(currentCatalogItem.backgroundIds);
+                  const linked = activeDynamic.filter((b) => itemBgSet.has(b.id));
+                  if (linked.length > 0) {
+                    dynamicList = linked.map((b) => b.id);
+                  }
+                }
+                const activeBgIdSet = new Set((dynamicBackgrounds || []).filter((b) => b.isActive).map((b) => b.id));
+                const filteredBase = (dynamicBackgrounds && dynamicBackgrounds.length > 0)
+                  ? baseList.filter((id) => !dynamicBackgrounds.some((b) => b.id === id) || activeBgIdSet.has(id))
+                  : baseList;
+                const uniqueIds = Array.from(new Set([...filteredBase, ...dynamicList]));
+                return uniqueIds.map((bg) => {
+                  const dbBg = dynamicBackgrounds?.find((b) => b.id === bg);
+                  const dbName = lang === "te" ? (dbBg?.nameTe || dbBg?.nameEn) : (dbBg?.nameEn || dbBg?.nameTe);
+                  return {
+                    id: bg,
+                    label: dbName || t[`bg_${bg}`] || bg,
+                    icon: (
+                      <>
+                        {bg === "plain" && <Icon icon="lucide:square" className="w-3.5 h-3.5" />}
+                        {bg === "studio" && <Camera className="w-3.5 h-3.5" />}
+                        {bg === "luxury" && <Gem className="w-3.5 h-3.5" />}
+                        {bg === "festival" && <Flame className="w-3.5 h-3.5" />}
+                        {bg === "traditional" && <Flower className="w-3.5 h-3.5" />}
+                        {bg === "wood" && <Icon icon="lucide:tree-pine" className="w-3.5 h-3.5" />}
+                        {bg === "beach" && <Sun className="w-3.5 h-3.5" />}
+                        {bg === "velvet" && <Icon icon="ph:sparkle-bold" className="w-3.5 h-3.5" />}
+                        {bg === "silk" && <Icon icon="ph:waves-bold" className="w-3.5 h-3.5" />}
+                        {bg === "granite" && <Icon icon="lucide:box" className="w-3.5 h-3.5" />}
+                        {bg === "mirror" && <LuSparklesIcon className="w-3.5 h-3.5" />}
+                        {!["plain", "studio", "luxury", "festival", "traditional", "wood", "beach", "velvet", "silk", "granite", "mirror"].includes(bg) && <Palette className="w-3.5 h-3.5" />}
+                      </>
+                    ),
+                  };
+                });
+              })()}
               selectedId={jewelryBackground}
               onSelect={(bg) => setJewelryBackground(bg as any)}
             />
@@ -640,12 +729,12 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
             <div className="space-y-1.5 border-t border-black/5 dark:border-white/5 pt-2">
               <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center justify-between">
                 <span>{t.bgColorLabel}</span>
-                {(!PRESET_COLORS.some(col => col.name.toLowerCase() === jewelryBgColor.toLowerCase() || col.hex.toLowerCase() === jewelryBgColor.toLowerCase()) && jewelryBgColor.startsWith("#")) && (
+                {(!(dynamicPresetColors || PRESET_COLORS).some(col => col.name.toLowerCase() === jewelryBgColor.toLowerCase() || col.hex.toLowerCase() === jewelryBgColor.toLowerCase()) && jewelryBgColor.startsWith("#")) && (
                   <span className="text-[10px] font-mono text-accent uppercase font-semibold">{jewelryBgColor}</span>
                 )}
               </label>
               <div className="flex flex-wrap gap-1.5 justify-center items-center">
-                {PRESET_COLORS.map((col) => {
+                {(dynamicPresetColors || PRESET_COLORS).map((col) => {
                   const isSelected = jewelryBgColor.toLowerCase() === col.name.toLowerCase() || jewelryBgColor.toLowerCase() === col.hex.toLowerCase();
                   return (
                     <button
@@ -664,7 +753,7 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                 })}
                 {/* Custom Color Picker Button with (+) Icon using react-colorful */}
                 {(() => {
-                  const isPreset = PRESET_COLORS.some(
+                  const isPreset = (dynamicPresetColors || PRESET_COLORS).some(
                     (col) => col.name.toLowerCase() === jewelryBgColor.toLowerCase() || col.hex.toLowerCase() === jewelryBgColor.toLowerCase()
                   );
                   const isCustom = !isPreset;
@@ -767,24 +856,28 @@ export const JewelryWorkspace: React.FC<JewelryWorkspaceProps> = ({
                   <LuAccessibilityIcon className="w-3.5 h-3.5 text-accent" />
                   {t.poseLabel}
                 </span>
-                <span className="text-[10px] text-accent/80 font-normal">({getJewelryPoses(jewelryType, jewelryPresentation).length} Options)</span>
+                <span className="text-[10px] text-accent/80 font-normal">({allowedPoses.length} Options)</span>
               </label>
               <PresentationSlider
-                items={getJewelryPoses(jewelryType, jewelryPresentation).map((pose) => ({
-                  id: pose,
-                  label: t[pose] || pose,
-                  icon: pose.includes("no_face") ? <UserX className="w-3.5 h-3.5" /> :
-                        pose.includes("partial_face") || pose.includes("partial_skin") || pose.includes("macro") || pose.includes("lips") || pose.includes("chin") ? <ScanFace className="w-3.5 h-3.5" /> :
-                        pose.includes("neck") || pose.includes("chest") || pose.includes("collarbone") ? <Gem className="w-3.5 h-3.5" /> :
-                        pose.includes("ear") || pose.includes("profile") || pose.includes("tilt") ? <LuRefreshCcwIcon className="w-3.5 h-3.5" /> :
-                        pose.includes("hand") || pose.includes("gesture") || pose.includes("finger") ? <LuSmileIcon className="w-3.5 h-3.5" /> :
-                        pose.includes("wrist") || pose.includes("arm") || pose.includes("cross") ? <Watch className="w-3.5 h-3.5" /> :
-                        pose.includes("hip") || pose.includes("waist") ? <UserRound className="w-3.5 h-3.5" /> :
-                        pose.includes("nose") || pose.includes("veil") || pose.includes("nostril") ? <LuSparklesIcon className="w-3.5 h-3.5" /> :
-                        pose.includes("anklet") || pose.includes("ankle") || pose.includes("foot") || pose.includes("toe") ? <LuFootprintsIcon className="w-3.5 h-3.5" /> :
-                        pose.includes("forehead") || pose.includes("tikka") || pose.includes("passa") || pose.includes("borla") || pose.includes("matha") ? <Crown className="w-3.5 h-3.5" /> :
-                        <User className="w-3.5 h-3.5" />
-                }))}
+                items={allowedPoses.map((pose) => {
+                  const dbPose = dynamicPoses?.find((p) => p.id === pose);
+                  const dbName = lang === "te" ? (dbPose?.nameTe || dbPose?.nameEn) : (dbPose?.nameEn || dbPose?.nameTe);
+                  return {
+                    id: pose,
+                    label: dbName || t[pose] || pose,
+                    icon: pose.includes("no_face") ? <UserX className="w-3.5 h-3.5" /> :
+                          pose.includes("partial_face") || pose.includes("partial_skin") || pose.includes("macro") || pose.includes("lips") || pose.includes("chin") ? <ScanFace className="w-3.5 h-3.5" /> :
+                          pose.includes("neck") || pose.includes("chest") || pose.includes("collarbone") ? <Gem className="w-3.5 h-3.5" /> :
+                          pose.includes("ear") || pose.includes("profile") || pose.includes("tilt") ? <LuRefreshCcwIcon className="w-3.5 h-3.5" /> :
+                          pose.includes("hand") || pose.includes("gesture") || pose.includes("finger") ? <LuSmileIcon className="w-3.5 h-3.5" /> :
+                          pose.includes("wrist") || pose.includes("arm") || pose.includes("cross") ? <Watch className="w-3.5 h-3.5" /> :
+                          pose.includes("hip") || pose.includes("waist") ? <UserRound className="w-3.5 h-3.5" /> :
+                          pose.includes("nose") || pose.includes("veil") || pose.includes("nostril") ? <LuSparklesIcon className="w-3.5 h-3.5" /> :
+                          pose.includes("anklet") || pose.includes("ankle") || pose.includes("foot") || pose.includes("toe") ? <LuFootprintsIcon className="w-3.5 h-3.5" /> :
+                          pose.includes("forehead") || pose.includes("tikka") || pose.includes("passa") || pose.includes("borla") || pose.includes("matha") ? <Crown className="w-3.5 h-3.5" /> :
+                          <User className="w-3.5 h-3.5" />
+                  };
+                })}
                 selectedId={jewelryModelPose}
                 onSelect={(pose) => setJewelryModelPose(pose as any)}
               />

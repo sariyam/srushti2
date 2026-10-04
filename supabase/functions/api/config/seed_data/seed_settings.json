@@ -1,0 +1,1919 @@
+[
+  {
+    "key": "option_mappings",
+    "category": "general",
+    "value": {
+      "garmentCategoryMapping": {
+        "full_wear": [
+          "saree",
+          "kurta",
+          "suit",
+          "salwar",
+          "western_wear",
+          "lehenga",
+          "gown",
+          "sherwani",
+          "dhoti",
+          "tracksuit"
+        ],
+        "top_wear": [
+          "tshirt",
+          "shirt",
+          "crop_top",
+          "blouse",
+          "blazer",
+          "hoodie"
+        ],
+        "bottom_wear": [
+          "jeans",
+          "skirt"
+        ]
+      },
+      "jewelryCategoryMapping": {
+        "neck_ear": [
+          "necklace",
+          "chain",
+          "choker",
+          "pendant"
+        ],
+        "ear_wear": [
+          "earrings"
+        ],
+        "wrist_ring": [
+          "bracelet",
+          "watch",
+          "bangles",
+          "kada",
+          "cufflinks"
+        ],
+        "hip": [
+          "waistband",
+          "hip_chain",
+          "kamarbandh"
+        ],
+        "nose": [
+          "nose_ring",
+          "nose_pin",
+          "nath",
+          "nose",
+          "noise"
+        ],
+        "finger": [],
+        "leg": [
+          "anklet",
+          "payal",
+          "toe_ring",
+          "toe"
+        ],
+        "forehead": [
+          "maang_tikka",
+          "matha_patti",
+          "borla",
+          "passa",
+          "headband"
+        ],
+        "accessories": []
+      },
+      "genderGarmentMapping": {
+        "female": [
+          "saree",
+          "kurta",
+          "suit",
+          "salwar",
+          "western_wear",
+          "tshirt",
+          "jeans",
+          "lehenga",
+          "gown",
+          "skirt",
+          "crop_top",
+          "blouse"
+        ],
+        "male": [
+          "shirt",
+          "kurta",
+          "suit",
+          "western_wear",
+          "tshirt",
+          "jeans",
+          "sherwani",
+          "dhoti",
+          "blazer",
+          "tracksuit",
+          "hoodie"
+        ]
+      },
+      "genderJewelryMapping": {
+        "female": [
+          "necklace",
+          "earrings",
+          "chain",
+          "choker",
+          "pendant",
+          "bracelet",
+          "watch",
+          "bangles",
+          "kada",
+          "cufflinks",
+          "waistband",
+          "hip_chain",
+          "kamarbandh",
+          "nose_ring",
+          "nose_pin",
+          "nath",
+          "nose",
+          "noise",
+          "anklet",
+          "payal",
+          "toe_ring",
+          "toe",
+          "maang_tikka",
+          "matha_patti",
+          "borla",
+          "passa",
+          "headband"
+        ],
+        "male": [
+          "chain",
+          "earrings",
+          "pendant",
+          "bracelet",
+          "watch",
+          "anklet",
+          "payal",
+          "toe_ring",
+          "toe",
+          "cufflinks",
+          "kada",
+          "waistband",
+          "hip_chain",
+          "kamarbandh",
+          "nose_ring",
+          "nose_pin",
+          "nath",
+          "nose",
+          "noise"
+        ]
+      },
+      "jewelryBustMapping": {
+        "earrings": [
+          "head",
+          "ear",
+          "naturally"
+        ],
+        "necklace": [
+          "neck",
+          "naturally"
+        ],
+        "chain": [
+          "neck",
+          "naturally"
+        ],
+        "ring": [
+          "finger",
+          "hand",
+          "naturally"
+        ],
+        "finger_ring": [
+          "finger",
+          "hand",
+          "naturally"
+        ],
+        "thumb_ring": [
+          "finger",
+          "hand",
+          "naturally"
+        ],
+        "solitaire": [
+          "finger",
+          "hand",
+          "naturally"
+        ],
+        "bracelet": [
+          "wrist",
+          "hand",
+          "naturally"
+        ],
+        "watch": [
+          "wrist",
+          "naturally"
+        ],
+        "anklet": [
+          "ankle",
+          "naturally"
+        ],
+        "payal": [
+          "ankle",
+          "naturally"
+        ],
+        "toe_ring": [
+          "ankle",
+          "naturally"
+        ],
+        "toe": [
+          "ankle",
+          "naturally"
+        ],
+        "nose_ring": [
+          "head",
+          "naturally"
+        ],
+        "nose_pin": [
+          "head",
+          "naturally"
+        ],
+        "nath": [
+          "head",
+          "naturally"
+        ],
+        "nose": [
+          "head",
+          "naturally"
+        ],
+        "noise": [
+          "head",
+          "naturally"
+        ],
+        "waistband": [
+          "wrist",
+          "naturally"
+        ],
+        "hip_chain": [
+          "wrist",
+          "naturally"
+        ],
+        "kamarbandh": [
+          "wrist",
+          "naturally"
+        ],
+        "bangles": [
+          "wrist",
+          "naturally"
+        ],
+        "choker": [
+          "neck",
+          "naturally"
+        ],
+        "cufflinks": [
+          "wrist",
+          "naturally"
+        ],
+        "pendant": [
+          "neck",
+          "naturally"
+        ],
+        "kada": [
+          "wrist",
+          "naturally"
+        ],
+        "maang_tikka": [
+          "head",
+          "naturally"
+        ],
+        "matha_patti": [
+          "head",
+          "naturally"
+        ],
+        "borla": [
+          "head",
+          "naturally"
+        ],
+        "passa": [
+          "head",
+          "naturally"
+        ],
+        "headband": [
+          "head",
+          "naturally"
+        ]
+      },
+      "garmentBgCompatibility": {
+        "model": {
+          "indoor": [
+            "plain",
+            "studio",
+            "festival",
+            "luxury",
+            "vintage",
+            "modern_office"
+          ],
+          "outdoor": [
+            "traditional",
+            "royal",
+            "urban"
+          ]
+        },
+        "partial_face": {
+          "indoor": [
+            "plain",
+            "studio",
+            "festival",
+            "luxury",
+            "vintage",
+            "modern_office"
+          ],
+          "outdoor": [
+            "traditional",
+            "royal",
+            "urban"
+          ]
+        },
+        "no_face": {
+          "indoor": [
+            "plain",
+            "studio",
+            "festival",
+            "luxury",
+            "vintage",
+            "modern_office"
+          ],
+          "outdoor": [
+            "traditional",
+            "royal",
+            "urban"
+          ]
+        },
+        "mannequin": {
+          "indoor": [
+            "plain",
+            "studio",
+            "festival",
+            "luxury",
+            "vintage",
+            "modern_office"
+          ],
+          "outdoor": [
+            "traditional"
+          ]
+        },
+        "hanger": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury",
+            "vintage"
+          ],
+          "outdoor": []
+        },
+        "ghost": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury"
+          ],
+          "outdoor": []
+        },
+        "flat_lay": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury",
+            "vintage"
+          ],
+          "outdoor": []
+        },
+        "folded": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury",
+            "vintage"
+          ],
+          "outdoor": []
+        },
+        "shelf": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury",
+            "vintage",
+            "modern_office"
+          ],
+          "outdoor": []
+        },
+        "shopwindow": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury",
+            "vintage",
+            "modern_office",
+            "festival"
+          ],
+          "outdoor": [
+            "urban"
+          ]
+        }
+      },
+      "jewelryBgCompatibility": {
+        "model": {
+          "indoor": [
+            "plain",
+            "studio"
+          ],
+          "outdoor": []
+        },
+        "partial_face": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury",
+            "silk",
+            "mirror"
+          ],
+          "outdoor": []
+        },
+        "no_face": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury",
+            "silk",
+            "mirror"
+          ],
+          "outdoor": []
+        },
+        "bust": {
+          "indoor": [
+            "plain",
+            "studio",
+            "luxury",
+            "traditional",
+            "wood",
+            "velvet",
+            "silk",
+            "granite",
+            "mirror"
+          ],
+          "outdoor": [
+            "beach"
+          ]
+        }
+      },
+      "garmentPosesByCategory": {
+        "full_wear": [
+          "standing_front",
+          "standing_side",
+          "standing_three_quarter",
+          "walking_candid",
+          "sitting_chair",
+          "sitting_casual"
+        ],
+        "top_wear": [
+          "top_upper_portrait",
+          "top_standing_mid",
+          "top_three_quarter",
+          "top_shoulder_profile",
+          "top_casual_cross",
+          "top_front_direct"
+        ],
+        "bottom_wear": [
+          "bottom_full_leg",
+          "bottom_walking_step",
+          "bottom_side_leg",
+          "bottom_seated_cross",
+          "bottom_3q_lower",
+          "bottom_front_stance"
+        ],
+        "partial_face_full": [
+          "partial_face_chin_torso",
+          "partial_face_shoulder_profile",
+          "partial_face_lips_mid",
+          "partial_face_back_shoulder"
+        ],
+        "partial_face_top": [
+          "partial_face_top_collar_crop",
+          "partial_face_top_jawline_chest",
+          "partial_face_top_side_profile",
+          "partial_face_top_mid_torso"
+        ],
+        "partial_face_bottom": [
+          "partial_face_bottom_waist_chest",
+          "partial_face_bottom_hip_stride",
+          "partial_face_bottom_seated_lap",
+          "partial_face_bottom_side_profile"
+        ],
+        "no_face_full": [
+          "no_face_full_body_crop",
+          "no_face_torso_hips_drape",
+          "no_face_walking_stride",
+          "no_face_seated_outfit"
+        ],
+        "no_face_top": [
+          "no_face_top_chest_shoulders",
+          "no_face_top_front_fit",
+          "no_face_top_side_sleeve",
+          "no_face_top_back_detail"
+        ],
+        "no_face_bottom": [
+          "no_face_bottom_waist_to_toe",
+          "no_face_bottom_side_seam",
+          "no_face_bottom_walking_stride",
+          "no_face_bottom_seated_trouser"
+        ]
+      },
+      "jewelryPosesByCategory": {
+        "partial_face_neck": [
+          "partial_face_lips_collarbone",
+          "partial_face_chin_neck_drape",
+          "partial_face_jawline_decollete",
+          "partial_face_neck_side_throat"
+        ],
+        "partial_face_ear": [
+          "partial_face_cheek_ear_close",
+          "partial_face_jawline_macro",
+          "partial_face_ear_neck_profile",
+          "partial_face_hairline_ear_crop"
+        ],
+        "partial_face_nose": [
+          "partial_face_nose_lips_profile",
+          "partial_face_nostril_cheek_macro",
+          "partial_face_lips_nose_front"
+        ],
+        "partial_face_forehead": [
+          "partial_face_forehead_brows_crop",
+          "partial_face_hairline_temple_macro",
+          "partial_face_upper_bridge_forehead"
+        ],
+        "partial_skin_wrist": [
+          "partial_skin_wrist_pulse_macro",
+          "partial_skin_forearm_wrist_drape",
+          "partial_skin_hand_wrist_profile"
+        ],
+        "partial_skin_finger": [
+          "partial_skin_finger_knuckle_macro",
+          "partial_skin_hand_resting_skin",
+          "partial_skin_interlocked_fingers"
+        ],
+        "partial_skin_hip": [
+          "partial_skin_waist_hip_curve_macro",
+          "partial_skin_navel_hip_drape",
+          "partial_skin_lower_waist_profile"
+        ],
+        "partial_skin_leg": [
+          "partial_skin_ankle_foot_macro",
+          "partial_skin_toes_instep_close",
+          "partial_skin_heel_anklet_profile"
+        ],
+        "partial_skin_accessories": [
+          "partial_skin_chest_lapel_macro",
+          "partial_skin_wrist_cuff_close"
+        ],
+        "no_face_neck": [
+          "no_face_neck_collarbone_drape",
+          "no_face_decollete_torso",
+          "no_face_throat_collarbone_macro"
+        ],
+        "no_face_ear": [
+          "no_face_side_neck_ear_macro",
+          "no_face_ear_nape_profile",
+          "no_face_shoulder_ear_line"
+        ],
+        "no_face_wrist": [
+          "no_face_wrist_hand_waist",
+          "no_face_forearm_cross_body",
+          "no_face_hand_lap_drape"
+        ],
+        "no_face_finger": [
+          "no_face_finger_touching_hip",
+          "no_face_interlocked_hands_chest",
+          "no_face_finger_ring_lap"
+        ],
+        "no_face_hip": [
+          "no_face_waist_midriff_front",
+          "no_face_hip_curve_side",
+          "no_face_back_waist_drape"
+        ],
+        "no_face_leg": [
+          "no_face_anklet_stepping",
+          "no_face_seated_feet_drape",
+          "no_face_toe_ring_step"
+        ],
+        "no_face_nose": [
+          "no_face_side_nostril_neck",
+          "no_face_chin_lips_nose"
+        ],
+        "no_face_forehead": [
+          "no_face_forehead_hairline_only",
+          "no_face_top_crown_hair"
+        ],
+        "no_face_accessories": [
+          "no_face_chest_shoulder_accessory",
+          "no_face_arm_wrist_cuff"
+        ],
+        "partial_face": [
+          "partial_face_jawline_macro",
+          "partial_face_lips_collarbone",
+          "partial_face_cheek_ear_close",
+          "partial_face_nose_lips_profile",
+          "partial_face_chin_neck_drape",
+          "partial_face_forehead_brows_crop"
+        ],
+        "neck_ear": [
+          "neck_collarbone",
+          "neck_chest_portrait",
+          "neck_3q_shoulder",
+          "neck_royal_gaze",
+          "neck_front_direct",
+          "neck_side_drape"
+        ],
+        "ear_wear": [
+          "side_ear_profile",
+          "ear_hair_tuck",
+          "ear_head_tilt",
+          "ear_3q_face",
+          "ear_front_balanced",
+          "ear_over_shoulder"
+        ],
+        "wrist_ring": [
+          "wrist_hand_display",
+          "wrist_resting_lap",
+          "wrist_cross_arms",
+          "wrist_hand_chest",
+          "wrist_side_arm",
+          "wrist_gesture"
+        ],
+        "hip": [
+          "hip_waist_mid",
+          "hip_hands_on_waist",
+          "hip_royal_standing",
+          "hip_side_turn",
+          "hip_saree_drape",
+          "hip_front_direct"
+        ],
+        "nose": [
+          "nose_close_profile",
+          "nose_front_portrait",
+          "nose_3q_headturn",
+          "nose_bridal_veil",
+          "nose_soft_smile",
+          "nose_macro_focus"
+        ],
+        "finger": [
+          "finger_hand_gesture",
+          "finger_chin_rest",
+          "finger_hands_clasped",
+          "finger_holding_prop",
+          "finger_macro_ring",
+          "finger_side_hand"
+        ],
+        "leg": [
+          "anklet_floor_cross_legged",
+          "anklet_floor_legs_extended",
+          "anklet_floor_kneeling_mehendi"
+        ],
+        "forehead": [
+          "forehead_tikka_center",
+          "forehead_mathapatti_frame",
+          "forehead_3q_headturn",
+          "forehead_bridal_veil",
+          "forehead_side_passa",
+          "forehead_front_portrait"
+        ],
+        "accessories": [
+          "acc_forehead_tikka",
+          "acc_front_direct",
+          "acc_3q_gaze",
+          "acc_side_profile"
+        ]
+      }
+    },
+    "description": "Complete option relationships, category grouping, bust display mounts, and background compatibility rules"
+  },
+  {
+    "key": "preset_colors",
+    "category": "general",
+    "value": [
+      {
+        "name": "Cream White",
+        "hex": "#fdfbf7"
+      },
+      {
+        "name": "Soft Charcoal",
+        "hex": "#2b2b2b"
+      },
+      {
+        "name": "Sage Green",
+        "hex": "#d1d9cf"
+      },
+      {
+        "name": "Royal Gold",
+        "hex": "#f0dfbd"
+      },
+      {
+        "name": "Powder Blue",
+        "hex": "#d5e2eb"
+      },
+      {
+        "name": "Blush Pink",
+        "hex": "#f2e1e4"
+      },
+      {
+        "name": "Terracotta",
+        "hex": "#dfc0b5"
+      }
+    ],
+    "description": "Predefined solid studio background colors with hex codes"
+  },
+  {
+    "key": "hero_slides",
+    "category": "general",
+    "value": [
+      {
+        "id": "slide-dress",
+        "image": "/showcase/tryons/3.png",
+        "fallback": "/showcase/hero-dress-fallback.jpg",
+        "titleEn": "Designer Dress & Fashion Studio Shoot",
+        "titleTe": "డిజైనర్ డ్రెస్ & ఫ్యాషన్ స్టూడియో షూట్",
+        "tagEn": "Professional Fashion Lighting",
+        "tagTe": "ప్రొఫెషనల్ ఫ్యాషన్ లైటింగ్",
+        "highlightEn": "Authentic Indian Model • 100% Studio Clarity",
+        "highlightTe": "భారతీయ మోడల్ • పర్ఫెక్ట్ స్టూడియో క్వాలిటీ"
+      },
+      {
+        "id": "slide-watch",
+        "image": "/showcase/tryons/10.png",
+        "fallback": "/showcase/hero-watch-fallback.jpg",
+        "titleEn": "Luxury Watch & Premium Product Shoot",
+        "titleTe": "లగ్జరీ వాచ్ & ప్రీమియం ప్రొడక్ట్ షూట్",
+        "tagEn": "Luxury Product Lighting",
+        "tagTe": "లగ్జరీ ప్రొడక్ట్ లైటింగ్",
+        "highlightEn": "Premium Details • Instant Catalog Ready",
+        "highlightTe": "ప్రీమియం డిటైల్స్ • క్యాటలాగ్ రెడీ"
+      },
+      {
+        "id": "slide-saree",
+        "image": "/showcase/tryons/3.png",
+        "fallback": "/showcase/hero-saree-fallback.jpg",
+        "titleEn": "Royal Kanjeevaram Silk Saree Shoot",
+        "titleTe": "రాయల్ కాంచీపురం పట్టుచీరల స్టూడియో షూట్",
+        "tagEn": "Heritage Studio Lighting",
+        "tagTe": "హెరిటేజ్ స్టూడియో లైటింగ్",
+        "highlightEn": "Authentic Indian Model • 100% Studio Clarity",
+        "highlightTe": "భారతీయ మోడల్ • పర్ఫెక్ట్ స్టూడియో క్వాలిటీ"
+      }
+    ],
+    "description": "Hero showcase carousel slides for landing page promotion"
+  },
+  {
+    "key": "simulated_mockups",
+    "category": "general",
+    "value": {
+      "garment": {
+        "saree": {
+          "model": {
+            "female": "/showcase/hero-saree.jpg",
+            "male": "/showcase/hero-lehenga.jpg"
+          },
+          "mannequin": "/showcase/showcase-garment-before.jpg",
+          "hanger": "/showcase/showcase-garment-before.jpg",
+          "ghost": "/showcase/hero-saree.jpg"
+        },
+        "tshirt": {
+          "model": {
+            "male": "/showcase/hero-lehenga.jpg",
+            "female": "/showcase/hero-saree.jpg"
+          },
+          "mannequin": "/showcase/showcase-garment-before.jpg",
+          "hanger": "/showcase/showcase-garment-before.jpg",
+          "ghost": "/showcase/showcase-garment-after.jpg"
+        },
+        "jeans": {
+          "model": {
+            "male": "/showcase/hero-lehenga.jpg",
+            "female": "/showcase/hero-saree.jpg"
+          },
+          "mannequin": "/showcase/showcase-garment-before.jpg",
+          "hanger": "/showcase/showcase-garment-before.jpg",
+          "ghost": "/showcase/showcase-garment-after.jpg"
+        },
+        "shirt": {
+          "model": {
+            "male": "/showcase/hero-lehenga.jpg",
+            "female": "/showcase/hero-saree.jpg"
+          },
+          "mannequin": "/showcase/showcase-garment-before.jpg",
+          "hanger": "/showcase/showcase-garment-before.jpg",
+          "ghost": "/showcase/showcase-garment-after.jpg"
+        },
+        "western_wear": {
+          "model": {
+            "male": "/showcase/hero-lehenga.jpg",
+            "female": "/showcase/hero-saree.jpg"
+          },
+          "mannequin": "/showcase/showcase-garment-before.jpg",
+          "hanger": "/showcase/showcase-garment-before.jpg",
+          "ghost": "/showcase/showcase-garment-after.jpg"
+        },
+        "kurta": {
+          "model": {
+            "male": "/showcase/hero-lehenga.jpg",
+            "female": "/showcase/hero-saree.jpg"
+          },
+          "mannequin": "/showcase/showcase-garment-before.jpg",
+          "hanger": "/showcase/showcase-garment-before.jpg",
+          "ghost": "/showcase/showcase-garment-after.jpg"
+        },
+        "suit": {
+          "model": {
+            "male": "/showcase/hero-lehenga.jpg",
+            "female": "/showcase/hero-saree.jpg"
+          },
+          "mannequin": "/showcase/showcase-garment-before.jpg",
+          "hanger": "/showcase/showcase-garment-before.jpg",
+          "ghost": "/showcase/showcase-garment-after.jpg"
+        },
+        "salwar": {
+          "model": {
+            "male": "/showcase/hero-lehenga.jpg",
+            "female": "/showcase/hero-saree.jpg"
+          },
+          "mannequin": "/showcase/showcase-garment-before.jpg",
+          "hanger": "/showcase/showcase-garment-before.jpg",
+          "ghost": "/showcase/showcase-garment-after.jpg"
+        }
+      },
+      "jewelry": {
+        "earrings": {
+          "model": {
+            "female": "/showcase/hero-jewelry.jpg",
+            "male": "/showcase/showcase-jewelry-after.jpg"
+          },
+          "bust": {
+            "head": "/showcase/hero-jewelry.jpg",
+            "neck": "/showcase/showcase-jewelry-after.jpg",
+            "wrist": "/showcase/showcase-jewelry-before.jpg"
+          }
+        },
+        "necklace": {
+          "model": {
+            "female": "/showcase/showcase-jewelry-after.jpg",
+            "male": "/showcase/hero-jewelry.jpg"
+          },
+          "bust": {
+            "head": "/showcase/showcase-jewelry-after.jpg",
+            "neck": "/showcase/showcase-jewelry-after.jpg",
+            "wrist": "/showcase/showcase-jewelry-before.jpg"
+          }
+        },
+        "chain": {
+          "model": {
+            "female": "/showcase/showcase-jewelry-after.jpg",
+            "male": "/showcase/hero-jewelry.jpg"
+          },
+          "bust": {
+            "head": "/showcase/showcase-jewelry-after.jpg",
+            "neck": "/showcase/showcase-jewelry-after.jpg",
+            "wrist": "/showcase/showcase-jewelry-before.jpg"
+          }
+        },
+        "ring": {
+          "model": {
+            "female": "/showcase/hero-jewelry.jpg",
+            "male": "/showcase/hero-jewelry.jpg"
+          },
+          "bust": {
+            "head": "/showcase/hero-jewelry.jpg",
+            "neck": "/showcase/hero-jewelry.jpg",
+            "wrist": "/showcase/showcase-jewelry-before.jpg"
+          }
+        },
+        "bracelet": {
+          "model": {
+            "female": "/showcase/showcase-jewelry-after.jpg",
+            "male": "/showcase/hero-jewelry.jpg"
+          },
+          "bust": {
+            "head": "/showcase/showcase-jewelry-after.jpg",
+            "neck": "/showcase/showcase-jewelry-after.jpg",
+            "wrist": "/showcase/showcase-jewelry-before.jpg"
+          }
+        },
+        "watch": {
+          "model": {
+            "female": "/showcase/hero-jewelry.jpg",
+            "male": "/showcase/hero-jewelry.jpg"
+          },
+          "bust": {
+            "head": "/showcase/hero-jewelry.jpg",
+            "neck": "/showcase/hero-jewelry.jpg",
+            "wrist": "/showcase/showcase-jewelry-before.jpg"
+          }
+        }
+      }
+    },
+    "description": "High quality themed mockups of Indian garments and jewelry for preview and offline demonstration"
+  },
+  {
+    "key": "image_models",
+    "category": "ai",
+    "value": [
+      {
+        "id": "gpt_image_2_5_sunburst",
+        "provider": "openai",
+        "name": "OpenAI GPT-Image-2.5 Sunburst (gpt-image-2.5-sunburst)",
+        "price": 0.08,
+        "unit": "image",
+        "desc": "OpenAI flagship high-fidelity studio image synthesis & editing model with exceptional photorealism, texture preservation & precise composition control"
+      }
+    ],
+    "description": "Configured AI image generation models and default provider pricing"
+  },
+  {
+    "key": "image_resolutions",
+    "category": "pricing",
+    "value": {
+      "standard": [
+        {
+          "id": "1k",
+          "name": "1024 x 1024 px (Standard HD)",
+          "multiplier": 1,
+          "labelEn": "1024 x 1024 px (Standard HD)",
+          "labelTe": "1024 x 1024 పిక్సెల్స్ (స్టాండర్డ్ HD)"
+        },
+        {
+          "id": "2k",
+          "name": "2048 x 2048 px (Ultra HD / 2K)",
+          "multiplier": 1.6,
+          "labelEn": "2048 x 2048 px (Ultra HD / 2K)",
+          "labelTe": "2048 x 2048 పిక్సెల్స్ (అల్ట్రా HD / 2K)"
+        },
+        {
+          "id": "4k",
+          "name": "4096 x 4096 px (Super Resolution / 4K)",
+          "multiplier": 2.6,
+          "labelEn": "4096 x 4096 px (Super Resolution / 4K)",
+          "labelTe": "4096 x 4096 పిక్సెల్స్ (సూపర్ రెజల్యూషన్ / 4K)"
+        }
+      ],
+      "gptImage": [
+        {
+          "id": "1024x1024",
+          "name": "1024 x 1024 px (1K Square)",
+          "multiplier": 1,
+          "labelEn": "1024 x 1024 px (1K Square)",
+          "labelTe": "1024 x 1024 పిక్సెల్స్ (1K స్క్వేర్)"
+        },
+        {
+          "id": "1536x1024",
+          "name": "1536 x 1024 px (1K Landscape)",
+          "multiplier": 1,
+          "labelEn": "1536 x 1024 px (1K Landscape)",
+          "labelTe": "1536 x 1024 పిక్సెల్స్ (1K ల్యాండ్‌స్కేప్)"
+        },
+        {
+          "id": "1024x1536",
+          "name": "1024 x 1536 px (1K Portrait)",
+          "multiplier": 1,
+          "labelEn": "1024 x 1536 px (1K Portrait)",
+          "labelTe": "1024 x 1536 పిక్సెల్స్ (1K పోర్ట్రెయిట్)"
+        },
+        {
+          "id": "2048x2048",
+          "name": "2048 x 2048 px (2K Square)",
+          "multiplier": 1.5,
+          "labelEn": "2048 x 2048 px (2K Square)",
+          "labelTe": "2048 x 2048 పిక్సెల్స్ (2K స్క్వేర్)"
+        },
+        {
+          "id": "2048x1152",
+          "name": "2048 x 1152 px (2K Landscape)",
+          "multiplier": 1.5,
+          "labelEn": "2048 x 1152 px (2K Landscape)",
+          "labelTe": "2048 x 1152 పిక్సెల్స్ (2K ల్యాండ్‌స్కేప్)"
+        },
+        {
+          "id": "1152x2048",
+          "name": "1152 x 2048 px (2K Portrait)",
+          "multiplier": 1.5,
+          "labelEn": "1152 x 2048 px (2K Portrait)",
+          "labelTe": "1152 x 2048 పిక్సెల్స్ (2K పోర్ట్రెయిట్)"
+        },
+        {
+          "id": "3840x2160",
+          "name": "3840 x 2160 px (4K Landscape)",
+          "multiplier": 2,
+          "labelEn": "3840 x 2160 px (4K Landscape)",
+          "labelTe": "3840 x 2160 పిక్సెల్స్ (4K ల్యాండ్‌స్కేప్)"
+        },
+        {
+          "id": "2160x3840",
+          "name": "2160 x 3840 px (4K Portrait)",
+          "multiplier": 2,
+          "labelEn": "2160 x 3840 px (4K Portrait)",
+          "labelTe": "2160 x 3840 పిక్సెల్స్ (4K పోర్ట్రెయిట్)"
+        },
+        {
+          "id": "3840x3840",
+          "name": "3840 x 3840 px (4K Square)",
+          "multiplier": 2,
+          "labelEn": "3840 x 3840 px (4K Square)",
+          "labelTe": "3840 x 3840 పిక్సెల్స్ (4K స్క్వేర్)"
+        }
+      ]
+    },
+    "description": "Resolution tiers, dimensions, and multiplier matrix"
+  },
+  {
+    "key": "pricing_matrix",
+    "category": "pricing",
+    "value": {
+      "gptImagePricing": {
+        "low": {
+          "1024x1024": 0.006,
+          "1024x1536": 0.005,
+          "1536x1024": 0.005
+        },
+        "medium": {
+          "1024x1024": 0.053,
+          "1024x1536": 0.041,
+          "1536x1024": 0.041
+        },
+        "high": {
+          "1024x1024": 0.211,
+          "1024x1536": 0.165,
+          "1536x1024": 0.165
+        }
+      },
+      "creditSettings": {
+        "creditsPerInr": 1,
+        "creditsPerUsd": 85,
+        "costPerImageGenLow": 1,
+        "costPerImageGenMed": 5,
+        "costPerImageGenHigh": 18,
+        "profitMarginPercent": 30,
+        "pricingMode": "cost_plus_margin",
+        "autoCreditDeduction": true,
+        "lowBalanceThreshold": 5
+      },
+      "rechargePacks": {
+        "inr": [
+          {
+            "amount": 200,
+            "credits": 200,
+            "bonus": 20,
+            "label": "+20 Bonus Credits",
+            "badge": null
+          },
+          {
+            "amount": 500,
+            "credits": 500,
+            "bonus": 100,
+            "label": "+100 Bonus Credits",
+            "badge": "Most Popular",
+            "badgeTe": "అత్యంత ప్రజాదరణ"
+          },
+          {
+            "amount": 1000,
+            "credits": 1000,
+            "bonus": 300,
+            "label": "+300 Bonus Credits",
+            "badge": "Pro Value",
+            "badgeTe": "ఉత్తమ విలువ"
+          },
+          {
+            "amount": 2500,
+            "credits": 2500,
+            "bonus": 1000,
+            "label": "+1000 Bonus Credits",
+            "badge": "Mega Pack",
+            "badgeTe": "మెగా ప్యాక్"
+          }
+        ],
+        "usd": [
+          {
+            "amount": 10,
+            "credits": 850,
+            "bonus": 100,
+            "label": "+100 Bonus Credits",
+            "badge": null
+          },
+          {
+            "amount": 25,
+            "credits": 2125,
+            "bonus": 400,
+            "label": "+400 Bonus Credits",
+            "badge": "Most Popular",
+            "badgeTe": "అత్యంత ప్రజాదరణ"
+          },
+          {
+            "amount": 50,
+            "credits": 4250,
+            "bonus": 1000,
+            "label": "+1000 Bonus Credits",
+            "badge": "Pro Value",
+            "badgeTe": "ఉత్తమ విలువ"
+          },
+          {
+            "amount": 100,
+            "credits": 8500,
+            "bonus": 2500,
+            "label": "+2500 Bonus Credits",
+            "badge": "Mega Pack",
+            "badgeTe": "మెగా ప్యాక్"
+          }
+        ]
+      }
+    },
+    "description": "Raw API cost matrix and studio credit pricing configuration"
+  },
+  {
+    "key": "ui_translations_en",
+    "category": "general",
+    "value": {
+      "title": "Srushti AI",
+      "subtitle": "Business to Brand",
+      "languageToggle": "తెలుగు",
+      "lightTheme": "Light",
+      "darkTheme": "Dark",
+      "navGarment": "Garments",
+      "navJewelry": "Jewelry",
+      "navBilling": "Admin Panel",
+      "navAdmin": "Admin Panel",
+      "navSettings": "Profile",
+      "garmentTitle": "Garment Photography",
+      "garmentSubtitle": "Sarees, T-shirts, Jeans, and more",
+      "jewelryTitle": "Jewelry Photography",
+      "jewelrySubtitle": "Necklaces, earrings, and rings",
+      "billingTitle": "Admin Panel",
+      "adminTitle": "Admin Panel",
+      "billingSubtitle": "Configure AI models, pricing, and API keys",
+      "adminSubtitle": "Configure AI models, pricing, and API keys",
+      "settingsTitle": "User Profile",
+      "settingsSubtitle": "Manage your profile details, theme, and preferences",
+      "settingsThemeLabel": "Choose Theme / థీమ్ ఎంచుకోండి",
+      "settingsLanguageLabel": "Choose Language / భాష ఎంచుకోండి",
+      "uploadTitle": "Product photo should be a clear front view with all details visible",
+      "uploadSubtitle": "Drag photo here or tap to capture",
+      "originalLabel": "Original Photo",
+      "finalLabel": "Final AI Photo",
+      "generating": "Creating Photographic Magic...",
+      "generateBtn": "Create Photo",
+      "retryBtn": "Try Again",
+      "downloadBtn": "Save to Phone",
+      "shareBtn": "Share Photo",
+      "productType": "Product Type",
+      "presentationMode": "Presentation Mode",
+      "useModel": "Put on Human Model?",
+      "genderLabel": "Model Gender",
+      "poseLabel": "Model Pose / Camera Angle",
+      "standing_front": "Standing Front Pose",
+      "standing_side": "Standing Side Profile",
+      "standing_three_quarter": "Three-Quarter Standing",
+      "walking_candid": "Walking Candid Pose",
+      "sitting_chair": "Sitting on Chair",
+      "sitting_casual": "Sitting Casually",
+      "top_upper_portrait": "Upper Body Portrait",
+      "top_standing_mid": "Mid-Shot Standing",
+      "top_three_quarter": "3/4 Upper Body Angle",
+      "top_shoulder_profile": "Shoulder & Collar Focus",
+      "top_casual_cross": "Arms Crossed Pose",
+      "top_front_direct": "Direct Front Chest Shot",
+      "bottom_full_leg": "Waist-to-Ankle Shot",
+      "bottom_walking_step": "Walking Step Motion",
+      "bottom_side_leg": "Side Leg Profile",
+      "bottom_seated_cross": "Seated Leg Showcase",
+      "bottom_3q_lower": "3/4 Lower Body Angle",
+      "bottom_front_stance": "Wide Stance Stride",
+      "partial_face_chin_torso": "Chin to Torso Crop",
+      "partial_face_shoulder_profile": "Shoulder Profile Angle",
+      "partial_face_lips_mid": "Lips to Midsection",
+      "partial_face_back_shoulder": "Over Back Shoulder Angle",
+      "partial_face_top_collar_crop": "Collarbone & Neck Crop",
+      "partial_face_top_jawline_chest": "Jawline to Chest Framing",
+      "partial_face_top_side_profile": "Side Profile Jaw Crop",
+      "partial_face_top_mid_torso": "Mid-Torso Top View",
+      "partial_face_bottom_waist_chest": "Chest to Knee Framing",
+      "partial_face_bottom_hip_stride": "Hip Stride Motion Crop",
+      "partial_face_bottom_seated_lap": "Seated Lap Framing",
+      "partial_face_bottom_side_profile": "Side Lower Body Profile",
+      "no_face_full_body_crop": "Headless Full Body Crop",
+      "no_face_torso_hips_drape": "Torso & Hips Drape Focus",
+      "no_face_walking_stride": "Headless Walking Stride",
+      "no_face_seated_outfit": "Headless Seated Outfit",
+      "no_face_top_chest_shoulders": "Chest & Shoulders Headless",
+      "no_face_top_front_fit": "Direct Front Headless Fit",
+      "no_face_top_side_sleeve": "Side Sleeve Detail",
+      "no_face_top_back_detail": "Back Detail Headless View",
+      "no_face_bottom_waist_to_toe": "Waist-to-Toe Headless",
+      "no_face_bottom_side_seam": "Side Seam Fit View",
+      "no_face_bottom_walking_stride": "Walking Leg Stride",
+      "no_face_bottom_seated_trouser": "Seated Trouser Fit",
+      "neck_collarbone": "Neck & Collarbone Focus",
+      "neck_chest_portrait": "High Chest Portrait",
+      "neck_3q_shoulder": "3/4 Shoulder Angle",
+      "neck_royal_gaze": "Regal Royal Posture",
+      "neck_front_direct": "Direct Front Neckline",
+      "neck_side_drape": "Side Angle Drape",
+      "side_ear_profile": "Ear Profile & Jawline",
+      "ear_hair_tuck": "Hair Tucked Behind Ear",
+      "ear_head_tilt": "Gentle Head Tilt Profile",
+      "ear_3q_face": "3/4 Face Framing Angle",
+      "ear_front_balanced": "Both Ears Frontal Shot",
+      "ear_over_shoulder": "Over-The-Shoulder Turn",
+      "wrist_hand_display": "Wrist & Arm Pose",
+      "wrist_resting_lap": "Resting Hand on Lap",
+      "wrist_cross_arms": "Crossed Arms Wrist Angle",
+      "wrist_hand_chest": "Hand Placed Near Chest",
+      "wrist_side_arm": "Side Arm Extension",
+      "wrist_gesture": "Fluid Hand Gesture",
+      "hip_waist_mid": "Midsection Waist Focus",
+      "hip_hands_on_waist": "Hands-on-Waist 3/4 Pose",
+      "hip_royal_standing": "Regal Standing Waistline",
+      "hip_side_turn": "Side Hip Curve Angle",
+      "hip_saree_drape": "Saree Draped Waistline",
+      "hip_front_direct": "Direct Frontal Midsection",
+      "nose_close_profile": "Nostril Profile Focus",
+      "nose_front_portrait": "Direct Facial Portrait",
+      "nose_3q_headturn": "3/4 Head Turn Angle",
+      "nose_bridal_veil": "Bridal Veil Side Angle",
+      "nose_soft_smile": "Subtle Smile Close-Up",
+      "nose_macro_focus": "Ultra Macro Nosepin",
+      "hand_face_gesture": "Hand-to-Face Gesture",
+      "finger_hand_gesture": "Hand & Finger Close-Up",
+      "finger_chin_rest": "Hand Resting on Chin",
+      "finger_hands_clasped": "Hands Clasped Together",
+      "finger_holding_prop": "Delicate Hand Pose",
+      "finger_macro_ring": "Macro Ring Diamond Focus",
+      "finger_side_hand": "Side Profile Hand Placement",
+      "anklet_floor_cross_legged": "Cross-Legged Floor Pose",
+      "anklet_floor_legs_extended": "Floor Seated Legs Extended",
+      "anklet_floor_kneeling_mehendi": "Floor Kneeling / Mehendi Pose",
+      "anklet_ankle_close": "Lower Leg & Ankle Focus",
+      "anklet_step_forward": "Forward Step Motion",
+      "anklet_seated_foot": "Seated Foot Display Pose",
+      "anklet_side_foot": "Side Ankle & Heel Angle",
+      "anklet_both_feet": "Both Feet Draped Together",
+      "anklet_toering_focus": "Toe Ring & Ankle Focus",
+      "matha_patti": "Royal Matha Patti",
+      "borla": "Traditional Borla",
+      "passa": "Elegant Jhumar / Passa",
+      "headband": "Hair Headband",
+      "acc_forehead_tikka": "Forehead Maang Tikka Focus",
+      "acc_front_direct": "Direct Accessory Portrait",
+      "acc_3q_gaze": "3/4 Accessory Framing",
+      "acc_side_profile": "Side Profile Accessory Shot",
+      "forehead_tikka_center": "Center Forehead Tikka Focus",
+      "forehead_mathapatti_frame": "Full Hairline Matha Patti",
+      "forehead_3q_headturn": "3/4 Head Turn Angle",
+      "forehead_bridal_veil": "Bridal Dupatta / Veil Frame",
+      "forehead_side_passa": "Side Temple Passa Focus",
+      "forehead_front_portrait": "Direct Forehead Beauty Portrait",
+      "three_quarter_gaze": "Three-Quarter Elegance",
+      "front_direct_portrait": "Direct Frontal Portrait",
+      "partial_face_jawline_macro": "Macro Jawline & Ear Profile",
+      "partial_face_lips_collarbone": "Macro Lips to Collarbone Crop",
+      "partial_face_chin_neck_drape": "Chin & Neckline Drape Macro",
+      "partial_face_jawline_decollete": "Jawline & Décolletage Profile",
+      "partial_face_neck_side_throat": "Side Neck & Throat Skin Close-Up",
+      "partial_face_cheek_ear_close": "Cheekbone & Earlobe Macro",
+      "partial_face_ear_neck_profile": "Earlobe to Neck Profile",
+      "partial_face_hairline_ear_crop": "Hairline & Ear Framing",
+      "partial_face_nose_lips_profile": "Nose & Lips Profile Angle",
+      "partial_face_nostril_cheek_macro": "Nostril & Cheekbone Macro",
+      "partial_face_lips_nose_front": "Lower Face Lips & Nose Framing",
+      "partial_face_forehead_brows_crop": "Forehead & Eyebrow Framing",
+      "partial_face_hairline_temple_macro": "Hairline & Temple Profile",
+      "partial_face_upper_bridge_forehead": "Upper Bridge & Forehead Crop",
+      "partial_skin_wrist_pulse_macro": "Wrist Pulse Point Skin Macro",
+      "partial_skin_forearm_wrist_drape": "Forearm & Wrist Close-Up",
+      "partial_skin_hand_wrist_profile": "Hand Back & Wrist Joint Profile",
+      "partial_skin_finger_knuckle_macro": "Finger Knuckle & Ring Macro",
+      "partial_skin_hand_resting_skin": "Resting Hand on Skin Profile",
+      "partial_skin_interlocked_fingers": "Fingers Close-Up Crop",
+      "partial_skin_waist_hip_curve_macro": "Waist & Hip Curve Skin Macro",
+      "partial_skin_navel_hip_drape": "Navel & Midriff Skin Close-Up",
+      "partial_skin_lower_waist_profile": "Lower Waist Skin Profile",
+      "partial_skin_ankle_foot_macro": "Ankle Joint & Foot Skin Macro",
+      "partial_skin_toes_instep_close": "Toes & Instep Close-Up",
+      "partial_skin_heel_anklet_profile": "Heel & Anklet Profile Angle",
+      "partial_skin_chest_lapel_macro": "Chest & Collarbone Skin Macro",
+      "partial_skin_wrist_cuff_close": "Wrist & Cuff Skin Close-Up",
+      "no_face_neck_collarbone_drape": "Neck-to-Chest Headless Crop",
+      "no_face_decollete_torso": "Décolletage & Torso (No Head)",
+      "no_face_throat_collarbone_macro": "Throat & Collarbone Centered",
+      "no_face_side_neck_ear_macro": "Ear & Side Neck Angle (No Face)",
+      "no_face_ear_nape_profile": "Ear & Nape Rear Profile",
+      "no_face_shoulder_ear_line": "Earlobe to Shoulder Line (No Face)",
+      "no_face_wrist_hand_waist": "Wrist & Hand Resting on Waist (No Head)",
+      "no_face_forearm_cross_body": "Crossed Forearms over Midriff (No Head)",
+      "no_face_hand_lap_drape": "Hand & Wrist Draped on Lap (No Head)",
+      "no_face_finger_touching_hip": "Hand Resting on Hip (No Head)",
+      "no_face_interlocked_hands_chest": "Folded Hands on Chest (No Face)",
+      "no_face_finger_ring_lap": "Rings on Hand Resting on Lap (No Head)",
+      "no_face_waist_midriff_front": "Midriff & Navel Waistband View (Headless)",
+      "no_face_hip_curve_side": "Side Hip Curve & Waist Chain (No Head)",
+      "no_face_back_waist_drape": "Lower Back & Waistline View (No Head)",
+      "no_face_anklet_stepping": "Anklet & Step Motion (Legs View, No Head)",
+      "no_face_seated_feet_drape": "Seated Feet & Anklets View (No Head)",
+      "no_face_toe_ring_step": "Toe Rings & Instep Close-Up (Feet Only)",
+      "no_face_side_nostril_neck": "Side Nostril & Neck Angle (No Upper Face)",
+      "no_face_chin_lips_nose": "Lower Face Nose & Lips Angle (No Upper Head)",
+      "no_face_forehead_hairline_only": "Forehead & Hairline Crop (No Eyes/Face)",
+      "no_face_top_crown_hair": "Top Crown & Headband View (No Face)",
+      "no_face_chest_shoulder_accessory": "Chest & Shoulder Accessory (No Face)",
+      "no_face_arm_wrist_cuff": "Arm & Cuff Accessory (No Head)",
+      "backgroundStyle": "Background Style",
+      "bgColorLabel": "Background Color",
+      "bustDisplay": "Display Mount",
+      "orientationLabel": "Image Orientation",
+      "resolutionLabel": "Export Resolution",
+      "aspectRatioLabel": "Aspect Ratio",
+      "square": "Square",
+      "portrait": "Portrait",
+      "landscape": "Landscape",
+      "res_1k": "Standard HD (1024x1024)",
+      "res_2k": "Ultra-HD 2K (2048x2048)",
+      "res_4k": "Super-HD 4K (4096x4096)",
+      "ratio_1_1": "Square 1:1",
+      "ratio_3_4": "Classic 3:4",
+      "ratio_9_16": "Story / Reel 9:16",
+      "ratio_4_3": "Tablet 4:3",
+      "ratio_16_9": "Wide Screen 16:9",
+      "exportTabTitle": "Export Settings",
+      "exportTabSubtitle": "Configure output photo aspect ratio and resolution",
+      "saree": "Saree",
+      "tshirt": "T-Shirt",
+      "jeans": "Jeans",
+      "shirt": "Premium Shirt",
+      "western_wear": "Western Wear",
+      "kurta": "Kurta",
+      "suit": "Classic Suit",
+      "salwar": "Salwar Kameez",
+      "lehenga": "Lehenga Choli",
+      "gown": "Elegant Gown",
+      "skirt": "Stylish Skirt",
+      "crop_top": "Crop Top",
+      "blouse": "Designer Blouse",
+      "sherwani": "Royal Sherwani",
+      "dhoti": "Traditional Dhoti",
+      "blazer": "Premium Blazer",
+      "tracksuit": "Sporty Tracksuit",
+      "hoodie": "Cozy Hoodie",
+      "earrings": "Earrings",
+      "necklace": "Necklace",
+      "chain": "Elegant Chain",
+      "ring": "Classic Ring",
+      "bracelet": "Designer Bracelet",
+      "watch": "Luxury Watch",
+      "anklet": "Elegant Anklet (Payal)",
+      "payal": "Traditional Payal Anklet",
+      "toe_ring": "Designer Toe Ring (Bichhiya)",
+      "toe": "Toe Ring (Bichhiya)",
+      "nose_ring": "Designer Nose Ring",
+      "nose_pin": "Sparkling Nose Pin",
+      "nath": "Bridal Nath Nose Ring",
+      "nose": "Nose Pin / Ring (Nath)",
+      "noise": "Nose Pin / Ring (Nath)",
+      "waistband": "Royal Waistband (Kamarbandh)",
+      "hip_chain": "Elegant Hip Chain",
+      "kamarbandh": "Traditional Kamarbandh",
+      "finger_ring": "Solitaire Finger Ring",
+      "thumb_ring": "Stylish Thumb Ring",
+      "solitaire": "Diamond Solitaire Ring",
+      "maang_tikka": "Bridal Maang Tikka",
+      "bangles": "Exquisite Bangles",
+      "choker": "Premium Choker",
+      "cufflinks": "Luxury Cufflinks",
+      "pendant": "Classic Pendant",
+      "kada": "Traditional Kada",
+      "model": "Human Model",
+      "partialFace": "Human Model(Partial Face)",
+      "partial_face": "Human Model(Partial Face)",
+      "noFace": "Human Model (No Face)",
+      "no_face": "Human Model (No Face)",
+      "bodyPart": "Body Part Close-Up",
+      "body_part": "Body Part Close-Up",
+      "mannequin": "Mannequin Doll",
+      "hanger": "Hanger",
+      "ghost": "Ghost Mannequin",
+      "flat_lay": "Flat Lay Display",
+      "folded": "Folded Display",
+      "shelf": "Retail Shelf",
+      "shopwindow": "Shop Window",
+      "bust": "Bust Display Mount",
+      "male": "Male",
+      "female": "Female",
+      "no": "No",
+      "yes": "Yes",
+      "bg_plain": "Plain Background",
+      "bg_studio": "Elegant Studio",
+      "bg_traditional": "Traditional Indian",
+      "bg_festival": "Festival / Diwali",
+      "bg_luxury": "Luxury Marble",
+      "bg_wood": "Wood Table",
+      "bg_royal": "Royal Palace",
+      "bg_river": "River (Water & Rock)",
+      "bg_wet_sand": "Wet Sand",
+      "bg_nature": "Garden / Nature",
+      "bg_garden": "Lush Garden",
+      "bg_urban": "Urban Street",
+      "bg_vintage": "Vintage Interior",
+      "bg_modern_office": "Modern Office",
+      "bg_beach": "Sunny Beach",
+      "bg_velvet": "Velvet Texture",
+      "bg_silk": "Luxurious Silk",
+      "bg_granite": "Polished Granite",
+      "bg_mirror": "Reflective Mirror",
+      "head": "Head Mount",
+      "neck": "Neck Mount",
+      "wrist": "Wrist Mount",
+      "ankle": "Ankle Mount",
+      "region_finger": "Finger Stand",
+      "hand": "Hand Display",
+      "naturally": "Place Naturally",
+      "ear": "Ear Model",
+      "apiLabel": "OpenAI API Key",
+      "apiHelp": "Enter your personal OpenAI API key (starting with sk-). It is saved safely in your browser and is never shared.",
+      "saveKey": "Save Key",
+      "keySaved": "Key Saved Successfully!",
+      "validatingKey": "Saving Key...",
+      "keyValidated": "API Key Saved Successfully!",
+      "keyValidationFailed": "Invalid Key",
+      "enterKeyPlaceholder": "Paste your OpenAI API Key (e.g. sk-proj-...)",
+      "pricingTitle": "OpenAI AI Model Reference Rates",
+      "pricingNote": "Prices shown are Google's published baseline rates for reference. Real rates may vary.",
+      "estCost": "Estimated Cost per Photo",
+      "freeTrialActive": "API Key Required",
+      "activeKeyInUse": "Using Saved Personal Key",
+      "modelNameCol": "Model",
+      "resolutionCol": "Resolution",
+      "priceCol": "Price (Reference)",
+      "verifyGoogle": "Verify pricing on official Google AI pricing page",
+      "errNoKey": "Please sign in with your phone number to generate AI photos using your studio credits.",
+      "errUploadFirst": "Please upload your product photo first!",
+      "errGenFailed": "Failed to generate photo. Please check your internet connection or server status."
+    },
+    "description": "Complete English translation dictionary for all UI buttons, titles, errors, and labels"
+  },
+  {
+    "key": "ui_translations_te",
+    "category": "general",
+    "value": {
+      "title": "Srushti AI",
+      "subtitle": "Business to Brand",
+      "languageToggle": "English",
+      "lightTheme": "లైట్",
+      "darkTheme": "డార్క్",
+      "navGarment": "బట్టల ఫోటోలు",
+      "navJewelry": "నగల ఫోటోలు",
+      "navBilling": "అడ్మిన్ ప్యానెల్",
+      "navAdmin": "అడ్మిన్ ప్యానెల్",
+      "navSettings": "ప్రొఫైల్",
+      "garmentTitle": "బట్టల ఫోటోగ్రఫీ",
+      "garmentSubtitle": "చీరలు, టీ-షర్టులు, జీన్స్ మరిన్ని",
+      "jewelryTitle": "నగల ఫోటోగ్రఫీ",
+      "jewelrySubtitle": "హారాలు, చెవి కమ్మలు, గాజులు",
+      "billingTitle": "అడ్మిన్ ప్యానెల్ (Admin Panel)",
+      "adminTitle": "అడ్మిన్ ప్యానెల్ (Admin Panel)",
+      "billingSubtitle": "ఏఐ మోడల్ ధరలు మరియు ఏపీఐ అమరికలను నిర్వహించండి",
+      "adminSubtitle": "ఏఐ మోడల్ ధరలు మరియు ఏపీఐ అమరికలను నిర్వహించండి",
+      "settingsTitle": "యూజర్ ప్రొఫైల్ (Profile)",
+      "settingsSubtitle": "మీ ఖాతా వివరాలు, థీమ్ మరియు భాషల అమరికలు",
+      "settingsThemeLabel": "థీమ్ ఎంచుకోండి (Choose Theme)",
+      "settingsLanguageLabel": "భాషను మార్చుకోండి (Choose Language)",
+      "uploadTitle": "ప్రొడక్ట్ ఫోటో స్పష్టమైన ఫ్రంట్ వ్యూలో అన్ని వివరాలతో ఉండాలి",
+      "uploadSubtitle": "ఇక్కడ ఫోటోను వేయండి లేదా కెమెరా కోసం నొక్కండి",
+      "originalLabel": "అసలు ఫోటో",
+      "finalLabel": "తయారైన ఏఐ ఫోటో",
+      "generating": "అందమైన ఏఐ ఫోటో తయారవుతోంది...",
+      "generateBtn": "ఫోటో సృష్టించు",
+      "retryBtn": "మళ్ళీ చేయి",
+      "downloadBtn": "ఫోన్‌లోకి డౌన్‌లోడ్ చేయి",
+      "shareBtn": "షేర్ చేయి",
+      "productType": "వస్తువు రకం",
+      "presentationMode": "ప్రదర్శన విధానం",
+      "useModel": "మనిషి మోడల్‌కు వేయాలా?",
+      "genderLabel": "మోడల్ లింగం",
+      "poseLabel": "మోడల్ పోజ్ / కెమెరా యాంగిల్",
+      "standing_front": "నిలబడిన ముఖచిత్రం (ఫ్రంట్ పోజ్)",
+      "standing_side": "పక్క చూపు నిలబడి (సైడ్ ప్రొఫైల్)",
+      "standing_three_quarter": "మూడు వంతుల నిలువు భంగిమ",
+      "walking_candid": "నడుస్తున్నట్లుగా (క్యాండిడ్ పోజ్)",
+      "sitting_chair": "కుర్చీపై కూర్చుని (సిట్టింగ్ పోజ్)",
+      "sitting_casual": "క్యాజువల్ గా కూర్చుని",
+      "top_upper_portrait": "పైభాగం క్లోజ్ పోర్ట్రెయిట్",
+      "top_standing_mid": "నడుము వరకు నిలబడిన షాట్",
+      "top_three_quarter": "3/4 పైభాగం యాంగిల్",
+      "top_shoulder_profile": "భుజం & కొల్లార్ ఫోకస్",
+      "top_casual_cross": "చేతులు కట్టుకున్న శైలి",
+      "top_front_direct": "నేరుగా పైభాగం ఫోటో",
+      "bottom_full_leg": "నడుము నుండి కాళ్ళ వరకు షాట్",
+      "bottom_walking_step": "నడుస్తున్న కాళ్ళ ఫోకస్",
+      "bottom_side_leg": "పక్కకి కాళ్ళ భంగిమ",
+      "bottom_seated_cross": "కూర్చుని కాళ్ళు కనిపించే షాట్",
+      "bottom_3q_lower": "3/4 క్రింది భాగం యాంగిల్",
+      "bottom_front_stance": "వెడల్పుగా నిలబడిన భంగిమ",
+      "partial_face_chin_torso": "చిన్ నుండి టోర్సో క్రాప్",
+      "partial_face_shoulder_profile": "భుజం ప్రొఫైల్ కోణం",
+      "partial_face_lips_mid": "పెదవుల నుండి మధ్యభాగం",
+      "partial_face_back_shoulder": "వెనుక భుజం కోణం",
+      "partial_face_top_collar_crop": "మెడ మరియు కాలర్‌బోన్ క్రాప్",
+      "partial_face_top_jawline_chest": "దవడ నుండి ఛాతీ ఫ్రేమింగ్",
+      "partial_face_top_side_profile": "సైడ్ ప్రొఫైల్ జా క్రాప్",
+      "partial_face_top_mid_torso": "మిడ్-టోర్సో టాప్ వ్యూ",
+      "partial_face_bottom_waist_chest": "ఛాతీ నుండి మోకాలి ఫ్రేమింగ్",
+      "partial_face_bottom_hip_stride": "హిప్ స్ట్రైడ్ మోషన్ క్రాప్",
+      "partial_face_bottom_seated_lap": "కూర్చున్న లాప్ ఫ్రేమింగ్",
+      "partial_face_bottom_side_profile": "సైడ్ లోయర్ బాడీ ప్రొఫైల్",
+      "no_face_full_body_crop": "తల లేకుండా పూర్తి బాడీ క్రాప్",
+      "no_face_torso_hips_drape": "టోర్సో & హిప్స్ డ్రేప్ ఫ్యాషన్",
+      "no_face_walking_stride": "నడుస్తున్న స్ట్రైడ్ క్రాప్",
+      "no_face_seated_outfit": "కూర్చున్న దుస్తుల ఫ్రేమ్",
+      "no_face_top_chest_shoulders": "ఛాతీ & భుజాలు (తల లేకుండా)",
+      "no_face_top_front_fit": "ఫ్రంట్ ఫిట్ (తల లేకుండా)",
+      "no_face_top_side_sleeve": "సైడ్ స్లీవ్ డిజైన్",
+      "no_face_top_back_detail": "బ్యాక్ డిజైన్ (తల లేకుండా)",
+      "no_face_bottom_waist_to_toe": "నడుము నుండి కాళ్ళ వరకు",
+      "no_face_bottom_side_seam": "సైడ్ సీమ్ ఫిట్ వ్యూ",
+      "no_face_bottom_walking_stride": "నడుస్తున్న కాలు స్ట్రైడ్",
+      "no_face_bottom_seated_trouser": "కూర్చున్న ట్రౌజర్ ఫిట్",
+      "neck_collarbone": "మెడ & కాలర్‌బోన్ ఫోకస్",
+      "neck_chest_portrait": "ఎద భాగం పోర్ట్రెయిట్",
+      "neck_3q_shoulder": "3/4 భుజం & మెడ కోణం",
+      "neck_royal_gaze": "రాజసం ఉట్టిపడే మెడ భంగిమ",
+      "neck_front_direct": "నేరుగా హారం కనిపించే భంగిమ",
+      "neck_side_drape": "పక్కకి తిరిగిన హారం భంగిమ",
+      "side_ear_profile": "చెవి ప్రొఫైల్ & దవడ లైన్",
+      "ear_hair_tuck": "జుట్టు వెనక్కి దువ్విన భంగిమ",
+      "ear_head_tilt": "తల పక్కకి వాల్చిన భంగిమ",
+      "ear_3q_face": "3/4 చెవిపోగుల యాంగిల్",
+      "ear_front_balanced": "నేరుగా రెండు చెవులు కనిపించే షాట్",
+      "ear_over_shoulder": "భుజం పైనుండి చూసే భంగిమ",
+      "wrist_hand_display": "మణికట్టు & చేతి భంగిమ",
+      "wrist_resting_lap": "చేతిని హాయిగా ఆనించిన భంగిమ",
+      "wrist_cross_arms": "చేతులు కట్టుకుని గాజులు చూపే షాట్",
+      "wrist_hand_chest": "గుండె వద్ద చేయి ఉంచిన భంగిమ",
+      "wrist_side_arm": "పక్క చేయి చాచిన భంగిమ",
+      "wrist_gesture": "సున్నితమైన చేతి కదలిక",
+      "hip_waist_mid": "నడుము & వడ్డాణం క్లోజ్-అప్",
+      "hip_hands_on_waist": "నడుముపై చేతులు ఉంచిన 3/4 యాంగిల్",
+      "hip_royal_standing": "రాజసపు నిలబడిన వడ్డాణం షాట్",
+      "hip_side_turn": "పక్కకి ఒరిగిన ఒంపు భంగిమ",
+      "hip_saree_drape": "చీరపై వడ్డాణం కనిపించే భంగిమ",
+      "hip_front_direct": "నేరుగా వడ్డాణం కనిపించే షాట్",
+      "nose_close_profile": "ముక్కు పుడక క్లోజ్-అప్ ప్రొఫైల్",
+      "nose_front_portrait": "ముఖం నేరుగా చూసే ముక్కు పుడక షాట్",
+      "nose_3q_headturn": "3/4 తల తిరిగిన నాథ్ భంగిమ",
+      "nose_bridal_veil": "పెళ్ళికూతురు ముక్కు రింగ్ యాంగిల్",
+      "nose_soft_smile": "చిరునవ్వుతో కూడిన ముక్కు పుడక షాట్",
+      "nose_macro_focus": "అత్యంత క్లోజ్-అప్ ముక్కు పుడక",
+      "hand_face_gesture": "చేతితో ముఖం తాకే భంగిమ",
+      "finger_hand_gesture": "చేతి వేళ్ళు & ఉంగరం క్లోజ్-అప్",
+      "finger_chin_rest": "గడ్డం కింద చేయి ఆనించిన భంగిమ",
+      "finger_hands_clasped": "రెండు చేతులు కలిపిన ఉంగరాల షాట్",
+      "finger_holding_prop": "సున్నితమైన చేతి ఉంగరం భంగిమ",
+      "finger_macro_ring": "ఉంగరం డైమండ్ ప్రస్ఫుటమైన షాట్",
+      "finger_side_hand": "పక్క చేయి ఆనించిన భంగిమ",
+      "anklet_floor_cross_legged": "నేలపై క్రాస్-లెగ్డ్ కూర్చున్న భంగిమ",
+      "anklet_floor_legs_extended": "నేలపై కాళ్ళు చాపి కూర్చున్న భంగిమ",
+      "anklet_floor_kneeling_mehendi": "నేలపై మోకాళ్ళపై నమస్కార/మెహందీ భంగిమ",
+      "anklet_ankle_close": "కాలు & పట్టీలు క్లోజ్-అప్",
+      "anklet_step_forward": "అడుగు ముందుకు వేసిన పాయల్ భంగిమ",
+      "anklet_seated_foot": "కూర్చుని పట్టీలు చూపే షాట్",
+      "anklet_side_foot": "పక్క మడమ & పట్టీల యాంగిల్",
+      "anklet_both_feet": "రెండు కాళ్ళ పట్టీలు కనిపించే షాట్",
+      "anklet_toering_focus": "మెట్టెలు & పట్టీల క్లోజ్-అప్",
+      "matha_patti": "రాయల్ మాతా పట్టీ",
+      "borla": "సాంప్రదాయ బొర్లా",
+      "passa": "ఝుమర్ / పస్సా",
+      "headband": "తల హెడ్‌బ్యాండ్",
+      "acc_forehead_tikka": "పాపిడి బిళ్ళ క్లోజ్-అప్",
+      "acc_front_direct": "నేరుగా అలంకరణ కనిపించే భంగిమ",
+      "acc_3q_gaze": "3/4 అలంకరణ యాంగిల్",
+      "acc_side_profile": "పక్క ప్రొఫైల్ అలంకరణ షాట్",
+      "forehead_tikka_center": "పాపిడి బిళ్ళ క్లోజ్-అప్",
+      "forehead_mathapatti_frame": "మాతా పట్టీ పూర్తి హెయిర్‌లైన్ షాట్",
+      "forehead_3q_headturn": "3/4 తల తిరిగిన అలంకరణ భంగిమ",
+      "forehead_bridal_veil": "పెళ్ళికూతురు ముసుగు హెడ్‌పీస్ యాంగిల్",
+      "forehead_side_passa": "సైడ్ ఝుమర్ / పస్సా ప్రొఫైల్",
+      "forehead_front_portrait": "నేరుగా పాపిడి అలంకరణ పోర్ట్రెయిట్",
+      "three_quarter_gaze": "మూడు వంతుల ముఖచిత్రం",
+      "front_direct_portrait": "నేరుగా నిలువు ముఖచిత్రం",
+      "partial_face_jawline_macro": "దవడ, చెవి మాక్రో ప్రొఫైల్",
+      "partial_face_lips_collarbone": "పెదవులు నుండి ఎముక వరకు మాక్రో",
+      "partial_face_chin_neck_drape": "గడ్డం, మెడ లైన్ క్లోజప్",
+      "partial_face_jawline_decollete": "దవడ, ఛాతీ పైభాగ ప్రొఫైల్",
+      "partial_face_neck_side_throat": "ప్రక్క మెడ చర్మం మాక్రో",
+      "partial_face_cheek_ear_close": "చెంప, చెవి లంబిక మాక్రో",
+      "partial_face_ear_neck_profile": "చెవి లంబిక నుండి మెడ ప్రొఫైల్",
+      "partial_face_hairline_ear_crop": "జుట్టు పక్కన చెవి ఫ్రేమింగ్",
+      "partial_face_nose_lips_profile": "ముక్కు, పెదవుల ప్రొఫైల్",
+      "partial_face_nostril_cheek_macro": "ముక్కురంధ్రం, చెంప మాక్రో",
+      "partial_face_lips_nose_front": "కింది ముఖం, ముక్కు ఫ్రేమింగ్",
+      "partial_face_forehead_brows_crop": "నుదురు, కనుబొమ్మల ఫ్రేమింగ్",
+      "partial_face_hairline_temple_macro": "పాపిడి, కణత ప్రొఫైల్",
+      "partial_face_upper_bridge_forehead": "నుదురు పైభాగం మాక్రో",
+      "partial_skin_wrist_pulse_macro": "చేతి మణికట్టు చర్మం మాక్రో",
+      "partial_skin_forearm_wrist_drape": "మొచేయి, మణికట్టు క్లోజప్",
+      "partial_skin_hand_wrist_profile": "అరచేతి వెనుక ప్రొఫైల్",
+      "partial_skin_finger_knuckle_macro": "వేలి కణుపు, ఉంగరం మాక్రో",
+      "partial_skin_hand_resting_skin": "చర్మంపై చేయి ప్రొఫైల్",
+      "partial_skin_interlocked_fingers": "వేళ్ళ క్లోజప్ ఫ్రేమింగ్",
+      "partial_skin_waist_hip_curve_macro": "నడుము మలుపు చర్మం మాక్రో",
+      "partial_skin_navel_hip_drape": "బొడ్డు, నడుము చర్మం క్లోజప్",
+      "partial_skin_lower_waist_profile": "కింది నడుము చర్మం ప్రొఫైల్",
+      "partial_skin_ankle_foot_macro": "మడమ, పాదం చర్మం మాక్రో",
+      "partial_skin_toes_instep_close": "కాలి వేళ్ళు, పాదం క్లోజప్",
+      "partial_skin_heel_anklet_profile": "మడమ, పట్టీ ప్రొఫైల్",
+      "partial_skin_chest_lapel_macro": "ఛాతీ, ఎముక చర్మం మాక్రో",
+      "partial_skin_wrist_cuff_close": "మణికట్టు, కఫ్ చర్మం క్లోజప్",
+      "no_face_neck_collarbone_drape": "గడ్డం కింద నుండి ఛాతీ దాకా ఫ్రేమింగ్",
+      "no_face_decollete_torso": "ఛాతీ మరియు డెకోలేటే ఫ్రేమ్ (తల లేదు)",
+      "no_face_throat_collarbone_macro": "మెడ, కాలర్‌బోన్ సెంటర్డ్ వ్యూ",
+      "no_face_side_neck_ear_macro": "చెవి, ప్రక్క మెడ యాంగిల్ (ముఖం లేదు)",
+      "no_face_ear_nape_profile": "చెవి, పిలక ప్రక్క ప్రొఫైల్",
+      "no_face_shoulder_ear_line": "చెవి నుండి భుజం వరకు వ్యూ",
+      "no_face_wrist_hand_waist": "నడుముపై చేయి, మణికట్టు ఫ్రేమింగ్",
+      "no_face_forearm_cross_body": "పొట్ట వద్ద అడ్డంగా ఉన్న చేతులు",
+      "no_face_hand_lap_drape": "తొడలపై ఉన్న మణికట్టు, చేతులు",
+      "no_face_finger_touching_hip": "నడుముపై వేళ్ళు మరియు ఉంగరం",
+      "no_face_interlocked_hands_chest": "ఛాతీపై మడిచిన చేతులు, వేళ్ళు",
+      "no_face_finger_ring_lap": "తొడపై అమర్చిన ఉంగరాల చేతి వ్యూ",
+      "no_face_waist_midriff_front": "నడుము, బొడ్డు భాగం (హెడ్‌లెస్)",
+      "no_face_hip_curve_side": "ప్రక్క నడుము మలుపు వ్యూ (తల లేదు)",
+      "no_face_back_waist_drape": "వీపు కింది భాగం నడుము పట్టీ",
+      "no_face_anklet_stepping": "కాలి పట్టీ మరియు నడక స్టెప్ (కాళ్ళ వ్యూ)",
+      "no_face_seated_feet_drape": "కూర్చున్న పాదాలు, పట్టీల వ్యూ",
+      "no_face_toe_ring_step": "కాలి వేళ్ళు, మెట్టెల క్లోజప్",
+      "no_face_side_nostril_neck": "ముక్కురంధ్రం, మెడ యాంగిల్",
+      "no_face_chin_lips_nose": "పెదవులు, ముక్కు కింద భాగం",
+      "no_face_forehead_hairline_only": "నుదురు, పాపిడి వ్యూ (కళ్ళు లేవు)",
+      "no_face_top_crown_hair": "తల పైభాగం హేర్‌బ్యాండ్ వ్యూ",
+      "no_face_chest_shoulder_accessory": "ఛాతీ, భుజాల యాక్సెసరీ వ్యూ",
+      "no_face_arm_wrist_cuff": "చేయి, కఫ్ యాక్సెసరీ వ్యూ",
+      "backgroundStyle": "వెనుక బ్యాక్‌గ్రౌండ్ రకం",
+      "bgColorLabel": "బ్యాక్‌గ్రౌండ్ రంగు",
+      "bustDisplay": "డిస్ప్లే స్టాండ్ రకం",
+      "orientationLabel": "చిత్రం ఓరియంటేషన్ / దిశ",
+      "resolutionLabel": "ఎగుమతి రిజల్యూషన్ (క్వాలిటీ)",
+      "aspectRatioLabel": "యాస్పెక్ట్ రేషియో (పరిమాణం)",
+      "square": "చతురస్రం",
+      "portrait": "నిలువు",
+      "landscape": "అడ్డంగా",
+      "res_1k": "సాధారణ నాణ్యత HD (1024x1024)",
+      "res_2k": "అధిక నాణ్యత 2K (2048x2048)",
+      "res_4k": "అత్యంత స్పష్టత 4K (4096x4096)",
+      "ratio_1_1": "చదరం 1:1",
+      "ratio_3_4": "క్లాసిక్ 3:4",
+      "ratio_9_16": "రీల్ / స్టోరీ 9:16",
+      "ratio_4_3": "టాబ్లెట్ 4:3",
+      "ratio_16_9": "వెడల్పు స్క్రీన్ 16:9",
+      "exportTabTitle": "ఎగుమతి అమరికలు",
+      "exportTabSubtitle": "ఫైనల్ ఫోటో యొక్క సైజ్ మరియు క్వాలిటీ సెట్ చేసుకోండి",
+      "saree": "చీర",
+      "tshirt": "టీ-షర్ట్",
+      "jeans": "జీన్స్",
+      "shirt": "ప్రీమియం షర్ట్",
+      "western_wear": "వెస్ట్రన్ వేర్",
+      "kurta": "కుర్తా",
+      "suit": "క్లాసిక్ సూట్",
+      "salwar": "సల్వార్ కమీజ్",
+      "lehenga": "లెహంగా చోళీ",
+      "gown": "గౌన్",
+      "skirt": "స్కార్ట్",
+      "crop_top": "క్రాప్ టాప్",
+      "blouse": "బ్లౌజ్",
+      "sherwani": "షేర్వాణీ",
+      "dhoti": "సాంప్రదాయ ధోతి",
+      "blazer": "బ్లేజర్",
+      "tracksuit": "ట్రాక్‌సూట్",
+      "hoodie": "హుడీ",
+      "earrings": "కమ్మలు (చెవి రింగులు)",
+      "necklace": "నెక్లెస్ / హారం",
+      "chain": "మెడ గొలుసు (చైన్)",
+      "ring": "ఉంగరం (రింగ్)",
+      "bracelet": "చేతి కడియం (బ్రేస్లెట్)",
+      "watch": "చేతి గడియారం (వాచ్)",
+      "anklet": "పట్టీలు (ఆంక్లెట్ / పాయల్)",
+      "payal": "సాంప్రదాయ పాయల్ పట్టీలు",
+      "toe_ring": "మెట్టెలు (బొటనవేలు ఉంగరం)",
+      "toe": "మెట్టెలు (కాలినవేలు ఉంగరం)",
+      "nose_ring": "ముక్కు పుడక / రింగ్",
+      "nose_pin": "మెరిసే ముక్కు పుడక",
+      "nath": "పెళ్ళికూతురు నాథ్ (ముక్కు రింగ్)",
+      "nose": "ముక్కు పుడక / ముక్కు రింగ్",
+      "noise": "ముక్కు పుడక / ముక్కు రింగ్",
+      "waistband": "వడ్డాణం (నడుము పట్టి)",
+      "hip_chain": "నడుము గొలుసు (హిప్ చైన్)",
+      "kamarbandh": "సాంప్రదాయ కమర్‌బంద్",
+      "finger_ring": "చేతి వేలు ఉంగరం (ఫింగర్ రింగ్)",
+      "thumb_ring": "బొటనవేలు ఉంగరం (థంబ్ రింగ్)",
+      "solitaire": "సోలిటైర్ డైమండ్ రింగ్",
+      "maang_tikka": "పాపిడి బిళ్ళ (మాంగ్ తిక్కా)",
+      "bangles": "గాజులు (బ్యాంగిల్స్)",
+      "choker": "చోకర్ హారం",
+      "cufflinks": "కఫ్ లింకులు",
+      "pendant": "లాకెట్ / పెండెంట్",
+      "kada": "కడా / బ్రేస్‌లెట్",
+      "model": "మనిషి మోడల్",
+      "partialFace": "మానవ మోడల్ (పాక్షిక ముఖం)",
+      "partial_face": "మానవ మోడల్ (పాక్షిక ముఖం)",
+      "noFace": "మానవ మోడల్ (ముఖం లేకుండా)",
+      "no_face": "మానవ మోడల్ (ముఖం లేకుండా)",
+      "bodyPart": "శరీర భాగం (క్లోజప్ షాట్)",
+      "body_part": "శరీర భాగం (క్లోజప్ షాట్)",
+      "mannequin": "బొమ్మ (మెనకిన్)",
+      "hanger": "హ్యాంగర్ స్టాండ్",
+      "ghost": "అదృశ్య బొమ్మ",
+      "flat_lay": "ఫ్లాట్ లే డిజైన్",
+      "folded": "మడతపెట్టిన ప్రదర్శన",
+      "shelf": "రిటైల్ షెల్ఫ్",
+      "shopwindow": "షాప్ విండో",
+      "bust": "ఆభరణాల స్టాండ్",
+      "male": "పురుషుడు",
+      "female": "స్త్రీ",
+      "no": "వద్దు",
+      "yes": "అవును",
+      "bg_plain": "సాధారణ రంగు",
+      "bg_studio": "స్టూడియో లైటింగ్",
+      "bg_traditional": "భారతీయ సాంప్రదాయం",
+      "bg_festival": "పండుగ / దీపావళి వెలుగులు",
+      "bg_luxury": "లగ్జరీ మార్బుల్ నేల",
+      "bg_wood": "చెక్క బల్ల",
+      "bg_royal": "రాజభవనం",
+      "bg_river": "నది (నీరు & రాయి)",
+      "bg_wet_sand": "తడి ఇసుక (Wet Sand)",
+      "bg_nature": "తోట / ప్రకృతి వాతావరణం",
+      "bg_garden": "పూల తోట (గార్డెన్)",
+      "bg_urban": "నగర వీధి (అర్బన్)",
+      "bg_vintage": "పాతకాలపు గది (వింటేజ్)",
+      "bg_modern_office": "ఆధునిక ఆఫీస్",
+      "bg_beach": "బీచ్ వాతావరణం",
+      "bg_velvet": "వెల్వెట్ బ్యాక్‌గ్రౌండ్",
+      "bg_silk": "పట్టు వస్త్రం (సిల్క్)",
+      "bg_granite": "గ్రానైట్ నేల",
+      "bg_mirror": "అద్దం ప్రతిబింబం",
+      "head": "తల భాగం",
+      "neck": "మెడ భాగం",
+      "wrist": "మణికట్టు భాగం",
+      "ankle": "కాలి మడమ భాగం",
+      "region_finger": "వేలి భాగం",
+      "hand": "చేతి భాగం",
+      "naturally": "సహజంగా ఉంచండి (Place Naturally)",
+      "ear": "చెవి భాగం",
+      "apiLabel": "ఓపెన్ ఏఐ ఏపీఐ కీ (OpenAI API Key)",
+      "apiHelp": "మీ ఓపెన్ ఏఐ ఏపీఐ కీ (sk- తో ప్రారంభమయ్యేది) ఇక్కడ రాయండి. ఇది మీ బ్రౌజర్‌లో సురక్షితంగా ఉంటుంది.",
+      "saveKey": "కీని సేవ్ చేయి",
+      "keySaved": "కీ సేవ్ చేయబడింది!",
+      "validatingKey": "కీని సేవ్ చేస్తోంది...",
+      "keyValidated": "ఏపీఐ కీ విజయవంతంగా సేవ్ చేయబడింది!",
+      "keyValidationFailed": "చెల్లని కీ (Invalid Key)",
+      "enterKeyPlaceholder": "ఇక్కడ ఓపెన్ ఏఐ కీని పేస్ట్ చేయండి (ఉదా: sk-proj-...)",
+      "pricingTitle": "ఓపెన్ ఏఐ మోడల్ ధరల పట్టిక",
+      "pricingNote": "ఈ ధరలు కేవలం గూగుల్ ప్రచురించిన ప్రాథమిక వివరాలు మాత్రమే. అసలు ధరలు మారవచ్చు.",
+      "estCost": "ఒక ఫోటో తయారీ అంచనా ఖరీదు",
+      "freeTrialActive": "ఏపీఐ కీ అవసరం (API Key Required)",
+      "activeKeyInUse": "మీ వ్యక్తిగత కీ ఉపయోగించబడుతోంది",
+      "modelNameCol": "మోడల్",
+      "resolutionCol": "రిజల్యూషన్",
+      "priceCol": "ధర (డాలర్లలో)",
+      "verifyGoogle": "గూగుల్ అధికారిక ధరల వెబ్‌సైట్‌లో సరిచూసుకోండి",
+      "errNoKey": "మీ స్టూడియో క్రెడిట్లను ఉపయోగించి ఏఐ ఫోటోలు రూపొందించడానికి దయచేసి ముందుగా మీ ఫోన్ నంబర్‌తో సైన్ ఇన్ అవ్వండి.",
+      "errUploadFirst": "ముందుగా మీ వస్తువు ఫోటోను అప్‌లోడ్ చేయండి!",
+      "errGenFailed": "ఫోటో తయారుచేయడం కుదరలేదు. దయచేసి ఇంటర్నెట్ లేదా సర్వర్ కనెక్షన్‌ను సరిచూసుకోండి."
+    },
+    "description": "Complete Telugu translation dictionary for all UI buttons, titles, errors, and labels"
+  },
+  {
+    "key": "landing_quotes",
+    "category": "general",
+    "value": [
+      {
+        "id": "quote-1",
+        "en": {
+          "text": "“You pick and craft wonderful products with care. We make sure they look like top showroom shoots so customers fall in love at first glance!”",
+          "author": "Supporting Home Sellers & Resellers"
+        },
+        "te": {
+          "text": "“మీరు ఎంతో ఇష్టపడి తెచ్చిన వస్తువులు సాధారణ ఫోటోలతో వెలవెలబోకూడదు. కస్టమర్లు చూడగానే 'వావ్ చాలా బాగుంది' అని మెచ్చేలా చేద్దాం!”",
+          "author": "హోమ్ బిజినెస్ మిత్రులకు ఎల్లప్పుడూ తోడుగా"
+        }
+      },
+      {
+        "id": "quote-2",
+        "en": {
+          "text": "“You don't need lakhs in the bank or costly studio lights. Your hard work deserves to shine just like big fashion brands.”",
+          "author": "For Local Boutiques & Crafters"
+        },
+        "te": {
+          "text": "“స్టూడియోలకు వేలకు వేలు ఖర్చు పెట్టే పనేలేదు. మీ కష్టానికి తగ్గ అందమైన మోడల్ లుక్ ఇప్పుడు మీ చేతిలోని ఫోన్ లోనే!”",
+          "author": "స్థానిక బోటిక్‌లు & షాపుల కోసం"
+        }
+      },
+      {
+        "id": "quote-3",
+        "en": {
+          "text": "“No more hesitation before sharing photos on WhatsApp or Instagram. Post with total pride, get instant trust, and close orders fast!”",
+          "author": "More Trust • Happy Customers • Instant Orders"
+        },
+        "te": {
+          "text": "“వాట్సాప్ స్టేటస్ లేదా ఇన్‌స్టాలో గర్వంగా పోస్ట్ చేయండి. ఫోటో చూసి కస్టమర్లు వెంటనే నమ్మకంతో ఆర్డర్ పెట్టేస్తారు.”",
+          "author": "కస్టమర్ల నమ్మకం & వేగవంతమైన ఆర్డర్లు"
+        }
+      }
+    ],
+    "description": "Inspiring home business and seller quotes displayed in landing page QuoteSlider"
+  },
+  {
+    "key": "landing_showcase",
+    "category": "general",
+    "value": {
+      "categories": [
+        "saree",
+        "dress",
+        "shirt",
+        "watch",
+        "earrings",
+        "bangle",
+        "jeans",
+        "trouser",
+        "necklace",
+        "chain"
+      ],
+      "tabs": [
+        {
+          "id": "saree",
+          "label": {
+            "en": "Saree",
+            "te": "చీరలు"
+          },
+          "thumb": "/items/saree.jpg"
+        },
+        {
+          "id": "dress",
+          "label": {
+            "en": "Dress",
+            "te": "డ్రెస్"
+          },
+          "thumb": "/items/gown.jpg"
+        },
+        {
+          "id": "shirt",
+          "label": {
+            "en": "Shirt",
+            "te": "షర్ట్"
+          },
+          "thumb": "/items/shirt.jpg"
+        },
+        {
+          "id": "watch",
+          "label": {
+            "en": "Watch",
+            "te": "వాచ్"
+          },
+          "thumb": "/items/watch.jpg"
+        },
+        {
+          "id": "earrings",
+          "label": {
+            "en": "Earrings",
+            "te": "చెవి కమ్మలు"
+          },
+          "thumb": "/items/earrings.jpg"
+        },
+        {
+          "id": "bangle",
+          "label": {
+            "en": "Bangle",
+            "te": "గాజులు"
+          },
+          "thumb": "/items/bangles.jpg"
+        },
+        {
+          "id": "jeans",
+          "label": {
+            "en": "Jeans",
+            "te": "జీన్స్"
+          },
+          "thumb": "/items/jeans.jpg"
+        },
+        {
+          "id": "trouser",
+          "label": {
+            "en": "Trouser",
+            "te": "ట్రౌజర్"
+          },
+          "thumb": "/items/suit.jpg"
+        },
+        {
+          "id": "necklace",
+          "label": {
+            "en": "Necklace",
+            "te": "నెక్లెస్"
+          },
+          "thumb": "/items/necklace.jpg"
+        },
+        {
+          "id": "chain",
+          "label": {
+            "en": "Chain",
+            "te": "చైన్"
+          },
+          "thumb": "/items/chain.jpg"
+        }
+      ]
+    },
+    "description": "Showcase tabs and catalog comparisons for home and landing page"
+  }
+]

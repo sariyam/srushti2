@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
 import { Language } from "../types";
+import { useStudioConfig, FALLBACK_HERO_SLIDES, HeroSlide } from "../context/StudioConfigContext";
 
 interface HeroCarouselProps {
   lang: Language;
@@ -11,46 +12,13 @@ interface HeroCarouselProps {
 
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
 
-
-
-const SLIDES = [
-  {
-    id: "slide-dress",
-    image: "/showcase/tryons/3.png",
-    fallback: "/showcase/hero-dress-fallback.jpg",
-    titleEn: "Designer Dress & Fashion Studio Shoot",
-    titleTe: "డిజైనర్ డ్రెస్ & ఫ్యాషన్ స్టూడియో షూట్",
-    tagEn: "Professional Fashion Lighting",
-    tagTe: "ప్రొఫెషనల్ ఫ్యాషన్ లైటింగ్",
-    highlightEn: "Authentic Indian Model • 100% Studio Clarity",
-    highlightTe: "భారతీయ మోడల్ • పర్ఫెక్ట్ స్టూడియో క్వాలిటీ",
-  },
-  {
-    id: "slide-watch",
-    image: "/showcase/tryons/10.png",
-    fallback: "/showcase/hero-watch-fallback.jpg",
-    titleEn: "Luxury Watch & Premium Product Shoot",
-    titleTe: "లగ్జరీ వాచ్ & ప్రీమియం ప్రొడక్ట్ షూట్",
-    tagEn: "Luxury Product Lighting",
-    tagTe: "లగ్జరీ ప్రొడక్ట్ లైటింగ్",
-    highlightEn: "Premium Details • Instant Catalog Ready",
-    highlightTe: "ప్రీమియం డిటైల్స్ • క్యాటలాగ్ రెడీ",
-  },
-  {
-    id: "slide-saree",
-    image: "/showcase/tryons/3.png",
-    fallback: "/showcase/hero-saree-fallback.jpg",
-    titleEn: "Royal Kanjeevaram Silk Saree Shoot",
-    titleTe: "రాయల్ కాంచీపురం పట్టుచీరల స్టూడియో షూట్",
-    tagEn: "Heritage Studio Lighting",
-    tagTe: "హెరిటేజ్ స్టూడియో లైటింగ్",
-    highlightEn: "Authentic Indian Model • 100% Studio Clarity",
-    highlightTe: "భారతీయ మోడల్ • పర్ఫెక్ట్ స్టూడియో క్వాలిటీ",
-  },
-];
-
-
 export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline }) => {
+  const { heroSlides } = useStudioConfig();
+  const slides: HeroSlide[] = useMemo(
+    () => (heroSlides && heroSlides.length > 0 ? heroSlides : FALLBACK_HERO_SLIDES),
+    [heroSlides]
+  );
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -69,7 +37,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
   const displayTagline = tagline || defaultTagline;
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % SLIDES.length);
+    setCurrentIndex((prev) => (prev + 1) % slides.length);
   };
 
   useEffect(() => {
@@ -82,9 +50,9 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [currentIndex, isPaused]);
+  }, [currentIndex, isPaused, slides.length]);
 
-  const current = SLIDES[currentIndex];
+  const current = slides[currentIndex] || slides[0] || FALLBACK_HERO_SLIDES[0];
 
   return (
     <div
@@ -111,7 +79,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
               className="w-full h-full object-cover object-center filter brightness-[0.82] contrast-[1.08]"
               onError={(e) => {
                 const target = e.currentTarget as HTMLImageElement;
-                if (target.src !== current.fallback) {
+                if (current.fallback && target.src !== current.fallback) {
                   target.src = current.fallback;
                 }
               }}
@@ -149,15 +117,16 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
 
         {/* Slide Indicators / Dots */}
         <div className="absolute bottom-2.5 sm:bottom-3.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-30">
-          {SLIDES.map((slide, idx) => (
+          {slides.map((slide, idx) => (
             <button
               key={slide.id}
               onClick={() => setCurrentIndex(idx)}
               aria-label={`Go to slide ${idx + 1}`}
-              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${currentIndex === idx
-                ? "w-6 sm:w-8 bg-accent shadow-md shadow-accent/50"
-                : "w-1.5 sm:w-2 bg-white/40 hover:bg-white/70"
-                }`}
+              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
+                currentIndex === idx
+                  ? "w-6 sm:w-8 bg-accent shadow-md shadow-accent/50"
+                  : "w-1.5 sm:w-2 bg-white/40 hover:bg-white/70"
+              }`}
             />
           ))}
         </div>

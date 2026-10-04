@@ -1,11 +1,10 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect, useMemo, useRef, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import { Icon } from "@iconify/react";
 import { GENDER_GARMENT_MAPPING, GENDER_JEWELRY_MAPPING, GARMENT_CATEGORY_MAPPING, JEWELRY_CATEGORY_MAPPING } from "../utils/optionMapping";
+import { useStudioConfig, FALLBACK_WORKSPACES } from "../context/StudioConfigContext";
 
-const AdminWorkspace = lazy(() =>
-  import("./AdminWorkspace").then((m) => ({ default: m.AdminWorkspace }))
-);
 const SettingsWorkspace = lazy(() =>
   import("./SettingsWorkspace").then((m) => ({ default: m.SettingsWorkspace }))
 );
@@ -17,7 +16,7 @@ const HistoryModal = lazy(() =>
 );
 import { WalletTransaction, getInitialWalletBalance, getInitialWalletTransactions, saveWalletBalance, saveWalletTransactions, formatCredits } from "../utils/wallet";
 import { Logo } from "./Logo";
-import { getStoredAuthUser, getAuthToken, fetchCurrentUserApi, AuthUser } from "../utils/api";
+import { getStoredAuthUser, getAuthToken, fetchCurrentUserApi, AuthUser, CatalogItemRecord, BusinessCategoryRecord } from "../utils/api";
 import { JewelryType } from "../types";
 
 const Sparkles = (props: any) => <Icon icon="lucide:sparkles" {...props} />;
@@ -172,6 +171,8 @@ interface SingleRowSliderProps {
   onSelect: (id: string) => void;
   getItemIcon: (id: string) => React.ReactNode;
   t: Record<string, string>;
+  catalogItemsMap?: Map<string, CatalogItemRecord>;
+  lang?: "en" | "te";
 }
 
 const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
@@ -180,16 +181,18 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
   onSelect,
   getItemIcon,
   t,
+  catalogItemsMap,
+  lang = "en",
 }) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const isMouseDown = React.useRef(false);
-  const startX = React.useRef(0);
-  const scrollLeftPos = React.useRef(0);
-  const hasDragged = React.useRef(false);
+  const isMouseDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftPos = useRef(0);
+  const hasDragged = useRef(false);
 
   const updateScrollState = () => {
     const el = containerRef.current;
@@ -298,7 +301,25 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
       <div className="flex flex-wrap items-center justify-center gap-2.5 py-1 px-1 w-full">
         {items.map((id) => {
           const isSelected = selectedId === id;
-          const imageSrc = `/items/${id}.jpg`;
+          const catItem = catalogItemsMap?.get(id);
+          const imageSrc = catItem?.sampleImageUrl || catItem?.thumbnailUrl || `/items/${id}.jpg`;
+          const displayName = lang === "te"
+            ? (catItem?.nameTe || t[id] || id)
+            : (catItem?.nameEn || t[id] || id.replace(/_/g, " "));
+
+          const renderedIcon = catItem?.icon ? (
+            <Icon
+              icon={
+                catItem.icon.startsWith("lucide:")
+                  ? catItem.icon
+                  : `lucide:${catItem.icon.toLowerCase()}`
+              }
+              className="w-4 h-4"
+            />
+          ) : (
+            getItemIcon(id)
+          );
+
           return (
             <button
               key={id}
@@ -309,13 +330,18 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
                 : "border border-black/10 dark:border-white/10 shadow-xs hover:scale-[1.04] hover:shadow-md active:scale-[0.97]"
                 }`}
             >
-              {/* Background Image from public/items */}
+              {/* Background Image from API or public/items */}
               <img
                 src={imageSrc}
-                alt={t[id] || id}
+                alt={displayName}
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300 pointer-events-none"
                 onError={(e) => {
-                  (e.currentTarget as HTMLElement).style.display = "none";
+                  const target = e.currentTarget as HTMLImageElement;
+                  if (target.src && !target.src.endsWith(`/items/${id}.jpg`)) {
+                    target.src = `/items/${id}.jpg`;
+                  } else {
+                    target.style.display = "none";
+                  }
                 }}
               />
 
@@ -330,7 +356,7 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
               {/* Top Row: Mini Icon Badge + Selected Checkmark Indicator */}
               <div className="relative z-10 w-full flex items-center justify-between pointer-events-none">
                 <div className="w-6 h-6 rounded-full bg-black/60 backdrop-blur-xs border border-white/20 flex items-center justify-center text-white/90 shrink-0 shadow-xs">
-                  {getItemIcon(id)}
+                  {renderedIcon}
                 </div>
                 {isSelected && (
                   <span className="w-4 h-4 rounded-full bg-accent text-white flex items-center justify-center shadow-xs">
@@ -341,7 +367,7 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
 
               {/* Bottom Label: Clear bold white typography with drop shadow */}
               <span className="relative z-10 text-[9px] xs:text-[9.5px] sm:text-[10px] font-black text-white text-center leading-tight drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.95)] max-w-full px-0.5 uppercase tracking-tight pointer-events-none break-words whitespace-normal">
-                {t[id] || id.replace(/_/g, " ")}
+                {displayName}
               </span>
             </button>
           );
@@ -357,7 +383,7 @@ interface HeaderProps {
   workspace: string;
   garmentModelGender: "female" | "male";
   jewelryModelGender: "female" | "male";
-  onSelectBusiness: (category: "garment" | "jewelry", gender: "female" | "male") => void;
+  onSelectBusiness: (category: "garment" | "jewelry", gender: "female" | "male", selectedItem?: string) => void;
   lang: "en" | "te";
 
   // Billing props
@@ -478,6 +504,26 @@ export const Header: React.FC<HeaderProps> = ({
   setIsWalletOpen: propSetIsWalletOpen,
   isSuperAdmin: propIsSuperAdmin,
 }) => {
+  const {
+    garmentCategories,
+    jewelryCategories,
+    getGarmentItems,
+    getJewelryItems,
+    catalogItems,
+    businesses,
+    workspacesList,
+    wearTypes,
+    getWearTypesByWorkspace,
+    genders,
+  } = useStudioConfig();
+
+  const catalogItemsMap = useMemo(() => {
+    const map = new Map<string, CatalogItemRecord>();
+    for (const item of catalogItems || []) {
+      map.set(item.id, item);
+    }
+    return map;
+  }, [catalogItems]);
   const [isOpen, setIsOpen] = useState(true);
   const [isBillingOpen, setIsBillingOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -523,7 +569,7 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   const effectiveIsSuperAdmin =
-    propIsSuperAdmin !== undefined ? propIsSuperAdmin : authUser?.role === "superadmin";
+    propIsSuperAdmin !== undefined ? propIsSuperAdmin : authUser?.role === "admin";
 
   const isWalletOpen = propIsWalletOpen !== undefined ? propIsWalletOpen : internalIsWalletOpen;
   const setIsWalletOpen = propSetIsWalletOpen !== undefined ? propSetIsWalletOpen : setInternalIsWalletOpen;
@@ -620,19 +666,238 @@ export const Header: React.FC<HeaderProps> = ({
   const [tempJewelryGender, setTempJewelryGender] = useState<"female" | "male">(jewelryModelGender);
   const [tempGarmentType, setTempGarmentType] = useState<any>(garmentType);
   const [tempJewelryType, setTempJewelryType] = useState<any>(jewelryType);
-  const [tempGarmentCategoryFilter, setTempGarmentCategoryFilter] = useState<"full_wear" | "top_wear" | "bottom_wear">("full_wear");
-  const [tempJewelryCategoryFilter, setTempJewelryCategoryFilter] = useState<"neck_ear" | "ear_wear" | "wrist_ring" | "hip" | "nose" | "leg" | "forehead" | "accessories">("neck_ear");
+  const [tempGarmentCategoryFilter, setTempGarmentCategoryFilter] = useState<string>("full_wear");
+  const [tempJewelryCategoryFilter, setTempJewelryCategoryFilter] = useState<string>("neck_wear");
+  const [tempBusinessCategoryId, setTempBusinessCategoryId] = useState<string>(() => {
+    const ws = (workspace === "garment" || workspace === "jewelry") ? workspace : "garment";
+    const g = ws === "garment" ? garmentModelGender : jewelryModelGender;
+    return `${ws}_${g}`;
+  });
+
+  const activeWorkspacesWithBusinesses = useMemo(() => {
+    const wsWithBiz = new Set(
+      (businesses || []).filter((b) => b.isActive).map((b) => b.workspace)
+    );
+    const list = (workspacesList || []).filter(
+      (ws) => ws.isActive && wsWithBiz.has(ws.id as any)
+    );
+    if (list.length > 0) return list;
+    return FALLBACK_WORKSPACES.filter((ws) => ws.id === "garment" || ws.id === "jewelry");
+  }, [workspacesList, businesses]);
+
+  // Sync tempBusinessCategoryId whenever businesses or selection changes
+  useEffect(() => {
+    if (businesses && businesses.length > 0) {
+      const currentGender = tempWorkspace === "garment" ? tempGarmentGender : tempJewelryGender;
+      const match = businesses.find(
+        (b) => b.workspace === tempWorkspace && b.genderTarget === currentGender && b.isActive
+      );
+      if (match && match.id !== tempBusinessCategoryId) {
+        setTempBusinessCategoryId(match.id);
+      }
+    }
+  }, [businesses, tempWorkspace, tempGarmentGender, tempJewelryGender]);
 
   const handleOpenModal = () => {
-    setTempWorkspace((workspace === "garment" || workspace === "jewelry") ? workspace : "garment");
+    const currentWs = (workspace === "garment" || workspace === "jewelry") ? workspace : "garment";
+    setTempWorkspace(currentWs);
     setTempGarmentGender(garmentModelGender);
     setTempJewelryGender(jewelryModelGender);
     setTempGarmentType(garmentType);
     setTempJewelryType(jewelryType);
-    setTempGarmentCategoryFilter("full_wear");
-    setTempJewelryCategoryFilter("neck_ear");
+
+    const currentGender = currentWs === "garment" ? garmentModelGender : jewelryModelGender;
+    const initialBiz = (businesses || []).find(
+      (b) => b.workspace === currentWs && b.genderTarget === currentGender && b.isActive
+    ) || (businesses || []).find((b) => b.workspace === currentWs && b.isActive);
+
+    setTempBusinessCategoryId(initialBiz?.id || `${currentWs}_${currentGender}`);
+
+    // Initial category filter dynamically derived from current item's wearType
+    const currentGarmentRecord = catalogItemsMap.get(garmentType);
+    const garmentWearType = currentGarmentRecord?.wearType || currentGarmentRecord?.wearTypeId || "full_wear";
+    setTempGarmentCategoryFilter(garmentWearType);
+
+    const currentJewelryRecord = catalogItemsMap.get(jewelryType);
+    const jewelryWearType = currentJewelryRecord?.wearType || currentJewelryRecord?.wearTypeId || "neck_wear";
+    setTempJewelryCategoryFilter(jewelryWearType);
+
     setIsOpen(true);
   };
+
+  const handleSelectBusinessCategory = (biz: BusinessCategoryRecord) => {
+    const ws = (biz.workspace === "garment" || biz.workspace === "jewelry") ? biz.workspace : "garment";
+    setTempWorkspace(ws);
+    setTempBusinessCategoryId(biz.id);
+    const targetGender = (biz.genderTarget === "male" ? "male" : "female") as "female" | "male";
+    if (ws === "garment") {
+      setTempGarmentGender(targetGender);
+    } else {
+      setTempJewelryGender(targetGender);
+    }
+
+    const bizItems = (catalogItems || []).filter(
+      (item) =>
+        item.isActive &&
+        item.workspace === ws &&
+        (item.businessCategoryId === biz.id ||
+          item.genderTarget === targetGender ||
+          item.genderTarget === "unisex" ||
+          item.genderTarget === "all")
+    ).sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+
+    const currentFilter = ws === "garment" ? tempGarmentCategoryFilter : tempJewelryCategoryFilter;
+    const itemsInFilter = bizItems.filter((i) => (i.wearType || i.wearTypeId) === currentFilter);
+
+    if (itemsInFilter.length > 0) {
+      const currentItem = ws === "garment" ? tempGarmentType : tempJewelryType;
+      if (!itemsInFilter.some((i) => i.id === currentItem)) {
+        if (ws === "garment") setTempGarmentType(itemsInFilter[0].id);
+        else setTempJewelryType(itemsInFilter[0].id);
+      }
+    } else if (bizItems.length > 0) {
+      const nextWearType = bizItems[0].wearType || bizItems[0].wearTypeId;
+      if (ws === "garment") {
+        if (nextWearType) setTempGarmentCategoryFilter(nextWearType);
+        setTempGarmentType(bizItems[0].id);
+      } else {
+        if (nextWearType) setTempJewelryCategoryFilter(nextWearType);
+        setTempJewelryType(bizItems[0].id);
+      }
+    }
+  };
+
+  const handleSelectGarmentCategory = (catCode: string) => {
+    setTempGarmentCategoryFilter(catCode);
+    const bizItems = (catalogItems || []).filter(
+      (item) =>
+        item.isActive &&
+        item.workspace === "garment" &&
+        (tempBusinessCategoryId
+          ? item.businessCategoryId === tempBusinessCategoryId ||
+            item.genderTarget === tempGarmentGender ||
+            item.genderTarget === "unisex" ||
+            item.genderTarget === "all"
+          : item.genderTarget === tempGarmentGender ||
+            item.genderTarget === "unisex" ||
+            item.genderTarget === "all")
+    );
+    const itemsInCat = bizItems.filter((i) => (i.wearType || i.wearTypeId) === catCode);
+    if (itemsInCat.length > 0 && !itemsInCat.some((i) => i.id === tempGarmentType)) {
+      setTempGarmentType(itemsInCat[0].id);
+    }
+  };
+
+  const handleSelectJewelryCategory = (catCode: string) => {
+    setTempJewelryCategoryFilter(catCode);
+    const bizItems = (catalogItems || []).filter(
+      (item) =>
+        item.isActive &&
+        item.workspace === "jewelry" &&
+        (tempBusinessCategoryId
+          ? item.businessCategoryId === tempBusinessCategoryId ||
+            item.genderTarget === tempJewelryGender ||
+            item.genderTarget === "unisex" ||
+            item.genderTarget === "all"
+          : item.genderTarget === tempJewelryGender ||
+            item.genderTarget === "unisex" ||
+            item.genderTarget === "all")
+    );
+    const itemsInCat = bizItems.filter((i) => (i.wearType || i.wearTypeId) === catCode);
+    if (itemsInCat.length > 0 && !itemsInCat.some((i) => i.id === tempJewelryType)) {
+      setTempJewelryType(itemsInCat[0].id);
+    }
+  };
+
+  const activeWearTypes = useMemo(() => {
+    const wsWearTypes = (wearTypes || [])
+      .filter((wt) => wt.workspace === tempWorkspace && wt.isActive)
+      .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+
+    const currentGender = tempWorkspace === "garment" ? tempGarmentGender : tempJewelryGender;
+    const bizItems = (catalogItems || []).filter(
+      (item) =>
+        item.isActive &&
+        item.workspace === tempWorkspace &&
+        (tempBusinessCategoryId
+          ? item.businessCategoryId === tempBusinessCategoryId ||
+            item.genderTarget === currentGender ||
+            item.genderTarget === "unisex" ||
+            item.genderTarget === "all"
+          : item.genderTarget === currentGender ||
+            item.genderTarget === "unisex" ||
+            item.genderTarget === "all")
+    );
+
+    const availableCodes = new Set(bizItems.map((i) => i.wearType || i.wearTypeId));
+    const filtered = wsWearTypes.filter((wt) => availableCodes.has(wt.code || wt.id));
+    if (filtered.length > 0) return filtered;
+    if (wsWearTypes.length > 0) return wsWearTypes;
+
+    const fallbackLookups = tempWorkspace === "garment" ? garmentCategories : jewelryCategories;
+    return (fallbackLookups || []).map((l) => ({
+      id: l.id || l.code,
+      code: l.code,
+      workspace: tempWorkspace,
+      nameEn: l.nameEn,
+      nameTe: l.nameTe,
+      description: null,
+      icon: null,
+      displayOrder: l.displayOrder ?? 0,
+      isActive: true,
+    }));
+  }, [
+    wearTypes,
+    tempWorkspace,
+    tempBusinessCategoryId,
+    tempGarmentGender,
+    tempJewelryGender,
+    catalogItems,
+    garmentCategories,
+    jewelryCategories,
+  ]);
+
+  const activeCategoryItems = useMemo(() => {
+    const currentGender = tempWorkspace === "garment" ? tempGarmentGender : tempJewelryGender;
+    const currentCategoryFilter =
+      tempWorkspace === "garment" ? tempGarmentCategoryFilter : tempJewelryCategoryFilter;
+
+    const bizItems = (catalogItems || []).filter(
+      (item) =>
+        item.isActive &&
+        item.workspace === tempWorkspace &&
+        (tempBusinessCategoryId
+          ? item.businessCategoryId === tempBusinessCategoryId ||
+            item.genderTarget === currentGender ||
+            item.genderTarget === "unisex" ||
+            item.genderTarget === "all"
+          : item.genderTarget === currentGender ||
+            item.genderTarget === "unisex" ||
+            item.genderTarget === "all")
+    ).sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+
+    if (bizItems.length === 0) {
+      return tempWorkspace === "garment"
+        ? getGarmentItems(tempGarmentGender, currentCategoryFilter)
+        : getJewelryItems(tempJewelryGender, currentCategoryFilter);
+    }
+
+    const filtered = bizItems.filter(
+      (i) => (i.wearType || i.wearTypeId) === currentCategoryFilter
+    );
+
+    return filtered.length > 0 ? filtered : bizItems;
+  }, [
+    catalogItems,
+    tempWorkspace,
+    tempBusinessCategoryId,
+    tempGarmentGender,
+    tempJewelryGender,
+    tempGarmentCategoryFilter,
+    tempJewelryCategoryFilter,
+    getGarmentItems,
+    getJewelryItems,
+  ]);
 
   useEffect(() => {
     const handleOpenBusinessModalEvent = () => {
@@ -657,7 +922,7 @@ export const Header: React.FC<HeaderProps> = ({
       window.removeEventListener("srushti:open-history-modal", handleOpenHistoryModalEvent);
       window.removeEventListener("srushti:open-settings-modal", handleOpenSettingsModalEvent);
     };
-  }, [workspace, garmentModelGender, jewelryModelGender, garmentType, jewelryType, setIsWalletOpen]);
+  }, [workspace, garmentModelGender, jewelryModelGender, garmentType, jewelryType, setIsWalletOpen, catalogItemsMap]);
 
   return (
     <header className="px-4 pt-2 pb-3 mx-auto max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] w-full shrink-0">
@@ -704,16 +969,16 @@ export const Header: React.FC<HeaderProps> = ({
             <Icon icon="lucide:history" className="w-4 h-4" />
           </button>
 
-          {/* Admin Panel popup trigger icon - exclusively shown for superadmin role */}
+          {/* Admin Panel button - directs admins directly to /admin-dashboard */}
           {effectiveIsSuperAdmin && (
-            <button
+            <Link
+              to="/admin-dashboard"
               id="btn-trigger-admin-modal"
-              onClick={() => setIsBillingOpen(true)}
               className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
-              title={isEn ? "Admin Panel" : "అడ్మిన్ ప్యానెల్"}
+              title={isEn ? "Open Admin Dashboard" : "అడ్మిన్ డాష్‌బోర్డ్ తెరవండి"}
             >
               <CreditCard className="w-4 h-4" />
-            </button>
+            </Link>
           )}
 
           {/* Profile popup trigger icon */}
@@ -788,180 +1053,149 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
 
-              {/* Selection Blocks */}
-              {/* Garments block */}
-              <div className="space-y-2">
-                <h4 className="text-[10px] font-black tracking-wider uppercase opacity-60 flex items-center gap-1">
-                  <Shirt className="w-3.5 h-3.5 text-accent" />
-                  {isEn ? "Garment" : "బట్టలు (Garment)"}
-                </h4>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTempWorkspace("garment");
-                      setTempGarmentGender("female");
-                      if (!GENDER_GARMENT_MAPPING.female.includes(tempGarmentType as any)) {
-                        setTempGarmentType("saree");
-                      }
-                    }}
-                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${tempWorkspace === "garment" && tempGarmentGender === "female"
-                      ? "nm-inset text-accent font-extrabold"
-                      : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
-                      }`}
-                  >
-                    <span className="text-[11px] font-bold">
-                      {isEn ? "Female Collection" : "మహిళల కలెక్షన్"}
-                    </span>
-                  </button>
+              {/* Dynamic Business Categories grouped by Workspace from API + DB */}
+              <div className="space-y-4">
+                {activeWorkspacesWithBusinesses.map((ws) => {
+                  const wsBusinesses = (businesses || [])
+                    .filter((b) => b.workspace === ws.id && b.isActive)
+                    .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTempWorkspace("garment");
-                      setTempGarmentGender("male");
-                      if (!GENDER_GARMENT_MAPPING.male.includes(tempGarmentType as any)) {
-                        setTempGarmentType("shirt");
-                      }
-                    }}
-                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${tempWorkspace === "garment" && tempGarmentGender === "male"
-                      ? "nm-inset text-accent font-extrabold"
-                      : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
-                      }`}
-                  >
-                    <span className="text-[11px] font-bold">
-                      {isEn ? "Male Collection" : "పురుషుల కలెక్షన్"}
-                    </span>
-                  </button>
-                </div>
+                  if (wsBusinesses.length === 0) return null;
+
+                  return (
+                    <div key={ws.id} className="space-y-2">
+                      <h4 className="text-[10px] font-black tracking-wider uppercase opacity-60 flex items-center gap-1.5">
+                        {ws.id === "garment" ? (
+                          <Shirt className="w-3.5 h-3.5 text-accent" />
+                        ) : ws.id === "jewelry" ? (
+                          <Gem className="w-3.5 h-3.5 text-accent" />
+                        ) : (
+                          <Sparkles className="w-3.5 h-3.5 text-accent" />
+                        )}
+                        <span>
+                          {isEn
+                            ? (ws.nameEn || ws.id)
+                            : (ws.nameTe || ws.nameEn || ws.id)}
+                        </span>
+                      </h4>
+
+                      <div
+                        className={`grid gap-2.5 ${
+                          wsBusinesses.length > 2
+                            ? "grid-cols-2 sm:grid-cols-3"
+                            : "grid-cols-2"
+                        }`}
+                      >
+                        {wsBusinesses.map((biz) => {
+                          const isSelected =
+                            tempWorkspace === biz.workspace &&
+                            (tempBusinessCategoryId === biz.id ||
+                              (!tempBusinessCategoryId &&
+                                (biz.workspace === "garment"
+                                  ? tempGarmentGender === biz.genderTarget
+                                  : tempJewelryGender === biz.genderTarget)));
+
+                          return (
+                            <button
+                              key={biz.id}
+                              type="button"
+                              onClick={() => handleSelectBusinessCategory(biz)}
+                              className={`p-2.5 rounded-xl flex items-center justify-center text-center gap-2 transition-all cursor-pointer ${
+                                isSelected
+                                  ? "nm-inset text-accent font-extrabold"
+                                  : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
+                              }`}
+                            >
+                              {biz.icon && (
+                                <Icon
+                                  icon={
+                                    biz.icon.startsWith("lucide:")
+                                      ? biz.icon
+                                      : `lucide:${biz.icon.toLowerCase()}`
+                                  }
+                                  className="w-3.5 h-3.5 shrink-0 opacity-80"
+                                />
+                              )}
+                              <span className="text-[11px] font-bold">
+                                {isEn ? biz.nameEn : (biz.nameTe || biz.nameEn)}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Jewelry block */}
-              <div className="space-y-2">
-                <h4 className="text-[10px] font-black tracking-wider uppercase opacity-60 flex items-center gap-1">
-                  <Gem className="w-3.5 h-3.5 text-accent" />
-                  {isEn ? "Jewelry" : "నగలు (Jewelry)"}
-                </h4>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTempWorkspace("jewelry");
-                      setTempJewelryGender("female");
-                      if (!GENDER_JEWELRY_MAPPING.female.includes(tempJewelryType as any)) {
-                        setTempJewelryType("necklace");
-                      }
-                    }}
-                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${tempWorkspace === "jewelry" && tempJewelryGender === "female"
-                      ? "nm-inset text-accent font-extrabold"
-                      : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
-                      }`}
-                  >
-                    <span className="text-[11px] font-bold">
-                      {isEn ? "Female Collection" : "మహిళల కలెక్షన్"}
-                    </span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTempWorkspace("jewelry");
-                      setTempJewelryGender("male");
-                      if (!GENDER_JEWELRY_MAPPING.male.includes(tempJewelryType as any)) {
-                        setTempJewelryType("chain");
-                      }
-                    }}
-                    className={`p-2.5 rounded-xl flex flex-col items-center justify-center text-center gap-1 transition-all cursor-pointer ${tempWorkspace === "jewelry" && tempJewelryGender === "male"
-                      ? "nm-inset text-accent font-extrabold"
-                      : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
-                      }`}
-                  >
-                    <span className="text-[11px] font-bold">
-                      {isEn ? "Male Collection" : "పురుషుల కలెక్షన్"}
-                    </span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Select Item block */}
+              {/* Select Item block - Dynamic from API + DB */}
               <div className="space-y-2.5 pt-1">
                 <label className="text-[10px] font-black tracking-wider uppercase opacity-60 flex items-center gap-1">
-                  {tempWorkspace === "garment" ? <Shirt className="w-3.5 h-3.5 text-accent" /> : <Gem className="w-3.5 h-3.5 text-accent" />}
+                  {tempWorkspace === "garment" ? (
+                    <Shirt className="w-3.5 h-3.5 text-accent" />
+                  ) : (
+                    <Gem className="w-3.5 h-3.5 text-accent" />
+                  )}
                   {isEn ? "Select Item" : "వస్తువును ఎంచుకోండి"}
                 </label>
 
-                {/* Dynamic Item Grid inside Select Business popup for Garment */}
-                {tempWorkspace === "garment" && (
-                  <div className="space-y-2.5">
-                    {/* Temp Category Filter */}
-                    <div className="flex flex-wrap gap-1 p-1.5 rounded-xl nm-inset-sm max-w-full">
-                      {(["full_wear", "top_wear", "bottom_wear"] as const).map((cat) => (
+                {/* Category / Wear Type Tabs - from DB wear_types table */}
+                <div className="space-y-2.5">
+                  <div className="flex flex-wrap gap-1 p-1.5 rounded-xl nm-inset-sm max-w-full">
+                    {activeWearTypes.map((catItem) => {
+                      const code = catItem.code || catItem.id;
+                      const activeFilter =
+                        tempWorkspace === "garment"
+                          ? tempGarmentCategoryFilter
+                          : tempJewelryCategoryFilter;
+                      const isSelected = activeFilter === code;
+
+                      return (
                         <button
-                          key={cat}
+                          key={catItem.id || code}
                           type="button"
-                          onClick={() => setTempGarmentCategoryFilter(cat)}
-                          className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all text-center uppercase tracking-tight ${tempGarmentCategoryFilter === cat
-                            ? "bg-accent/10 text-accent font-black nm-outset-xs"
-                            : "text-[var(--text-primary)] text-opacity-60 hover:text-opacity-90"
-                            }`}
+                          onClick={() => {
+                            if (tempWorkspace === "garment") {
+                              handleSelectGarmentCategory(code);
+                            } else {
+                              handleSelectJewelryCategory(code);
+                            }
+                          }}
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all text-center uppercase tracking-tight cursor-pointer ${
+                            isSelected
+                              ? "bg-accent/10 text-accent font-black nm-outset-xs"
+                              : "text-[var(--text-primary)] text-opacity-60 hover:text-opacity-90"
+                          }`}
                         >
-                          {cat === "full_wear" && (isEn ? "Full" : "పూర్తి")}
-                          {cat === "top_wear" && (isEn ? "Top" : "పై")}
-                          {cat === "bottom_wear" && (isEn ? "Bottom" : "క్రింది")}
+                          {isEn
+                            ? (catItem.nameEn || code)
+                            : (catItem.nameTe || catItem.nameEn || code)}
                         </button>
-                      ))}
-                    </div>
-
-                    <SingleRowSlider
-                      items={GENDER_GARMENT_MAPPING[tempGarmentGender].filter((id) =>
-                        (GARMENT_CATEGORY_MAPPING[tempGarmentCategoryFilter] as readonly string[]).includes(id)
-                      )}
-                      selectedId={tempGarmentType}
-                      onSelect={(id) => setTempGarmentType(id)}
-                      getItemIcon={getGarmentIcon}
-                      t={t}
-                    />
+                      );
+                    })}
                   </div>
-                )}
 
-                {/* Dynamic Item Grid inside Select Business popup for Jewelry */}
-                {tempWorkspace === "jewelry" && (
-                  <div className="space-y-2.5">
-                    {/* Temp Category Filter */}
-                    <div className="flex flex-wrap gap-1 p-1.5 rounded-xl nm-inset-sm max-w-full">
-                      {(["neck_ear", "ear_wear", "wrist_ring", "hip", "nose", "leg", "forehead", "accessories"] as const).map((cat) => (
-                        <button
-                          key={cat}
-                          type="button"
-                          onClick={() => setTempJewelryCategoryFilter(cat as any)}
-                          className={`px-2 py-1 rounded-lg text-[10px] font-extrabold transition-all text-center uppercase tracking-tight ${tempJewelryCategoryFilter === cat
-                            ? "bg-accent/10 text-accent font-black nm-outset-xs"
-                            : "text-[var(--text-primary)] text-opacity-60 hover:text-opacity-90"
-                            }`}
-                        >
-                          {cat === "neck_ear" && (isEn ? "Neck" : "నెక్")}
-                          {cat === "ear_wear" && (isEn ? "Ear" : "చెవి")}
-                          {cat === "wrist_ring" && (isEn ? "Wrist" : "రిస్ట్")}
-                          {cat === "hip" && (isEn ? "Hip" : "వడ్డాణం")}
-                          {cat === "nose" && (isEn ? "Nose" : "ముక్కు")}
-                          {cat === "leg" && (isEn ? "Leg" : "కాలు / పట్టీలు")}
-                          {cat === "forehead" && (isEn ? "Forehead" : "పాపిడి బిళ్ళ")}
-                          {cat === "accessories" && (isEn ? "Other" : "ఇతర")}
-                        </button>
-                      ))}
-                    </div>
-
-                    <SingleRowSlider
-                      items={GENDER_JEWELRY_MAPPING[tempJewelryGender].filter((id) =>
-                        (JEWELRY_CATEGORY_MAPPING[tempJewelryCategoryFilter] as readonly string[]).includes(id)
-                      )}
-                      selectedId={tempJewelryType}
-                      onSelect={(id) => setTempJewelryType(id)}
-                      getItemIcon={getJewelryIcon}
-                      t={t}
-                    />
-                  </div>
-                )}
+                  {/* Dynamic Item Grid inside Select Business popup */}
+                  <SingleRowSlider
+                    items={activeCategoryItems.map((item) => item.id)}
+                    selectedId={
+                      tempWorkspace === "garment" ? tempGarmentType : tempJewelryType
+                    }
+                    onSelect={(id) => {
+                      if (tempWorkspace === "garment") {
+                        setTempGarmentType(id);
+                      } else {
+                        setTempJewelryType(id);
+                      }
+                    }}
+                    getItemIcon={
+                      tempWorkspace === "garment" ? getGarmentIcon : getJewelryIcon
+                    }
+                    t={t}
+                    catalogItemsMap={catalogItemsMap}
+                    lang={lang}
+                  />
+                </div>
               </div>
 
               {/* Confirm Button & Selection Summary */}
@@ -973,20 +1207,48 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                   <div className="flex items-center gap-1.5 font-black text-accent text-xs">
                     <span>
-                      {tempWorkspace === "garment"
-                        ? (isEn ? "Garment" : "బట్టలు")
-                        : (isEn ? "Jewelry" : "నగలు")}
+                      {(() => {
+                        const wsRec = workspacesList.find((w) => w.id === tempWorkspace);
+                        if (wsRec) {
+                          return isEn ? wsRec.nameEn : (wsRec.nameTe || wsRec.nameEn);
+                        }
+                        return tempWorkspace === "garment"
+                          ? (isEn ? "Garment" : "బట్టలు")
+                          : (isEn ? "Jewelry" : "నగలు");
+                      })()}
                     </span>
                     <span className="text-[var(--text-secondary)] opacity-40">•</span>
                     <span>
-                      {(tempWorkspace === "garment" ? tempGarmentGender : tempJewelryGender) === "female"
-                        ? (isEn ? "Female" : "మహిళలు")
-                        : (isEn ? "Male" : "పురుషులు")}
+                      {(() => {
+                        const currentGender =
+                          tempWorkspace === "garment" ? tempGarmentGender : tempJewelryGender;
+                        const bizRec =
+                          businesses.find((b) => b.id === tempBusinessCategoryId) ||
+                          businesses.find(
+                            (b) =>
+                              b.workspace === tempWorkspace &&
+                              b.genderTarget === currentGender &&
+                              b.isActive
+                          );
+                        if (bizRec) {
+                          return isEn ? bizRec.nameEn : (bizRec.nameTe || bizRec.nameEn);
+                        }
+                        return currentGender === "female"
+                          ? (isEn ? "Female" : "మహిళలు")
+                          : (isEn ? "Male" : "పురుషులు");
+                      })()}
                     </span>
                     <span className="text-[var(--text-secondary)] opacity-40">•</span>
                     <span className="uppercase">
-                      {t[tempWorkspace === "garment" ? tempGarmentType : tempJewelryType] ||
-                        (tempWorkspace === "garment" ? tempGarmentType : tempJewelryType)?.replace("_", " ")}
+                      {(() => {
+                        const activeId =
+                          tempWorkspace === "garment" ? tempGarmentType : tempJewelryType;
+                        const activeItem = catalogItemsMap.get(activeId);
+                        if (activeItem) {
+                          return isEn ? activeItem.nameEn : (activeItem.nameTe || activeItem.nameEn);
+                        }
+                        return t[activeId] || activeId?.replace(/_/g, " ");
+                      })()}
                     </span>
                   </div>
                 </div>
@@ -996,7 +1258,8 @@ export const Header: React.FC<HeaderProps> = ({
                   type="button"
                   onClick={() => {
                     const finalGender = tempWorkspace === "garment" ? tempGarmentGender : tempJewelryGender;
-                    onSelectBusiness(tempWorkspace, finalGender);
+                    const finalItem = tempWorkspace === "garment" ? tempGarmentType : tempJewelryType;
+                    onSelectBusiness(tempWorkspace, finalGender, finalItem);
                     if (tempWorkspace === "garment") {
                       setGarmentType(tempGarmentType);
                     } else if (tempWorkspace === "jewelry") {
@@ -1015,95 +1278,7 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Pop-up Dialog for Billing / Admin Panel */}
-      <AnimatePresence>
-        {isBillingOpen && effectiveIsSuperAdmin && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsBillingOpen(false)}
-              className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm"
-            />
 
-            {/* Modal Dialog Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-6 max-w-lg landscape:max-w-3xl lg:max-w-4xl w-full space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[85vh] overflow-y-auto custom-scrollbar shadow-none"
-            >
-              {/* Header inside the popup card */}
-              <div className="flex items-start justify-between border-b border-white/5 pb-2">
-                <div>
-                  <h3 className="text-sm font-extrabold text-[var(--text-emphasis)] tracking-tight">
-                    {t.billingTitle}
-                  </h3>
-                  <p className="text-[10px] opacity-75 mt-0.5 leading-relaxed">
-                    {t.billingSubtitle}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setIsBillingOpen(false)}
-                  className="w-7 h-7 rounded-full flex items-center justify-center nm-outset-sm hover:scale-105 active:scale-95 text-accent cursor-pointer shrink-0"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Admin Workspace Component */}
-              <div className="pt-2">
-                <Suspense
-                  fallback={
-                    <div className="min-h-[300px] flex flex-col items-center justify-center space-y-3">
-                      <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
-                      <span className="text-xs font-bold text-accent">Loading Admin Workspace...</span>
-                    </div>
-                  }
-                >
-                  <AdminWorkspace
-                    apiKey={apiKey}
-                    apiInput={apiInput}
-                    setApiInput={setApiInput}
-                    onSaveApiKey={onSaveApiKey}
-                    estimatedCost={estimatedCost}
-                    lang={lang}
-                    t={t}
-                    selectedImageModel={selectedImageModel}
-                    setSelectedImageModel={setSelectedImageModel}
-                    gptImageQuality={gptImageQuality}
-                    setGptImageQuality={setGptImageQuality}
-                    selectedProvider={selectedProvider}
-                    setSelectedProvider={setSelectedProvider}
-                    currency={currency}
-                    setCurrency={setCurrency}
-                    usdToInrRate={usdToInrRate}
-                    setUsdToInrRate={setUsdToInrRate}
-                    onRefreshLiveRate={onRefreshLiveRate}
-                    isFetchingRate={isFetchingRate}
-                    rateFetchStatus={rateFetchStatus}
-                    hideTitle={true}
-                    isValidatingKey={isValidatingKey}
-                    keyValidationError={keyValidationError}
-                    setKeyValidationError={setKeyValidationError}
-                    openaiApiKey={openaiApiKey}
-                    openaiApiInput={openaiApiInput}
-                    setOpenaiApiInput={setOpenaiApiInput}
-                    onSaveOpenaiApiKey={onSaveOpenaiApiKey}
-                    geminiApiKey={geminiApiKey}
-                    geminiApiInput={geminiApiInput}
-                    setGeminiApiInput={setGeminiApiInput}
-                    onSaveGeminiApiKey={onSaveGeminiApiKey}
-                  />
-                </Suspense>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* Pop-up Dialog for Settings */}
       <AnimatePresence>

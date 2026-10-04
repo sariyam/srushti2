@@ -1,6 +1,6 @@
 import { z } from "@hono/zod-openapi";
 
-export const UserRoleEnum = z.enum(["user", "admin", "superadmin"]).openapi({
+export const UserRoleEnum = z.enum(["user", "admin"]).openapi({
   description: "Role assigned to the user",
   example: "user",
 });
@@ -16,6 +16,10 @@ export const UserModel = z
       example: "+919059108434",
     }),
     role: UserRoleEnum,
+    gender: z.string().nullable().optional().openapi({
+      description: "User demographic gender referencing genders lookup table",
+      example: "all",
+    }),
     walletBalance: z.number().int().openapi({
       description: "Available generation credits in the user's wallet",
       example: 100,

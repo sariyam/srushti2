@@ -182,7 +182,7 @@ export class OtpService {
         .values({
           phone: cleanIdentifier,
           walletBalance: 10,
-          role: cleanIdentifier === env.SUPERADMIN_PHONE ? "superadmin" : "user",
+          role: cleanIdentifier === env.SUPERADMIN_PHONE ? "admin" : "user",
           isActive: true,
         })
         .returning();

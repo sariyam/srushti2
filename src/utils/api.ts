@@ -7,7 +7,8 @@ import { parseError } from "./errorHandler";
 export interface AuthUser {
   id: string;
   phone: string;
-  role: "user" | "admin" | "superadmin";
+  role: "user" | "admin";
+  gender?: string | null;
   walletBalance: number;
   avatarUrl?: string | null;
 }
@@ -628,6 +629,7 @@ export interface GenerateAiImageParams {
   quality?: string;
   model?: string;
   productImage: string;
+  presentationMode?: string;
   faceImage?: string;
   metadata?: Record<string, any>;
 }
@@ -677,3 +679,885 @@ export async function generateAiImageApi(params: GenerateAiImageParams): Promise
 
   return data;
 }
+
+// =============================================================================
+// ADMIN DASHBOARD & STUDIO CONFIG API CLIENTS
+// =============================================================================
+
+export interface WearTypeRecord {
+  id: string;
+  workspace: "garment" | "jewelry" | string;
+  code: string;
+  nameEn: string;
+  nameTe: string;
+  description?: string | null;
+  icon?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BusinessCategoryRecord {
+  id: string;
+  workspace: "garment" | "jewelry";
+  genderTarget: "female" | "male" | "all" | string;
+  nameEn: string;
+  nameTe: string;
+  icon?: string | null;
+  bannerUrl?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CatalogItemRecord {
+  id: string;
+  wearType: string;
+  wearTypeId?: string | null;
+  businessCategoryId?: string | null;
+  workspace: "garment" | "jewelry" | string;
+  genderTarget: "female" | "male" | "unisex" | "all" | string;
+  categoryLabel?: string;
+  nameEn: string;
+  nameTe: string;
+  icon?: string | null;
+  sampleImageUrl?: string | null;
+  thumbnailUrl?: string | null;
+  promptDirective: string;
+  placementDirective?: string | null;
+  negativePrompt?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  metadata?: Record<string, any>;
+  presentationIds?: string[];
+  backgroundIds?: string[];
+  poseIds?: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface WorkspaceRecord {
+  id: string;
+  code: string;
+  nameEn: string;
+  nameTe: string;
+  description?: string | null;
+  icon?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface FaceRecord {
+  id: string;
+  workspace: "garment" | "jewelry" | "all";
+  genderTarget?: "female" | "male" | "unisex" | "all" | string;
+  wearTypeId?: string | null;
+  subCategory?: string | null;
+  nameEn: string;
+  nameTe: string;
+  promptDirective: string;
+  cameraFraming?: string | null;
+  faceVisibilityRule?: "full_face" | "partial_face" | "no_face" | null;
+  thumbnailUrl?: string | null;
+  previewImageUrl?: string | null;
+  storagePath?: string | null;
+  colorHex?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PoseRecord {
+  id: string;
+  workspace: "garment" | "jewelry" | "all";
+  genderTarget?: "female" | "male" | "unisex" | "all" | string;
+  wearTypeId?: string | null;
+  subCategory?: string | null;
+  nameEn: string;
+  nameTe: string;
+  promptDirective: string;
+  cameraFraming?: string | null;
+  faceVisibilityRule?: "full_face" | "partial_face" | "no_face" | null;
+  thumbnailUrl?: string | null;
+  previewImageUrl?: string | null;
+  storagePath?: string | null;
+  colorHex?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PresentationRecord {
+  id: string;
+  workspace: "garment" | "jewelry" | "all";
+  genderTarget?: "female" | "male" | "unisex" | "all" | string;
+  wearTypeId?: string | null;
+  subCategory?: string | null;
+  nameEn: string;
+  nameTe: string;
+  promptDirective: string;
+  cameraFraming?: string | null;
+  faceVisibilityRule?: "full_face" | "partial_face" | "no_face" | null;
+  thumbnailUrl?: string | null;
+  previewImageUrl?: string | null;
+  storagePath?: string | null;
+  colorHex?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BackgroundRecord {
+  id: string;
+  workspace: "garment" | "jewelry" | "all";
+  genderTarget?: "female" | "male" | "unisex" | "all" | string;
+  wearTypeId?: string | null;
+  subCategory?: string | null;
+  nameEn: string;
+  nameTe: string;
+  promptDirective: string;
+  cameraFraming?: string | null;
+  faceVisibilityRule?: "full_face" | "partial_face" | "no_face" | null;
+  thumbnailUrl?: string | null;
+  previewImageUrl?: string | null;
+  storagePath?: string | null;
+  colorHex?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface StudioPresetRecord {
+  id: string;
+  wearTypeId?: string | null;
+  type?: "pose" | "background" | "face" | "presentation" | "style";
+  workspace: "garment" | "jewelry" | "all";
+  genderTarget?: "female" | "male" | "unisex" | "all" | string;
+  subCategory?: string | null;
+  nameEn: string;
+  nameTe: string;
+  thumbnailUrl?: string | null;
+  previewImageUrl?: string | null;
+  previewUrl?: string | null;
+  storagePath?: string | null;
+  promptDirective: string;
+  cameraFraming?: string | null;
+  faceVisibilityRule?: "full_face" | "partial_face" | "no_face" | null;
+  colorHex?: string | null;
+  negativePrompt?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface SystemSettingRecord {
+  id?: string;
+  key: string;
+  value: any;
+  description?: string | null;
+  updatedAt?: string;
+}
+
+export interface AdminUserRecord {
+  id: string;
+  phone: string;
+  role: "user" | "admin";
+  gender?: string | null;
+  walletBalance: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface GenderRecord {
+  id: string;
+  code: string;
+  nameEn: string;
+  nameTe: string;
+  description?: string | null;
+  icon?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface SystemLookupRecord {
+  id: string;
+  type: "background_type" | "gender" | "garment_category" | "jewelry_category" | string;
+  code: string;
+  nameEn: string;
+  nameTe: string;
+  description?: string | null;
+  icon?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface GroupedLookups {
+  backgroundTypes: SystemLookupRecord[];
+  genders: SystemLookupRecord[];
+  garmentCategories: SystemLookupRecord[];
+  jewelryCategories: SystemLookupRecord[];
+  all?: SystemLookupRecord[];
+}
+
+export interface StudioConfigResponse {
+  success: boolean;
+  categories: BusinessCategoryRecord[];
+  businesses?: BusinessCategoryRecord[];
+  catalogItems: CatalogItemRecord[];
+  presets: {
+    poses: StudioPresetRecord[];
+    backgrounds: StudioPresetRecord[];
+    presentations: StudioPresetRecord[];
+    presentationModes?: StudioPresetRecord[];
+    faces: StudioPresetRecord[];
+    styles: StudioPresetRecord[];
+  };
+  poses?: StudioPresetRecord[];
+  backgrounds?: StudioPresetRecord[];
+  presentations?: StudioPresetRecord[];
+  presentationModes?: StudioPresetRecord[];
+  faces?: StudioPresetRecord[];
+  lookups?: GroupedLookups;
+  wearTypes?: WearTypeRecord[];
+  genders?: GenderRecord[];
+  workspaces?: WorkspaceRecord[];
+  settings: Record<string, any>;
+  optionMappings?: any;
+  heroSlides?: any[];
+  presetColors?: any[];
+  pricingMatrix?: any;
+  imageModels?: any[];
+  imageResolutions?: any;
+  translations?: {
+    en?: any;
+    te?: any;
+  };
+  systemSettings?: {
+    pricing?: any;
+    fidelityRules?: string[];
+    negativeExclusions?: string[];
+  };
+}
+
+/**
+ * Fetch unified studio configuration (100% backend driven)
+ */
+export async function fetchStudioConfigApi(forceFresh = false): Promise<StudioConfigResponse> {
+  const baseUrl = getApiBaseUrl();
+  const url = forceFresh ? `${baseUrl}/studio/config?_t=${Date.now()}` : `${baseUrl}/studio/config`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-cache",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    throw new Error(data?.message || data?.error || `Failed to fetch studio config (${res.status})`);
+  }
+  return data;
+}
+
+/**
+ * Common auth fetch wrapper for Admin API endpoints
+ */
+async function adminFetch(endpoint: string, options: RequestInit = {}): Promise<any> {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error("Admin session required. Please sign in as admin.");
+  }
+  const baseUrl = getApiBaseUrl();
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    ...(options.headers as Record<string, string> || {}),
+  };
+
+  // If body is NOT FormData, default to application/json
+  if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  const res = await fetch(`${baseUrl}/admin${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.success === false) {
+    throw new Error(data?.message || data?.error || `Admin API Error (${res.status})`);
+  }
+
+  // If this was a modifying operation, broadcast event so /studio auto-refreshes immediately
+  const method = (options.method || "GET").toUpperCase();
+  if (method === "POST" || method === "PUT" || method === "PATCH" || method === "DELETE") {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("srushti:studio-config-updated"));
+    }
+  }
+
+  return data;
+}
+
+// 1. Business Verticals
+export async function fetchAdminBusinessesApi(): Promise<BusinessCategoryRecord[]> {
+  const data = await adminFetch("/businesses");
+  return data.categories || [];
+}
+
+export async function createAdminBusinessApi(payload: Partial<BusinessCategoryRecord>): Promise<BusinessCategoryRecord> {
+  const data = await adminFetch("/businesses", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.category;
+}
+
+export async function updateAdminBusinessApi(id: string, payload: Partial<BusinessCategoryRecord>): Promise<BusinessCategoryRecord> {
+  const data = await adminFetch(`/businesses/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.category;
+}
+
+export async function deleteAdminBusinessApi(id: string): Promise<void> {
+  await adminFetch(`/businesses/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+// 2. Catalog Items
+export async function fetchAdminCatalogApi(filters?: {
+  wearType?: string;
+  wearTypeId?: string;
+  workspace?: string;
+  genderTarget?: string;
+  businessCategoryId?: string;
+  categoryLabel?: string;
+  search?: string;
+  isActive?: boolean;
+}): Promise<CatalogItemRecord[]> {
+  const query = new URLSearchParams();
+  if (filters?.wearType) query.set("wearType", filters.wearType);
+  if (filters?.wearTypeId) query.set("wearTypeId", filters.wearTypeId);
+  if (filters?.workspace) query.set("workspace", filters.workspace);
+  if (filters?.genderTarget) query.set("genderTarget", filters.genderTarget);
+  if (filters?.businessCategoryId) query.set("businessCategoryId", filters.businessCategoryId);
+  if (filters?.categoryLabel) query.set("categoryLabel", filters.categoryLabel);
+  if (filters?.search) query.set("search", filters.search);
+  if (filters?.isActive !== undefined) query.set("isActive", String(filters.isActive));
+  query.set("limit", "200");
+
+  const data = await adminFetch(`/catalog?${query.toString()}`);
+  return data.items || [];
+}
+
+export async function createAdminCatalogItemApi(payload: Partial<CatalogItemRecord>): Promise<CatalogItemRecord> {
+  const data = await adminFetch("/catalog", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.item;
+}
+
+export async function updateAdminCatalogItemApi(id: string, payload: Partial<CatalogItemRecord>): Promise<CatalogItemRecord> {
+  const data = await adminFetch(`/catalog/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.item;
+}
+
+export async function deleteAdminCatalogItemApi(id: string): Promise<void> {
+  await adminFetch(`/catalog/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+export async function toggleAdminCatalogItemStatusApi(id: string): Promise<CatalogItemRecord> {
+  const data = await adminFetch(`/catalog/${encodeURIComponent(id)}/status`, {
+    method: "PATCH",
+  });
+  return data.item;
+}
+
+// 3. Studio Presets
+export async function fetchAdminPresetsApi(filters?: {
+  type?: string;
+  workspace?: string;
+  isActive?: boolean;
+}): Promise<StudioPresetRecord[]> {
+  const query = new URLSearchParams();
+  if (filters?.type) query.set("type", filters.type);
+  if (filters?.workspace) query.set("workspace", filters.workspace);
+  if (filters?.isActive !== undefined) query.set("isActive", String(filters.isActive));
+  query.set("limit", "200");
+
+  const data = await adminFetch(`/presets?${query.toString()}`);
+  return data.presets || [];
+}
+
+export async function createAdminPresetApi(payload: Partial<StudioPresetRecord>): Promise<StudioPresetRecord> {
+  const data = await adminFetch("/presets", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.preset;
+}
+
+export async function updateAdminPresetApi(id: string, payload: Partial<StudioPresetRecord>): Promise<StudioPresetRecord> {
+  const data = await adminFetch(`/presets/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.preset;
+}
+
+export async function deleteAdminPresetApi(id: string): Promise<void> {
+  await adminFetch(`/presets/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+export async function toggleAdminPresetStatusApi(id: string): Promise<StudioPresetRecord> {
+  const data = await adminFetch(`/presets/${encodeURIComponent(id)}/status`, {
+    method: "PATCH",
+  });
+  return data.preset;
+}
+
+// 4. Model Faces & Supabase Storage Management
+export async function fetchAdminFacesApi(filters?: {
+  workspace?: string;
+  genderTarget?: string;
+  wearTypeId?: string;
+  isActive?: boolean;
+}): Promise<FaceRecord[]> {
+  const query = new URLSearchParams();
+  if (filters?.workspace) query.set("workspace", filters.workspace);
+  if (filters?.genderTarget) query.set("genderTarget", filters.genderTarget);
+  if (filters?.wearTypeId) query.set("wearTypeId", filters.wearTypeId);
+  if (filters?.isActive !== undefined) query.set("isActive", String(filters.isActive));
+  query.set("limit", "200");
+
+  const data = await adminFetch(`/faces?${query.toString()}`);
+  return data.faces || [];
+}
+
+export async function createAdminFaceApi(payload: Partial<FaceRecord>): Promise<FaceRecord> {
+  const data = await adminFetch("/faces", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.face;
+}
+
+export async function updateAdminFaceApi(id: string, payload: Partial<FaceRecord>): Promise<FaceRecord> {
+  const data = await adminFetch(`/faces/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.face;
+}
+
+export async function toggleAdminFaceStatusApi(id: string): Promise<FaceRecord> {
+  const data = await adminFetch(`/faces/${encodeURIComponent(id)}/status`, {
+    method: "PATCH",
+  });
+  return data.face;
+}
+
+export async function uploadAdminFaceApi(formData: FormData): Promise<StudioPresetRecord> {
+  const data = await adminFetch("/faces/upload", {
+    method: "POST",
+    body: formData,
+  });
+  return data.preset || data.face;
+}
+
+export async function replaceAdminFacePhotoApi(id: string, formData: FormData): Promise<StudioPresetRecord> {
+  const data = await adminFetch(`/faces/${encodeURIComponent(id)}/replace`, {
+    method: "PUT",
+    body: formData,
+  });
+  return data.preset || data.face;
+}
+
+export async function deleteAdminFaceApi(id: string): Promise<void> {
+  await adminFetch(`/faces/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+// 5. Poses API
+export async function fetchAdminPosesApi(filters?: {
+  workspace?: string;
+  genderTarget?: string;
+  wearTypeId?: string;
+  isActive?: boolean;
+}): Promise<PoseRecord[]> {
+  const query = new URLSearchParams();
+  if (filters?.workspace) query.set("workspace", filters.workspace);
+  if (filters?.genderTarget) query.set("genderTarget", filters.genderTarget);
+  if (filters?.wearTypeId) query.set("wearTypeId", filters.wearTypeId);
+  if (filters?.isActive !== undefined) query.set("isActive", String(filters.isActive));
+  query.set("limit", "200");
+
+  const data = await adminFetch(`/poses?${query.toString()}`);
+  return data.poses || [];
+}
+
+export async function createAdminPoseApi(payload: Partial<PoseRecord>): Promise<PoseRecord> {
+  const data = await adminFetch("/poses", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.pose;
+}
+
+export async function updateAdminPoseApi(id: string, payload: Partial<PoseRecord>): Promise<PoseRecord> {
+  const data = await adminFetch(`/poses/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.pose;
+}
+
+export async function deleteAdminPoseApi(id: string): Promise<void> {
+  await adminFetch(`/poses/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+export async function toggleAdminPoseStatusApi(id: string): Promise<PoseRecord> {
+  const data = await adminFetch(`/poses/${encodeURIComponent(id)}/status`, {
+    method: "PATCH",
+  });
+  return data.pose;
+}
+
+// 6. Presentations API
+export async function fetchAdminPresentationsApi(filters?: {
+  workspace?: string;
+  genderTarget?: string;
+  wearTypeId?: string;
+  isActive?: boolean;
+}): Promise<PresentationRecord[]> {
+  const query = new URLSearchParams();
+  if (filters?.workspace) query.set("workspace", filters.workspace);
+  if (filters?.genderTarget) query.set("genderTarget", filters.genderTarget);
+  if (filters?.wearTypeId) query.set("wearTypeId", filters.wearTypeId);
+  if (filters?.isActive !== undefined) query.set("isActive", String(filters.isActive));
+  query.set("limit", "200");
+
+  const data = await adminFetch(`/presentations?${query.toString()}`);
+  return data.presentations || [];
+}
+
+export async function createAdminPresentationApi(payload: Partial<PresentationRecord>): Promise<PresentationRecord> {
+  const data = await adminFetch("/presentations", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.presentation;
+}
+
+export async function updateAdminPresentationApi(id: string, payload: Partial<PresentationRecord>): Promise<PresentationRecord> {
+  const data = await adminFetch(`/presentations/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.presentation;
+}
+
+export async function deleteAdminPresentationApi(id: string): Promise<void> {
+  await adminFetch(`/presentations/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+export async function toggleAdminPresentationStatusApi(id: string): Promise<PresentationRecord> {
+  const data = await adminFetch(`/presentations/${encodeURIComponent(id)}/status`, {
+    method: "PATCH",
+  });
+  return data.presentation;
+}
+
+// 7. Backgrounds API
+export async function fetchAdminBackgroundsApi(filters?: {
+  workspace?: string;
+  genderTarget?: string;
+  wearTypeId?: string;
+  isActive?: boolean;
+}): Promise<BackgroundRecord[]> {
+  const query = new URLSearchParams();
+  if (filters?.workspace) query.set("workspace", filters.workspace);
+  if (filters?.genderTarget) query.set("genderTarget", filters.genderTarget);
+  if (filters?.wearTypeId) query.set("wearTypeId", filters.wearTypeId);
+  if (filters?.isActive !== undefined) query.set("isActive", String(filters.isActive));
+  query.set("limit", "200");
+
+  const data = await adminFetch(`/backgrounds?${query.toString()}`);
+  return data.backgrounds || [];
+}
+
+export async function createAdminBackgroundApi(payload: Partial<BackgroundRecord>): Promise<BackgroundRecord> {
+  const data = await adminFetch("/backgrounds", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.background;
+}
+
+export async function updateAdminBackgroundApi(id: string, payload: Partial<BackgroundRecord>): Promise<BackgroundRecord> {
+  const data = await adminFetch(`/backgrounds/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.background;
+}
+
+export async function deleteAdminBackgroundApi(id: string): Promise<void> {
+  await adminFetch(`/backgrounds/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+export async function toggleAdminBackgroundStatusApi(id: string): Promise<BackgroundRecord> {
+  const data = await adminFetch(`/backgrounds/${encodeURIComponent(id)}/status`, {
+    method: "PATCH",
+  });
+  return data.background;
+}
+
+// 5. System Settings
+export async function fetchAdminSettingsApi(): Promise<SystemSettingRecord[]> {
+  const data = await adminFetch("/settings");
+  return data.settings || [];
+}
+
+export async function updateAdminSettingByKeyApi(key: string, value: any, description?: string): Promise<SystemSettingRecord> {
+  const data = await adminFetch(`/settings/${encodeURIComponent(key)}`, {
+    method: "PUT",
+    body: JSON.stringify({ value, description }),
+  });
+  return data.setting;
+}
+
+// 6. Users & Credit Topup
+export async function fetchAdminUsersApi(): Promise<AdminUserRecord[]> {
+  const data = await adminFetch("/users");
+  return data.users || [];
+}
+
+export async function adjustAdminCreditsApi(userId: string, amount: number, description?: string): Promise<any> {
+  const data = await adminFetch("/credits/adjust", {
+    method: "POST",
+    body: JSON.stringify({ userId, amount, description }),
+  });
+  return data;
+}
+
+export async function toggleAdminUserStatusApi(userId: string): Promise<any> {
+  const data = await adminFetch(`/users/${encodeURIComponent(userId)}/status`, {
+    method: "PATCH",
+  });
+  return data;
+}
+
+// 7. System Lookups (Public & Admin)
+export async function fetchLookupsApi(): Promise<GroupedLookups> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/studio/lookups`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    throw new Error(data?.message || data?.error || `Failed to fetch lookups (${res.status})`);
+  }
+  return data.lookups;
+}
+
+export async function fetchAdminLookupsApi(type?: string): Promise<SystemLookupRecord[]> {
+  const query = type ? `?type=${encodeURIComponent(type)}` : "";
+  const data = await adminFetch(`/lookups${query}`);
+  return data.lookups || [];
+}
+
+export async function createAdminLookupApi(payload: Partial<SystemLookupRecord>): Promise<SystemLookupRecord> {
+  const data = await adminFetch("/lookups", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.lookup;
+}
+
+export async function updateAdminLookupApi(id: string, payload: Partial<SystemLookupRecord>): Promise<SystemLookupRecord> {
+  const data = await adminFetch(`/lookups/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.lookup;
+}
+
+export async function deleteAdminLookupApi(id: string): Promise<void> {
+  await adminFetch(`/lookups/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+// 8. Gender Demographics (Public & Admin)
+export async function fetchGendersApi(): Promise<GenderRecord[]> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/studio/genders`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    throw new Error(data?.message || data?.error || `Failed to fetch genders (${res.status})`);
+  }
+  return data.genders || [];
+}
+
+export async function fetchAdminGendersApi(isActive?: boolean): Promise<GenderRecord[]> {
+  const query = isActive !== undefined ? `?isActive=${isActive}` : "";
+  const data = await adminFetch(`/genders${query}`);
+  return data.genders || [];
+}
+
+export async function createAdminGenderApi(payload: Partial<GenderRecord>): Promise<GenderRecord> {
+  const data = await adminFetch("/genders", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.gender;
+}
+
+export async function updateAdminGenderApi(id: string, payload: Partial<GenderRecord>): Promise<GenderRecord> {
+  const data = await adminFetch(`/genders/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.gender;
+}
+
+export async function deleteAdminGenderApi(id: string): Promise<void> {
+  await adminFetch(`/genders/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+// 9. Workspaces (Public & Admin)
+export async function fetchWorkspacesApi(): Promise<WorkspaceRecord[]> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/studio/workspaces`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    throw new Error(data?.message || data?.error || `Failed to fetch workspaces (${res.status})`);
+  }
+  return data.workspaces || [];
+}
+
+export async function fetchAdminWorkspacesApi(isActive?: boolean): Promise<WorkspaceRecord[]> {
+  const query = isActive !== undefined ? `?isActive=${isActive}` : "";
+  const data = await adminFetch(`/workspaces${query}`);
+  return data.workspaces || [];
+}
+
+export async function createAdminWorkspaceApi(payload: Partial<WorkspaceRecord>): Promise<WorkspaceRecord> {
+  const data = await adminFetch("/workspaces", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.workspace;
+}
+
+export async function updateAdminWorkspaceApi(id: string, payload: Partial<WorkspaceRecord>): Promise<WorkspaceRecord> {
+  const data = await adminFetch(`/workspaces/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.workspace;
+}
+
+export async function deleteAdminWorkspaceApi(id: string): Promise<void> {
+  await adminFetch(`/workspaces/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+// 10. Wear Types (Public & Admin)
+export async function fetchWearTypesApi(workspace?: string): Promise<WearTypeRecord[]> {
+  const baseUrl = getApiBaseUrl();
+  const query = workspace ? `?workspace=${encodeURIComponent(workspace)}` : "";
+  const res = await fetch(`${baseUrl}/studio/wear-types${query}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    throw new Error(data?.message || data?.error || `Failed to fetch wear types (${res.status})`);
+  }
+  return data.wearTypes || [];
+}
+
+export async function fetchAdminWearTypesApi(filters?: {
+  workspace?: string;
+  isActive?: boolean;
+}): Promise<WearTypeRecord[]> {
+  const query = new URLSearchParams();
+  if (filters?.workspace) query.set("workspace", filters.workspace);
+  if (filters?.isActive !== undefined) query.set("isActive", String(filters.isActive));
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  const data = await adminFetch(`/wear-types${qs}`);
+  return data.wearTypes || [];
+}
+
+export async function createAdminWearTypeApi(payload: Partial<WearTypeRecord>): Promise<WearTypeRecord> {
+  const data = await adminFetch("/wear-types", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return data.wearType;
+}
+
+export async function updateAdminWearTypeApi(id: string, payload: Partial<WearTypeRecord>): Promise<WearTypeRecord> {
+  const data = await adminFetch(`/wear-types/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return data.wearType;
+}
+
+export async function deleteAdminWearTypeApi(id: string): Promise<void> {
+  await adminFetch(`/wear-types/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
+
+

@@ -9,9 +9,9 @@ const isPooler = env.DATABASE_URL.includes("6543") || env.DATABASE_URL.includes(
 export const queryClient = postgres(env.DATABASE_URL, {
   prepare: !isPooler,
   ssl: env.DATABASE_URL.includes("localhost") ? false : "require",
-  max: env.NODE_ENV === "production" ? 10 : 2,
-  idle_timeout: 20,
-  connect_timeout: 15,
+  max: env.NODE_ENV === "production" ? 15 : 8,
+  idle_timeout: 30,
+  connect_timeout: 10,
 });
 
 export const db = drizzle(queryClient, { schema });
@@ -40,4 +40,5 @@ export async function checkDbConnection(): Promise<{
   }
 }
 
+export * from "./schema";
 export { schema, env, getEnv };

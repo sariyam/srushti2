@@ -4,6 +4,7 @@ import paymentRoutes from "./payment.routes";
 import usageRoutes from "./usage.routes";
 import adminRoutes from "./admin.routes";
 import aiRoutes from "./ai.routes";
+import studioRoutes from "./studio.routes";
 import { checkDbConnection } from "../config";
 
 const router = Router();
@@ -13,6 +14,7 @@ router.use("/payments", paymentRoutes);
 router.use("/usage", usageRoutes);
 router.use("/admin", adminRoutes);
 router.use("/ai", aiRoutes);
+router.use("/studio", studioRoutes);
 
 import {
   getOpenApiDocument,

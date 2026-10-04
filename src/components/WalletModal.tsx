@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Icon } from "@iconify/react";
 import { WalletTransaction, getCreditSettings, formatCredits } from "../utils/wallet";
@@ -9,6 +9,7 @@ import {
   loadRazorpayCheckoutScript,
   fetchCurrentUserApi,
 } from "../utils/api";
+import { useStudioConfig } from "../context/StudioConfigContext";
 
 interface WalletModalProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
   usdToInrRate = 83.5,
 }) => {
   const isEn = lang === "en";
+  const { config } = useStudioConfig();
   const creditSettings = getCreditSettings();
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number>(
     currency === "INR" ? 500 : 25
@@ -45,25 +47,43 @@ export const WalletModal: React.FC<WalletModalProps> = ({
   const [showSuccessNotice, setShowSuccessNotice] = useState<string | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  if (!isOpen) return null;
-
   // Conversion rates from Admin settings
   const conversionRate = currency === "INR" ? creditSettings.creditsPerInr : creditSettings.creditsPerUsd;
 
-  // Quick Recharge Packs (Currency price -> Credits + Bonus Credits)
-  const inrPresets = [
-    { amount: 200, credits: 200, bonus: 20, label: "+20 Bonus Credits", badge: null },
-    { amount: 500, credits: 500, bonus: 100, label: "+100 Bonus Credits", badge: isEn ? "Most Popular" : "అత్యంత ప్రజాదరణ" },
-    { amount: 1000, credits: 1000, bonus: 300, label: "+300 Bonus Credits", badge: isEn ? "Pro Value" : "ఉత్తమ విలువ" },
-    { amount: 2500, credits: 2500, bonus: 1000, label: "+1000 Bonus Credits", badge: isEn ? "Mega Pack" : "మెగా ప్యాక్" },
-  ];
+  // Dynamic Quick Recharge Packs from DB system_settings with robust fallback
+  const dynamicPacks = (config?.settings as any)?.pricing_matrix?.rechargePacks || (config?.settings as any)?.pricing_rules?.packs;
 
-  const usdPresets = [
-    { amount: 10, credits: 850, bonus: 100, label: "+100 Bonus Credits", badge: null },
-    { amount: 25, credits: 2125, bonus: 400, label: "+400 Bonus Credits", badge: isEn ? "Most Popular" : "అత్యంత ప్రజాదరణ" },
-    { amount: 50, credits: 4250, bonus: 1000, label: "+1000 Bonus Credits", badge: isEn ? "Pro Value" : "ఉత్తమ విలువ" },
-    { amount: 100, credits: 8500, bonus: 2500, label: "+2500 Bonus Credits", badge: isEn ? "Mega Pack" : "మెగా ప్యాక్" },
-  ];
+  const inrPresets = useMemo(() => {
+    if (dynamicPacks?.inr && Array.isArray(dynamicPacks.inr) && dynamicPacks.inr.length > 0) {
+      return dynamicPacks.inr.map((p: any) => ({
+        ...p,
+        badge: p.badge ? (isEn ? p.badge : (p.badgeTe || p.badge)) : null,
+      }));
+    }
+    return [
+      { amount: 200, credits: 200, bonus: 20, label: "+20 Bonus Credits", badge: null },
+      { amount: 500, credits: 500, bonus: 100, label: "+100 Bonus Credits", badge: isEn ? "Most Popular" : "అత్యంత ప్రజాదరణ" },
+      { amount: 1000, credits: 1000, bonus: 300, label: "+300 Bonus Credits", badge: isEn ? "Pro Value" : "ఉత్తమ విలువ" },
+      { amount: 2500, credits: 2500, bonus: 1000, label: "+1000 Bonus Credits", badge: isEn ? "Mega Pack" : "మెగా ప్యాక్" },
+    ];
+  }, [dynamicPacks, isEn]);
+
+  const usdPresets = useMemo(() => {
+    if (dynamicPacks?.usd && Array.isArray(dynamicPacks.usd) && dynamicPacks.usd.length > 0) {
+      return dynamicPacks.usd.map((p: any) => ({
+        ...p,
+        badge: p.badge ? (isEn ? p.badge : (p.badgeTe || p.badge)) : null,
+      }));
+    }
+    return [
+      { amount: 10, credits: 850, bonus: 100, label: "+100 Bonus Credits", badge: null },
+      { amount: 25, credits: 2125, bonus: 400, label: "+400 Bonus Credits", badge: isEn ? "Most Popular" : "అత్యంత ప్రజాదరణ" },
+      { amount: 50, credits: 4250, bonus: 1000, label: "+1000 Bonus Credits", badge: isEn ? "Pro Value" : "ఉత్తమ విలువ" },
+      { amount: 100, credits: 8500, bonus: 2500, label: "+2500 Bonus Credits", badge: isEn ? "Mega Pack" : "మెగా ప్యాక్" },
+    ];
+  }, [dynamicPacks, isEn]);
+
+  if (!isOpen) return null;
 
   const quickPresets = currency === "INR" ? inrPresets : usdPresets;
 

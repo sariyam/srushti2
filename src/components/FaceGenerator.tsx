@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useMemo } from "react";
 import { motion } from "motion/react";
 import { Icon } from "@iconify/react";
+import { useStudioConfig } from "../context/StudioConfigContext";
 
 
 const Smile = (props: any) => <Icon icon="lucide:smile" {...props} />;
@@ -774,9 +775,43 @@ export const FaceGenerator: React.FC<FaceGeneratorProps> = ({
   const [currentFaceIndex, setCurrentFaceIndex] = React.useState(0);
   const [subtabIndex, setSubtabIndex] = React.useState(0);
 
+  const { modelFaces } = useStudioConfig();
+
   // Combine custom faces with preset faces matching current gender
   const customFacesList = customFaces.filter(f => f.gender === gender).map(f => ({ ...f, category: "custom" as const, isCustom: true }));
-  const presetFacesList = PRESET_FACES.filter(f => f.gender === gender);
+
+  // Dynamically resolve preset faces from backend / Supabase Storage with local fallback
+  const presetFacesList = useMemo(() => {
+    if (modelFaces && modelFaces.length > 0) {
+      const backendFaces: ModelFace[] = modelFaces
+        .filter((f) => {
+          const faceGender = (f.metadata as any)?.gender || f.genderTarget;
+          return faceGender === gender || faceGender === "all" || faceGender === "unisex";
+        })
+        .map((f) => ({
+          id: f.id,
+          nameEn: f.nameEn,
+          nameTe: f.nameTe,
+          gender:
+            (f.metadata as any)?.gender === "female" || (f.metadata as any)?.gender === "male"
+              ? (f.metadata as any).gender
+              : f.genderTarget === "female" || f.genderTarget === "male"
+              ? f.genderTarget
+              : gender,
+          prompt: f.promptDirective,
+          url: f.previewImageUrl || f.previewUrl || f.thumbnailUrl || `/faces/${f.id}.jpg`,
+          fallbackUrl: FALLBACK_UNSPLASH_MAP[f.id] || `/faces/${f.id}.jpg` || "/faces/indian_f.jpg",
+          category: ((f.subCategory as any) || (f.metadata as any)?.ethnicity || (f.metadata as any)?.category || "indian") as any,
+        }));
+
+      if (backendFaces.length > 0) {
+        const backendIds = new Set(backendFaces.map((b) => b.id));
+        const remainingStatic = PRESET_FACES.filter((f) => f.gender === gender && !backendIds.has(f.id));
+        return [...backendFaces, ...remainingStatic];
+      }
+    }
+    return PRESET_FACES.filter((f) => f.gender === gender);
+  }, [modelFaces, gender]);
 
   const allFaces = [
     ...customFacesList,

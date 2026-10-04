@@ -8,6 +8,7 @@ import { getGarmentPoses } from "../utils/optionMapping";
 import { FaceGenerator, ModelFace } from "./FaceGenerator";
 import { PresentationSlider } from "./PresentationSlider";
 import { HorizontalSliderTrack } from "./HorizontalSliderTrack";
+import { useStudioConfig, WorkspaceTab } from "../context/StudioConfigContext";
 
 const Shirt = (props: any) => <Icon icon="lucide:shirt" {...props} />;
 const User = (props: any) => <Icon icon="lucide:user" {...props} />;
@@ -54,8 +55,8 @@ function isDarkColor(hex: string): boolean {
 }
 
 interface GarmentWorkspaceProps {
-  garmentTab: "setup" | "studio" | "background";
-  setGarmentTab: (tab: "setup" | "studio" | "background") => void;
+  garmentTab: WorkspaceTab;
+  setGarmentTab: (tab: WorkspaceTab) => void;
   garmentType: "saree" | "tshirt" | "jeans" | "shirt" | "western_wear" | "kurta" | "suit" | "salwar" | "lehenga" | "gown" | "skirt" | "crop_top" | "blouse" | "sherwani" | "dhoti" | "blazer" | "tracksuit" | "hoodie";
   setGarmentType: (type: any) => void;
   garmentPresentation: "model" | "partial_face" | "no_face" | "mannequin" | "hanger" | "ghost" | "flat_lay" | "folded" | "shelf" | "shopwindow";
@@ -168,57 +169,131 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const {
+    poses: dynamicPoses,
+    backgrounds: dynamicBackgrounds,
+    presentationModes: dynamicPresentations,
+    backgroundTypes,
+    presetColors: dynamicPresetColors,
+    catalogItems,
+    businesses,
+    workspacesList,
+    optionMappings,
+  } = useStudioConfig();
+
+  const currentCatalogItem = React.useMemo(() => {
+    return catalogItems?.find((i) => i.id === garmentType);
+  }, [catalogItems, garmentType]);
+
+  const availablePresentations = React.useMemo(() => {
+    if (dynamicPresentations && dynamicPresentations.length > 0) {
+      const activeGarmentPres = dynamicPresentations.filter(
+        (p) => p.isActive && (p.workspace === "garment" || p.workspace === "all")
+      );
+      if (currentCatalogItem?.presentationIds && currentCatalogItem.presentationIds.length > 0) {
+        const itemPresSet = new Set(currentCatalogItem.presentationIds);
+        const linked = activeGarmentPres.filter((p) => itemPresSet.has(p.id));
+        if (linked.length > 0) {
+          return linked.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+        }
+      }
+      if (activeGarmentPres.length > 0) {
+        return activeGarmentPres.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+      }
+    }
+    return [
+      { id: "model", nameEn: "Live Human Model", nameTe: "మనిషి మోడల్", faceVisibilityRule: "full_face" },
+      { id: "partial_face", nameEn: "Human Model (Partial Face)", nameTe: "మానవ మోడల్ (పాక్షిక ముఖం)", faceVisibilityRule: "partial_face" },
+      { id: "no_face", nameEn: "Human Model (No Face)", nameTe: "మానవ మోడల్ (ముఖం లేకుండా)", faceVisibilityRule: "no_face" },
+      { id: "mannequin", nameEn: "Realistic Studio Mannequin", nameTe: "బొమ్మ (మెనకిన్)", faceVisibilityRule: "no_face" },
+      { id: "hanger", nameEn: "Boutique Hanger Display", nameTe: "హ్యాంగర్ స్టాండ్", faceVisibilityRule: "no_face" },
+      { id: "ghost", nameEn: "3D Ghost Mannequin", nameTe: "అదృశ్య బొమ్మ", faceVisibilityRule: "no_face" },
+      { id: "flat_lay", nameEn: "Studio Flat Lay", nameTe: "ఫ్లాట్ లే డిజైన్", faceVisibilityRule: "no_face" },
+      { id: "folded", nameEn: "Retail Folded Display", nameTe: "మడతపెట్టిన ప్రదర్శన", faceVisibilityRule: "no_face" },
+      { id: "shelf", nameEn: "Boutique Retail Shelf", nameTe: "రిటైల్ షెల్ఫ్", faceVisibilityRule: "no_face" },
+      { id: "shopwindow", nameEn: "Showroom Window Display", nameTe: "షాప్ విండో", faceVisibilityRule: "no_face" },
+    ];
+  }, [dynamicPresentations, currentCatalogItem]);
+
+  React.useEffect(() => {
+    if (availablePresentations.length > 0 && !availablePresentations.some(p => p.id === garmentPresentation)) {
+      setGarmentPresentation(availablePresentations[0].id);
+    }
+  }, [availablePresentations, garmentPresentation, setGarmentPresentation]);
+
+  const allowedPoses = React.useMemo(() => {
+    const staticPoses = getGarmentPoses(garmentType, garmentPresentation);
+    if (dynamicPoses && dynamicPoses.length > 0) {
+      const activeDynamic = dynamicPoses
+        .filter((p) => (p.workspace === "garment" || p.workspace === "all") && p.isActive);
+
+      if (currentCatalogItem?.poseIds && currentCatalogItem.poseIds.length > 0) {
+        const itemPoseSet = new Set(currentCatalogItem.poseIds);
+        const linked = activeDynamic.filter((p) => itemPoseSet.has(p.id));
+        if (linked.length > 0) {
+          return linked.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)).map((p) => p.id);
+        }
+      }
+
+      const activePoseIdSet = new Set(activeDynamic.map((p) => p.id));
+      const validStatic = staticPoses.filter((id) => !dynamicPoses.some((p) => p.id === id) || activePoseIdSet.has(id));
+      const matchingDynamic = activeDynamic.map((p) => p.id);
+      return Array.from(new Set([...validStatic, ...matchingDynamic]));
+    }
+    return staticPoses;
+  }, [garmentType, garmentPresentation, dynamicPoses, currentCatalogItem]);
+
   // Keep model pose valid when garmentType or garmentPresentation changes
   React.useEffect(() => {
-    const allowed = getGarmentPoses(garmentType, garmentPresentation);
-    if (!allowed.includes(garmentModelPose)) {
-      setGarmentModelPose(allowed[0]);
+    if (!allowedPoses.includes(garmentModelPose)) {
+      setGarmentModelPose(allowedPoses[0]);
     }
-  }, [garmentType, garmentPresentation]);
+  }, [allowedPoses, garmentModelPose, setGarmentModelPose]);
 
-  // Define background compatibility per presentation mode
-  const GARMENT_BG_COMPATIBILITY: Record<string, { indoor: string[]; outdoor: string[] }> = {
-    model: {
-      indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
-      outdoor: ["traditional", "royal", "urban"]
-    },
-    partial_face: {
-      indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
-      outdoor: ["traditional", "royal", "urban"]
-    },
-    no_face: {
-      indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
-      outdoor: ["traditional", "royal", "urban"]
-    },
-    mannequin: {
-      indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
-      outdoor: ["traditional"]
-    },
-    hanger: {
-      indoor: ["plain", "studio", "luxury", "vintage"],
-      outdoor: []
-    },
-    ghost: {
-      indoor: ["plain", "studio", "luxury"],
-      outdoor: []
-    },
-    flat_lay: {
-      indoor: ["plain", "studio", "luxury", "vintage"],
-      outdoor: []
-    },
-    folded: {
-      indoor: ["plain", "studio", "luxury", "vintage"],
-      outdoor: []
-    },
-    shelf: {
-      indoor: ["plain", "studio", "luxury", "vintage", "modern_office"],
-      outdoor: []
-    },
-    shopwindow: {
-      indoor: ["plain", "studio", "luxury", "vintage", "modern_office", "festival"],
-      outdoor: ["urban"]
-    }
-  };
+  // Define background compatibility per presentation mode (backed by dynamic DB settings)
+  const GARMENT_BG_COMPATIBILITY: Record<string, { indoor: string[]; outdoor: string[] }> =
+    optionMappings?.garmentBgCompatibility || {
+      model: {
+        indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
+        outdoor: ["traditional", "royal", "urban"],
+      },
+      partial_face: {
+        indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
+        outdoor: ["traditional", "royal", "urban"],
+      },
+      no_face: {
+        indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
+        outdoor: ["traditional", "royal", "urban"],
+      },
+      mannequin: {
+        indoor: ["plain", "studio", "festival", "luxury", "vintage", "modern_office"],
+        outdoor: ["traditional"],
+      },
+      hanger: {
+        indoor: ["plain", "studio", "luxury", "vintage"],
+        outdoor: [],
+      },
+      ghost: {
+        indoor: ["plain", "studio", "luxury"],
+        outdoor: [],
+      },
+      flat_lay: {
+        indoor: ["plain", "studio", "luxury", "vintage"],
+        outdoor: [],
+      },
+      folded: {
+        indoor: ["plain", "studio", "luxury", "vintage"],
+        outdoor: [],
+      },
+      shelf: {
+        indoor: ["plain", "studio", "luxury", "vintage", "modern_office"],
+        outdoor: [],
+      },
+      shopwindow: {
+        indoor: ["plain", "studio", "luxury", "vintage", "modern_office", "festival"],
+        outdoor: ["urban"],
+      },
+    };
 
   const comp = GARMENT_BG_COMPATIBILITY[garmentPresentation] || GARMENT_BG_COMPATIBILITY.model;
   const hasIndoor = comp.indoor.length > 0;
@@ -268,10 +343,10 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
           <span className="break-words">{lang === "en" ? "Studio" : "స్టూడియో"}</span>
         </button>
         <button
-          id="tab-garment-background"
-          onClick={() => setGarmentTab("background")}
+          id="tab-garment-bg"
+          onClick={() => setGarmentTab("bg")}
           className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-wrap items-center justify-center gap-1 text-center leading-tight transition-all cursor-pointer ${
-            garmentTab === "background" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
+            garmentTab === "bg" || garmentTab === "background" ? "nm-outset-sm text-accent font-extrabold scale-[1.02]" : "text-[var(--text-primary)] hover:text-accent"
           }`}
         >
           <Palette className="w-3.5 h-3.5 flex-shrink-0" />
@@ -292,16 +367,25 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
             </label>
             <div className="flex items-center justify-between p-2.5 px-3 rounded-2xl nm-inset-sm border border-black/5 dark:border-white/5 bg-[var(--bg-secondary)]/40 gap-2">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[var(--text-emphasis)] flex-wrap">
-                <span className="capitalize">{lang === "en" ? "garment" : "బట్టలు"}</span>
+                <span className="capitalize">
+                  {(() => {
+                    const wsRec = (workspacesList || []).find((w) => w.id === "garment");
+                    return wsRec ? (lang === "te" ? (wsRec.nameTe || wsRec.nameEn) : wsRec.nameEn) : (lang === "en" ? "garment" : "బట్టలు");
+                  })()}
+                </span>
                 <ChevronRight className="w-3.5 h-3.5 text-accent opacity-80 shrink-0" />
                 <span>
-                  {garmentModelGender === "female" 
-                    ? (lang === "en" ? "female" : "స్త్రీల") 
-                    : (lang === "en" ? "male" : "పురుషుల")}
+                  {(() => {
+                    const bizRec = (businesses || []).find((b) => b.workspace === "garment" && b.genderTarget === garmentModelGender);
+                    return bizRec ? (lang === "te" ? (bizRec.nameTe || bizRec.nameEn) : bizRec.nameEn) : (garmentModelGender === "female" ? (lang === "en" ? "female" : "స్త్రీల") : (lang === "en" ? "male" : "పురుషుల"));
+                  })()}
                 </span>
                 <ChevronRight className="w-3.5 h-3.5 text-accent opacity-80 shrink-0" />
                 <span className="text-accent font-black uppercase">
-                  {t[garmentType] || garmentType.replace("_", " ")}
+                  {(() => {
+                    const catRec = (catalogItems || []).find((i) => i.id === garmentType);
+                    return catRec ? (lang === "te" ? (catRec.nameTe || catRec.nameEn) : catRec.nameEn) : (t[garmentType] || garmentType.replace("_", " "));
+                  })()}
                 </span>
               </div>
               <button
@@ -479,21 +563,24 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
               {t.presentationMode}
             </label>
             <PresentationSlider
-              items={(["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"] as const).map((mode) => ({
-                id: mode,
-                label: (t as any)[mode] || (mode === "partial_face" ? ((t as any).partialFace || "Human Model(Partial Face)") : mode === "no_face" ? ((t as any).noFace || "Human Model (No Face)") : mode),
+              items={availablePresentations.map((mode) => ({
+                id: mode.id,
+                label: lang === "te" ? (mode.nameTe || mode.nameEn) : mode.nameEn,
                 icon: (
                   <>
-                    {mode === "model" && <User className="w-4 h-4" />}
-                    {mode === "partial_face" && <ScanFace className="w-4 h-4" />}
-                    {mode === "no_face" && <UserX className="w-4 h-4" />}
-                    {mode === "mannequin" && <LuUserRoundIcon className="w-4 h-4" />}
-                    {mode === "hanger" && <Icon icon="ph:coat-hanger-bold" className="w-4 h-4" />}
-                    {mode === "ghost" && <LuGhostIcon className="w-4 h-4" />}
-                    {mode === "flat_lay" && <Icon icon="ph:layout-bold" className="w-4 h-4" />}
-                    {mode === "folded" && <Icon icon="ph:stack-bold" className="w-4 h-4" />}
-                    {mode === "shelf" && <Icon icon="lucide:grid" className="w-4 h-4" />}
-                    {mode === "shopwindow" && <Icon icon="ph:storefront-bold" className="w-4 h-4" />}
+                    {mode.id === "model" && <User className="w-4 h-4" />}
+                    {mode.id === "partial_face" && <ScanFace className="w-4 h-4" />}
+                    {mode.id === "no_face" && <UserX className="w-4 h-4" />}
+                    {mode.id === "mannequin" && <LuUserRoundIcon className="w-4 h-4" />}
+                    {mode.id === "hanger" && <Icon icon="ph:coat-hanger-bold" className="w-4 h-4" />}
+                    {mode.id === "ghost" && <LuGhostIcon className="w-4 h-4" />}
+                    {mode.id === "flat_lay" && <Icon icon="ph:layout-bold" className="w-4 h-4" />}
+                    {mode.id === "folded" && <Icon icon="ph:stack-bold" className="w-4 h-4" />}
+                    {mode.id === "shelf" && <Icon icon="lucide:grid" className="w-4 h-4" />}
+                    {mode.id === "shopwindow" && <Icon icon="ph:storefront-bold" className="w-4 h-4" />}
+                    {!["model", "partial_face", "no_face", "mannequin", "hanger", "ghost", "flat_lay", "folded", "shelf", "shopwindow"].includes(mode.id) && (
+                      <Icon icon="lucide:layers" className="w-4 h-4" />
+                    )}
                   </>
                 ),
               }))}
@@ -502,7 +589,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
             />
           </div>
 
-          {(garmentPresentation === "model" || garmentPresentation === "partial_face" || garmentPresentation === "no_face") && (
+          {(garmentPresentation === "model" || garmentPresentation === "partial_face") && (
             <FaceGenerator
               gender={garmentModelGender}
               selectedFaceId={selectedFaceId}
@@ -519,7 +606,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
       )}
 
       {/* Tab 3 Content: Background Customization */}
-      {garmentTab === "background" && (
+      {(garmentTab === "bg" || garmentTab === "background") && (
         <div 
           className="nm-outset nm-panel rounded-3xl p-4 space-y-3 flex-1 min-h-0 overflow-y-auto scrollbar-thin"
         >
@@ -535,68 +622,88 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                 </span>
               </div>
               
-              {/* Indoor / Outdoor Segmented Filter */}
+              {/* Dynamic Indoor / Outdoor Segmented Filter from System Lookups */}
               {hasIndoor && hasOutdoor && (
                 <div className="flex p-0.5 rounded-xl nm-inset-sm gap-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setBgCategory("indoor");
-                      if (comp.outdoor.includes(garmentBackground)) {
-                        setGarmentBackground(comp.indoor[0] || "studio");
-                      }
-                    }}
-                    className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 ${
-                      bgCategory === "indoor" 
-                        ? "nm-inset-sm text-accent scale-[1.02]" 
-                        : "border-transparent text-[var(--text-emphasis)] text-opacity-60 hover:text-opacity-90"
-                    }`}
-                  >
-                    <LuHomeIcon className="w-3 h-3 text-inherit" />
-                    {lang === "en" ? "Indoor" : "ఇంటి లోపల"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setBgCategory("outdoor");
-                      if (comp.indoor.includes(garmentBackground)) {
-                        setGarmentBackground(comp.outdoor[0] || "traditional");
-                      }
-                    }}
-                    className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 ${
-                      bgCategory === "outdoor" 
-                        ? "nm-inset-sm text-accent scale-[1.02]" 
-                        : "border-transparent text-[var(--text-emphasis)] text-opacity-60 hover:text-opacity-90"
-                    }`}
-                  >
-                    <LuTreesIcon className="w-3 h-3 text-inherit" />
-                    {lang === "en" ? "Outdoor" : "బయట (ప్రకృతి)"}
-                  </button>
+                  {(backgroundTypes || []).map((bgType) => {
+                    const isSelected = bgCategory === bgType.code;
+                    return (
+                      <button
+                        key={bgType.id || bgType.code}
+                        type="button"
+                        onClick={() => {
+                          const target = bgType.code as "indoor" | "outdoor";
+                          setBgCategory(target);
+                          const currentPool = target === "indoor" ? comp.indoor : comp.outdoor;
+                          const otherPool = target === "indoor" ? comp.outdoor : comp.indoor;
+                          if (otherPool.includes(garmentBackground)) {
+                            setGarmentBackground(currentPool[0] || (target === "indoor" ? "studio" : "traditional"));
+                          }
+                        }}
+                        className={`px-3 py-1 rounded-lg text-[10px] font-extrabold transition-all flex items-center gap-1 ${
+                          isSelected 
+                            ? "nm-inset-sm text-accent scale-[1.02]" 
+                            : "border-transparent text-[var(--text-emphasis)] text-opacity-60 hover:text-opacity-90"
+                        }`}
+                      >
+                        {bgType.code === "indoor" ? (
+                          <LuHomeIcon className="w-3 h-3 text-inherit" />
+                        ) : (
+                          <LuTreesIcon className="w-3 h-3 text-inherit" />
+                        )}
+                        {lang === "te" ? bgType.nameTe : bgType.nameEn}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
 
             <PresentationSlider
-              items={(hasIndoor && hasOutdoor
-                ? (bgCategory === "indoor" ? comp.indoor : comp.outdoor)
-                : [...comp.indoor, ...comp.outdoor]
-              ).map((bg) => ({
-                id: bg,
-                label: t[`bg_${bg}`] || bg,
-                icon: (
-                  <>
-                    {bg === "plain" && <Icon icon="lucide:square" className="w-3.5 h-3.5" />}
-                    {bg === "studio" && <LuCameraIcon className="w-3.5 h-3.5" />}
-                    {bg === "traditional" && <LuFlowerIcon className="w-3.5 h-3.5" />}
-                    {bg === "festival" && <LuFlameIcon className="w-3.5 h-3.5" />}
-                    {bg === "luxury" && <LuGemIcon className="w-3.5 h-3.5" />}
-                    {bg === "royal" && <LuCrownIcon className="w-3.5 h-3.5" />}
-                    {bg === "vintage" && <LuCoffeeIcon className="w-3.5 h-3.5" />}
-                    {bg === "modern_office" && <Icon icon="lucide:building-2" className="w-3.5 h-3.5" />}
-                    {bg === "urban" && <Icon icon="lucide:building" className="w-3.5 h-3.5" />}
-                  </>
-                ),
-              }))}
+              items={(() => {
+                const baseList = (hasIndoor && hasOutdoor
+                  ? (bgCategory === "indoor" ? comp.indoor : comp.outdoor)
+                  : [...comp.indoor, ...comp.outdoor]
+                );
+                const activeDynamic = (dynamicBackgrounds || [])
+                  .filter((b) => (b.workspace === "garment" || b.workspace === "all") && b.isActive && (!b.subCategory || b.subCategory === bgCategory));
+                
+                let dynamicList = activeDynamic.map((b) => b.id);
+                if (currentCatalogItem?.backgroundIds && currentCatalogItem.backgroundIds.length > 0) {
+                  const itemBgSet = new Set(currentCatalogItem.backgroundIds);
+                  const linked = activeDynamic.filter((b) => itemBgSet.has(b.id));
+                  if (linked.length > 0) {
+                    dynamicList = linked.map((b) => b.id);
+                  }
+                }
+                const activeBgIdSet = new Set((dynamicBackgrounds || []).filter((b) => b.isActive).map((b) => b.id));
+                const filteredBase = (dynamicBackgrounds && dynamicBackgrounds.length > 0)
+                  ? baseList.filter((id) => !dynamicBackgrounds.some((b) => b.id === id) || activeBgIdSet.has(id))
+                  : baseList;
+                const uniqueIds = Array.from(new Set([...filteredBase, ...dynamicList]));
+                return uniqueIds.map((bg) => {
+                  const dbBg = dynamicBackgrounds?.find((b) => b.id === bg);
+                  const dbName = lang === "te" ? (dbBg?.nameTe || dbBg?.nameEn) : (dbBg?.nameEn || dbBg?.nameTe);
+                  return {
+                    id: bg,
+                    label: dbName || t[`bg_${bg}`] || bg,
+                    icon: (
+                      <>
+                        {bg === "plain" && <Icon icon="lucide:square" className="w-3.5 h-3.5" />}
+                        {bg === "studio" && <LuCameraIcon className="w-3.5 h-3.5" />}
+                        {bg === "traditional" && <LuFlowerIcon className="w-3.5 h-3.5" />}
+                        {bg === "festival" && <LuFlameIcon className="w-3.5 h-3.5" />}
+                        {bg === "luxury" && <LuGemIcon className="w-3.5 h-3.5" />}
+                        {bg === "royal" && <LuCrownIcon className="w-3.5 h-3.5" />}
+                        {bg === "vintage" && <LuCoffeeIcon className="w-3.5 h-3.5" />}
+                        {bg === "modern_office" && <Icon icon="lucide:building-2" className="w-3.5 h-3.5" />}
+                        {bg === "urban" && <Icon icon="lucide:building" className="w-3.5 h-3.5" />}
+                        {!["plain", "studio", "traditional", "festival", "luxury", "royal", "vintage", "modern_office", "urban"].includes(bg) && <Palette className="w-3.5 h-3.5" />}
+                      </>
+                    ),
+                  };
+                });
+              })()}
               selectedId={garmentBackground}
               onSelect={(bg) => setGarmentBackground(bg as any)}
             />
@@ -607,12 +714,12 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
             <div className="space-y-1.5 border-t border-black/5 dark:border-white/5 pt-2">
               <label className="text-xs font-bold text-[var(--text-emphasis)] flex items-center justify-between">
                 <span>{t.bgColorLabel}</span>
-                {(!PRESET_COLORS.some(col => col.name.toLowerCase() === garmentBgColor.toLowerCase() || col.hex.toLowerCase() === garmentBgColor.toLowerCase()) && garmentBgColor.startsWith("#")) && (
+                {(!(dynamicPresetColors || PRESET_COLORS).some(col => col.name.toLowerCase() === garmentBgColor.toLowerCase() || col.hex.toLowerCase() === garmentBgColor.toLowerCase()) && garmentBgColor.startsWith("#")) && (
                   <span className="text-[10px] font-mono text-accent uppercase font-semibold">{garmentBgColor}</span>
                 )}
               </label>
               <div className="flex flex-wrap gap-1.5 justify-center items-center">
-                {PRESET_COLORS.map((col) => {
+                {(dynamicPresetColors || PRESET_COLORS).map((col) => {
                   const isSelected = garmentBgColor.toLowerCase() === col.name.toLowerCase() || garmentBgColor.toLowerCase() === col.hex.toLowerCase();
                   return (
                     <button
@@ -631,7 +738,7 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                 })}
                 {/* Custom Color Picker Button with (+) Icon using react-colorful */}
                 {(() => {
-                  const isPreset = PRESET_COLORS.some(
+                  const isPreset = (dynamicPresetColors || PRESET_COLORS).some(
                     (col) => col.name.toLowerCase() === garmentBgColor.toLowerCase() || col.hex.toLowerCase() === garmentBgColor.toLowerCase()
                   );
                   const isCustom = !isPreset;
@@ -734,19 +841,23 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                   <LuAccessibilityIcon className="w-3.5 h-3.5 text-accent" />
                   {t.poseLabel}
                 </span>
-                <span className="text-[10px] text-accent/80 font-normal">({getGarmentPoses(garmentType, garmentPresentation).length} Options)</span>
+                <span className="text-[10px] text-accent/80 font-normal">({allowedPoses.length} Options)</span>
               </label>
               <PresentationSlider
-                items={getGarmentPoses(garmentType, garmentPresentation).map((pose) => ({
-                  id: pose,
-                  label: (t as any)[pose] || pose,
-                  icon: pose.includes("front") || pose.includes("portrait") ? <LuSmileIcon className="w-3.5 h-3.5" /> :
-                        pose.includes("side") || pose.includes("profile") ? <LuRefreshCcwIcon className="w-3.5 h-3.5" /> :
-                        pose.includes("three_quarter") || pose.includes("3q") ? <LuSparklesIcon className="w-3.5 h-3.5" /> :
-                        pose.includes("walk") || pose.includes("step") || pose.includes("stance") || pose.includes("stride") ? <LuFootprintsIcon className="w-3.5 h-3.5" /> :
-                        pose.includes("chair") || pose.includes("seated") || pose.includes("lap") ? <LuArmchairIcon className="w-3.5 h-3.5" /> :
-                        <LuCameraIcon className="w-3.5 h-3.5" />
-                }))}
+                items={allowedPoses.map((pose) => {
+                  const dbPose = dynamicPoses?.find((p) => p.id === pose);
+                  const dbName = lang === "te" ? (dbPose?.nameTe || dbPose?.nameEn) : (dbPose?.nameEn || dbPose?.nameTe);
+                  return {
+                    id: pose,
+                    label: dbName || (t as any)[pose] || pose,
+                    icon: pose.includes("front") || pose.includes("portrait") ? <LuSmileIcon className="w-3.5 h-3.5" /> :
+                          pose.includes("side") || pose.includes("profile") ? <LuRefreshCcwIcon className="w-3.5 h-3.5" /> :
+                          pose.includes("three_quarter") || pose.includes("3q") ? <LuSparklesIcon className="w-3.5 h-3.5" /> :
+                          pose.includes("walk") || pose.includes("step") || pose.includes("stance") || pose.includes("stride") ? <LuFootprintsIcon className="w-3.5 h-3.5" /> :
+                          pose.includes("chair") || pose.includes("seated") || pose.includes("lap") ? <LuArmchairIcon className="w-3.5 h-3.5" /> :
+                          <LuCameraIcon className="w-3.5 h-3.5" />
+                  };
+                })}
                 selectedId={garmentModelPose}
                 onSelect={(pose) => setGarmentModelPose(pose as any)}
               />

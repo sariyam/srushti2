@@ -7,6 +7,7 @@ import { Logo } from "../components/Logo";
 import { HeroCarousel } from "../components/HeroCarousel";
 import { QuoteSlider } from "../components/QuoteSlider";
 import { Language } from "../types";
+import { useStudioConfig } from "../context/StudioConfigContext";
 
 export const Route = createRoute({
   getParentRoute: () => rootRoute,
@@ -192,23 +193,29 @@ function LandingPageComponent() {
   };
 
   const t = content[lang];
+  const { config } = useStudioConfig();
+  const remoteTabs = (config?.settings as any)?.landing_showcase?.tabs;
 
-  const showcaseTabs: {
+  const DEFAULT_SHOWCASE_TABS: {
     id: ShowcaseCategory;
     label: { en: string; te: string };
     thumb: string;
   }[] = [
-      { id: "saree", label: { en: "Saree", te: "చీరలు" }, thumb: "/items/saree.jpg" },
-      { id: "dress", label: { en: "Dress", te: "డ్రెస్" }, thumb: "/items/gown.jpg" },
-      { id: "shirt", label: { en: "Shirt", te: "షర్ట్" }, thumb: "/items/shirt.jpg" },
-      { id: "watch", label: { en: "Watch", te: "వాచ్" }, thumb: "/items/watch.jpg" },
-      { id: "earrings", label: { en: "Earrings", te: "చెవి కమ్మలు" }, thumb: "/items/earrings.jpg" },
-      { id: "bangle", label: { en: "Bangle", te: "గాజులు" }, thumb: "/items/bangles.jpg" },
-      { id: "jeans", label: { en: "Jeans", te: "జీన్స్" }, thumb: "/items/jeans.jpg" },
-      { id: "trouser", label: { en: "Trouser", te: "ట్రౌజర్" }, thumb: "/items/suit.jpg" },
-      { id: "necklace", label: { en: "Necklace", te: "నెక్లెస్" }, thumb: "/items/necklace.jpg" },
-      { id: "chain", label: { en: "Chain", te: "చైన్" }, thumb: "/items/chain.jpg" },
-    ];
+    { id: "saree", label: { en: "Saree", te: "చీరలు" }, thumb: "/items/saree.jpg" },
+    { id: "dress", label: { en: "Dress", te: "డ్రెస్" }, thumb: "/items/gown.jpg" },
+    { id: "shirt", label: { en: "Shirt", te: "షర్ట్" }, thumb: "/items/shirt.jpg" },
+    { id: "watch", label: { en: "Watch", te: "వాచ్" }, thumb: "/items/watch.jpg" },
+    { id: "earrings", label: { en: "Earrings", te: "చెవి కమ్మలు" }, thumb: "/items/earrings.jpg" },
+    { id: "bangle", label: { en: "Bangle", te: "గాజులు" }, thumb: "/items/bangles.jpg" },
+    { id: "jeans", label: { en: "Jeans", te: "జీన్స్" }, thumb: "/items/jeans.jpg" },
+    { id: "trouser", label: { en: "Trouser", te: "ట్రౌజర్" }, thumb: "/items/suit.jpg" },
+    { id: "necklace", label: { en: "Necklace", te: "నెక్లెస్" }, thumb: "/items/necklace.jpg" },
+    { id: "chain", label: { en: "Chain", te: "చైన్" }, thumb: "/items/chain.jpg" },
+  ];
+
+  const showcaseTabs = (Array.isArray(remoteTabs) && remoteTabs.length > 0)
+    ? remoteTabs
+    : DEFAULT_SHOWCASE_TABS;
 
   const showcaseData: Record<
     ShowcaseCategory,

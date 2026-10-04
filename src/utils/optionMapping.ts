@@ -14,13 +14,19 @@ export const GARMENT_CATEGORY_MAPPING = {
 // Categorization of jewelry
 export const JEWELRY_CATEGORY_MAPPING = {
   neck_ear: ["necklace", "chain", "choker", "pendant"],
+  neck_wear: ["necklace", "chain", "choker", "pendant"],
   ear_wear: ["earrings"],
   wrist_ring: ["bracelet", "watch", "bangles", "kada", "cufflinks"],
+  wrist_wear: ["bracelet", "watch", "bangles", "kada", "cufflinks"],
   hip: ["waistband", "hip_chain", "kamarbandh"],
+  hip_wear: ["waistband", "hip_chain", "kamarbandh"],
   nose: ["nose_ring", "nose_pin", "nath", "nose", "noise"],
+  nose_wear: ["nose_ring", "nose_pin", "nath", "nose", "noise"],
   finger: [],
   leg: ["anklet", "payal", "toe_ring", "toe"],
+  leg_wear: ["anklet", "payal", "toe_ring", "toe"],
   forehead: ["maang_tikka", "matha_patti", "borla", "passa", "headband"],
+  forehead_wear: ["maang_tikka", "matha_patti", "borla", "passa", "headband"],
   accessories: []
 } as const;
 
@@ -524,12 +530,20 @@ export const OptionValidator = {
 
   /**
    * Check if a garment type is valid for the chosen gender.
+   * If dynamic catalog items are available, validates against them first.
    * If not, returns a valid fallback type.
    */
   getValidGarmentType(
     gender: "female" | "male",
-    currentType: string
+    currentType: string,
+    dynamicItems?: Array<{ id: string; genderTarget?: string }>
   ): string {
+    if (dynamicItems && dynamicItems.length > 0) {
+      const match = dynamicItems.find(
+        (i) => i.id === currentType && (i.genderTarget === gender || i.genderTarget === "unisex" || i.genderTarget === "all")
+      );
+      if (match) return currentType;
+    }
     const allowed = GENDER_GARMENT_MAPPING[gender];
     if ((allowed as readonly string[]).includes(currentType)) {
       return currentType;
@@ -539,12 +553,20 @@ export const OptionValidator = {
 
   /**
    * Check if a jewelry type is valid for the chosen gender.
+   * If dynamic catalog items are available, validates against them first.
    * If not, returns a valid fallback type.
    */
   getValidJewelryType(
     gender: "female" | "male",
-    currentType: string
+    currentType: string,
+    dynamicItems?: Array<{ id: string; genderTarget?: string }>
   ): string {
+    if (dynamicItems && dynamicItems.length > 0) {
+      const match = dynamicItems.find(
+        (i) => i.id === currentType && (i.genderTarget === gender || i.genderTarget === "unisex" || i.genderTarget === "all")
+      );
+      if (match) return currentType;
+    }
     const allowed = GENDER_JEWELRY_MAPPING[gender];
     if ((allowed as readonly string[]).includes(currentType)) {
       return currentType;

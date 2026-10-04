@@ -6,6 +6,10 @@ import { Route as studioRoute } from "./studio";
 import { Route as termsRoute } from "./terms";
 import { Route as privacyRoute } from "./privacy";
 
+const LazyAdminDashboard = lazy(() =>
+  import("./admin-dashboard").then((m) => ({ default: m.AdminDashboardPage }))
+);
+
 const TermsAndConditionsPage = lazy(() =>
   import("../components/TermsAndConditionsPage").then((m) => ({ default: m.TermsAndConditionsPage }))
 );
@@ -37,6 +41,25 @@ const LazyPrivacy = () => (
   </Suspense>
 );
 
+const LazyAdmin = () => (
+  <Suspense
+    fallback={
+      <div className="min-h-screen bg-[var(--md-surface)] flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <div className="w-10 h-10 rounded-full border-3 border-accent border-t-transparent animate-spin" />
+        <p className="text-xs font-bold text-[var(--md-on-surface-variant)]">Loading Admin Dashboard...</p>
+      </div>
+    }
+  >
+    <LazyAdminDashboard />
+  </Suspense>
+);
+
+const adminDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin-dashboard",
+  component: LazyAdmin,
+});
+
 const termsAndConditionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/termsandconditions",
@@ -65,6 +88,7 @@ const privacyPolicyHyphenRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   indexRoute,
   studioRoute,
+  adminDashboardRoute,
   termsRoute,
   privacyRoute,
   termsAndConditionsRoute,

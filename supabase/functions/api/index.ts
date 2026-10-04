@@ -151,6 +151,11 @@ if (isDeno) {
     console.log("==========================================");
   });
 
+  server.on("error", (err: any) => {
+    console.error("❌ HTTP Server failed to start:", err.message);
+    process.exit(1);
+  });
+
   // Graceful shutdown handling
   const gracefulShutdown = async (signal: string) => {
     console.log(`\n🛑 Received ${signal}. Starting graceful shutdown...`);
@@ -182,6 +187,7 @@ if (isDeno) {
   process.on("uncaughtException", (error: Error) => {
     console.error("🔥 [FATAL] Uncaught Exception:", error.message);
     console.error(error.stack);
+    process.exit(1);
   });
 }
 
