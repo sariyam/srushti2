@@ -14,7 +14,7 @@
     "db:migrate": "npm run migrate",
     "db:seed": "npm run seed",
     "db:studio": "drizzle-kit studio --config=functions/api/config/drizzle.config.ts",
-    "bundle:edge": "esbuild functions/api/index.ts --bundle --platform=node --format=esm --target=es2022 --external:express --external:cors --external:helmet --external:morgan --external:dotenv --external:zod --external:postgres --external:drizzle-orm '--external:drizzle-orm/*' --external:jsonwebtoken --external:bcryptjs --external:razorpay --external:multer --external:@supabase/* --external:hono '--external:@hono/*' --external:serverless-http --external:path '--external:node:*' '--external:jsr:*' --outfile=functions/api/bundle.ts"
+    "bundle:edge": "node functions/api/bundle.js"
   },
   "keywords": [
     "supabase",
