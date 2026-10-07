@@ -1283,7 +1283,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Pop-up Dialog for Settings */}
       <AnimatePresence>
         {isSettingsOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 landscape:p-2 overflow-x-hidden">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -1302,9 +1302,9 @@ export const Header: React.FC<HeaderProps> = ({
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className={`relative bg-[var(--bg-primary)] rounded-[2rem] landscape:rounded-2xl p-4 sm:p-6 md:p-8 landscape:p-2.5 landscape:py-2 w-[92vw] max-w-[92vw] ${
-                isSignedOut ? "lg:max-w-4xl landscape:max-w-[96vw]" : "lg:max-w-xl landscape:max-w-[92vw]"
-              } space-y-4 landscape:space-y-1.5 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] landscape:max-h-[96vh] overflow-y-auto overflow-x-hidden custom-scrollbar shadow-xl transition-all`}
+              className={`relative bg-[var(--bg-primary)] rounded-[2rem] p-4 sm:p-6 md:p-8 w-[90vw] max-w-[90vw] ${
+                isSignedOut ? "lg:max-w-4xl" : "lg:max-w-xl"
+              } space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-xl transition-all`}
             >
               {/* Header inside the popup card (hidden when signed out) */}
               {!isSignedOut && (
@@ -1327,7 +1327,7 @@ export const Header: React.FC<HeaderProps> = ({
               )}
 
               {/* Settings Workspace Component */}
-              <div className="pt-2 landscape:pt-0">
+              <div className="pt-2">
                 <Suspense
                   fallback={
                     <div className="min-h-[300px] flex flex-col items-center justify-center space-y-3">
