@@ -298,11 +298,10 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
 
   return (
     <div className="py-1 w-full">
-      <div className="flex flex-wrap items-center justify-center gap-2.5 py-1 px-1 w-full">
+      <div className="flex flex-wrap items-stretch justify-center gap-2 py-1 px-0.5 w-full">
         {items.map((id) => {
           const isSelected = selectedId === id;
           const catItem = catalogItemsMap?.get(id);
-          const imageSrc = catItem?.sampleImageUrl || catItem?.thumbnailUrl || `/items/${id}.jpg`;
           const displayName = lang === "te"
             ? (catItem?.nameTe || t[id] || id)
             : (catItem?.nameEn || t[id] || id.replace(/_/g, " "));
@@ -314,7 +313,7 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
                   ? catItem.icon
                   : `lucide:${catItem.icon.toLowerCase()}`
               }
-              className="w-4 h-4"
+              className="w-5 h-5"
             />
           ) : (
             getItemIcon(id)
@@ -325,48 +324,33 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
               key={id}
               type="button"
               onClick={() => onSelect(id)}
-              className={`relative overflow-hidden w-[84px] xs:w-[92px] sm:w-[100px] h-[96px] xs:h-[104px] sm:h-[114px] rounded-2xl flex flex-col justify-between p-2 transition-all duration-200 cursor-pointer group shrink-0 bg-[var(--bg-secondary)] ${isSelected
-                ? "ring-2 ring-accent ring-offset-2 ring-offset-[var(--bg-primary)] shadow-lg shadow-accent/25 scale-[0.98]"
-                : "border border-black/10 dark:border-white/10 shadow-xs hover:scale-[1.04] hover:shadow-md active:scale-[0.97]"
-                }`}
+              className={`relative min-w-[76px] xs:min-w-[84px] sm:min-w-[94px] max-w-[110px] flex-1 py-3 px-2 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${
+                isSelected
+                  ? "nm-inset bg-accent/10 text-accent font-black shadow-inner border border-accent/30 scale-[0.98]"
+                  : "nm-outset-sm hover:scale-[1.03] active:scale-[0.97] text-[var(--text-primary)] hover:text-accent bg-[var(--bg-secondary)]/50"
+              }`}
             >
-              {/* Background Image from API or public/items */}
-              <img
-                src={imageSrc}
-                alt={displayName}
-                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300 pointer-events-none"
-                onError={(e) => {
-                  const target = e.currentTarget as HTMLImageElement;
-                  if (target.src && !target.src.endsWith(`/items/${id}.jpg`)) {
-                    target.src = `/items/${id}.jpg`;
-                  } else {
-                    target.style.display = "none";
-                  }
-                }}
-              />
+              {isSelected && (
+                <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-accent text-white flex items-center justify-center shadow-xs">
+                  <Check className="w-2.5 h-2.5 stroke-[3]" />
+                </span>
+              )}
 
-              {/* Gradient Overlay for high text contrast and visual depth */}
+              {/* Icon Container */}
               <div
-                className={`absolute inset-0 transition-colors pointer-events-none ${isSelected
-                  ? "bg-gradient-to-t from-black/95 via-black/55 to-accent/25"
-                  : "bg-gradient-to-t from-black/85 via-black/45 to-black/20 group-hover:from-black/90 group-hover:via-black/55"
-                  }`}
-              />
-
-              {/* Top Row: Mini Icon Badge + Selected Checkmark Indicator */}
-              <div className="relative z-10 w-full flex items-center justify-between pointer-events-none">
-                <div className="w-6 h-6 rounded-full bg-black/60 backdrop-blur-xs border border-white/20 flex items-center justify-center text-white/90 shrink-0 shadow-xs">
-                  {renderedIcon}
-                </div>
-                {isSelected && (
-                  <span className="w-4 h-4 rounded-full bg-accent text-white flex items-center justify-center shadow-xs">
-                    <Check className="w-2.5 h-2.5 stroke-[3]" />
-                  </span>
-                )}
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
+                  isSelected
+                    ? "text-accent bg-accent/15"
+                    : "text-[var(--text-primary)] opacity-75 group-hover:opacity-100"
+                }`}
+              >
+                {renderedIcon}
               </div>
 
-              {/* Bottom Label: Clear bold white typography with drop shadow */}
-              <span className="relative z-10 text-[9px] xs:text-[9.5px] sm:text-[10px] font-black text-white text-center leading-tight drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.95)] max-w-full px-0.5 uppercase tracking-tight pointer-events-none break-words whitespace-normal">
+              {/* Label */}
+              <span className={`text-[10px] sm:text-[10.5px] font-bold text-center leading-tight max-w-full px-0.5 uppercase tracking-tight break-words whitespace-normal line-clamp-2 ${
+                isSelected ? "text-accent font-black" : "text-[var(--text-primary)]"
+              }`}>
                 {displayName}
               </span>
             </button>
@@ -1011,7 +995,7 @@ export const Header: React.FC<HeaderProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-5 sm:p-6 max-w-lg w-full border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 h-[70vh] sm:h-[80vh] lg:h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col space-y-4"
+              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-5 sm:p-6 max-w-lg w-full border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 h-[90vh] h-[90dvh] max-h-[90dvh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col space-y-4"
             >
               {/* Header inside the popup card */}
               <div className="flex items-center justify-between gap-2 pb-2 border-b border-black/5 dark:border-white/5">
@@ -1283,7 +1267,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Pop-up Dialog for Settings */}
       <AnimatePresence>
         {isSettingsOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 landscape:p-0.5 overflow-hidden">
             {/* Backdrop Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -1302,32 +1286,32 @@ export const Header: React.FC<HeaderProps> = ({
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className={`relative bg-[var(--bg-primary)] rounded-[2rem] p-4 sm:p-6 md:p-8 w-[90vw] max-w-[90vw] ${
-                isSignedOut ? "lg:max-w-4xl" : "lg:max-w-xl"
-              } space-y-4 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-xl transition-all`}
+              className={`relative bg-[var(--bg-primary)] rounded-[2rem] landscape:rounded-xl p-4 sm:p-6 md:p-8 landscape:p-1.5 landscape:py-1 w-[90vw] max-w-[90vw] ${
+                isSignedOut ? "lg:max-w-4xl landscape:max-w-[98vw]" : "lg:max-w-xl landscape:max-w-[90vw]"
+              } space-y-4 landscape:space-y-0 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] landscape:max-h-[98vh] overflow-y-auto overflow-x-hidden custom-scrollbar landscape-no-scrollbar shadow-xl transition-all`}
             >
               {/* Header inside the popup card (hidden when signed out) */}
               {!isSignedOut && (
-                <div className="flex items-start justify-between border-b border-white/5 pb-2">
+                <div className="flex items-start justify-between border-b border-white/5 pb-2 landscape:pb-0.5">
                   <div>
-                    <h3 className="text-sm font-extrabold text-[var(--text-emphasis)] tracking-tight">
+                    <h3 className="text-sm landscape:text-xs font-extrabold text-[var(--text-emphasis)] tracking-tight">
                       {t.settingsTitle}
                     </h3>
-                    <p className="text-[10px] opacity-75 mt-0.5 leading-relaxed">
+                    <p className="text-[10px] landscape:text-[8px] opacity-75 mt-0.5 leading-relaxed landscape:leading-none">
                       {t.settingsSubtitle}
                     </p>
                   </div>
                   <button
                     onClick={() => setIsSettingsOpen(false)}
-                    className="w-7 h-7 rounded-full flex items-center justify-center nm-outset-sm hover:scale-105 active:scale-95 text-accent cursor-pointer shrink-0"
+                    className="w-7 h-7 landscape:w-5 landscape:h-5 rounded-full flex items-center justify-center nm-outset-sm hover:scale-105 active:scale-95 text-accent cursor-pointer shrink-0"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="w-3.5 h-3.5 landscape:w-2.5 landscape:h-2.5" />
                   </button>
                 </div>
               )}
 
               {/* Settings Workspace Component */}
-              <div className="pt-2">
+              <div className="pt-2 landscape:pt-0">
                 <Suspense
                   fallback={
                     <div className="min-h-[300px] flex flex-col items-center justify-center space-y-3">

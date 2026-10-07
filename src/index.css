@@ -251,6 +251,25 @@ button.nm-outset-lg:active,
   scrollbar-color: rgba(140, 140, 140, 0.35) transparent;
 }
 
+@media (orientation: landscape) {
+  .landscape-no-scrollbar,
+  .landscape-no-scrollbar *,
+  .landscape-no-scrollbar.custom-scrollbar,
+  .custom-scrollbar.landscape-no-scrollbar {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  .landscape-no-scrollbar::-webkit-scrollbar,
+  .landscape-no-scrollbar *::-webkit-scrollbar,
+  .landscape-no-scrollbar.custom-scrollbar::-webkit-scrollbar,
+  .custom-scrollbar.landscape-no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
+}
+
 /* Custom Color Picker Styles (react-colorful) */
 .custom-color-picker-container .react-colorful {
   width: 100% !important;
