@@ -281,19 +281,19 @@ export const WalletModal: React.FC<WalletModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94, y: 16 }}
         transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-        className="relative bg-[var(--bg-primary)] rounded-[2rem] p-5 sm:p-7 max-w-xl w-full border border-neutral-300 dark:border-neutral-800 text-[var(--text-primary)] z-10 max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col gap-5 my-auto"
+        className="relative bg-[var(--md-surface-container-high)] neu-m3-dialog rounded-[2rem] p-5 sm:p-7 max-w-xl w-full text-[var(--md-on-surface)] z-10 max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col gap-5 my-auto"
       >
         {/* Header with Title and Close */}
         <div className="flex items-center justify-between gap-3 pb-3 border-b border-black/5 dark:border-white/5">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl nm-inset-sm flex items-center justify-center text-accent bg-accent/10 shrink-0">
+            <div className="w-10 h-10 rounded-2xl neu-m3-inset-sm flex items-center justify-center text-accent bg-accent/10 shrink-0">
               <Icon icon="lucide:zap" className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-black tracking-tight text-[var(--text-emphasis)] flex items-center gap-2">
+              <h2 className="text-base sm:text-lg font-black tracking-tight text-[var(--md-on-surface)] flex items-center gap-2">
                 {isEn ? "Studio Credits & Wallet" : "స్టూడియో క్రెడిట్స్ & వాలెట్"}
               </h2>
-              <p className="text-[11px] font-medium text-[var(--text-primary)] opacity-75">
+              <p className="text-[11px] font-medium text-[var(--md-on-surface-variant)] opacity-75">
                 {isEn
                   ? "Recharge generation credits instantly via Razorpay"
                   : "రేజర్‌పే ద్వారా క్రెడిట్స్ తక్షణమే రీఛార్జ్ చేయండి"}
@@ -304,7 +304,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
           <button
             id="btn-close-wallet-modal"
             onClick={onClose}
-            className="w-8 h-8 rounded-full nm-outset-sm hover:scale-105 active:scale-95 flex items-center justify-center text-[var(--text-primary)] opacity-80 hover:opacity-100 transition-all cursor-pointer shrink-0"
+            className="w-8 h-8 rounded-xl neu-m3-icon-btn flex items-center justify-center text-[var(--md-on-surface)] transition-all cursor-pointer shrink-0"
             title={isEn ? "Close" : "మూసివేయి"}
           >
             <Icon icon="lucide:x" className="w-4 h-4" />
@@ -350,14 +350,14 @@ export const WalletModal: React.FC<WalletModalProps> = ({
           )}
         </AnimatePresence>
 
-        {/* Current Balance Neumorphic Showcase (Primary Credit Display) */}
-        <div className="nm-inset rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 bg-[var(--bg-panel)]/50">
+        {/* Current Balance Showcase (Primary Credit Display) */}
+        <div className="neu-m3-inset rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 bg-[var(--md-surface-container-low)]">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl nm-outset-sm flex items-center justify-center text-accent shrink-0 bg-[var(--bg-primary)]">
+            <div className="w-12 h-12 rounded-2xl neu-m3-outset-sm flex items-center justify-center text-accent shrink-0 bg-[var(--md-surface-container)]">
               <Icon icon="lucide:coins" className="w-6 h-6 text-amber-500" />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-wider font-extrabold text-[var(--text-primary)] opacity-70 block">
+              <span className="text-[10px] uppercase tracking-wider font-extrabold text-[var(--md-on-surface-variant)] block">
                 {isEn ? "Available Credits" : "అందుబాటులో ఉన్న క్రెడిట్స్"}
               </span>
               <div className="flex items-baseline gap-2 mt-0.5">
@@ -396,8 +396,8 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                   onClick={() => handleSelectPreset(p.amount)}
                   className={`relative p-3 rounded-2xl transition-all text-left flex flex-col justify-between cursor-pointer ${
                     isSelected
-                      ? "nm-inset-sm text-accent ring-1.5 ring-accent/60 bg-accent/5"
-                      : "nm-outset-sm text-[var(--text-primary)] hover:scale-[1.02] active:scale-[0.98] bg-[var(--bg-panel)]"
+                      ? "neu-m3-inset-sm text-accent ring-1.5 ring-accent/60 bg-accent/5 font-extrabold"
+                      : "neu-m3-outset-sm text-[var(--md-on-surface)] hover:scale-[1.02] active:scale-[0.98] bg-[var(--md-surface-container)]"
                   }`}
                 >
                   {p.badge && (
@@ -408,7 +408,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                   <div>
                     <span
                       className={`text-base sm:text-lg font-black font-mono tracking-tight block ${
-                        isSelected ? "text-accent" : "text-[var(--text-emphasis)]"
+                        isSelected ? "text-accent" : "text-[var(--md-on-surface)]"
                       }`}
                     >
                       {formatCredits(p.credits + p.bonus)}
@@ -424,7 +424,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
 
                   <div className="mt-2.5 pt-1.5 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-[9.5px] font-bold opacity-75">
                     <span>{isEn ? "Pay" : "చెల్లించండి"}</span>
-                    <span className="font-mono font-extrabold text-[var(--text-emphasis)]">
+                    <span className="font-mono font-extrabold text-[var(--md-on-surface)]">
                       {currency === "INR" ? `₹${p.amount}` : `$${p.amount.toFixed(2)}`}
                     </span>
                   </div>
@@ -434,9 +434,9 @@ export const WalletModal: React.FC<WalletModalProps> = ({
           </div>
 
           {/* Custom Amount Input & Recharge Action Row */}
-          <div className="nm-outset rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center gap-3 bg-[var(--bg-panel)]">
+          <div className="neu-m3-card rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center gap-3 bg-[var(--md-surface-container)]">
             <div className="relative w-full sm:flex-1">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-black font-mono text-[var(--text-primary)] opacity-60">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-black font-mono text-[var(--md-on-surface-variant)] opacity-60">
                 {currency === "INR" ? "₹" : "$"}
               </span>
               <input
@@ -447,7 +447,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                 value={customAmountInput}
                 onChange={handleCustomInputChange}
                 placeholder={isEn ? "Enter payment amount..." : "చెల్లింపు మొత్తం నమోదు చేయండి..."}
-                className="w-full pl-8 pr-3.5 py-2.5 rounded-xl nm-inset text-sm font-mono font-bold text-[var(--text-emphasis)] bg-transparent focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full pl-8 pr-3.5 py-2.5 rounded-xl neu-m3-input text-sm font-mono font-bold text-[var(--md-on-surface)]"
               />
             </div>
 
@@ -456,10 +456,10 @@ export const WalletModal: React.FC<WalletModalProps> = ({
               type="button"
               disabled={isProcessing || parsedCustomAmount <= 0}
               onClick={handleExecuteRecharge}
-              className={`w-full sm:w-auto px-5 py-2.5 rounded-xl nm-outset-sm flex items-center justify-center gap-2 font-black text-xs uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
+              className={`w-full sm:w-auto px-5 py-2.5 rounded-xl neu-m3-btn-filled flex items-center justify-center gap-2 font-black text-xs uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
                 parsedCustomAmount > 0 && !isProcessing
-                  ? "bg-accent text-white hover:scale-[1.03] active:scale-[0.97] shadow-md shadow-accent/20"
-                  : "opacity-50 cursor-not-allowed text-[var(--text-primary)]"
+                  ? "shadow-md"
+                  : "opacity-50 cursor-not-allowed"
               }`}
             >
               {isProcessing ? (
@@ -481,16 +481,16 @@ export const WalletModal: React.FC<WalletModalProps> = ({
 
           {/* Direct Link to Usage & History Modal */}
           {onOpenHistory && (
-            <div className="flex items-center justify-between p-3 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
+            <div className="flex items-center justify-between p-3 rounded-2xl neu-m3-inset-sm bg-[var(--md-surface-container-lowest)]">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-xl flex items-center justify-center bg-accent/10 text-accent shrink-0">
+                <div className="w-7 h-7 rounded-xl flex items-center justify-center bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] shrink-0">
                   <Icon icon="lucide:history" className="w-4 h-4" />
                 </div>
                 <div className="text-left">
-                  <span className="text-xs font-bold text-[var(--text-emphasis)] block">
+                  <span className="text-xs font-bold text-[var(--md-on-surface)] block">
                     {isEn ? "Usage & Payment History" : "వాడుక & చెల్లింపుల చరిత్ర"}
                   </span>
-                  <span className="text-[10px] text-[var(--text-primary)] opacity-70">
+                  <span className="text-[10px] text-[var(--md-on-surface-variant)] opacity-70">
                     {isEn ? "View logs from AI generations & Razorpay payments" : "ఏఐ జనరేషన్‌లు & Razorpay చెల్లింపుల వివరాలు చూడండి"}
                   </span>
                 </div>
@@ -501,7 +501,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                   onClose();
                   onOpenHistory();
                 }}
-                className="px-3 py-1.5 rounded-xl nm-outset-sm bg-accent/10 hover:bg-accent text-accent hover:text-white text-xs font-black transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-2"
+                className="px-3 py-1.5 rounded-xl neu-m3-btn-tonal text-xs font-black transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-2"
               >
                 <span>{isEn ? "View Logs" : "చూడండి"}</span>
                 <Icon icon="lucide:arrow-right" className="w-3.5 h-3.5" />

@@ -828,7 +828,7 @@ export default function App() {
   };
 
   return (
-    <div className="h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-[var(--md-surface)] text-[var(--md-on-surface)] flex flex-col overflow-hidden">
       
       {/* --- TOP BRAND HEADER BAR --- */}
       <Header 

@@ -10,28 +10,30 @@
 }
 
 :root {
-  --bg-primary: #ebeaea;
-  --bg-secondary: #e5e5e5;
-  --text-primary: #353535;
-  --text-secondary: #333333;
-  --text-emphasis: #303030;
+  --bg-primary: var(--md-surface, #fdf8fd);
+  --bg-secondary: var(--md-surface-container, #f1edf2);
+  --bg-panel: var(--md-surface-container-high, #ebe7ec);
+  --text-primary: var(--md-on-surface, #1a1b21);
+  --text-secondary: var(--md-on-surface-variant, #46464f);
+  --text-emphasis: var(--md-on-surface, #1a1b21);
   
-  --shadow-light: #ffffff;
-  --shadow-dark: #b8b7b7;
+  --shadow-light: var(--neu-shadow-light, #ffffff);
+  --shadow-dark: var(--neu-shadow-dark, #cfcbcf);
   
   --color-accent: #32cf11; /* Visible neon green for light mode */
   --color-accent-hover: #25a40a;
 }
 
 .dark {
-  --bg-primary: #303030;
-  --bg-secondary: #353535;
-  --text-primary: #ebeaea;
-  --text-secondary: #e5e5e5;
+  --bg-primary: var(--md-surface, #121318);
+  --bg-secondary: var(--md-surface-container, #1e1f25);
+  --bg-panel: var(--md-surface-container-high, #292a2f);
+  --text-primary: var(--md-on-surface, #e4e1e9);
+  --text-secondary: var(--md-on-surface-variant, #c7c5d0);
   --text-emphasis: #ffffff;
   
-  --shadow-light: #3e3e3e;
-  --shadow-dark: #1e1e1e;
+  --shadow-light: var(--neu-shadow-light, #2c2d36);
+  --shadow-dark: var(--neu-shadow-dark, #101115);
   
   --color-accent: #39FF14; /* True neon green #39FF14 for dark mode */
   --color-accent-hover: #32e60f;

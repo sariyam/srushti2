@@ -8,6 +8,12 @@ import { HeroCarousel } from "../components/HeroCarousel";
 import { QuoteSlider } from "../components/QuoteSlider";
 import { Language } from "../types";
 import { useStudioConfig } from "../context/StudioConfigContext";
+import {
+  NeuM3Button,
+  NeuM3IconButton,
+  NeuM3Card,
+  NeuM3Chip,
+} from "../components/m3";
 
 export const Route = createRoute({
   getParentRoute: () => rootRoute,
@@ -349,12 +355,12 @@ function LandingPageComponent() {
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200 flex flex-col font-sans">
 
       {/* --- MINIMAL HEADER --- */}
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--bg-primary)]/90 border-b border-black/5 dark:border-white/5 py-3 px-4 sm:px-6">
+      <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--md-surface)]/90 border-b border-black/5 dark:border-white/5 py-3 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
             <Logo theme="dark" />
             <div>
-              <span className="text-base sm:text-lg font-black tracking-tight text-[var(--text-emphasis)] block leading-none">
+              <span className="text-base sm:text-lg font-black tracking-tight text-[var(--md-on-surface)] block leading-none">
                 Srushti AI
               </span>
               <span className="text-[9.5px] font-bold text-accent">Studio for Local Biz</span>
@@ -363,22 +369,22 @@ function LandingPageComponent() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Language Toggle */}
-            <button
+            <NeuM3Chip
+              active={lang === "te"}
+              icon={<GlobeIcon className="w-3.5 h-3.5 text-accent" />}
               onClick={() => setLang(lang === "en" ? "te" : "en")}
-              className="px-2.5 py-1.5 rounded-xl nm-outset bg-[var(--bg-secondary)] text-xs font-bold text-[var(--text-primary)] hover:text-accent flex items-center gap-1.5 transition-all"
             >
-              <GlobeIcon className="w-3.5 h-3.5 text-accent" />
-              <span>{lang === "en" ? "తెలుగు" : "English"}</span>
-            </button>
+              {lang === "en" ? "తెలుగు" : "English"}
+            </NeuM3Chip>
 
             {/* Theme Toggle */}
-            <button
+            <NeuM3IconButton
+              size="sm"
               onClick={toggleTheme}
-              className="w-8 h-8 rounded-xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-secondary)] hover:text-accent transition-all"
               aria-label="Toggle Theme"
             >
               {theme === "light" ? <MoonIcon className="w-4 h-4 text-accent" /> : <SunIcon className="w-4 h-4 text-accent" />}
-            </button>
+            </NeuM3IconButton>
           </div>
         </div>
       </header>
@@ -392,17 +398,17 @@ function LandingPageComponent() {
         </div>
 
         {/* Subtitle */}
-        <p className="max-w-2xl mx-auto text-xs sm:text-base text-[var(--text-secondary)] font-medium leading-relaxed">
+        <p className="max-w-2xl mx-auto text-xs sm:text-base text-[var(--md-on-surface-variant)] font-medium leading-relaxed">
           {t.subtext}
         </p>
 
         {/* ₹1 Highlight Banner */}
-        <div className="max-w-xl mx-auto nm-outset rounded-2xl p-3.5 bg-[var(--bg-secondary)] flex items-center justify-center gap-3.5 text-left">
-          <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent flex items-center justify-center font-black text-sm shrink-0">
+        <NeuM3Card variant="elevated" className="max-w-xl mx-auto p-3.5 flex items-center justify-center gap-3.5 text-left">
+          <div className="w-9 h-9 rounded-xl neu-m3-inset bg-[var(--md-surface-container-low)] text-accent flex items-center justify-center font-black text-sm shrink-0">
             ₹1
           </div>
           <div>
-            <span className="text-xs sm:text-sm font-black text-[var(--text-emphasis)] block leading-tight">
+            <span className="text-xs sm:text-sm font-black text-[var(--md-on-surface)] block leading-tight">
               {t.priceOffer}
             </span>
             <span className="text-[10px] text-accent font-bold flex items-center gap-1 mt-0.5">
@@ -410,42 +416,45 @@ function LandingPageComponent() {
               <span>UPI Instant Top-Up • No Monthly Lock-in • Lifetime Validity</span>
             </span>
           </div>
-        </div>
+        </NeuM3Card>
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <Link
-            to="/studio"
-            className="w-full sm:w-auto px-7 py-3.5 rounded-2xl nm-outset bg-[var(--bg-secondary)] text-accent text-sm sm:text-base font-black flex items-center justify-center gap-2.5 hover:scale-105 active:scale-95 transition-all group"
-          >
-            <CameraIcon className="w-4 h-4 text-accent transition-transform group-hover:scale-110" />
-            <span className="text-accent tracking-wide">{t.ctaPrimary}</span>
-            <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover:translate-x-0.5" />
+          <Link to="/studio" className="w-full sm:w-auto">
+            <NeuM3Button
+              variant="filled"
+              icon={<CameraIcon className="w-4 h-4" />}
+              className="w-full sm:w-auto py-3.5 px-7 text-sm sm:text-base font-black"
+            >
+              {t.ctaPrimary}
+            </NeuM3Button>
           </Link>
 
-          <a
-            href="#live-transformation"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl nm-outset bg-[var(--bg-secondary)] text-xs sm:text-sm font-extrabold text-[var(--text-primary)] hover:text-accent hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
-          >
-            <ZapIcon className="w-4 h-4 text-accent" />
-            <span>{lang === "en" ? "See Transformation" : "ఫలితం చూడండి"}</span>
+          <a href="#live-transformation" className="w-full sm:w-auto">
+            <NeuM3Button
+              variant="tonal"
+              icon={<ZapIcon className="w-4 h-4 text-accent" />}
+              className="w-full sm:w-auto py-3.5 px-6 text-xs sm:text-sm font-extrabold"
+            >
+              {lang === "en" ? "See Transformation" : "ఫలితం చూడండి"}
+            </NeuM3Button>
           </a>
         </div>
 
         {/* 3 Quick Value Stats */}
         <div className="grid grid-cols-3 gap-2.5 sm:gap-4 pt-4 max-w-2xl mx-auto">
-          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center">
+          <NeuM3Card variant="elevated" className="p-3 sm:p-4 text-center">
             <span className="text-sm sm:text-lg font-black text-accent block tracking-tight">{t.stat1Val}</span>
-            <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stat1Lbl}</span>
-          </div>
-          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center">
+            <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--md-on-surface-variant)] block mt-0.5">{t.stat1Lbl}</span>
+          </NeuM3Card>
+          <NeuM3Card variant="elevated" className="p-3 sm:p-4 text-center">
             <span className="text-sm sm:text-lg font-black text-accent block tracking-tight">{t.stat2Val}</span>
-            <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stat2Lbl}</span>
-          </div>
-          <div className="nm-outset rounded-2xl p-3 sm:p-4 bg-[var(--bg-secondary)] text-center">
+            <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--md-on-surface-variant)] block mt-0.5">{t.stat2Lbl}</span>
+          </NeuM3Card>
+          <NeuM3Card variant="elevated" className="p-3 sm:p-4 text-center">
             <span className="text-sm sm:text-lg font-black text-accent block tracking-tight">{t.stat3Val}</span>
-            <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--text-secondary)] block mt-0.5">{t.stat3Lbl}</span>
-          </div>
+            <span className="text-[9.5px] sm:text-[11px] font-bold text-[var(--md-on-surface-variant)] block mt-0.5">{t.stat3Lbl}</span>
+          </NeuM3Card>
         </div>
       </section>
 
@@ -453,16 +462,16 @@ function LandingPageComponent() {
       <section id="live-transformation" className="py-8 sm:py-14 px-4 sm:px-6 max-w-5xl mx-auto w-full">
         {/* Section Header */}
         <div className="text-center space-y-2 mb-6">
-          <h2 className="text-xl sm:text-3xl font-black text-[var(--text-emphasis)] tracking-tight">
+          <h2 className="text-xl sm:text-3xl font-black text-[var(--md-on-surface)] tracking-tight">
             {t.showcaseHeading}
           </h2>
-          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-lg mx-auto font-medium">
+          <p className="text-xs sm:text-sm text-[var(--md-on-surface-variant)] max-w-lg mx-auto font-medium">
             {t.showcaseDesc}
           </p>
 
           {/* 10 Category Tabs */}
           <div className="w-full flex justify-center pt-2">
-            <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-2xl nm-inset bg-[var(--bg-secondary)] max-w-4xl">
+            <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-2xl neu-m3-inset bg-[var(--md-surface-container-low)] max-w-4xl">
               {showcaseTabs.map((tab) => {
                 const isActive = activeShowcase === tab.id;
                 return (
@@ -471,8 +480,8 @@ function LandingPageComponent() {
                     id={`tab-${tab.id}`}
                     onClick={() => setActiveShowcase(tab.id)}
                     className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-black flex items-center gap-2 whitespace-nowrap transition-all select-none ${isActive
-                      ? "nm-outset bg-[var(--bg-secondary)] text-accent shadow-sm"
-                      : "text-[var(--text-secondary)] hover:text-accent hover:bg-black/5 dark:hover:bg-white/5"
+                      ? "neu-m3-outset bg-[var(--md-surface-container)] text-accent shadow-sm"
+                      : "text-[var(--md-on-surface-variant)] hover:text-accent hover:bg-black/5 dark:hover:bg-white/5"
                       }`}
                   >
                     <img
@@ -490,13 +499,11 @@ function LandingPageComponent() {
         </div>
 
         {/* Showcase Container with SINGLE LANDSCAPE PHOTO SLOT */}
-        <div className="nm-outset rounded-3xl p-4 sm:p-6 lg:p-7 bg-[var(--bg-secondary)] space-y-6">
-
+        <NeuM3Card variant="elevated" className="p-4 sm:p-6 lg:p-7 space-y-6">
 
           {/* THE SINGLE LANDSCAPE PHOTO SLOT */}
-          <div className="nm-inset rounded-2xl p-2 sm:p-3 bg-[var(--bg-secondary)]">
+          <NeuM3Card variant="well" className="p-2 sm:p-3">
             <div className="relative aspect-[16/10] sm:aspect-[16/9] md:aspect-[21/10] w-full rounded-xl overflow-hidden bg-neutral-950 shadow-md select-none group">
-
               {/* Single Landscape Image */}
               <img
                 src={curShowcase.img}
@@ -505,92 +512,95 @@ function LandingPageComponent() {
                 loading="lazy"
               />
             </div>
-          </div>
+          </NeuM3Card>
 
           {/* 3 Step Workflow / Value Cards (Under Landscape Photo) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 pt-1">
-            <div className="nm-inset rounded-2xl p-3.5 sm:p-4 bg-[var(--bg-secondary)] flex items-start gap-3">
-              <div className="w-8 h-8 rounded-xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center shrink-0 text-accent">
+            <NeuM3Card variant="well" className="p-3.5 sm:p-4 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl neu-m3-outset bg-[var(--md-surface-container)] flex items-center justify-center shrink-0 text-accent">
                 <SmartphoneIcon className="w-4 h-4" />
               </div>
               <div className="space-y-1">
-                <span className="text-xs font-black text-[var(--text-emphasis)] block">
+                <span className="text-xs font-black text-[var(--md-on-surface)] block">
                   {lang === "en" ? "1. Simple Phone Click" : "1. మీ ఫోన్‌తో ఒక ఫోటో"}
                 </span>
-                <p className="text-[10.5px] sm:text-[11px] text-[var(--text-secondary)] font-medium leading-relaxed">
+                <p className="text-[10.5px] sm:text-[11px] text-[var(--md-on-surface-variant)] font-medium leading-relaxed">
                   {curShowcase.bullet1}
                 </p>
               </div>
-            </div>
+            </NeuM3Card>
 
-            <div className="nm-inset rounded-2xl p-3.5 sm:p-4 bg-[var(--bg-secondary)] flex items-start gap-3">
-              <div className="w-8 h-8 rounded-xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center shrink-0 text-accent">
+            <NeuM3Card variant="well" className="p-3.5 sm:p-4 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl neu-m3-outset bg-[var(--md-surface-container)] flex items-center justify-center shrink-0 text-accent">
                 <Sparkles className="w-4 h-4 text-accent" />
               </div>
               <div className="space-y-1">
                 <span className="text-xs font-black text-accent block">
                   {lang === "en" ? "2. AI Studio Model Shoot" : "2. రాయల్ మోడల్ షూట్"}
                 </span>
-                <p className="text-[10.5px] sm:text-[11px] text-[var(--text-secondary)] font-medium leading-relaxed">
+                <p className="text-[10.5px] sm:text-[11px] text-[var(--md-on-surface-variant)] font-medium leading-relaxed">
                   {curShowcase.bullet2}
                 </p>
               </div>
-            </div>
+            </NeuM3Card>
 
-            <div className="nm-inset rounded-2xl p-3.5 sm:p-4 bg-[var(--bg-secondary)] flex items-start gap-3">
-              <div className="w-8 h-8 rounded-xl nm-outset bg-[var(--bg-secondary)] flex items-center justify-center shrink-0 text-accent">
+            <NeuM3Card variant="well" className="p-3.5 sm:p-4 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl neu-m3-outset bg-[var(--md-surface-container)] flex items-center justify-center shrink-0 text-accent">
                 <ZapIcon className="w-4 h-4 text-accent" />
               </div>
               <div className="space-y-1">
-                <span className="text-xs font-black text-[var(--text-emphasis)] block">
+                <span className="text-xs font-black text-[var(--md-on-surface)] block">
                   {lang === "en" ? "3. Orders on WhatsApp" : "3. వాట్సాప్ & ఇన్‌స్టా ఆర్డర్లు"}
                 </span>
-                <p className="text-[10.5px] sm:text-[11px] text-[var(--text-secondary)] font-medium leading-relaxed">
+                <p className="text-[10.5px] sm:text-[11px] text-[var(--md-on-surface-variant)] font-medium leading-relaxed">
                   {curShowcase.bullet3}
                 </p>
               </div>
-            </div>
+            </NeuM3Card>
           </div>
 
           {/* Quick Studio Trigger & Value Bar */}
           <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-black/5 dark:border-white/5">
             <div className="space-y-0.5 text-center sm:text-left">
-              <span className="text-xs sm:text-sm font-black text-[var(--text-emphasis)] block">
+              <span className="text-xs sm:text-sm font-black text-[var(--md-on-surface)] block">
                 {lang === "en" ? "Ready to transform your own collection?" : "మీ స్వంత ఉత్పత్తులకు ఇప్పుడే ఫోటోషూట్ చేయండి"}
               </span>
-              <span className="text-[10.5px] text-[var(--text-secondary)] font-medium block">
+              <span className="text-[10.5px] text-[var(--md-on-surface-variant)] font-medium block">
                 {lang === "en" ? "From ₹1/photo • No monthly subscriptions • Ready in 30 seconds" : "కేవలం ₹1 నుంచే • ఎలాంటి నెలవారీ ఫీజులు లేవు • 30 సెకన్లలో రెడీ"}
               </span>
             </div>
-            <Link
-              to="/studio"
-              className="px-6 py-3 rounded-2xl nm-outset bg-[var(--bg-secondary)] text-accent text-xs sm:text-sm font-black flex items-center gap-2 hover:scale-105 active:scale-95 transition-all group shrink-0 shadow-md"
-            >
-              <Sparkles className="w-4 h-4 text-accent" />
-              <span>{t.ctaPrimary}</span>
-              <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover:translate-x-1" />
+            <Link to="/studio">
+              <NeuM3Button
+                variant="filled"
+                icon={<Sparkles className="w-4 h-4" />}
+                iconPosition="start"
+                className="py-3 px-6 text-xs sm:text-sm font-black shadow-md shrink-0"
+              >
+                <span>{t.ctaPrimary}</span>
+                <ArrowRight className="w-4 h-4 text-neutral-950 transition-transform group-hover:translate-x-1" />
+              </NeuM3Button>
             </Link>
           </div>
 
-        </div>
+        </NeuM3Card>
       </section>
 
       {/* --- MINIMALIST EMOTIONAL & PSYCHOLOGICAL SUPPORT SECTION --- */}
       <section className="py-8 sm:py-14 px-4 sm:px-6 max-w-5xl mx-auto w-full">
-        <div className="nm-outset rounded-3xl p-5 sm:p-8 bg-[var(--bg-secondary)] space-y-6 sm:space-y-8">
+        <NeuM3Card variant="elevated" className="rounded-3xl p-5 sm:p-8 space-y-6 sm:space-y-8">
 
           {/* Header */}
           <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full nm-inset bg-[var(--bg-secondary)] text-[10.5px] sm:text-xs font-black text-accent">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full neu-m3-inset bg-[var(--md-surface-container-low)] text-[10.5px] sm:text-xs font-black text-accent">
               <HeartHandshake className="w-3.5 h-3.5 text-accent shrink-0" />
               <span>{t.supportBadge}</span>
             </div>
 
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-[var(--text-emphasis)] tracking-tight leading-snug">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-[var(--md-on-surface)] tracking-tight leading-snug">
               {t.supportHeading}
             </h2>
 
-            <p className="text-xs sm:text-sm md:text-base text-[var(--text-secondary)] font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-[var(--md-on-surface-variant)] font-medium leading-relaxed">
               {t.supportDesc}
             </p>
           </div>
@@ -599,70 +609,70 @@ function LandingPageComponent() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
             {/* Pillar 1: Social Media Confidence */}
-            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
+            <NeuM3Card variant="elevated" className="rounded-2xl p-4 sm:p-5 space-y-3 flex flex-col justify-between">
               <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent">
+                <div className="w-10 h-10 rounded-2xl neu-m3-inset bg-[var(--md-surface-container-low)] flex items-center justify-center text-accent">
                   <Share2Icon className="w-5 h-5 text-accent" />
                 </div>
-                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                <h3 className="text-sm sm:text-base font-black text-[var(--md-on-surface)]">
                   {t.pillar1Title}
                 </h3>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                <p className="text-xs text-[var(--md-on-surface-variant)] leading-relaxed font-normal">
                   {t.pillar1Desc}
                 </p>
               </div>
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg nm-inset-sm">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg neu-m3-inset-sm">
                   <BadgeCheck className="w-3 h-3 text-accent" />
                   <span>WhatsApp & Instagram Ready</span>
                 </span>
               </div>
-            </div>
+            </NeuM3Card>
 
             {/* Pillar 2: Conversion & Trust */}
-            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
+            <NeuM3Card variant="elevated" className="rounded-2xl p-4 sm:p-5 space-y-3 flex flex-col justify-between">
               <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent">
+                <div className="w-10 h-10 rounded-2xl neu-m3-inset bg-[var(--md-surface-container-low)] flex items-center justify-center text-accent">
                   <TrendingUp className="w-5 h-5 text-accent" />
                 </div>
-                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                <h3 className="text-sm sm:text-base font-black text-[var(--md-on-surface)]">
                   {t.pillar2Title}
                 </h3>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                <p className="text-xs text-[var(--md-on-surface-variant)] leading-relaxed font-normal">
                   {t.pillar2Desc}
                 </p>
               </div>
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg nm-inset-sm">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg neu-m3-inset-sm">
                   <Sparkles className="w-3 h-3 text-accent" />
                   <span>High-Converting Catalogue</span>
                 </span>
               </div>
-            </div>
+            </NeuM3Card>
 
             {/* Pillar 3: Zero Financial Burden */}
-            <div className="nm-outset rounded-2xl p-4 sm:p-5 bg-[var(--bg-secondary)] space-y-3 flex flex-col justify-between">
+            <NeuM3Card variant="elevated" className="rounded-2xl p-4 sm:p-5 space-y-3 flex flex-col justify-between">
               <div className="space-y-2.5">
-                <div className="w-10 h-10 rounded-2xl nm-inset bg-[var(--bg-secondary)] flex items-center justify-center text-accent">
+                <div className="w-10 h-10 rounded-2xl neu-m3-inset bg-[var(--md-surface-container-low)] flex items-center justify-center text-accent">
                   <ShieldCheck className="w-5 h-5 text-accent" />
                 </div>
-                <h3 className="text-sm sm:text-base font-black text-[var(--text-emphasis)]">
+                <h3 className="text-sm sm:text-base font-black text-[var(--md-on-surface)]">
                   {t.pillar3Title}
                 </h3>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                <p className="text-xs text-[var(--md-on-surface-variant)] leading-relaxed font-normal">
                   {t.pillar3Desc}
                 </p>
               </div>
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg nm-inset-sm">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-accent px-2.5 py-1 rounded-lg neu-m3-inset-sm">
                   <Check className="w-3 h-3 text-accent" />
                   <span>Pay-as-you-go from ₹1</span>
                 </span>
               </div>
-            </div>
+            </NeuM3Card>
 
           </div>
-        </div>
+        </NeuM3Card>
       </section>
 
       {/* --- STANDALONE EMOTIONAL QUOTES CARD --- */}
@@ -673,84 +683,85 @@ function LandingPageComponent() {
       {/* --- 3-STEP WORKFLOW --- */}
       <section className="py-8 sm:py-12 px-4 sm:px-6 max-w-4xl mx-auto w-full">
         <div className="text-center space-y-1.5 mb-6 sm:mb-8">
-          <h2 className="text-lg sm:text-2xl font-black text-[var(--text-emphasis)]">
+          <h2 className="text-lg sm:text-2xl font-black text-[var(--md-on-surface)]">
             {t.stepsTitle}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] space-y-2.5">
-            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center">
+          <NeuM3Card variant="elevated" className="rounded-2xl p-5 space-y-2.5">
+            <div className="w-9 h-9 rounded-xl neu-m3-inset bg-[var(--md-surface-container-low)] text-accent font-black text-sm flex items-center justify-center">
               1
             </div>
-            <h3 className="text-sm font-black text-[var(--text-emphasis)]">{t.step1}</h3>
-            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{t.step1Desc}</p>
-          </div>
+            <h3 className="text-sm font-black text-[var(--md-on-surface)]">{t.step1}</h3>
+            <p className="text-xs text-[var(--md-on-surface-variant)] leading-relaxed">{t.step1Desc}</p>
+          </NeuM3Card>
 
-          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] space-y-2.5">
-            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center">
+          <NeuM3Card variant="elevated" className="rounded-2xl p-5 space-y-2.5">
+            <div className="w-9 h-9 rounded-xl neu-m3-inset bg-[var(--md-surface-container-low)] text-accent font-black text-sm flex items-center justify-center">
               2
             </div>
-            <h3 className="text-sm font-black text-[var(--text-emphasis)]">{t.step2}</h3>
-            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{t.step2Desc}</p>
-          </div>
+            <h3 className="text-sm font-black text-[var(--md-on-surface)]">{t.step2}</h3>
+            <p className="text-xs text-[var(--md-on-surface-variant)] leading-relaxed">{t.step2Desc}</p>
+          </NeuM3Card>
 
-          <div className="nm-outset rounded-2xl p-5 bg-[var(--bg-secondary)] space-y-2.5">
-            <div className="w-9 h-9 rounded-xl nm-inset bg-[var(--bg-secondary)] text-accent font-black text-sm flex items-center justify-center">
+          <NeuM3Card variant="elevated" className="rounded-2xl p-5 space-y-2.5">
+            <div className="w-9 h-9 rounded-xl neu-m3-inset bg-[var(--md-surface-container-low)] text-accent font-black text-sm flex items-center justify-center">
               3
             </div>
-            <h3 className="text-sm font-black text-[var(--text-emphasis)]">{t.step3}</h3>
-            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{t.step3Desc}</p>
-          </div>
+            <h3 className="text-sm font-black text-[var(--md-on-surface)]">{t.step3}</h3>
+            <p className="text-xs text-[var(--md-on-surface-variant)] leading-relaxed">{t.step3Desc}</p>
+          </NeuM3Card>
         </div>
       </section>
 
       {/* --- MINIMAL PRICING / WALLET STATEMENT & DIRECT ACTION --- */}
       <section className="py-8 sm:py-12 px-4 sm:px-6 max-w-3xl mx-auto w-full text-center space-y-4">
-        <div className="nm-outset rounded-3xl p-6 sm:p-10 bg-[var(--bg-secondary)] space-y-4">
-          <span className="px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider nm-inset bg-[var(--bg-secondary)] text-accent inline-block">
+        <NeuM3Card variant="elevated" className="rounded-3xl p-6 sm:p-10 space-y-4">
+          <span className="px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider neu-m3-inset bg-[var(--md-surface-container-low)] text-accent inline-block">
             {lang === "en" ? "Simple UPI Recharge" : "సులభమైన యూపీఐ పేమెంట్"}
           </span>
 
-          <h2 className="text-xl sm:text-3xl font-black text-[var(--text-emphasis)]">
+          <h2 className="text-xl sm:text-3xl font-black text-[var(--md-on-surface)]">
             {lang === "en" ? "Start Your First Photoshoot from Just ₹1" : "కేవలం రూ. 1/- నుంచే మీ ఫోటోషూట్ మొదలుపెట్టండి"}
           </h2>
 
-          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md mx-auto font-medium leading-relaxed">
+          <p className="text-xs sm:text-sm text-[var(--md-on-surface-variant)] max-w-md mx-auto font-medium leading-relaxed">
             {lang === "en"
               ? "No monthly plans or hidden charges. Just add a few rupees using Google Pay or PhonePe whenever you get new stock."
               : "నెలనెలా కట్టాల్సిన పనేలేదు. కొత్త స్టాక్ వచ్చినప్పుడు గూగుల్ పే లేదా ఫోన్‌పేతో చిన్న రీఛార్జ్ చేసుకొని వెంటనే ఫోటోలు రెడీ చేసుకోండి."}
           </p>
 
           <div className="pt-2">
-            <Link
-              to="/studio"
-              className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl nm-outset bg-[var(--bg-secondary)] text-accent text-sm font-black hover:scale-105 active:scale-95 transition-all group"
-            >
-              <Sparkles className="w-4 h-4 text-accent transition-transform group-hover:scale-110" />
-              <span className="text-accent tracking-wide">{t.ctaPrimary}</span>
-              <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover:translate-x-0.5" />
+            <Link to="/studio">
+              <NeuM3Button
+                variant="filled"
+                icon={<Sparkles className="w-4 h-4" />}
+                className="px-8 py-3.5 text-sm font-black"
+              >
+                <span>{t.ctaPrimary}</span>
+              </NeuM3Button>
             </Link>
           </div>
-        </div>
+        </NeuM3Card>
       </section>
 
       {/* --- FOOTER (COMPLIANCE & NAVIGATION) --- */}
-      <footer className="mt-auto border-t border-black/10 dark:border-white/10 py-8 px-4 sm:px-6 bg-[var(--bg-primary)]">
+      <footer className="mt-auto border-t border-black/10 dark:border-white/10 py-8 px-4 sm:px-6 bg-[var(--md-surface)]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
             <Logo />
             <div className="flex flex-col">
-              <span className="text-xs font-bold text-[var(--text-secondary)]">
+              <span className="text-xs font-bold text-[var(--md-on-surface-variant)]">
                 {t.footerText}
               </span>
-              <span className="text-[11px] text-[var(--text-secondary)] opacity-60 mt-0.5">
+              <span className="text-[11px] text-[var(--md-on-surface-variant)] opacity-60 mt-0.5">
                 © 2026 Srushti AI. All rights reserved.
               </span>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-5 gap-y-2.5 text-xs font-bold text-[var(--text-secondary)]">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-5 gap-y-2.5 text-xs font-bold text-[var(--md-on-surface-variant)]">
             <Link to="/studio" className="hover:text-accent transition-colors">
               {lang === "en" ? "Studio" : "స్టూడియో"}
             </Link>
@@ -768,7 +779,7 @@ function LandingPageComponent() {
             </Link>
             <a
               href="mailto:hi@srushtiai.in"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl nm-inset-sm text-accent font-extrabold hover:opacity-80 transition-all border border-accent/20"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl neu-m3-inset-sm text-accent font-extrabold hover:opacity-80 transition-all border border-accent/20"
             >
               <MailIcon className="w-3.5 h-3.5 shrink-0" />
               <span>{t.contactLabel}</span>

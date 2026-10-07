@@ -879,11 +879,11 @@ export const GarmentWorkspace: React.FC<GarmentWorkspaceProps> = ({
                   id="btn-generate-ai-bg-tab"
                   onClick={onGenerate}
                   disabled={isGenerating}
-                  className="w-full py-3.5 rounded-2xl font-extrabold text-xs nm-outset flex items-center justify-center gap-2 text-[var(--text-emphasis)] bg-accent/10 hover:bg-accent/15 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 cursor-pointer"
+                  className="w-full py-3.5 rounded-2xl font-black text-xs neu-m3-btn-filled flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
                 >
-                  <LuSparklesIcon className="w-4 h-4 text-accent animate-bounce" />
+                  <LuSparklesIcon className="w-4 h-4 text-neutral-950 animate-bounce" />
                   <span>{t.generateBtn}</span>
-                  <span className="ml-1 text-[11px] font-black font-mono px-2 py-0.5 rounded-full bg-accent/20 text-accent">
+                  <span className="ml-1 text-[11px] font-black font-mono px-2 py-0.5 rounded-full bg-black/20 text-neutral-950">
                     {formatCredits(reqCredits)}
                   </span>
                 </button>

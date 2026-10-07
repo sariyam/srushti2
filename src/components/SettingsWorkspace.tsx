@@ -294,7 +294,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
   const renderNoteCard = (isEmbeddedInAccount = false) => (
     <div
       className={`${
-        isEmbeddedInAccount ? "rounded-2xl p-4 space-y-2.5" : "nm-outset rounded-[2rem] p-4 sm:p-5 space-y-3"
+        isEmbeddedInAccount ? "rounded-2xl p-4 space-y-2.5" : "neu-m3-card rounded-[2rem] p-4 sm:p-5 space-y-3 bg-[var(--md-surface-container)]"
       } bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/25`}
     >
       <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
@@ -303,12 +303,12 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
           {lang === "te" ? "గమనిక" : "Note"}
         </h4>
       </div>
-      <p className="text-[10.5px] sm:text-[11px] leading-relaxed text-[var(--text-primary)] opacity-90 font-medium break-words">
+      <p className="text-[10.5px] sm:text-[11px] leading-relaxed text-[var(--md-on-surface-variant)] opacity-90 font-medium break-words">
         {lang === "te"
           ? "గమనిక: జనరేట్ చేయబడిన చిత్రాల ఖచ్చితత్వం అప్‌లోడ్ చేసిన ప్రొడక్ట్ ఇమేజ్ యొక్క నాణ్యత మరియు స్పష్టతపై ఆధారపడి ఉంటుంది. సోర్స్ ఇమేజ్ తక్కువ రిజల్యూషన్, మసకగా, క్రాప్ చేయబడి లేదా కనిపించే వివరాలు లేనట్లయితే, జనరేట్ చేయబడిన చిత్రం అసలు ప్రొడక్ట్ కంటే భిన్నంగా ఉండవచ్చు."
           : "Note: The accuracy of generated images depends on the quality and clarity of the uploaded product image. If the source image is low-resolution, blurry, cropped, or lacks visible details, the generated image may vary from the original product."}
       </p>
-      <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center gap-x-2 gap-y-1 text-[9.5px] sm:text-[10px] font-bold text-[var(--text-primary)]">
+      <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center gap-x-2 gap-y-1 text-[9.5px] sm:text-[10px] font-bold text-[var(--md-on-surface-variant)]">
         <span>{lang === "te" ? "Srushti AI (srushtiai.in) ని ఉపయోగించడం ద్వారా, మీరు మా" : "By using Srushti AI (srushtiai.in), you agree to our"}</span>
         <a
           id="link-terms-and-conditions"
@@ -351,10 +351,10 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
       {!hideTitle && (
         <div className="flex items-center justify-between px-1">
           <div>
-            <h2 className="text-base font-extrabold text-[var(--text-emphasis)]">{t.settingsTitle}</h2>
-            <p className="text-[11px] opacity-75 mt-0.5">{t.settingsSubtitle}</p>
+            <h2 className="text-base font-extrabold text-[var(--md-on-surface)]">{t.settingsTitle}</h2>
+            <p className="text-[11px] text-[var(--md-on-surface-variant)] opacity-75 mt-0.5">{t.settingsSubtitle}</p>
           </div>
-          <div className="w-8 h-8 rounded-full nm-inset-sm flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full neu-m3-inset-sm flex items-center justify-center">
             <UserIcon className="w-4 h-4 text-accent" />
           </div>
         </div>
@@ -368,11 +368,11 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="nm-outset rounded-[1.75rem] sm:rounded-[2rem] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border border-accent/20 bg-[var(--bg-panel)] w-full overflow-hidden lg:h-full lg:flex lg:flex-col lg:justify-between"
+              className="neu-m3-dialog rounded-[1.75rem] sm:rounded-[2rem] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full overflow-hidden lg:h-full lg:flex lg:flex-col lg:justify-between"
             >
           {/* Header Logo above Sign In */}
           <div className="flex flex-col items-center justify-center text-center space-y-2 sm:space-y-3 pt-1 pb-2 border-b border-black/5 dark:border-white/5">
-            <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden nm-outset p-2.5 sm:p-3 bg-[var(--bg-panel)] flex items-center justify-center shadow-lg">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden neu-m3-card p-2.5 sm:p-3 bg-[var(--md-surface-container-low)] flex items-center justify-center shadow-lg">
               <img
                 src={LOGOS_BASE64.front || frontLogo || "/assets/front_logo.png"}
                 alt="Srushti AI Logo"
@@ -390,21 +390,21 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
               />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg md:text-xl font-extrabold text-[var(--text-emphasis)] tracking-tight">Srushti AI</h2>
+              <h2 className="text-base sm:text-lg md:text-xl font-extrabold text-[var(--md-on-surface)] tracking-tight">Srushti AI</h2>
               <p className="text-[10px] sm:text-xs md:text-sm font-extrabold text-accent uppercase tracking-wider">Business to Brand</p>
             </div>
           </div>
 
           <div className="flex items-start sm:items-center justify-between border-b border-black/5 dark:border-white/5 pb-3 gap-2">
             <div className="flex items-start sm:items-center gap-2 min-w-0 flex-1">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl nm-inset-sm flex items-center justify-center text-accent shrink-0 mt-0.5 sm:mt-0">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl neu-m3-inset-sm flex items-center justify-center text-accent bg-accent/10 shrink-0 mt-0.5 sm:mt-0">
                 <SmartphoneIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="font-extrabold text-xs sm:text-sm md:text-base text-[var(--text-emphasis)] leading-tight whitespace-normal break-words">
+                <h3 className="font-extrabold text-xs sm:text-sm md:text-base text-[var(--md-on-surface)] leading-tight whitespace-normal break-words">
                   {isEn ? "Sign In to Your Account" : "మీ ఖాతాలోకి సైన్ ఇన్ అవ్వండి"}
                 </h3>
-                <p className="text-[10px] sm:text-[11px] opacity-70 leading-snug mt-0.5 whitespace-normal break-words">
+                <p className="text-[10px] sm:text-[11px] text-[var(--md-on-surface-variant)] opacity-70 leading-snug mt-0.5 whitespace-normal break-words">
                   {otpStep === "phone"
                     ? (isEn ? "Enter phone number to receive 6-digit OTP code" : "6 అంకెల OTP కోడ్‌ను అందుకోవడానికి ఫోన్ నంబర్‌ను నమోదు చేయండి")
                     : (isEn ? `OTP sent to ${authCountryCode} ${authPhone}` : `OTP ${authCountryCode} ${authPhone} కి పంపబడింది`)}
@@ -421,21 +421,18 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
           {otpStep === "phone" ? (
             <form onSubmit={handleSendOtp} className="space-y-3.5 sm:space-y-4">
               <div className="space-y-1.5">
-                <label className="font-extrabold opacity-80 text-[10px] sm:text-[11px] md:text-xs block">
+                <label className="font-extrabold opacity-80 text-[10px] sm:text-[11px] md:text-xs block text-[var(--md-on-surface)]">
                   {isEn ? "Mobile Phone Number" : "మొబైల్ ఫోన్ నంబర్"}
                 </label>
                 <div className="flex items-center gap-2">
-                  {/* Country Code Picker */}
-                  <select
-                    value={authCountryCode}
-                    onChange={(e) => setAuthCountryCode(e.target.value)}
-                    className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-mono font-bold border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] shrink-0 cursor-pointer"
+                  {/* Fixed Country Code */}
+                  <div
+                    id="fixed-country-code"
+                    className="px-3 sm:px-3.5 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-mono font-bold neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)] shrink-0 flex items-center justify-center select-none gap-1 border border-black/5 dark:border-white/5"
                   >
-                    <option value="+91">🇮🇳 +91</option>
-                    <option value="+1">🇺🇸 +1</option>
-                    <option value="+44">🇬🇧 +44</option>
-                    <option value="+971">🇦🇪 +971</option>
-                  </select>
+                    <span className="text-accent font-black">IN</span>
+                    <span>+91</span>
+                  </div>
 
                   {/* Phone Input */}
                   <div className="relative flex-1 flex items-center min-w-0">
@@ -444,9 +441,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                       value={authPhone}
                       onChange={(e) => setAuthPhone(e.target.value)}
                       placeholder="98765 43210"
-                      className="w-full p-3 sm:p-3.5 pl-8 sm:pl-9 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-wider border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] focus:ring-2 focus:ring-accent text-[var(--text-emphasis)]"
+                      className="w-full p-3 sm:p-3.5 pl-8 sm:pl-9 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
                     />
-                    <PhoneIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 absolute left-2.5 sm:left-3 opacity-50 text-[var(--text-primary)]" />
+                    <PhoneIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 absolute left-2.5 sm:left-3 opacity-50 text-[var(--md-on-surface-variant)]" />
                   </div>
                 </div>
               </div>
@@ -460,13 +457,13 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
               <button
                 type="submit"
                 disabled={isSendingOtp}
-                className={`w-full py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold nm-outset text-accent bg-accent/10 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`w-full py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold neu-m3-btn-filled flex items-center justify-center gap-2 cursor-pointer ${
                   isSendingOtp ? "opacity-70 pointer-events-none" : ""
                 }`}
               >
                 {isSendingOtp ? (
                   <>
-                    <svg className="animate-spin h-4 w-4 text-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4 text-[var(--md-on-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -505,7 +502,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
 
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-[10px] sm:text-[11px]">
-                  <label className="font-extrabold opacity-80 block">
+                  <label className="font-extrabold opacity-80 block text-[var(--md-on-surface)]">
                     {isEn ? "Enter 6-Digit OTP" : "6 అంకెల OTP నమోదు చేయండి"}
                   </label>
                 </div>
@@ -517,7 +514,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                     value={otpValue}
                     onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
                     placeholder="• • • • • •"
-                    className="w-full p-3 sm:p-3.5 pl-9 sm:pl-10 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-[0.2em] sm:tracking-[0.3em] border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] focus:ring-2 focus:ring-accent text-[var(--text-emphasis)]"
+                    className="w-full p-3 sm:p-3.5 pl-9 sm:pl-10 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-[0.2em] sm:tracking-[0.3em] neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
                   />
                   <KeyRoundIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 absolute left-3 sm:left-3.5 opacity-50 text-accent" />
                 </div>
@@ -534,7 +531,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                   type="button"
                   disabled={resendCooldown > 0 || isSendingOtp}
                   onClick={() => handleSendOtp()}
-                  className={`w-full sm:w-auto px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold nm-outset-sm text-[var(--text-primary)] hover:text-accent transition-all flex items-center justify-center gap-1.5 shrink-0 cursor-pointer ${
+                  className={`w-full sm:w-auto px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold neu-m3-btn-tonal flex items-center justify-center gap-1.5 shrink-0 cursor-pointer ${
                     resendCooldown > 0 ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
@@ -551,13 +548,13 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                 <button
                   type="submit"
                   disabled={isVerifyingOtp}
-                  className={`flex-1 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold nm-outset text-accent bg-accent/10 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  className={`flex-1 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold neu-m3-btn-filled flex items-center justify-center gap-2 cursor-pointer ${
                     isVerifyingOtp ? "opacity-70 pointer-events-none" : ""
                   }`}
                 >
                   {isVerifyingOtp ? (
                     <>
-                      <svg className="animate-spin h-4 w-4 text-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin h-4 w-4 text-[var(--md-on-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -576,11 +573,11 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
         </motion.div>
       ) : (
         /* User Profile Details Card */
-        <div className="nm-outset rounded-[2rem] p-5 space-y-4 w-full lg:h-full lg:flex lg:flex-col lg:justify-between">
+        <div className="neu-m3-card rounded-[2rem] p-5 space-y-4 w-full bg-[var(--md-surface-container)] text-[var(--md-on-surface)] lg:h-full lg:flex lg:flex-col lg:justify-between">
           <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3">
             <div className="flex items-center gap-2">
               <UserIcon className="w-5 h-5 text-accent shrink-0" />
-              <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">
+              <h3 className="font-extrabold text-sm text-[var(--md-on-surface)]">
                 {isEn ? "Account Profile" : "ఖాతా వివరాలు"}
               </h3>
             </div>
@@ -594,7 +591,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             {/* Registered Phone Number with Eye Security Toggle */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-[11px]">
-                <label className="font-extrabold opacity-80 flex items-center gap-1.5">
+                <label className="font-extrabold opacity-80 flex items-center gap-1.5 text-[var(--md-on-surface)]">
                   <PhoneIcon className="w-3.5 h-3.5 text-accent" />
                   <span>{isEn ? "Registered Phone Number" : "నమోదైన ఫోన్ నంబర్"}</span>
                 </label>
@@ -626,14 +623,14 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                   }
                   disabled
                   readOnly
-                  className="w-full p-3.5 pl-9 pr-12 rounded-2xl text-xs font-mono font-extrabold tracking-wider border border-transparent outline-none nm-inset-sm bg-[var(--bg-secondary)] text-[var(--text-emphasis)] cursor-default select-all"
+                  className="w-full p-3.5 pl-9 pr-12 rounded-2xl text-xs font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)] cursor-default select-all"
                 />
-                <PhoneIcon className="w-4 h-4 absolute left-3 opacity-50 text-[var(--text-primary)]" />
+                <PhoneIcon className="w-4 h-4 absolute left-3 opacity-50 text-[var(--md-on-surface-variant)]" />
                 <button
                   type="button"
                   id="btn-toggle-phone-visibility"
                   onClick={() => setIsPhoneVisible((prev) => !prev)}
-                  className="absolute right-2.5 p-2 rounded-xl nm-outset-sm hover:scale-105 active:scale-95 text-[var(--text-primary)] hover:text-accent transition-all cursor-pointer flex items-center justify-center bg-[var(--bg-panel)]"
+                  className="absolute right-2.5 p-2 rounded-xl neu-m3-icon-btn text-[var(--md-on-surface)] transition-all cursor-pointer flex items-center justify-center"
                   title={isPhoneVisible ? (isEn ? "Hide phone number" : "ఫోన్ నంబర్ దాచు") : (isEn ? "Show phone number" : "ఫోన్ నంబర్ చూపించు")}
                   aria-label={isPhoneVisible ? "Hide phone number" : "Show phone number"}
                 >
@@ -647,14 +644,14 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             </div>
 
             {/* Account Status Information Badge & Sign Out Action */}
-            <div className="p-3 rounded-2xl nm-inset-sm bg-[var(--bg-secondary)] flex items-center justify-between gap-3">
+            <div className="p-3 rounded-2xl neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
                 <ShieldCheckIcon className="w-4 h-4 text-emerald-500 shrink-0 self-center" />
                 <div className="space-y-0.5 min-w-0 flex-1">
-                  <div className="text-[11px] font-extrabold text-[var(--text-emphasis)] leading-snug break-words whitespace-normal">
+                  <div className="text-[11px] font-extrabold text-[var(--md-on-surface)] leading-snug break-words whitespace-normal">
                     {isEn ? "OTP Secure Account" : "OTP సురక్షిత ఖాతా"}
                   </div>
-                  <div className="text-[10px] opacity-70 leading-normal break-words whitespace-normal">
+                  <div className="text-[10px] text-[var(--md-on-surface-variant)] opacity-70 leading-normal break-words whitespace-normal">
                     {isEn ? "Passwordless Mobile Login Active" : "పాస్‌వర్డ్‌లెస్ మొబైల్ లాగిన్ యాక్టివ్"}
                   </div>
                 </div>
@@ -674,26 +671,26 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             {/* Preferences: Choose Theme & Choose Language Inside Account Profile Card */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5">
               {/* Choose Theme */}
-              <div className="p-3.5 rounded-2xl nm-inset-sm bg-[var(--bg-secondary)] space-y-2.5">
+              <div className="p-3.5 rounded-2xl neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] space-y-2.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     {theme === "light" ? <SunIcon className="w-4 h-4 text-accent" /> : <MoonIcon className="w-4 h-4 text-accent" />}
-                    <span className="font-extrabold text-xs text-[var(--text-emphasis)]">{t.settingsThemeLabel}</span>
+                    <span className="font-extrabold text-xs text-[var(--md-on-surface)]">{t.settingsThemeLabel}</span>
                   </div>
                   <span className="text-[10px] font-bold text-accent capitalize">
                     {theme === "light" ? t.lightTheme : t.darkTheme}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-black/5 dark:bg-white/5">
+                <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl neu-m3-tabs-track">
                   <button
                     type="button"
                     id="profile-theme-light"
                     onClick={() => setTheme("light")}
-                    className={`py-2 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                       theme === "light" 
-                        ? "bg-[var(--bg-panel)] text-accent shadow-sm font-extrabold scale-[1.02]" 
-                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
                     }`}
                   >
                     <SunIcon className="w-3.5 h-3.5" />
@@ -704,10 +701,10 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                     type="button"
                     id="profile-theme-dark"
                     onClick={() => setTheme("dark")}
-                    className={`py-2 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                       theme === "dark" 
-                        ? "bg-[var(--bg-panel)] text-accent shadow-sm font-extrabold scale-[1.02]" 
-                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
                     }`}
                   >
                     <MoonIcon className="w-3.5 h-3.5" />
@@ -717,21 +714,21 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
               </div>
 
               {/* Choose Language */}
-              <div className="p-3.5 rounded-2xl nm-inset-sm bg-[var(--bg-secondary)] space-y-2.5">
+              <div className="p-3.5 rounded-2xl neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] space-y-2.5">
                 <div className="flex items-center gap-2">
                   <LanguagesIcon className="w-4 h-4 text-accent" />
-                  <span className="font-extrabold text-xs text-[var(--text-emphasis)]">{t.settingsLanguageLabel}</span>
+                  <span className="font-extrabold text-xs text-[var(--md-on-surface)]">{t.settingsLanguageLabel}</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-black/5 dark:bg-white/5">
+                <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl neu-m3-tabs-track">
                   <button
                     type="button"
                     id="profile-lang-en"
                     onClick={() => setLang("en")}
-                    className={`py-2 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                       lang === "en" 
-                        ? "bg-[var(--bg-panel)] text-accent shadow-sm font-extrabold scale-[1.02]" 
-                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
                     }`}
                   >
                     English
@@ -741,10 +738,10 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                     type="button"
                     id="profile-lang-te"
                     onClick={() => setLang("te")}
-                    className={`py-2 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                       lang === "te" 
-                        ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                        : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                        : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
                     }`}
                   >
                     తెలుగు
@@ -767,20 +764,20 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
         {renderNoteCard(false)}
 
         {/* Choose Theme / Appearance Card */}
-        <div className="nm-outset rounded-[2rem] p-5 space-y-4">
+        <div className="neu-m3-card rounded-[2rem] p-5 space-y-4 bg-[var(--md-surface-container)] text-[var(--md-on-surface)]">
           <div className="flex items-center gap-2">
             {theme === "light" ? <SunIcon className="w-5 h-5 text-accent" /> : <MoonIcon className="w-5 h-5 text-accent" />}
-            <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsThemeLabel}</h3>
+            <h3 className="font-extrabold text-sm text-[var(--md-on-surface)]">{t.settingsThemeLabel}</h3>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
+          <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl neu-m3-tabs-track">
             <button
               id="settings-theme-light"
               onClick={() => setTheme("light")}
-              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 theme === "light" 
-                  ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                  : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                  ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                  : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
               }`}
             >
               <SunIcon className="w-4 h-4" />
@@ -790,10 +787,10 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             <button
               id="settings-theme-dark"
               onClick={() => setTheme("dark")}
-              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 theme === "dark" 
-                  ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                  : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                  ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                  : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
               }`}
             >
               <MoonIcon className="w-4 h-4" />
@@ -803,20 +800,20 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
         </div>
 
         {/* Choose Language / భాష ఎంచుకోండి Card */}
-        <div className="nm-outset rounded-[2rem] p-5 space-y-4">
+        <div className="neu-m3-card rounded-[2rem] p-5 space-y-4 bg-[var(--md-surface-container)] text-[var(--md-on-surface)]">
           <div className="flex items-center gap-2">
             <LanguagesIcon className="w-5 h-5 text-accent" />
-            <h3 className="font-extrabold text-sm text-[var(--text-emphasis)]">{t.settingsLanguageLabel}</h3>
+            <h3 className="font-extrabold text-sm text-[var(--md-on-surface)]">{t.settingsLanguageLabel}</h3>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5">
+          <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl neu-m3-tabs-track">
             <button
               id="settings-lang-en"
               onClick={() => setLang("en")}
-              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 lang === "en" 
-                  ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                  : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                  ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                  : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
               }`}
             >
               English
@@ -825,10 +822,10 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             <button
               id="settings-lang-te"
               onClick={() => setLang("te")}
-              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+              className={`py-3 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 lang === "te" 
-                  ? "bg-[var(--bg-panel)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                  : "opacity-60 hover:opacity-100 text-[var(--text-primary)]"
+                  ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                  : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
               }`}
             >
               తెలుగు

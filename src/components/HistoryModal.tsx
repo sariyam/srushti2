@@ -195,24 +195,24 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
         exit={{ opacity: 0, scale: 0.96, y: 16 }}
         transition={{ duration: 0.2, ease: "easeOut" }}
         style={{ height: "90dvh", maxHeight: "90dvh" }}
-        className="relative w-full max-w-2xl bg-[var(--bg-panel)] rounded-3xl nm-outset p-4 sm:p-6 flex flex-col z-10 border border-black/5 dark:border-white/10 h-[90vh] h-[90dvh] max-h-[90vh] max-h-[90dvh] shadow-2xl overflow-hidden my-auto"
+        className="relative w-full max-w-2xl bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] rounded-[2rem] neu-m3-dialog p-4 sm:p-6 flex flex-col z-10 border border-black/5 dark:border-white/10 h-[90vh] h-[90dvh] max-h-[90vh] max-h-[90dvh] shadow-2xl overflow-hidden my-auto"
       >
         {/* Header Bar */}
         <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3.5 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-accent/20 to-accent/5 text-accent flex items-center justify-center nm-inset-sm shrink-0 border border-accent/20">
+            <div className="w-10 h-10 rounded-2xl neu-m3-inset-sm flex items-center justify-center text-accent bg-accent/10 shrink-0">
               <Icon icon="lucide:history" className="w-5 h-5 text-accent" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-base sm:text-lg font-black tracking-tight text-[var(--text-emphasis)] leading-tight">
+                <h2 className="text-base sm:text-lg font-black tracking-tight text-[var(--md-on-surface)] leading-tight">
                   {isEn ? "Usage & Payment History" : "వాడుక & చెల్లింపుల చరిత్ర"}
                 </h2>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-accent/10 text-accent font-mono shrink-0">
                   {filteredItems.length} {isEn ? "events" : "ఈవెంట్లు"}
                 </span>
               </div>
-              <p className="text-[11px] font-medium text-[var(--text-primary)] opacity-70 truncate mt-0.5">
+              <p className="text-[11px] font-medium text-[var(--md-on-surface-variant)] opacity-70 truncate mt-0.5">
                 {isEn
                   ? "Real-time audit records for AI generations & wallet recharges"
                   : "ఏఐ ఫోటో షూట్‌లు & వాలెట్ రీఛార్జ్‌ల వాస్తవ రికార్డులు"}
@@ -227,7 +227,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
               type="button"
               onClick={() => loadData(period, true)}
               disabled={isLoading || isLoadingMore}
-              className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-105 active:scale-95 flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0 disabled:opacity-50"
+              className="w-8 h-8 rounded-xl neu-m3-icon-btn flex items-center justify-center text-accent transition-all cursor-pointer shrink-0 disabled:opacity-50"
               title={isEn ? "Refresh Activity" : "తాజాకరించు"}
             >
               <Icon icon="lucide:refresh-cw" className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
@@ -238,7 +238,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
               id="btn-close-history-modal"
               type="button"
               onClick={onClose}
-              className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-105 active:scale-95 flex items-center justify-center text-[var(--text-primary)] opacity-75 hover:opacity-100 transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
+              className="w-8 h-8 rounded-xl neu-m3-icon-btn flex items-center justify-center text-[var(--md-on-surface)] opacity-75 hover:opacity-100 transition-all cursor-pointer shrink-0"
               title={isEn ? "Close" : "మూసివేయి"}
             >
               <Icon icon="lucide:x" className="w-4 h-4" />
@@ -249,16 +249,16 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
         {/* Filter Controls Row */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-3 pb-2 shrink-0 border-b border-black/5 dark:border-white/5">
           {/* Category Tabs: 1st Recharges, 2nd AI Shoots (No 'All' option) */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl nm-inset-sm bg-black/5 dark:bg-white/5 shrink-0">
+          <div className="flex items-center gap-1.5 p-1 rounded-2xl neu-m3-tabs-track shrink-0">
             {/* 1st Tab: Recharges */}
             <button
               id="filter-payment-history"
               type="button"
               onClick={() => setFilter("payment")}
-              className={`px-3 py-1.5 rounded-lg text-[11px] font-black transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
+              className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                 filter === "payment"
-                  ? "bg-accent text-white shadow-sm"
-                  : "text-[var(--text-primary)] opacity-75 hover:opacity-100"
+                  ? "neu-m3-outset-sm bg-accent text-white"
+                  : "text-[var(--md-on-surface-variant)] opacity-75 hover:opacity-100"
               }`}
             >
               <Icon icon="lucide:credit-card" className="w-3.5 h-3.5" />
@@ -277,10 +277,10 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
               id="filter-usage-history"
               type="button"
               onClick={() => setFilter("usage")}
-              className={`px-3 py-1.5 rounded-lg text-[11px] font-black transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
+              className={`px-3 py-1.5 rounded-xl text-[11px] font-black transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                 filter === "usage"
-                  ? "bg-accent text-white shadow-sm"
-                  : "text-[var(--text-primary)] opacity-75 hover:opacity-100"
+                  ? "neu-m3-outset-sm bg-accent text-white"
+                  : "text-[var(--md-on-surface-variant)] opacity-75 hover:opacity-100"
               }`}
             >
               <Icon icon="lucide:camera" className="w-3.5 h-3.5" />
@@ -296,7 +296,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
           </div>
 
           {/* Time Range Filter Tabs: [1 week , 1 month , 3 months , 6 months , 1 year , All] */}
-          <div className="flex items-center gap-1 p-1 rounded-xl nm-inset-sm bg-black/5 dark:bg-white/5 overflow-x-auto no-scrollbar touch-pan-x">
+          <div className="flex items-center gap-1 p-1 rounded-2xl neu-m3-tabs-track overflow-x-auto no-scrollbar touch-pan-x">
             {PERIOD_FILTERS.map((p) => {
               const isActive = period === p.id;
               return (
@@ -305,10 +305,10 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
                   id={`filter-period-${p.id}`}
                   type="button"
                   onClick={() => setPeriod(p.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[10.5px] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-2.5 py-1 rounded-xl text-[10.5px] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     isActive
-                      ? "bg-accent text-white shadow-sm font-black"
-                      : "text-[var(--text-primary)] opacity-70 hover:opacity-100 font-bold"
+                      ? "neu-m3-outset-sm bg-accent text-white font-black"
+                      : "text-[var(--md-on-surface-variant)] opacity-70 hover:opacity-100 font-bold"
                   }`}
                 >
                   {isEn ? p.labelEn : p.labelTe}
@@ -331,7 +331,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
               {[1, 2, 3, 4, 5].map((n) => (
                 <div
                   key={n}
-                  className="p-4 rounded-2xl nm-inset-sm bg-black/5 dark:bg-white/5 animate-pulse flex items-center justify-between"
+                  className="p-4 rounded-2xl neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] animate-pulse flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-black/10 dark:bg-white/10" />
@@ -346,11 +346,11 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
             </div>
           ) : filteredItems.length === 0 ? (
             /* Empty State */
-            <div className="p-8 sm:p-10 rounded-2xl nm-inset-sm text-center flex flex-col items-center justify-center gap-2.5 text-[var(--text-primary)] my-auto min-h-[280px] h-full">
-              <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent nm-inset-sm">
+            <div className="p-8 sm:p-10 rounded-3xl neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] text-center flex flex-col items-center justify-center gap-2.5 text-[var(--md-on-surface)] my-auto min-h-[280px] h-full">
+              <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent neu-m3-inset-sm">
                 <Icon icon={filter === "payment" ? "lucide:credit-card" : "lucide:camera"} className="w-6 h-6" />
               </div>
-              <p className="text-sm font-extrabold text-[var(--text-emphasis)]">
+              <p className="text-sm font-extrabold text-[var(--md-on-surface)]">
                 {filter === "payment"
                   ? isEn
                     ? "No recharge history found"
@@ -359,14 +359,14 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
                   ? "No AI shoot history found"
                   : "ఏఐ షూట్ రికార్డులు ఏవీ కనుగొనబడలేదు"}
               </p>
-              <p className="text-xs max-w-sm opacity-70 leading-relaxed">
+              <p className="text-xs max-w-sm text-[var(--md-on-surface-variant)] opacity-70 leading-relaxed">
                 {filter === "payment"
                   ? isEn
                     ? "No wallet recharge payments found for the selected time range."
                     : "ఎంచుకున్న సమయంలో ఎలాంటి వాలెట్ రీఛార్జ్ చెల్లింపులు కనుగొనబడలేదు."
                   : isEn
                   ? "No AI photo shoot generations recorded for the selected time range."
-                  : "ఎంచుకున్న సమయంలో ఎలాంటి ఏఐ ఫోటో షూట్‌లు నమోదు కాలేదు."}
+                    : "ఎంచుకున్న సమయంలో ఎలాంటి ఏఐ ఫోటో షూట్‌లు నమోదు కాలేదు."}
               </p>
               {filter === "payment" && onOpenWallet && (
                 <button
@@ -375,7 +375,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
                     onClose();
                     onOpenWallet();
                   }}
-                  className="mt-2 px-4 py-2 rounded-xl nm-outset-sm bg-accent text-white text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+                  className="mt-2 px-4 py-2 rounded-xl neu-m3-btn-filled text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
                 >
                   <Icon icon="lucide:zap" className="w-3.5 h-3.5" />
                   <span>{isEn ? "Recharge Studio Credits" : "క్రెడిట్స్ రీఛార్జ్ చేయండి"}</span>
@@ -402,14 +402,14 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
               return (
                 <div
                   key={item.id}
-                  className="p-3.5 rounded-2xl nm-outset-sm bg-[var(--bg-panel)] flex flex-col gap-2.5 transition-all hover:border hover:border-accent/20"
+                  className="p-3.5 rounded-2xl neu-m3-card bg-[var(--md-surface-container)] flex flex-col gap-2.5 transition-all"
                 >
                   {/* Card Main Row */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 min-w-0 flex-1">
                       {/* Icon Badge */}
                       <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 nm-inset-sm ${
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 neu-m3-inset-sm ${
                           isUsage
                             ? "bg-accent/10 text-accent"
                             : "bg-emerald-500/10 text-emerald-500"
@@ -430,7 +430,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
                       {/* Info Center */}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-black text-xs text-[var(--text-emphasis)] break-words">
+                          <span className="font-black text-xs text-[var(--md-on-surface)] break-words">
                             {isEn ? item.title : item.titleTe || item.title}
                           </span>
 
@@ -459,14 +459,14 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
 
                           {/* Workspace / Item Chip for Usage */}
                           {isUsage && item.itemType && (
-                            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-black/5 dark:bg-white/5 text-[var(--text-primary)] opacity-80 uppercase">
+                            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-black/5 dark:bg-white/5 text-[var(--md-on-surface-variant)] opacity-80 uppercase">
                               {item.itemType}
                             </span>
                           )}
                         </div>
 
                         {/* Metadata & Technical Specs */}
-                        <div className="flex items-center gap-2 text-[10px] text-[var(--text-primary)] opacity-75 flex-wrap mt-1">
+                        <div className="flex items-center gap-2 text-[10px] text-[var(--md-on-surface-variant)] opacity-75 flex-wrap mt-1">
                           <span className="flex items-center gap-1">
                             <Icon icon="lucide:clock" className="w-3 h-3 opacity-60" />
                             <span>{dateStr}</span>
@@ -561,20 +561,20 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
 
           {/* End of list indicator */}
           {!hasMore && filteredItems.length > 4 && (
-            <div className="py-2 text-center text-[10px] font-bold text-[var(--text-primary)] opacity-40">
+            <div className="py-2 text-center text-[10px] font-bold text-[var(--md-on-surface-variant)] opacity-40">
               {isEn ? "• All records loaded •" : "• అన్ని రికార్డులు లోడ్ అయ్యాయి •"}
             </div>
           )}
         </div>
 
         {/* Modal Footer */}
-        <div className="pt-3 border-t border-black/5 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-[10.5px] text-[var(--text-primary)] opacity-80 shrink-0">
+        <div className="pt-3 border-t border-black/5 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-[10.5px] text-[var(--md-on-surface-variant)] opacity-80 shrink-0">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="font-semibold">
+            <span className="font-semibold text-[var(--md-on-surface)]">
               {isEn ? "100% Encrypted & Live Audited Activity" : "100% భద్రపరచబడిన లైవ్ ఆడిట్ రికార్డులు"}
             </span>
           </div>
@@ -597,7 +597,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="font-black hover:text-accent cursor-pointer px-3 py-1 rounded-lg nm-outset-sm bg-[var(--bg-panel)]"
+              className="font-black cursor-pointer px-4 py-1.5 rounded-xl neu-m3-btn-tonal text-xs"
             >
               {isEn ? "Done" : "పూర్తయింది"}
             </button>

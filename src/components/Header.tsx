@@ -926,15 +926,15 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="px-4 pt-2 pb-3 mx-auto max-w-lg sm:max-w-xl md:max-w-3xl landscape:max-w-full lg:landscape:max-w-full xl:landscape:max-w-full 2xl:landscape:max-w-full lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1440px] w-full shrink-0">
-      <div className="nm-outset rounded-2xl px-4 py-2.5 flex items-center justify-between gap-3 w-full">
+      <div className="neu-m3-card rounded-2xl px-4 py-2.5 flex items-center justify-between gap-3 w-full bg-[var(--md-surface-container)]">
         {/* Brand title */}
         <div className="flex items-center gap-2 select-none">
           <Logo theme="dark" />
           <div>
-            <h1 className="text-base font-bold tracking-tight text-[var(--text-emphasis)] leading-none font-sans">
+            <h1 className="text-base font-bold tracking-tight text-[var(--md-on-surface)] leading-none font-sans">
               {title}
             </h1>
-            <p className="text-[9px] font-medium opacity-75 mt-0.5 leading-none font-sans">
+            <p className="text-[9px] font-medium text-[var(--md-on-surface-variant)] mt-0.5 leading-none font-sans">
               {subtitle}
             </p>
           </div>
@@ -947,10 +947,10 @@ export const Header: React.FC<HeaderProps> = ({
             id="btn-trigger-wallet-modal"
             type="button"
             onClick={() => setIsWalletOpen(true)}
-            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl nm-outset-sm hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer bg-[var(--bg-panel)] text-[var(--text-emphasis)] shrink-0"
+            className="neu-m3-btn-tonal flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl cursor-pointer text-[var(--md-on-surface)] shrink-0"
             title={isEn ? "Studio Wallet & Credits" : "స్టూడియో వాలెట్ & క్రెడిట్స్"}
           >
-            <div className="w-5 h-5 rounded-full flex items-center justify-center nm-inset-sm bg-accent/10 text-accent shrink-0">
+            <div className="w-5 h-5 rounded-full flex items-center justify-center neu-m3-inset-sm bg-accent/10 text-accent shrink-0">
               <Icon icon="lucide:coins" className="w-3 h-3 text-amber-500" />
             </div>
             <span className="text-xs font-black font-mono text-accent">
@@ -963,7 +963,7 @@ export const Header: React.FC<HeaderProps> = ({
             id="btn-trigger-history-modal"
             type="button"
             onClick={() => setIsHistoryOpen(true)}
-            className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
+            className="neu-m3-icon-btn w-9 h-9 rounded-xl flex items-center justify-center text-accent cursor-pointer shrink-0"
             title={isEn ? "Usage & Payment History" : "వాడుక & చెల్లింపుల చరిత్ర"}
           >
             <Icon icon="lucide:history" className="w-4 h-4" />
@@ -974,7 +974,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Link
               to="/admin-dashboard"
               id="btn-trigger-admin-modal"
-              className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
+              className="neu-m3-icon-btn w-9 h-9 rounded-xl flex items-center justify-center text-accent cursor-pointer shrink-0"
               title={isEn ? "Open Admin Dashboard" : "అడ్మిన్ డాష్‌బోర్డ్ తెరవండి"}
             >
               <CreditCard className="w-4 h-4" />
@@ -985,7 +985,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             id="btn-trigger-settings-modal"
             onClick={() => setIsSettingsOpen(true)}
-            className="w-8 h-8 rounded-xl nm-outset-sm hover:scale-[1.05] active:scale-[0.95] flex items-center justify-center text-accent transition-all cursor-pointer bg-[var(--bg-panel)] shrink-0"
+            className="neu-m3-icon-btn w-9 h-9 rounded-xl flex items-center justify-center text-accent cursor-pointer shrink-0"
             title={isEn ? "Profile" : "ప్రొఫైల్"}
           >
             <UserIcon className="w-4 h-4" />
@@ -1267,9 +1267,9 @@ export const Header: React.FC<HeaderProps> = ({
                     }
                     setIsOpen(false);
                   }}
-                  className="w-full py-3.5 rounded-2xl text-xs sm:text-sm font-black tracking-wide nm-outset flex items-center justify-center gap-2 text-accent hover:scale-[1.01] active:scale-[0.99] cursor-pointer bg-[var(--bg-secondary)] transition-all"
+                  className="w-full py-3.5 rounded-2xl text-xs sm:text-sm font-black tracking-wide neu-m3-btn-filled flex items-center justify-center gap-2 cursor-pointer transition-all"
                 >
-                  <Sparkles className="w-4 h-4 text-accent animate-pulse" />
+                  <Sparkles className="w-4 h-4 text-neutral-950 animate-pulse" />
                   <span>{isEn ? "Confirm Selection" : "సెలక్షన్ నిర్ధారించండి"}</span>
                 </button>
               </div>

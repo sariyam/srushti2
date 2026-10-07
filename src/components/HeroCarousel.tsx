@@ -57,12 +57,12 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ lang, badge, tagline
   return (
     <div
       id="hero-fashion-carousel"
-      className="relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden nm-outset p-2 sm:p-3 bg-[var(--bg-secondary)] group select-none"
+      className="relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden neu-m3-card p-2 sm:p-3 bg-[var(--md-surface-container)] group select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* 16:9 Aspect Ratio Container with Stacked Text Overlay */}
-      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-neutral-950 flex items-center justify-center nm-inset-sm">
+      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-neutral-950 flex items-center justify-center neu-m3-inset-sm">
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}

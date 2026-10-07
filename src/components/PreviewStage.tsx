@@ -442,21 +442,21 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
         {/* THE VISUAL STAGE CANVAS */}
         <div 
           id="stage-canvas-card"
-          className={`nm-outset rounded-2xl md:rounded-[2.5rem] overflow-hidden p-2.5 relative aspect-auto lg:${aspectClass} landscape:aspect-auto flex-1 min-h-0 lg:flex-1 landscape:flex-1 flex flex-col items-center justify-center transition-all w-full`}
+          className={`neu-m3-card bg-[var(--md-surface-container)] rounded-2xl md:rounded-[2.5rem] overflow-hidden p-2.5 relative aspect-auto lg:${aspectClass} landscape:aspect-auto flex-1 min-h-0 lg:flex-1 landscape:flex-1 flex flex-col items-center justify-center transition-all w-full`}
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleFileDrop}
         >
           {/* Overlay Tabs Bar (Floating at top) */}
           {originalImage && !isGenerating && (
-            <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 p-1 rounded-full bg-[var(--bg-secondary)] nm-inset-sm border border-accent/20 z-20">
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 p-1 rounded-full neu-m3-tabs-track z-20">
               <button
                 id="tab-preview-original"
                 onClick={() => setActivePreviewTab("original")}
                 title={t.originalLabel}
                 className={`w-8 h-8 rounded-full transition-all flex items-center justify-center cursor-pointer ${
                   activePreviewTab === "original" 
-                    ? "nm-outset-sm text-accent scale-105 font-bold" 
-                    : "text-[var(--text-primary)] opacity-65 hover:opacity-100"
+                    ? "neu-m3-outset-sm text-accent scale-105 font-bold" 
+                    : "text-[var(--md-on-surface-variant)] opacity-65 hover:opacity-100"
                 }`}
               >
                 <ImageIcon className="w-3.5 h-3.5" />
@@ -468,8 +468,8 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                 title={t.finalLabel}
                 className={`w-8 h-8 rounded-full transition-all flex items-center justify-center disabled:opacity-40 cursor-pointer ${
                   activePreviewTab === "generated" 
-                    ? "nm-outset-sm text-accent scale-105 font-bold" 
-                    : "text-[var(--text-primary)] opacity-65 hover:opacity-100"
+                    ? "neu-m3-outset-sm text-accent scale-105 font-bold" 
+                    : "text-[var(--md-on-surface-variant)] opacity-65 hover:opacity-100"
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5" />
@@ -505,12 +505,12 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                         e.stopPropagation();
                         cameraInputRef.current?.click();
                       }}
-                      className="w-14 h-14 rounded-full nm-outset flex items-center justify-center text-[var(--text-emphasis)] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+                      className="w-14 h-14 rounded-full neu-m3-outset flex items-center justify-center text-[var(--md-on-surface)] hover:scale-105 active:scale-95 transition-transform cursor-pointer bg-[var(--md-surface-container-high)]"
                       title={lang === "en" ? "Camera" : "కెమెరా"}
                     >
                       <Camera className="w-5 h-5 text-accent" />
                     </button>
-                    <span className="text-[10px] font-bold opacity-85">
+                    <span className="text-[10px] font-bold opacity-85 text-[var(--md-on-surface)]">
                       {lang === "en" ? "Camera" : "కెమెరా"}
                     </span>
                   </div>
@@ -523,12 +523,12 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                         e.stopPropagation();
                         galleryInputRef.current?.click();
                       }}
-                      className="w-14 h-14 rounded-full nm-outset flex items-center justify-center text-[var(--text-emphasis)] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+                      className="w-14 h-14 rounded-full neu-m3-outset flex items-center justify-center text-[var(--md-on-surface)] hover:scale-105 active:scale-95 transition-transform cursor-pointer bg-[var(--md-surface-container-high)]"
                       title={lang === "en" ? "Gallery" : "గ్యాలరీ"}
                     >
                       <Upload className="w-5 h-5 text-accent" />
                     </button>
-                    <span className="text-[10px] font-bold opacity-85">
+                    <span className="text-[10px] font-bold opacity-85 text-[var(--md-on-surface)]">
                       {lang === "en" ? "Gallery" : "గ్యాలరీ"}
                     </span>
                   </div>
@@ -619,7 +619,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                   <button
                     id="btn-download-output-overlay"
                     onClick={onDownload}
-                    className="w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center shadow-lg transition-all hover:scale-115 active:scale-95 border border-accent/30 text-accent cursor-pointer nm-outset-sm"
+                    className="w-9 h-9 rounded-full neu-m3-icon-btn backdrop-blur-md flex items-center justify-center shadow-lg transition-all border border-accent/30 text-accent cursor-pointer bg-[var(--md-surface-container-high)]/90"
                     title={lang === "en" ? "Save to Phone" : "ఫోన్‌లో సేవ్ చేయండి"}
                   >
                     <Download className="w-4 h-4 text-accent" />
@@ -627,7 +627,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                   <button
                     id="btn-share-output-overlay"
                     onClick={onShare}
-                    className="md:hidden w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center shadow-lg transition-all hover:scale-115 active:scale-95 border border-accent/30 text-accent cursor-pointer nm-outset-sm"
+                    className="md:hidden w-9 h-9 rounded-full neu-m3-icon-btn backdrop-blur-md flex items-center justify-center shadow-lg transition-all border border-accent/30 text-accent cursor-pointer bg-[var(--md-surface-container-high)]/90"
                     title={lang === "en" ? "Share Photo" : "ఫోటో షేర్ చేయండి"}
                   >
                     <Share2 className="w-4 h-4 text-accent" />
@@ -641,7 +641,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                   setIsViewerOpen(true);
                   setViewerMode("crop");
                 }}
-                className="w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center shadow-lg transition-all hover:scale-115 active:scale-95 border border-accent/30 text-accent cursor-pointer nm-outset-sm"
+                className="w-9 h-9 rounded-full neu-m3-icon-btn backdrop-blur-md flex items-center justify-center shadow-lg transition-all border border-accent/30 text-accent cursor-pointer bg-[var(--md-surface-container-high)]/90"
                 title={lang === "en" ? "Photo Editor & Cropper" : "ఫోటో ఎడిటర్"}
               >
                 <EditIcon className="w-4 h-4 text-accent" />
@@ -654,7 +654,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                     setCopied(true);
                     setTimeout(() => setCopied(false), 1500);
                   }}
-                  className="w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center shadow-lg transition-all hover:scale-115 active:scale-95 border border-accent/30 text-accent cursor-pointer nm-outset-sm animate-bounce"
+                  className="w-9 h-9 rounded-full neu-m3-icon-btn backdrop-blur-md flex items-center justify-center shadow-lg transition-all border border-accent/30 text-accent cursor-pointer bg-[var(--md-surface-container-high)]/90 animate-bounce"
                   title={lang === "en" ? "Copy API Payload" : "ఏపిఐ పేలోడ్ కాపీ చేయండి"}
                 >
                   {copied ? <CheckIcon className="w-4 h-4 text-emerald-500" /> : <CopyIcon className="w-4 h-4 text-accent" />}
@@ -663,7 +663,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
               <button
                 id="btn-clear-canvas"
                 onClick={onClearCanvas}
-                className="w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center shadow-lg transition-all hover:scale-115 active:scale-95 border border-accent/30 text-accent cursor-pointer nm-outset-sm"
+                className="w-9 h-9 rounded-full neu-m3-icon-btn backdrop-blur-md flex items-center justify-center shadow-lg transition-all border border-accent/30 text-accent cursor-pointer bg-[var(--md-surface-container-high)]/90"
                 title={lang === "en" ? "Delete / Clear Photo" : "ఫోటోను తొలగించండి"}
               >
                 <Trash2 className="w-4 h-4 text-accent" />
@@ -704,10 +704,10 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[9999] bg-[var(--bg-primary)]/95 dark:bg-[var(--bg-primary)]/98 text-[var(--text-primary)] backdrop-blur-lg flex flex-col select-none overflow-hidden touch-none"
+              className="fixed inset-0 z-[9999] bg-[var(--md-surface)]/95 text-[var(--md-on-surface)] backdrop-blur-lg flex flex-col select-none overflow-hidden touch-none"
             >
               {/* Photo Editor Header Bar with Left Edge Close Button */}
-              <div className="flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 border-b border-[var(--shadow-dark)]/20 z-10 bg-[var(--bg-secondary)]/90 backdrop-blur-sm gap-3">
+              <div className="flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 border-b border-black/5 dark:border-white/10 z-10 bg-[var(--md-surface-container)]/90 backdrop-blur-sm gap-3">
                 {/* Left: Close Icon (X) + Main Header Title */}
                 <div className="flex items-center gap-3">
                   <button
@@ -716,13 +716,13 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                       setIsViewerOpen(false);
                       handleViewerReset();
                     }}
-                    className="w-8 h-8 rounded-full nm-outset-sm text-[var(--text-emphasis)] hover:text-accent flex items-center justify-center transition-all cursor-pointer border border-[var(--shadow-dark)]/20 shrink-0"
+                    className="w-8 h-8 rounded-xl neu-m3-icon-btn text-[var(--md-on-surface)] flex items-center justify-center transition-all cursor-pointer shrink-0"
                     title={lang === "en" ? "Close" : "మూసివేయి"}
                   >
                     <CloseIcon className="w-4 h-4" />
                   </button>
                   <div className="space-y-0.5">
-                    <h3 className="text-[var(--text-emphasis)] text-sm font-extrabold tracking-wide flex items-center gap-2">
+                    <h3 className="text-[var(--md-on-surface)] text-sm font-extrabold tracking-wide flex items-center gap-2">
                       <span>{lang === "en" ? "Srushti AI Photo Studio" : "సృష్టి AI ఫోటో స్టూడియో"}</span>
                       {cropToast && (
                         <span className="text-xs bg-accent/20 text-accent border border-accent/30 px-2 py-0.5 rounded-full font-medium animate-pulse">
@@ -730,7 +730,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                         </span>
                       )}
                     </h3>
-                    <p className="text-[10px] text-[var(--text-secondary)] opacity-80">
+                    <p className="text-[10px] text-[var(--md-on-surface-variant)] opacity-80">
                       {viewerMode === "zoom"
                         ? (lang === "en" ? "Pinch / Scroll to Zoom • Drag to Move" : "జూమ్ చేయడానికి పించ్ లేదా స్క్రోల్ చేయండి")
                         : viewerMode === "crop"
@@ -741,14 +741,14 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                 </div>
 
                 {/* Mode Switcher Tabs */}
-                <div className="flex items-center gap-1 bg-[var(--bg-secondary)] nm-inset-sm p-1 rounded-xl border border-[var(--shadow-dark)]/20">
+                <div className="flex items-center gap-1 neu-m3-tabs-track p-1 rounded-2xl">
                   <button
                     id="btn-mode-zoom"
                     onClick={() => setViewerMode("zoom")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       viewerMode === "zoom"
-                        ? "bg-accent text-white shadow-lg scale-105"
-                        : "text-[var(--text-primary)] opacity-70 hover:opacity-100"
+                        ? "neu-m3-outset-sm bg-accent text-white shadow-md scale-105"
+                        : "text-[var(--md-on-surface-variant)] opacity-70 hover:opacity-100"
                     }`}
                   >
                     <Eye className="w-3.5 h-3.5" />
@@ -760,10 +760,10 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                       setViewerMode("crop");
                       setTimeout(() => centerCropBox(cropAspectRatio, cropScale), 50);
                     }}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       viewerMode === "crop"
-                        ? "bg-accent text-white shadow-lg scale-105"
-                        : "text-[var(--text-primary)] opacity-70 hover:opacity-100"
+                        ? "neu-m3-outset-sm bg-accent text-white shadow-md scale-105"
+                        : "text-[var(--md-on-surface-variant)] opacity-70 hover:opacity-100"
                     }`}
                   >
                     <CropIcon className="w-3.5 h-3.5" />
@@ -834,7 +834,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                         id="btn-lightbox-zoom-out"
                         onClick={handleViewerZoomOut}
                         disabled={viewerScale <= 1}
-                        className="w-10 h-10 rounded-xl nm-outset-sm text-[var(--text-primary)] disabled:opacity-40 flex items-center justify-center transition-all cursor-pointer border border-[var(--shadow-dark)]/20"
+                        className="w-10 h-10 rounded-xl neu-m3-icon-btn text-[var(--md-on-surface)] disabled:opacity-40 flex items-center justify-center transition-all cursor-pointer"
                         title={lang === "en" ? "Zoom Out" : "జూమ్ తగ్గించండి"}
                       >
                         <ZoomOut className="w-5 h-5" />
@@ -843,7 +843,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                         id="btn-lightbox-zoom-in"
                         onClick={handleViewerZoomIn}
                         disabled={viewerScale >= 6}
-                        className="w-10 h-10 rounded-xl nm-outset-sm text-[var(--text-primary)] disabled:opacity-40 flex items-center justify-center transition-all cursor-pointer border border-[var(--shadow-dark)]/20"
+                        className="w-10 h-10 rounded-xl neu-m3-icon-btn text-[var(--md-on-surface)] disabled:opacity-40 flex items-center justify-center transition-all cursor-pointer"
                         title={lang === "en" ? "Zoom In" : "జూమ్ పెంచండి"}
                       >
                         <ZoomIn className="w-5 h-5" />
@@ -851,7 +851,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                       <button
                         id="btn-lightbox-reset"
                         onClick={handleViewerReset}
-                        className="w-10 h-10 rounded-xl nm-outset-sm text-[var(--text-primary)] flex items-center justify-center transition-all cursor-pointer border border-[var(--shadow-dark)]/20"
+                        className="w-10 h-10 rounded-xl neu-m3-icon-btn text-[var(--md-on-surface)] flex items-center justify-center transition-all cursor-pointer"
                         title={lang === "en" ? "Reset View" : "రీసెట్"}
                       >
                         <RotateCcw className="w-5 h-5" />
@@ -880,9 +880,9 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                         );
                         handleDownloadEditorImage(croppedResult, croppedFileName);
                       }}
-                      className="px-6 py-2.5 rounded-xl nm-outset text-accent hover:text-accent font-extrabold text-xs flex items-center gap-2 transition-all cursor-pointer border border-accent/40 hover:scale-105 active:scale-95"
+                      className="px-6 py-2.5 rounded-xl neu-m3-btn-filled text-xs font-extrabold flex items-center gap-2 transition-all cursor-pointer shadow-md"
                     >
-                      <Download className="w-4 h-4 text-accent" />
+                      <Download className="w-4 h-4 text-white" />
                       <span>{lang === "en" ? "Download Cropped Image" : "క్రాప్ ఫోటో డౌన్‌లోడ్"}</span>
                     </button>
                   </div>
@@ -902,10 +902,10 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                             setCropAspectRatio(ratioObj.id);
                             setTimeout(() => centerCropBox(ratioObj.id, cropScale), 30);
                           }}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold text-center leading-tight break-words transition-all cursor-pointer border ${
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold text-center leading-tight break-words transition-all cursor-pointer ${
                             isActive
-                              ? "bg-accent text-white border-accent shadow-lg scale-105"
-                              : "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-[var(--shadow-dark)]/20 hover:border-accent/40 nm-outset-sm"
+                              ? "neu-m3-outset-sm bg-accent text-white shadow-md scale-105"
+                              : "neu-m3-card bg-[var(--md-surface-container)] text-[var(--md-on-surface-variant)] hover:text-[var(--md-on-surface)]"
                           }`}
                         >
                           {lang === "en" ? ratioObj.labelEn : ratioObj.labelTe}
@@ -1048,7 +1048,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                           }
                           setTimeout(() => centerCropBox(cropAspectRatio, 85), 30);
                         }}
-                        className="px-3.5 py-2 rounded-xl nm-outset-sm text-[var(--text-primary)] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border border-[var(--shadow-dark)]/20"
+                        className="px-3.5 py-2 rounded-xl neu-m3-btn-tonal text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
                         <span>{lang === "en" ? "Reset" : "రీసెట్"}</span>
@@ -1057,7 +1057,7 @@ export const PreviewStage: React.FC<PreviewStageProps> = ({
                       <button
                         id="btn-apply-crop"
                         onClick={handleApplyCrop}
-                        className="px-4 py-2 rounded-xl bg-accent hover:bg-accent/90 text-white text-xs font-extrabold flex items-center gap-2 transition-all cursor-pointer shadow-lg shadow-accent/30 hover:scale-105 active:scale-95"
+                        className="px-4 py-2 rounded-xl neu-m3-btn-filled text-xs font-extrabold flex items-center gap-2 transition-all cursor-pointer shadow-md"
                       >
                         <CheckIcon className="w-4 h-4 text-white" />
                         <span>{lang === "en" ? "Apply Crop" : "క్రాప్ చేయండి"}</span>
