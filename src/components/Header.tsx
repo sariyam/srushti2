@@ -306,49 +306,25 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
             ? (catItem?.nameTe || t[id] || id)
             : (catItem?.nameEn || t[id] || id.replace(/_/g, " "));
 
-          const renderedIcon = catItem?.icon ? (
-            <Icon
-              icon={
-                catItem.icon.startsWith("lucide:")
-                  ? catItem.icon
-                  : `lucide:${catItem.icon.toLowerCase()}`
-              }
-              className="w-5 h-5"
-            />
-          ) : (
-            getItemIcon(id)
-          );
-
           return (
             <button
               key={id}
               type="button"
               onClick={() => onSelect(id)}
-              className={`relative min-w-[76px] xs:min-w-[84px] sm:min-w-[94px] max-w-[110px] flex-1 py-3 px-2 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${
+              className={`relative min-w-[76px] xs:min-w-[84px] sm:min-w-[94px] max-w-[120px] flex-1 py-2.5 px-2.5 rounded-xl sm:rounded-2xl flex items-center justify-center text-center transition-all duration-200 cursor-pointer ${
                 isSelected
                   ? "nm-inset bg-accent/10 text-accent font-black shadow-inner border border-accent/30 scale-[0.98]"
                   : "nm-outset-sm hover:scale-[1.03] active:scale-[0.97] text-[var(--text-primary)] hover:text-accent bg-[var(--bg-secondary)]/50"
               }`}
             >
               {isSelected && (
-                <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-accent text-white flex items-center justify-center shadow-xs">
-                  <Check className="w-2.5 h-2.5 stroke-[3]" />
+                <span className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-accent text-white flex items-center justify-center shadow-xs">
+                  <Check className="w-2 h-2 stroke-[3]" />
                 </span>
               )}
 
-              {/* Icon Container */}
-              <div
-                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                  isSelected
-                    ? "text-accent bg-accent/15"
-                    : "text-[var(--text-primary)] opacity-75 group-hover:opacity-100"
-                }`}
-              >
-                {renderedIcon}
-              </div>
-
               {/* Label */}
-              <span className={`text-[10px] sm:text-[10.5px] font-bold text-center leading-tight max-w-full px-0.5 uppercase tracking-tight break-words whitespace-normal line-clamp-2 ${
+              <span className={`text-[11px] sm:text-xs font-bold text-center leading-tight max-w-full px-1 uppercase tracking-tight break-words whitespace-normal ${
                 isSelected ? "text-accent font-black" : "text-[var(--text-primary)]"
               }`}>
                 {displayName}
