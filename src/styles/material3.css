@@ -110,8 +110,8 @@
   --md-on-success-container: #d1e7dd;
 
   /* Calibrated Neu-M3 Dual Shadows (Dark) */
-  --neu-shadow-light: #2c2d36;
-  --neu-shadow-dark: #101115;
+  --neu-shadow-light: rgba(255, 255, 255, 0.08);
+  --neu-shadow-dark: rgba(0, 0, 0, 0.45);
 
   --neu-outset: 5px 5px 12px var(--neu-shadow-dark), -5px -5px 12px var(--neu-shadow-light);
   --neu-outset-sm: 2.5px 2.5px 6px var(--neu-shadow-dark), -2.5px -2.5px 6px var(--neu-shadow-light);

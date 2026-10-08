@@ -348,8 +348,8 @@ const SingleRowSlider: React.FC<SingleRowSliderProps> = ({
               onClick={() => onSelect(id)}
               className={`relative min-w-[76px] xs:min-w-[84px] sm:min-w-[94px] max-w-[120px] flex-1 py-2.5 px-2.5 rounded-xl sm:rounded-2xl flex items-center justify-center text-center transition-all duration-200 cursor-pointer ${
                 isSelected
-                  ? "nm-inset bg-accent/10 text-accent font-black shadow-inner border border-accent/30 scale-[0.98]"
-                  : "nm-outset-sm hover:scale-[1.03] active:scale-[0.97] text-[var(--text-primary)] hover:text-accent bg-[var(--bg-secondary)]/50"
+                  ? "nm-inset bg-accent/15 text-accent font-black border border-accent/40 scale-[0.98]"
+                  : "nm-outset-sm hover:scale-[1.03] active:scale-[0.97] text-[var(--text-primary)] hover:text-accent bg-[var(--bg-secondary)]"
               }`}
             >
               {isSelected && (
@@ -1008,7 +1008,7 @@ export const Header: React.FC<HeaderProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              className="relative bg-[var(--bg-primary)] rounded-[2rem] p-5 sm:p-6 max-w-lg w-full border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 h-[90vh] h-[90dvh] max-h-[90dvh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col space-y-4"
+              className="relative bg-[var(--md-surface-container-high)] neu-m3-dialog rounded-[2rem] p-5 sm:p-6 max-w-lg w-full text-[var(--md-on-surface)] z-10 h-[90vh] h-[90dvh] max-h-[90dvh] overflow-y-auto custom-scrollbar shadow-2xl flex flex-col space-y-4"
             >
               {/* Header inside the popup card */}
               <div className="flex items-center justify-between gap-2 pb-2 border-b border-black/5 dark:border-white/5">
@@ -1111,8 +1111,8 @@ export const Header: React.FC<HeaderProps> = ({
                               onClick={() => handleSelectBusinessCategory(biz)}
                               className={`p-2.5 rounded-xl flex items-center justify-center text-center gap-2 transition-all cursor-pointer ${
                                 isSelected
-                                  ? "nm-inset text-accent font-extrabold"
-                                  : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
+                                  ? "nm-inset bg-accent/15 text-accent font-extrabold border border-accent/40"
+                                  : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)] bg-[var(--bg-secondary)]"
                               }`}
                             >
                               {isFemale ? (
@@ -1176,8 +1176,8 @@ export const Header: React.FC<HeaderProps> = ({
                           }}
                           className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all text-center uppercase tracking-tight cursor-pointer ${
                             isSelected
-                              ? "bg-accent/10 text-accent font-black nm-outset-xs"
-                              : "text-[var(--text-primary)] text-opacity-60 hover:text-opacity-90"
+                              ? "bg-accent text-white font-black shadow-xs"
+                              : "text-[var(--text-primary)] text-opacity-70 hover:text-opacity-100"
                           }`}
                         >
                           {isEn
