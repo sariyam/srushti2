@@ -292,7 +292,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
   };
 
   const renderNoteCard = () => (
-    <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-2.5 bg-[var(--md-surface-container-high)] border border-amber-500/30 w-full min-w-0">
+    <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-2.5 bg-[var(--md-surface-container-high)] w-full min-w-0 border-0">
       <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
         <InfoIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
         <h4 className="font-extrabold text-xs sm:text-sm tracking-tight">
@@ -364,7 +364,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="neu-m3-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full"
+              className="neu-m3-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full border-0"
             >
               {/* Header Logo above Sign In */}
               <div className="flex items-center justify-center text-center gap-3 pt-1 pb-3 border-b border-black/5 dark:border-white/5">
@@ -757,7 +757,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
             {/* Theme & Language Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4 w-full min-w-0">
               {/* Choose Theme / Appearance Card */}
-              <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-3 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full min-w-0">
+              <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-3 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full min-w-0 border-0">
                 <div className="flex items-center gap-2">
                   {theme === "light" ? <SunIcon className="w-5 h-5 text-accent" /> : <MoonIcon className="w-5 h-5 text-accent" />}
                   <h3 className="font-extrabold text-xs sm:text-sm text-[var(--md-on-surface)]">{t.settingsThemeLabel}</h3>
@@ -793,7 +793,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
               </div>
 
               {/* Choose Language / భాష ఎంచుకోండి Card */}
-              <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-3 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full min-w-0">
+              <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-3 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full min-w-0 border-0">
                 <div className="flex items-center gap-2">
                   <LanguagesIcon className="w-5 h-5 text-accent" />
                   <h3 className="font-extrabold text-xs sm:text-sm text-[var(--md-on-surface)]">{t.settingsLanguageLabel}</h3>
