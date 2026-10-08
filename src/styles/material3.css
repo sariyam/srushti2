@@ -456,11 +456,30 @@
   box-shadow: var(--neu-inset), 0 0 0 1px var(--color-accent);
 }
 
-/* --- NEU-M3 DIALOG CONTAINER --- */
+/* --- NEU-M3 DIALOG CONTAINER (NO NEUMORPHISM SHADOW) --- */
 .neu-m3-dialog {
   background-color: var(--md-surface-container-high);
   color: var(--md-on-surface);
   border-radius: 1.75rem;
-  box-shadow: var(--neu-outset-lg), 0 20px 40px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark .neu-m3-dialog {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- M3 ELEVATED CARD / MODAL --- */
+.m3-card-elevated {
+  background-color: var(--md-surface-container-high);
+  color: var(--md-on-surface);
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark .m3-card-elevated {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
