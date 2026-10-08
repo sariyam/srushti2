@@ -142,7 +142,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
 
   // Phone + OTP Sign In States
   const [authCountryCode, setAuthCountryCode] = useState("+91");
-  const [authPhone, setAuthPhone] = useState("98765 43210");
+  const [authPhone, setAuthPhone] = useState("");
   const [otpStep, setOtpStep] = useState<"phone" | "otp">("phone");
   const [otpValue, setOtpValue] = useState("");
   const [isSendingOtp, setIsSendingOtp] = useState(false);
@@ -438,9 +438,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                           value={authPhone}
                           onChange={(e) => setAuthPhone(e.target.value)}
                           placeholder="98765 43210"
-                          className="w-full p-3 sm:p-3.5 pl-9 sm:pl-10 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
+                          className="w-full p-3 sm:p-3.5 !pl-10 sm:!pl-11 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
                         />
-                        <PhoneIcon className="w-4 h-4 absolute left-3 opacity-50 text-[var(--md-on-surface-variant)]" />
+                        <PhoneIcon className="w-4 h-4 absolute left-3.5 opacity-50 text-[var(--md-on-surface-variant)] pointer-events-none" />
                       </div>
                     </div>
                   </div>
@@ -511,9 +511,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                         value={otpValue}
                         onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
                         placeholder="• • • • • •"
-                        className="w-full p-3 sm:p-3.5 pl-10 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-[0.25em] sm:tracking-[0.35em] neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
+                        className="w-full p-3 sm:p-3.5 !pl-10 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-[0.25em] sm:tracking-[0.35em] neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
                       />
-                      <KeyRoundIcon className="w-4 h-4 absolute left-3.5 opacity-50 text-accent" />
+                      <KeyRoundIcon className="w-4 h-4 absolute left-3.5 opacity-50 text-accent pointer-events-none" />
                     </div>
                   </div>
 
@@ -609,9 +609,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                       }
                       disabled
                       readOnly
-                      className="w-full p-3 sm:p-3.5 pl-9 sm:pl-10 pr-12 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)] cursor-default select-all"
+                      className="w-full p-3 sm:p-3.5 !pl-10 sm:!pl-11 pr-12 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)] cursor-default select-all"
                     />
-                    <PhoneIcon className="w-4 h-4 absolute left-3 opacity-50 text-[var(--md-on-surface-variant)]" />
+                    <PhoneIcon className="w-4 h-4 absolute left-3.5 opacity-50 text-[var(--md-on-surface-variant)] pointer-events-none" />
                     <button
                       type="button"
                       id="btn-toggle-phone-visibility"
