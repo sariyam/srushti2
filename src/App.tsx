@@ -1037,8 +1037,8 @@ export default function App() {
               {/* Header Icon + Title */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center shrink-0">
-                    <Icon icon="lucide:coins" className="w-6 h-6 animate-pulse" />
+                  <div className="w-11 h-11 rounded-2xl bg-accent/10 border border-accent/20 text-accent flex items-center justify-center shrink-0">
+                    <Icon icon="lucide:sparkles" className="w-6 h-6 animate-pulse" />
                   </div>
                   <div>
                     <h3 className="text-base font-extrabold text-[var(--text-emphasis)] leading-tight">

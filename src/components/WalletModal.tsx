@@ -354,7 +354,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
         <div className="neu-m3-inset rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 bg-[var(--md-surface-container-low)]">
           <div className="flex items-center gap-3.5">
             <div className="w-12 h-12 rounded-2xl neu-m3-outset-sm flex items-center justify-center text-accent shrink-0 bg-[var(--md-surface-container)]">
-              <Icon icon="lucide:coins" className="w-6 h-6 text-amber-500" />
+              <Icon icon="lucide:sparkles" className="w-6 h-6 text-accent animate-pulse" />
             </div>
             <div>
               <span className="text-[10px] uppercase tracking-wider font-extrabold text-[var(--md-on-surface-variant)] block">

@@ -174,7 +174,19 @@ export const BusinessVerticalsTab: React.FC<BusinessVerticalsTabProps> = ({ lang
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-2xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
                     <Icon
-                      icon={cat.workspace === "garment" ? "lucide:shirt" : "lucide:gem"}
+                      icon={
+                        cat.icon
+                          ? cat.icon.startsWith("lucide:")
+                            ? cat.icon
+                            : `lucide:${cat.icon.toLowerCase()}`
+                          : cat.genderTarget === "female"
+                          ? "lucide:venus"
+                          : cat.genderTarget === "male"
+                          ? "lucide:mars"
+                          : cat.workspace === "garment"
+                          ? "lucide:shirt"
+                          : "lucide:gem"
+                      }
                       className="w-6 h-6"
                     />
                   </div>

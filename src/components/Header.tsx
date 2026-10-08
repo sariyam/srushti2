@@ -29,6 +29,40 @@ const Settings = (props: any) => <Icon icon="lucide:settings" {...props} />;
 const UserIcon = (props: any) => <Icon icon="lucide:user" {...props} />;
 const Check = (props: any) => <Icon icon="lucide:check" {...props} />;
 
+const FemaleIcon = (props: any) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-3.5 h-3.5 shrink-0 opacity-80"
+    {...props}
+  >
+    <circle cx="12" cy="9" r="6" />
+    <path d="M12 15v7" />
+    <path d="M9 19h6" />
+  </svg>
+);
+
+const MaleIcon = (props: any) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-3.5 h-3.5 shrink-0 opacity-80"
+    {...props}
+  >
+    <circle cx="10" cy="14" r="6" />
+    <path d="M16 3h5v5" />
+    <path d="m21 3-6.75 6.75" />
+  </svg>
+);
+
 const KurtaIcon = (props: any) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" {...props}>
     <path d="M6 3h12l3 5-3 14H6L3 8l3-5z" />
@@ -911,10 +945,12 @@ export const Header: React.FC<HeaderProps> = ({
             title={isEn ? "Studio Wallet & Credits" : "స్టూడియో వాలెట్ & క్రెడిట్స్"}
           >
             <div className="w-5 h-5 rounded-full flex items-center justify-center neu-m3-inset-sm bg-accent/10 text-accent shrink-0">
-              <Icon icon="lucide:coins" className="w-3 h-3 text-amber-500" />
+              <Sparkles className="w-3.5 h-3.5 text-accent animate-pulse" />
             </div>
             <span className="text-xs font-black font-mono text-accent">
-              {formatCredits(activeWalletBalance)}
+              {(activeWalletBalance ?? 0) % 1 === 0
+                ? (activeWalletBalance ?? 0).toFixed(0)
+                : (activeWalletBalance ?? 0).toFixed(1)}
             </span>
           </button>
 
@@ -1055,6 +1091,18 @@ export const Header: React.FC<HeaderProps> = ({
                                   ? tempGarmentGender === biz.genderTarget
                                   : tempJewelryGender === biz.genderTarget)));
 
+                          const isFemale =
+                            biz.genderTarget === "female" ||
+                            biz.id?.toLowerCase().includes("female") ||
+                            biz.nameEn?.toLowerCase().includes("female") ||
+                            biz.nameEn?.toLowerCase().includes("women");
+
+                          const isMale =
+                            biz.genderTarget === "male" ||
+                            biz.id?.toLowerCase().includes("male") ||
+                            biz.nameEn?.toLowerCase().includes("male") ||
+                            biz.nameEn?.toLowerCase().includes("men");
+
                           return (
                             <button
                               key={biz.id}
@@ -1066,7 +1114,11 @@ export const Header: React.FC<HeaderProps> = ({
                                   : "nm-outset-sm hover:scale-[1.02] active:scale-[0.98] text-[var(--text-primary)]"
                               }`}
                             >
-                              {biz.icon && (
+                              {isFemale ? (
+                                <FemaleIcon className="w-3.5 h-3.5 shrink-0 opacity-80" />
+                              ) : isMale ? (
+                                <MaleIcon className="w-3.5 h-3.5 shrink-0 opacity-80" />
+                              ) : biz.icon ? (
                                 <Icon
                                   icon={
                                     biz.icon.startsWith("lucide:")
@@ -1075,7 +1127,7 @@ export const Header: React.FC<HeaderProps> = ({
                                   }
                                   className="w-3.5 h-3.5 shrink-0 opacity-80"
                                 />
-                              )}
+                              ) : null}
                               <span className="text-[11px] font-bold">
                                 {isEn ? biz.nameEn : (biz.nameTe || biz.nameEn)}
                               </span>
@@ -1158,61 +1210,8 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
 
-              {/* Confirm Button & Selection Summary */}
-              <div className="pt-2 mt-auto space-y-2.5">
-                {/* Active Selection Summary */}
-                <div className="flex items-center justify-between px-3.5 py-2 rounded-xl nm-inset-sm text-[11px] bg-[var(--bg-secondary)]/50">
-                  <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
-                    {isEn ? "Selected" : "ఎంచుకున్నది"}:
-                  </span>
-                  <div className="flex items-center gap-1.5 font-black text-accent text-xs">
-                    <span>
-                      {(() => {
-                        const wsRec = workspacesList.find((w) => w.id === tempWorkspace);
-                        if (wsRec) {
-                          return isEn ? wsRec.nameEn : (wsRec.nameTe || wsRec.nameEn);
-                        }
-                        return tempWorkspace === "garment"
-                          ? (isEn ? "Garment" : "బట్టలు")
-                          : (isEn ? "Jewelry" : "నగలు");
-                      })()}
-                    </span>
-                    <span className="text-[var(--text-secondary)] opacity-40">•</span>
-                    <span>
-                      {(() => {
-                        const currentGender =
-                          tempWorkspace === "garment" ? tempGarmentGender : tempJewelryGender;
-                        const bizRec =
-                          businesses.find((b) => b.id === tempBusinessCategoryId) ||
-                          businesses.find(
-                            (b) =>
-                              b.workspace === tempWorkspace &&
-                              b.genderTarget === currentGender &&
-                              b.isActive
-                          );
-                        if (bizRec) {
-                          return isEn ? bizRec.nameEn : (bizRec.nameTe || bizRec.nameEn);
-                        }
-                        return currentGender === "female"
-                          ? (isEn ? "Female" : "మహిళలు")
-                          : (isEn ? "Male" : "పురుషులు");
-                      })()}
-                    </span>
-                    <span className="text-[var(--text-secondary)] opacity-40">•</span>
-                    <span className="uppercase">
-                      {(() => {
-                        const activeId =
-                          tempWorkspace === "garment" ? tempGarmentType : tempJewelryType;
-                        const activeItem = catalogItemsMap.get(activeId);
-                        if (activeItem) {
-                          return isEn ? activeItem.nameEn : (activeItem.nameTe || activeItem.nameEn);
-                        }
-                        return t[activeId] || activeId?.replace(/_/g, " ");
-                      })()}
-                    </span>
-                  </div>
-                </div>
-
+              {/* Confirm Button */}
+              <div className="pt-2 mt-auto">
                 <button
                   id="btn-confirm-business"
                   type="button"
