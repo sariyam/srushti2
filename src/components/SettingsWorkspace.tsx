@@ -291,27 +291,21 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
     setOtpNotice(null);
   };
 
-  const renderNoteCard = (isEmbeddedInAccount = false) => (
-    <div
-      className={`${
-        isEmbeddedInAccount
-          ? "rounded-2xl p-4 space-y-2.5 landscape:p-1.5 landscape:space-y-0.5"
-          : "neu-m3-card rounded-[2rem] landscape:rounded-xl p-4 sm:p-5 landscape:p-1 landscape:py-0.5 space-y-3 landscape:space-y-0 bg-[var(--md-surface-container)]"
-      } bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/25 overflow-hidden w-full min-w-0`}
-    >
-      <div className="flex items-center gap-1.5 sm:gap-2 landscape:gap-1 text-amber-600 dark:text-amber-400">
-        <InfoIcon className="w-4 h-4 sm:w-5 sm:h-5 landscape:w-2.5 landscape:h-2.5 shrink-0" />
-        <h4 className="font-extrabold text-xs sm:text-sm landscape:text-[8.5px] landscape:leading-none tracking-tight">
-          {lang === "te" ? "గమనిక" : "Note"}
+  const renderNoteCard = () => (
+    <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-2.5 bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/25 overflow-hidden w-full min-w-0">
+      <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+        <InfoIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
+        <h4 className="font-extrabold text-xs sm:text-sm tracking-tight">
+          {lang === "te" ? "ముఖ్య గమనిక" : "Important Note"}
         </h4>
       </div>
-      <p className="text-[10.5px] sm:text-[11px] landscape:text-[7px] leading-relaxed landscape:leading-tight text-[var(--md-on-surface-variant)] opacity-90 font-medium break-words landscape:my-0.5">
+      <p className="text-[11px] sm:text-xs leading-relaxed text-[var(--md-on-surface-variant)] opacity-90 font-medium break-words">
         {lang === "te"
-          ? "గమనిక: జనరేట్ చేయబడిన చిత్రాల ఖచ్చితత్వం అప్‌లోడ్ చేసిన ప్రొడక్ట్ ఇమేజ్ యొక్క నాణ్యత మరియు స్పష్టతపై ఆధారపడి ఉంటుంది. సోర్స్ ఇమేజ్ తక్కువ రిజల్యూషన్, మసకగా, క్రాప్ చేయబడి లేదా కనిపించే వివరాలు లేనట్లయితే, జనరేట్ చేయబడిన చిత్రం అసలు ప్రొడక్ట్ కంటే భిన్నంగా ఉండవచ్చు."
-          : "Note: The accuracy of generated images depends on the quality and clarity of the uploaded product image. If the source image is low-resolution, blurry, cropped, or lacks visible details, the generated image may vary from the original product."}
+          ? "జనరేట్ చేయబడిన చిత్రాల ఖచ్చితత్వం అప్‌లోడ్ చేసిన ప్రొడక్ట్ ఇమేజ్ యొక్క నాణ్యత మరియు స్పష్టతపై ఆధారపడి ఉంటుంది. సోర్స్ ఇమేజ్ తక్కువ రిజల్యూషన్, మసకగా, క్రాప్ చేయబడి లేదా కనిపించే వివరాలు లేనట్లయితే, ఫలితాలు మారవచ్చు."
+          : "The accuracy of generated images depends on the quality and clarity of the uploaded product image. If the source image is low-resolution, blurry, cropped, or lacks visible details, the generated image may vary from the original product."}
       </p>
-      <div className="pt-2 landscape:pt-0.5 border-t border-amber-500/20 flex flex-wrap items-center gap-x-2 landscape:gap-x-1 gap-y-1 landscape:gap-y-0 text-[9.5px] sm:text-[10px] landscape:text-[6.5px] landscape:leading-none font-bold text-[var(--md-on-surface-variant)]">
-        <span>{lang === "te" ? "Srushti AI (srushtiai.in) ని ఉపయోగించడం ద్వారా, మీరు మా" : "By using Srushti AI (srushtiai.in), you agree to our"}</span>
+      <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10.5px] sm:text-xs font-bold text-[var(--md-on-surface-variant)]">
+        <span>{lang === "te" ? "Srushti AI ని ఉపయోగించడం ద్వారా, మీరు మా" : "By using Srushti AI, you agree to our"}</span>
         <a
           id="link-terms-and-conditions"
           href="/termsandconditions"
@@ -347,389 +341,471 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
     <motion.section 
       initial={{ opacity: 0 }} 
       animate={{ opacity: 1 }} 
-      className={`space-y-5 landscape:space-y-0 w-full mx-auto overflow-x-hidden ${isSignedOut ? "max-w-3xl landscape:max-w-full" : "max-w-xl"}`}
+      className={`space-y-4 sm:space-y-5 w-full mx-auto overflow-x-hidden ${isSignedOut ? "max-w-4xl" : "max-w-xl"}`}
     >
       {/* Title Header */}
       {!hideTitle && (
         <div className="flex items-center justify-between px-1">
           <div>
-            <h2 className="text-base font-extrabold text-[var(--md-on-surface)]">{t.settingsTitle}</h2>
-            <p className="text-[11px] text-[var(--md-on-surface-variant)] opacity-75 mt-0.5">{t.settingsSubtitle}</p>
+            <h2 className="text-base sm:text-lg font-black text-[var(--md-on-surface)]">{t.settingsTitle}</h2>
+            <p className="text-xs text-[var(--md-on-surface-variant)] opacity-75 mt-0.5">{t.settingsSubtitle}</p>
           </div>
-          <div className="w-8 h-8 rounded-full neu-m3-inset-sm flex items-center justify-center">
-            <UserIcon className="w-4 h-4 text-accent" />
+          <div className="w-9 h-9 rounded-full neu-m3-inset-sm flex items-center justify-center text-accent">
+            <UserIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
         </div>
       )}
 
-      {/* Responsive Grid: 2-column grid when signed out, clean single column when signed in */}
-      <div className={isSignedOut ? "grid grid-cols-1 landscape:grid-cols-2 lg:grid-cols-2 gap-5 landscape:gap-1.5 lg:gap-6 items-start landscape:items-stretch lg:items-stretch overflow-x-hidden w-full" : "w-full overflow-x-hidden"}>
+      {/* Responsive Grid: 2-column grid when signed out on desktop/tablet, clean single column when signed in */}
+      <div className={isSignedOut ? "grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-stretch overflow-x-hidden w-full" : "w-full overflow-x-hidden space-y-4 sm:space-y-5"}>
         {/* Left Side: Account Profile or Sign In Card */}
-        <div className={`space-y-5 landscape:space-y-0.5 w-full min-w-0 ${isSignedOut ? "lg:h-full lg:flex lg:flex-col landscape:h-full landscape:flex landscape:flex-col" : ""}`}>
+        <div className="space-y-4 sm:space-y-5 w-full min-w-0">
           {isSignedOut ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="neu-m3-dialog rounded-[1.75rem] sm:rounded-[2rem] landscape:rounded-xl p-4 sm:p-6 md:p-8 landscape:p-1.5 landscape:py-1 space-y-4 sm:space-y-6 landscape:space-y-0.5 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full overflow-hidden lg:h-full lg:flex lg:flex-col lg:justify-between landscape:h-full landscape:flex landscape:flex-col landscape:justify-between"
+              className="neu-m3-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 bg-[var(--md-surface-container)] text-[var(--md-on-surface)] w-full overflow-hidden"
             >
-          {/* Header Logo above Sign In */}
-          <div className="flex landscape:flex-row flex-col items-center justify-center text-center landscape:text-left space-y-2 sm:space-y-3 landscape:space-y-0 landscape:gap-1.5 pt-1 pb-2 landscape:py-0 landscape:pb-0.5 border-b border-black/5 dark:border-white/5">
-            <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 landscape:w-6 landscape:h-6 rounded-3xl landscape:rounded-md overflow-hidden neu-m3-card p-2.5 sm:p-3 landscape:p-0.5 bg-[var(--md-surface-container-low)] flex items-center justify-center shadow-lg shrink-0">
-              <img
-                src={LOGOS_BASE64.front || frontLogo || "/assets/front_logo.png"}
-                alt="Srushti AI Logo"
-                className="w-full h-full object-contain rounded-2xl landscape:rounded-xs"
-                onError={(e) => {
-                  const target = e.currentTarget as HTMLImageElement;
-                  if (!target.dataset.failed) {
-                    target.dataset.failed = "1";
-                    target.src = frontLogo || "/assets/front_logo.png";
-                  } else if (target.dataset.failed === "1") {
-                    target.dataset.failed = "2";
-                    target.src = "/front_logo.png";
-                  }
-                }}
-              />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg md:text-xl landscape:text-[11px] landscape:leading-tight font-extrabold text-[var(--md-on-surface)] tracking-tight">Srushti AI</h2>
-              <p className="text-[10px] sm:text-xs md:text-sm landscape:text-[7px] landscape:leading-none font-extrabold text-accent uppercase tracking-wider">Business to Brand</p>
-            </div>
-          </div>
-
-          <div className="flex items-start sm:items-center justify-between border-b border-black/5 dark:border-white/5 pb-3 landscape:pb-0.5 gap-2 landscape:gap-1">
-            <div className="flex items-start sm:items-center gap-2 landscape:gap-1 min-w-0 flex-1">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 landscape:w-4.5 landscape:h-4.5 rounded-xl sm:rounded-2xl landscape:rounded-md neu-m3-inset-sm flex items-center justify-center text-accent bg-accent/10 shrink-0 mt-0.5 sm:mt-0">
-                <SmartphoneIcon className="w-4 h-4 sm:w-5 sm:h-5 landscape:w-2.5 landscape:h-2.5" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-extrabold text-xs sm:text-sm md:text-base landscape:text-[10px] landscape:leading-none text-[var(--md-on-surface)] whitespace-normal break-words">
-                  {isEn ? "Sign In to Your Account" : "మీ ఖాతాలోకి సైన్ ఇన్ అవ్వండి"}
-                </h3>
-                <p className="text-[10px] sm:text-[11px] landscape:text-[7.5px] landscape:leading-none text-[var(--md-on-surface-variant)] opacity-70 mt-0.5 whitespace-normal break-words">
-                  {otpStep === "phone"
-                    ? (isEn ? "Enter phone number to receive 6-digit OTP code" : "6 అంకెల OTP కోడ్‌ను అందుకోవడానికి ఫోన్ నంబర్‌ను నమోదు చేయండి")
-                    : (isEn ? `OTP sent to ${authCountryCode} ${authPhone}` : `OTP ${authCountryCode} ${authPhone} కి పంపబడింది`)}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-1 text-[9px] sm:text-[10px] landscape:text-[6.5px] font-extrabold px-2 sm:px-2.5 landscape:px-1 py-1 landscape:py-0 rounded-full bg-accent/10 text-accent border border-accent/20 shrink-0 self-start sm:self-auto">
-              <KeyRoundIcon className="w-3 h-3 landscape:w-2 landscape:h-2 text-accent" />
-              <span>{otpStep === "phone" ? (isEn ? "Step 1 of 2" : "దశ 1/2") : (isEn ? "Step 2 of 2" : "దశ 2/2")}</span>
-            </div>
-          </div>
-
-          {/* Step 1: Phone Number Entry */}
-          {otpStep === "phone" ? (
-            <form onSubmit={handleSendOtp} className="space-y-3.5 sm:space-y-4 landscape:space-y-0.5">
-              <div className="space-y-1.5 landscape:space-y-0">
-                <label className="font-extrabold opacity-80 text-[10px] sm:text-[11px] md:text-xs landscape:text-[7.5px] landscape:leading-none block text-[var(--md-on-surface)]">
-                  {isEn ? "Mobile Phone Number" : "మొబైల్ ఫోన్ నంబర్"}
-                </label>
-                <div className="flex items-center gap-2 landscape:gap-1">
-                  {/* Fixed Country Code */}
-                  <div
-                    id="fixed-country-code"
-                    className="px-3 sm:px-3.5 landscape:px-1.5 py-3 sm:py-3.5 landscape:py-0.5 rounded-xl sm:rounded-2xl landscape:rounded-md text-xs sm:text-sm landscape:text-[9.5px] font-mono font-bold neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)] shrink-0 flex items-center justify-center select-none gap-1 border border-black/5 dark:border-white/5"
-                  >
-                    <span className="text-accent font-black">IN</span>
-                    <span>+91</span>
-                  </div>
-
-                  {/* Phone Input */}
-                  <div className="relative flex-1 flex items-center min-w-0">
-                    <input
-                      type="tel"
-                      value={authPhone}
-                      onChange={(e) => setAuthPhone(e.target.value)}
-                      placeholder="98765 43210"
-                      className="w-full p-3 sm:p-3.5 landscape:py-0.5 landscape:px-1.5 pl-8 sm:pl-9 landscape:pl-5 rounded-xl sm:rounded-2xl landscape:rounded-md text-xs sm:text-sm md:text-base landscape:text-[9.5px] font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
-                    />
-                    <PhoneIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 landscape:w-2.5 landscape:h-2.5 absolute left-2.5 sm:left-3 landscape:left-1 opacity-50 text-[var(--md-on-surface-variant)]" />
-                  </div>
-                </div>
-              </div>
-
-              {otpError && (
-                <p className="text-[10px] sm:text-[11px] landscape:text-[7.5px] font-bold text-red-500 bg-red-500/10 p-2.5 landscape:p-0.5 rounded-xl landscape:rounded-md border border-red-500/20">
-                  {otpError}
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={isSendingOtp}
-                className={`w-full py-3 sm:py-3.5 landscape:py-0.5 rounded-xl sm:rounded-2xl landscape:rounded-md text-xs sm:text-sm landscape:text-[9.5px] font-extrabold neu-m3-btn-filled flex items-center justify-center gap-2 landscape:gap-1 cursor-pointer ${
-                  isSendingOtp ? "opacity-70 pointer-events-none" : ""
-                }`}
-              >
-                {isSendingOtp ? (
-                  <>
-                    <svg className="animate-spin h-4 w-4 landscape:h-3 landscape:w-3 text-[var(--md-on-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span>{isEn ? "Sending OTP..." : "OTP పంపుతోంది..."}</span>
-                  </>
-                ) : (
-                  <>
-                    <span>{isEn ? "Send OTP via SMS" : "SMS ద్వారా OTP పంపండి"}</span>
-                    <ArrowRightIcon className="w-4 h-4 landscape:w-2.5 landscape:h-2.5" />
-                  </>
-                )}
-              </button>
-            </form>
-          ) : (
-            /* Step 2: OTP Verification */
-            <form onSubmit={handleVerifyOtp} className="space-y-3.5 sm:space-y-4 landscape:space-y-0.5">
-              {/* Notice Banner */}
-              {otpNotice && (
-                <div className="p-2.5 sm:p-3 landscape:p-0.5 rounded-xl sm:rounded-2xl landscape:rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] sm:text-[11px] landscape:text-[7.5px] font-bold flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 landscape:gap-1">
-                  <div className="flex items-center gap-1.5 landscape:gap-1 min-w-0">
-                    <CheckCircleIcon className="w-4 h-4 landscape:w-2.5 landscape:h-2.5 shrink-0 text-emerald-500" />
-                    <span className="break-words">{otpNotice}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOtpStep("phone");
-                      setOtpError(null);
+              {/* Header Logo above Sign In */}
+              <div className="flex items-center justify-center text-center gap-3 pt-1 pb-3 border-b border-black/5 dark:border-white/5">
+                <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl overflow-hidden neu-m3-inset-sm p-2 bg-[var(--md-surface-container-lowest)] flex items-center justify-center shrink-0 shadow-xs">
+                  <img
+                    src={LOGOS_BASE64.front || frontLogo || "/assets/front_logo.png"}
+                    alt="Srushti AI Logo"
+                    className="w-full h-full object-contain rounded-xl"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      if (!target.dataset.failed) {
+                        target.dataset.failed = "1";
+                        target.src = frontLogo || "/assets/front_logo.png";
+                      } else if (target.dataset.failed === "1") {
+                        target.dataset.failed = "2";
+                        target.src = "/front_logo.png";
+                      }
                     }}
-                    className="text-[10px] landscape:text-[7.5px] font-extrabold underline text-accent shrink-0 cursor-pointer self-end sm:self-auto"
-                  >
-                    {isEn ? "Change Number" : "నంబర్ మార్చు"}
-                  </button>
-                </div>
-              )}
-
-              <div className="space-y-1.5 landscape:space-y-0">
-                <div className="flex items-center justify-between text-[10px] sm:text-[11px] landscape:text-[7.5px]">
-                  <label className="font-extrabold opacity-80 block text-[var(--md-on-surface)]">
-                    {isEn ? "Enter 6-Digit OTP" : "6 అంకెల OTP నమోదు చేయండి"}
-                  </label>
-                </div>
-
-                <div className="relative flex items-center">
-                  <input
-                    type="text"
-                    maxLength={6}
-                    value={otpValue}
-                    onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
-                    placeholder="• • • • • •"
-                    className="w-full p-3 sm:p-3.5 landscape:py-0.5 landscape:px-1.5 pl-9 sm:pl-10 landscape:pl-5 rounded-xl sm:rounded-2xl landscape:rounded-md text-xs sm:text-sm md:text-base landscape:text-[10px] font-mono font-extrabold tracking-[0.2em] sm:tracking-[0.3em] landscape:tracking-[0.15em] neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
                   />
-                  <KeyRoundIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 landscape:w-2.5 landscape:h-2.5 absolute left-3 sm:left-3.5 landscape:left-1 opacity-50 text-accent" />
+                </div>
+                <div className="text-left">
+                  <h2 className="text-base sm:text-lg md:text-xl font-black text-[var(--md-on-surface)] tracking-tight">Srushti AI</h2>
+                  <p className="text-xs sm:text-sm font-extrabold text-accent uppercase tracking-wider">Business to Brand</p>
                 </div>
               </div>
 
-              {otpError && (
-                <p className="text-[10px] sm:text-[11px] landscape:text-[7.5px] font-bold text-red-500 bg-red-500/10 p-2.5 landscape:p-0.5 rounded-xl landscape:rounded-md border border-red-500/20">
-                  {otpError}
-                </p>
-              )}
-
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 landscape:gap-1">
-                <button
-                  type="button"
-                  disabled={resendCooldown > 0 || isSendingOtp}
-                  onClick={() => handleSendOtp()}
-                  className={`w-full sm:w-auto px-4 py-3 sm:py-3.5 landscape:py-0.5 landscape:px-1.5 rounded-xl sm:rounded-2xl landscape:rounded-md text-xs sm:text-sm landscape:text-[9px] font-bold neu-m3-btn-tonal flex items-center justify-center gap-1.5 landscape:gap-0.5 shrink-0 cursor-pointer ${
-                    resendCooldown > 0 ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  <RefreshCwIcon className={`w-3.5 h-3.5 landscape:w-2.5 landscape:h-2.5 ${isSendingOtp ? "animate-spin" : ""}`} />
-                  <span>
-                    {resendCooldown > 0
-                      ? `${isEn ? "Resend in" : "తిరిగి పంపు"} ${resendCooldown}s`
-                      : isEn
-                      ? "Resend OTP"
-                      : "OTP మళ్ళీ పంపు"}
-                  </span>
-                </button>
-
-                <button
-                  type="submit"
-                  disabled={isVerifyingOtp}
-                  className={`flex-1 py-3 sm:py-3.5 landscape:py-0.5 landscape:px-1.5 rounded-xl sm:rounded-2xl landscape:rounded-md text-xs sm:text-sm landscape:text-[9.5px] font-extrabold neu-m3-btn-filled flex items-center justify-center gap-2 landscape:gap-1 cursor-pointer ${
-                    isVerifyingOtp ? "opacity-70 pointer-events-none" : ""
-                  }`}
-                >
-                  {isVerifyingOtp ? (
-                    <>
-                      <svg className="animate-spin h-4 w-4 landscape:h-3 landscape:w-3 text-[var(--md-on-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span>{isEn ? "Verifying OTP..." : "OTP పరిశీలిస్తోంది..."}</span>
-                    </>
-                  ) : (
-                    <>
-                      <ShieldCheckIcon className="w-4 h-4 landscape:w-2.5 landscape:h-2.5 text-accent" />
-                      <span>{isEn ? "Verify & Sign In" : "పరిశీలించి సైన్ ఇన్ అవ్వండి"}</span>
-                    </>
-                  )}
-                </button>
+              {/* Step indicator header */}
+              <div className="flex items-start sm:items-center justify-between border-b border-black/5 dark:border-white/5 pb-3 gap-2">
+                <div className="flex items-start sm:items-center gap-2.5 min-w-0 flex-1">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl neu-m3-inset-sm flex items-center justify-center text-accent bg-accent/10 shrink-0">
+                    <SmartphoneIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-extrabold text-xs sm:text-sm md:text-base text-[var(--md-on-surface)] leading-tight">
+                      {isEn ? "Sign In to Your Account" : "మీ ఖాతాలోకి సైన్ ఇన్ అవ్వండి"}
+                    </h3>
+                    <p className="text-[11px] sm:text-xs text-[var(--md-on-surface-variant)] opacity-70 mt-0.5 leading-snug">
+                      {otpStep === "phone"
+                        ? (isEn ? "Enter phone number to receive 6-digit OTP code" : "6 అంకెల OTP కోడ్‌ను అందుకోవడానికి ఫోన్ నంబర్‌ను నమోదు చేయండి")
+                        : (isEn ? `OTP sent to ${authCountryCode} ${authPhone}` : `OTP ${authCountryCode} ${authPhone} కి పంపబడింది`)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-[10px] sm:text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 shrink-0">
+                  <KeyRoundIcon className="w-3 h-3 text-accent" />
+                  <span>{otpStep === "phone" ? (isEn ? "Step 1 of 2" : "దశ 1/2") : (isEn ? "Step 2 of 2" : "దశ 2/2")}</span>
+                </div>
               </div>
-            </form>
-          )}
-        </motion.div>
-      ) : (
-        /* User Profile Details Card */
-        <div className="neu-m3-card rounded-[2rem] landscape:rounded-xl p-5 landscape:p-1.5 space-y-4 landscape:space-y-0.5 w-full bg-[var(--md-surface-container)] text-[var(--md-on-surface)] lg:h-full lg:flex lg:flex-col lg:justify-between">
-          <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3 landscape:pb-0.5">
-            <div className="flex items-center gap-2 landscape:gap-1">
-              <UserIcon className="w-5 h-5 landscape:w-3.5 landscape:h-3.5 text-accent shrink-0" />
-              <h3 className="font-extrabold text-sm landscape:text-xs text-[var(--md-on-surface)]">
-                {isEn ? "Account Profile" : "ఖాతా వివరాలు"}
-              </h3>
-            </div>
-            <span className="text-[10px] landscape:text-[7.5px] font-extrabold px-2.5 landscape:px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
-              <CheckCircleIcon className="w-3 h-3 landscape:w-2 landscape:h-2" />
-              {isEn ? "Active" : "యాక్టివ్"}
-            </span>
-          </div>
 
-          <div className="space-y-3.5 landscape:space-y-0.5 text-xs">
-            {/* Registered Phone Number with Eye Security Toggle */}
-            <div className="space-y-1.5 landscape:space-y-0">
-              <div className="flex items-center justify-between text-[11px] landscape:text-[8px]">
-                <label className="font-extrabold opacity-80 flex items-center gap-1.5 landscape:gap-1 text-[var(--md-on-surface)]">
-                  <PhoneIcon className="w-3.5 h-3.5 landscape:w-2.5 landscape:h-2.5 text-accent" />
-                  <span>{isEn ? "Registered Phone Number" : "నమోదైన ఫోన్ నంబర్"}</span>
-                </label>
-                <div className="flex items-center gap-1.5 landscape:gap-0.5">
-                  <span
-                    className={`text-[10px] landscape:text-[7px] font-extrabold px-2 landscape:px-1 py-0.5 rounded-full border flex items-center gap-1 transition-all ${
-                      isPhoneVisible
-                        ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-                        : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+              {/* Step 1: Phone Number Entry */}
+              {otpStep === "phone" ? (
+                <form onSubmit={handleSendOtp} className="space-y-3.5 sm:space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="font-extrabold opacity-80 text-xs sm:text-sm block text-[var(--md-on-surface)]">
+                      {isEn ? "Mobile Phone Number" : "మొబైల్ ఫోన్ నంబర్"}
+                    </label>
+                    <div className="flex items-center gap-2">
+                      {/* Fixed Country Code */}
+                      <div
+                        id="fixed-country-code"
+                        className="px-3 sm:px-3.5 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-mono font-bold neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)] shrink-0 flex items-center justify-center select-none gap-1 border border-black/5 dark:border-white/5"
+                      >
+                        <span className="text-accent font-black">IN</span>
+                        <span>+91</span>
+                      </div>
+
+                      {/* Phone Input */}
+                      <div className="relative flex-1 flex items-center min-w-0">
+                        <input
+                          type="tel"
+                          value={authPhone}
+                          onChange={(e) => setAuthPhone(e.target.value)}
+                          placeholder="98765 43210"
+                          className="w-full p-3 sm:p-3.5 pl-9 sm:pl-10 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
+                        />
+                        <PhoneIcon className="w-4 h-4 absolute left-3 opacity-50 text-[var(--md-on-surface-variant)]" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {otpError && (
+                    <p className="text-xs font-bold text-red-500 bg-red-500/10 p-2.5 rounded-xl border border-red-500/20">
+                      {otpError}
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={isSendingOtp}
+                    className={`w-full py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold neu-m3-btn-filled flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                      isSendingOtp ? "opacity-70 pointer-events-none" : ""
                     }`}
                   >
-                    <LockIcon className="w-2.5 h-2.5 landscape:w-1.5 landscape:h-1.5" />
-                    <span>{isPhoneVisible ? (isEn ? "Visible" : "కనిపిస్తోంది") : (isEn ? "Protected" : "రక్షించబడింది")}</span>
-                  </span>
-                  <span className="text-[10px] landscape:text-[7px] font-extrabold px-2 landscape:px-1 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
-                    <CheckCircleIcon className="w-2.5 h-2.5 landscape:w-1.5 landscape:h-1.5" />
-                    <span>{isEn ? "Verified" : "ధృవీకరించబడింది"}</span>
-                  </span>
-                </div>
-              </div>
-              <div className="relative flex items-center">
-                <input
-                  id="profile-phone-input"
-                  type="text"
-                  value={
-                    phoneNumber
-                      ? (isPhoneVisible ? formatPhoneNumber(phoneNumber) : maskPhoneNumber(phoneNumber))
-                      : (isEn ? "No phone number linked" : "ఫోన్ నంబర్ లింక్ చేయబడలేదు")
-                  }
-                  disabled
-                  readOnly
-                  className="w-full p-3.5 landscape:py-0.5 landscape:px-1.5 pl-9 pr-12 landscape:pl-6 landscape:pr-7 rounded-2xl landscape:rounded-md text-xs landscape:text-[9.5px] font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)] cursor-default select-all"
-                />
-                <PhoneIcon className="w-4 h-4 landscape:w-2.5 landscape:h-2.5 absolute left-3 landscape:left-1.5 opacity-50 text-[var(--md-on-surface-variant)]" />
-                <button
-                  type="button"
-                  id="btn-toggle-phone-visibility"
-                  onClick={() => setIsPhoneVisible((prev) => !prev)}
-                  className="absolute right-2.5 landscape:right-1 p-2 landscape:p-0.5 rounded-xl landscape:rounded-sm neu-m3-icon-btn text-[var(--md-on-surface)] transition-all cursor-pointer flex items-center justify-center"
-                  title={isPhoneVisible ? (isEn ? "Hide phone number" : "ఫోన్ నంబర్ దాచు") : (isEn ? "Show phone number" : "ఫోన్ నంబర్ చూపించు")}
-                  aria-label={isPhoneVisible ? "Hide phone number" : "Show phone number"}
-                >
-                  {isPhoneVisible ? (
-                    <EyeOffIcon className="w-3.5 h-3.5 landscape:w-2.5 landscape:h-2.5 text-accent" />
-                  ) : (
-                    <EyeIcon className="w-3.5 h-3.5 landscape:w-2.5 landscape:h-2.5" />
+                    {isSendingOtp ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4 text-[var(--md-on-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>{isEn ? "Sending OTP..." : "OTP పంపుతోంది..."}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>{isEn ? "Send OTP via SMS" : "SMS ద్వారా OTP పంపండి"}</span>
+                        <ArrowRightIcon className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              ) : (
+                /* Step 2: OTP Verification */
+                <form onSubmit={handleVerifyOtp} className="space-y-3.5 sm:space-y-4">
+                  {/* Notice Banner */}
+                  {otpNotice && (
+                    <div className="p-3 rounded-xl sm:rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <CheckCircleIcon className="w-4 h-4 shrink-0 text-emerald-500" />
+                        <span className="break-words">{otpNotice}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOtpStep("phone");
+                          setOtpError(null);
+                        }}
+                        className="text-xs font-extrabold underline text-accent shrink-0 cursor-pointer self-end sm:self-auto"
+                      >
+                        {isEn ? "Change Number" : "నంబర్ మార్చు"}
+                      </button>
+                    </div>
                   )}
-                </button>
-              </div>
-            </div>
 
-            {/* Account Status Information Badge & Sign Out Action */}
-            <div className="p-3 landscape:p-0.5 rounded-2xl landscape:rounded-md neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] flex items-center justify-between gap-3 landscape:gap-1">
-              <div className="flex items-center gap-2.5 landscape:gap-1 min-w-0 flex-1">
-                <ShieldCheckIcon className="w-4 h-4 landscape:w-2.5 landscape:h-2.5 text-emerald-500 shrink-0 self-center" />
-                <div className="space-y-0.5 min-w-0 flex-1">
-                  <div className="text-[11px] landscape:text-[8.5px] font-extrabold text-[var(--md-on-surface)] leading-snug break-words whitespace-normal">
-                    {isEn ? "OTP Secure Account" : "OTP సురక్షిత ఖాతా"}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
+                      <label className="font-extrabold opacity-80 block text-[var(--md-on-surface)]">
+                        {isEn ? "Enter 6-Digit OTP" : "6 అంకెల OTP నమోదు చేయండి"}
+                      </label>
+                    </div>
+
+                    <div className="relative flex items-center">
+                      <input
+                        type="text"
+                        maxLength={6}
+                        value={otpValue}
+                        onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
+                        placeholder="• • • • • •"
+                        className="w-full p-3 sm:p-3.5 pl-10 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-[0.25em] sm:tracking-[0.35em] neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)]"
+                      />
+                      <KeyRoundIcon className="w-4 h-4 absolute left-3.5 opacity-50 text-accent" />
+                    </div>
                   </div>
-                  <div className="text-[10px] landscape:text-[7px] text-[var(--md-on-surface-variant)] opacity-70 leading-normal break-words whitespace-normal">
-                    {isEn ? "Passwordless Mobile Login Active" : "పాస్‌వర్డ్‌లెస్ మొబైల్ లాగిన్ యాక్టివ్"}
+
+                  {otpError && (
+                    <p className="text-xs font-bold text-red-500 bg-red-500/10 p-2.5 rounded-xl border border-red-500/20">
+                      {otpError}
+                    </p>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
+                    <button
+                      type="button"
+                      disabled={resendCooldown > 0 || isSendingOtp}
+                      onClick={() => handleSendOtp()}
+                      className={`w-full sm:w-auto px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold neu-m3-btn-tonal flex items-center justify-center gap-2 shrink-0 cursor-pointer ${
+                        resendCooldown > 0 ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      <RefreshCwIcon className={`w-3.5 h-3.5 ${isSendingOtp ? "animate-spin" : ""}`} />
+                      <span>
+                        {resendCooldown > 0
+                          ? `${isEn ? "Resend in" : "తిరిగి పంపు"} ${resendCooldown}s`
+                          : isEn
+                          ? "Resend OTP"
+                          : "OTP మళ్ళీ పంపు"}
+                      </span>
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={isVerifyingOtp}
+                      className={`flex-1 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold neu-m3-btn-filled flex items-center justify-center gap-2 cursor-pointer ${
+                        isVerifyingOtp ? "opacity-70 pointer-events-none" : ""
+                      }`}
+                    >
+                      {isVerifyingOtp ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4 text-[var(--md-on-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <span>{isEn ? "Verifying OTP..." : "OTP పరిశీలిస్తోంది..."}</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShieldCheckIcon className="w-4 h-4 text-accent" />
+                          <span>{isEn ? "Verify & Sign In" : "పరిశీలించి సైన్ ఇన్ అవ్వండి"}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </motion.div>
+          ) : (
+            /* User Profile Details (When Authenticated) */
+            <div className="space-y-4 sm:space-y-5 w-full">
+              {/* Account Phone & Security Card */}
+              <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 space-y-4 bg-[var(--md-surface-container)] text-[var(--md-on-surface)]">
+                {/* Registered Phone Number with Eye Security Toggle */}
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs sm:text-sm">
+                    <label className="font-extrabold opacity-80 flex items-center gap-1.5 text-[var(--md-on-surface)]">
+                      <PhoneIcon className="w-4 h-4 text-accent" />
+                      <span>{isEn ? "Registered Phone Number" : "నమోదైన ఫోన్ నంబర్"}</span>
+                    </label>
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`text-[10px] sm:text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border flex items-center gap-1 transition-all ${
+                          isPhoneVisible
+                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                            : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                        }`}
+                      >
+                        <LockIcon className="w-2.5 h-2.5" />
+                        <span>{isPhoneVisible ? (isEn ? "Visible" : "కనిపిస్తోంది") : (isEn ? "Protected" : "రక్షించబడింది")}</span>
+                      </span>
+                      <span className="text-[10px] sm:text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                        <CheckCircleIcon className="w-2.5 h-2.5" />
+                        <span>{isEn ? "Verified" : "ధృవీకరించబడింది"}</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="relative flex items-center">
+                    <input
+                      id="profile-phone-input"
+                      type="text"
+                      value={
+                        phoneNumber
+                          ? (isPhoneVisible ? formatPhoneNumber(phoneNumber) : maskPhoneNumber(phoneNumber))
+                          : (isEn ? "No phone number linked" : "ఫోన్ నంబర్ లింక్ చేయబడలేదు")
+                      }
+                      disabled
+                      readOnly
+                      className="w-full p-3 sm:p-3.5 pl-9 sm:pl-10 pr-12 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-mono font-extrabold tracking-wider neu-m3-input bg-[var(--md-surface-container-lowest)] text-[var(--md-on-surface)] cursor-default select-all"
+                    />
+                    <PhoneIcon className="w-4 h-4 absolute left-3 opacity-50 text-[var(--md-on-surface-variant)]" />
+                    <button
+                      type="button"
+                      id="btn-toggle-phone-visibility"
+                      onClick={() => setIsPhoneVisible((prev) => !prev)}
+                      className="absolute right-2.5 p-2 rounded-xl neu-m3-icon-btn text-[var(--md-on-surface)] transition-all cursor-pointer flex items-center justify-center hover:scale-105 active:scale-95"
+                      title={isPhoneVisible ? (isEn ? "Hide phone number" : "ఫోన్ నంబర్ దాచు") : (isEn ? "Show phone number" : "ఫోన్ నంబర్ చూపించు")}
+                      aria-label={isPhoneVisible ? "Hide phone number" : "Show phone number"}
+                    >
+                      {isPhoneVisible ? (
+                        <EyeOffIcon className="w-4 h-4 text-accent" />
+                      ) : (
+                        <EyeIcon className="w-4 h-4 text-[var(--md-on-surface-variant)]" />
+                      )}
+                    </button>
                   </div>
                 </div>
-              </div>
-              <button
-                type="button"
-                id="profile-btn-signout"
-                onClick={handleSignOut}
-                className="px-3 landscape:px-1.5 py-1.5 landscape:py-0.5 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 landscape:gap-0.5 cursor-pointer shrink-0 self-center whitespace-nowrap"
-                title={isEn ? "Sign out of your account" : "మీ ఖాతా నుండి సైన్ అవుట్ అవ్వండి"}
-              >
-                <LogOutIcon className="w-3.5 h-3.5 landscape:w-2.5 landscape:h-2.5 shrink-0" />
-                <span>{isEn ? "Sign Out" : "సైన్ అవుట్"}</span>
-              </button>
-            </div>
 
-            {/* Preferences: Choose Theme & Choose Language Inside Account Profile Card */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-2 gap-3 landscape:gap-1 pt-0.5">
-              {/* Choose Theme */}
-              <div className="p-3.5 landscape:p-1 landscape:py-0.5 rounded-2xl landscape:rounded-md neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] space-y-2.5 landscape:space-y-0.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 landscape:gap-0.5">
-                    {theme === "light" ? <SunIcon className="w-4 h-4 landscape:w-2.5 landscape:h-2.5 text-accent" /> : <MoonIcon className="w-4 h-4 landscape:w-2.5 landscape:h-2.5 text-accent" />}
-                    <span className="font-extrabold text-xs landscape:text-[8.5px] text-[var(--md-on-surface)]">{t.settingsThemeLabel}</span>
+                {/* Account Status Information Badge & Sign Out Action */}
+                <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <ShieldCheckIcon className="w-5 h-5 text-emerald-500 shrink-0 self-center" />
+                    <div className="space-y-0.5 min-w-0">
+                      <div className="text-xs sm:text-sm font-extrabold text-[var(--md-on-surface)]">
+                        {isEn ? "OTP Secure Account" : "OTP సురక్షిత ఖాతా"}
+                      </div>
+                      <div className="text-[11px] sm:text-xs text-[var(--md-on-surface-variant)] opacity-70">
+                        {isEn ? "Passwordless Mobile Login Active" : "పాస్‌వర్డ్‌లెస్ మొబైల్ లాగిన్ యాక్టివ్"}
+                      </div>
+                    </div>
                   </div>
-                  <span className="text-[10px] landscape:text-[7.5px] font-bold text-accent capitalize">
-                    {theme === "light" ? t.lightTheme : t.darkTheme}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-1.5 landscape:gap-0.5 p-1 landscape:p-0.5 rounded-2xl landscape:rounded-md neu-m3-tabs-track">
                   <button
                     type="button"
-                    id="profile-theme-light"
+                    id="profile-btn-signout"
+                    onClick={handleSignOut}
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 self-start sm:self-center whitespace-nowrap"
+                    title={isEn ? "Sign out of your account" : "మీ ఖాతా నుండి సైన్ అవుట్ అవ్వండి"}
+                  >
+                    <LogOutIcon className="w-3.5 h-3.5 shrink-0" />
+                    <span>{isEn ? "Sign Out" : "సైన్ అవుట్"}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Preferences: Choose Theme & Choose Language */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+                {/* Choose Theme Card */}
+                <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 bg-[var(--md-surface-container)] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {theme === "light" ? <SunIcon className="w-4 h-4 text-accent" /> : <MoonIcon className="w-4 h-4 text-accent" />}
+                      <span className="font-extrabold text-xs sm:text-sm text-[var(--md-on-surface)]">{t.settingsThemeLabel}</span>
+                    </div>
+                    <span className="text-[10.5px] font-bold text-accent capitalize">
+                      {theme === "light" ? t.lightTheme : t.darkTheme}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl neu-m3-tabs-track">
+                    <button
+                      type="button"
+                      id="profile-theme-light"
+                      onClick={() => setTheme("light")}
+                      className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                        theme === "light" 
+                          ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                          : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
+                      }`}
+                    >
+                      <SunIcon className="w-3.5 h-3.5" />
+                      <span>{t.lightTheme}</span>
+                    </button>
+                    
+                    <button
+                      type="button"
+                      id="profile-theme-dark"
+                      onClick={() => setTheme("dark")}
+                      className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                        theme === "dark" 
+                          ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                          : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
+                      }`}
+                    >
+                      <MoonIcon className="w-3.5 h-3.5" />
+                      <span>{t.darkTheme}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Choose Language Card */}
+                <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 bg-[var(--md-surface-container)] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <LanguagesIcon className="w-4 h-4 text-accent" />
+                      <span className="font-extrabold text-xs sm:text-sm text-[var(--md-on-surface)]">{t.settingsLanguageLabel}</span>
+                    </div>
+                    <span className="text-[10.5px] font-bold text-accent uppercase">
+                      {lang}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl neu-m3-tabs-track">
+                    <button
+                      type="button"
+                      id="profile-lang-en"
+                      onClick={() => setLang("en")}
+                      className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                        lang === "en" 
+                          ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                          : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
+                      }`}
+                    >
+                      English
+                    </button>
+                    
+                    <button
+                      type="button"
+                      id="profile-lang-te"
+                      onClick={() => setLang("te")}
+                      className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                        lang === "te" 
+                          ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
+                          : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
+                      }`}
+                    >
+                      తెలుగు
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Note Card with embedded Terms & Conditions & Privacy Policy links */}
+              {renderNoteCard()}
+            </div>
+          )}
+        </div>
+
+        {/* Right Side: Theme / Appearance & Language Options (during Sign In to Your Account) */}
+        {isSignedOut && (
+          <div className="space-y-4 sm:space-y-5 w-full min-w-0 flex flex-col justify-between">
+            {/* Show Note Card above Choose Theme during Sign In to Your Account */}
+            {renderNoteCard()}
+
+            {/* Theme & Language Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4 w-full min-w-0">
+              {/* Choose Theme / Appearance Card */}
+              <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-3 bg-[var(--md-surface-container)] text-[var(--md-on-surface)] w-full min-w-0">
+                <div className="flex items-center gap-2">
+                  {theme === "light" ? <SunIcon className="w-5 h-5 text-accent" /> : <MoonIcon className="w-5 h-5 text-accent" />}
+                  <h3 className="font-extrabold text-xs sm:text-sm text-[var(--md-on-surface)]">{t.settingsThemeLabel}</h3>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 p-1 rounded-xl neu-m3-tabs-track">
+                  <button
+                    id="settings-theme-light"
                     onClick={() => setTheme("light")}
-                    className={`py-2 px-2 landscape:py-0.5 landscape:px-1 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold flex items-center justify-center gap-1.5 landscape:gap-0.5 transition-all cursor-pointer ${
+                    className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       theme === "light" 
-                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
                         : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
                     }`}
                   >
-                    <SunIcon className="w-3.5 h-3.5 landscape:w-2 landscape:h-2" />
+                    <SunIcon className="w-4 h-4" />
                     <span>{t.lightTheme}</span>
                   </button>
                   
                   <button
-                    type="button"
-                    id="profile-theme-dark"
+                    id="settings-theme-dark"
                     onClick={() => setTheme("dark")}
-                    className={`py-2 px-2 landscape:py-0.5 landscape:px-1 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold flex items-center justify-center gap-1.5 landscape:gap-0.5 transition-all cursor-pointer ${
+                    className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       theme === "dark" 
-                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
                         : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
                     }`}
                   >
-                    <MoonIcon className="w-3.5 h-3.5 landscape:w-2 landscape:h-2" />
+                    <MoonIcon className="w-4 h-4" />
                     <span>{t.darkTheme}</span>
                   </button>
                 </div>
               </div>
 
-              {/* Choose Language */}
-              <div className="p-3.5 landscape:p-1 landscape:py-0.5 rounded-2xl landscape:rounded-md neu-m3-inset-sm bg-[var(--md-surface-container-lowest)] space-y-2.5 landscape:space-y-0.5">
-                <div className="flex items-center gap-2 landscape:gap-1">
-                  <LanguagesIcon className="w-4 h-4 landscape:w-2.5 landscape:h-2.5 text-accent" />
-                  <span className="font-extrabold text-xs landscape:text-[8.5px] text-[var(--md-on-surface)]">{t.settingsLanguageLabel}</span>
+              {/* Choose Language / భాష ఎంచుకోండి Card */}
+              <div className="neu-m3-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-3 bg-[var(--md-surface-container)] text-[var(--md-on-surface)] w-full min-w-0">
+                <div className="flex items-center gap-2">
+                  <LanguagesIcon className="w-5 h-5 text-accent" />
+                  <h3 className="font-extrabold text-xs sm:text-sm text-[var(--md-on-surface)]">{t.settingsLanguageLabel}</h3>
                 </div>
 
-                <div className="grid grid-cols-2 gap-1.5 landscape:gap-0.5 p-1 landscape:p-0.5 rounded-2xl landscape:rounded-md neu-m3-tabs-track">
+                <div className="grid grid-cols-2 gap-2 p-1 rounded-xl neu-m3-tabs-track">
                   <button
-                    type="button"
-                    id="profile-lang-en"
+                    id="settings-lang-en"
                     onClick={() => setLang("en")}
-                    className={`py-2 px-2 landscape:py-0.5 landscape:px-1 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold flex items-center justify-center gap-1.5 landscape:gap-0.5 transition-all cursor-pointer ${
+                    className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       lang === "en" 
-                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-sm font-extrabold scale-[1.02]" 
+                        ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
                         : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
                     }`}
                   >
@@ -737,10 +813,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                   </button>
                   
                   <button
-                    type="button"
-                    id="profile-lang-te"
+                    id="settings-lang-te"
                     onClick={() => setLang("te")}
-                    className={`py-2 px-2 landscape:py-0.5 landscape:px-1 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold flex items-center justify-center gap-1.5 landscape:gap-0.5 transition-all cursor-pointer ${
+                    className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       lang === "te" 
                         ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
                         : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
@@ -751,95 +826,9 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                 </div>
               </div>
             </div>
-
-            {/* Note Card with embedded Terms & Conditions & Privacy Policy links */}
-            {renderNoteCard(true)}
           </div>
-        </div>
-      )}
-    </div>
-
-    {/* Right Side: Theme / Appearance & Language Options (during Sign In to Your Account) */}
-    {isSignedOut && (
-      <div className="space-y-5 landscape:space-y-0.5 w-full min-w-0 lg:h-full lg:flex lg:flex-col lg:justify-between landscape:h-full landscape:flex landscape:flex-col landscape:justify-between">
-        {/* Show Note Card above Choose Theme during Sign In to Your Account */}
-        {renderNoteCard(false)}
-
-        {/* In landscape mode, place Theme & Language side-by-side to perfectly balance height with Left column! */}
-        <div className="grid grid-cols-1 landscape:grid-cols-2 lg:grid-cols-1 gap-5 landscape:gap-1 lg:gap-5 w-full min-w-0">
-          {/* Choose Theme / Appearance Card */}
-          <div className="neu-m3-card rounded-[2rem] landscape:rounded-xl p-5 landscape:p-1 landscape:py-0.5 space-y-4 landscape:space-y-0.5 bg-[var(--md-surface-container)] text-[var(--md-on-surface)] w-full min-w-0">
-            <div className="flex items-center gap-2 landscape:gap-1">
-              {theme === "light" ? <SunIcon className="w-5 h-5 landscape:w-2.5 landscape:h-2.5 text-accent" /> : <MoonIcon className="w-5 h-5 landscape:w-2.5 landscape:h-2.5 text-accent" />}
-              <h3 className="font-extrabold text-sm landscape:text-[9.5px] text-[var(--md-on-surface)]">{t.settingsThemeLabel}</h3>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 landscape:gap-1 p-1 landscape:p-0.5 rounded-2xl landscape:rounded-md neu-m3-tabs-track">
-              <button
-                id="settings-theme-light"
-                onClick={() => setTheme("light")}
-                className={`py-3 px-3 landscape:py-0.5 landscape:px-1 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold flex items-center justify-center gap-2 landscape:gap-0.5 transition-all cursor-pointer ${
-                  theme === "light" 
-                    ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                    : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
-                }`}
-              >
-                <SunIcon className="w-4 h-4 landscape:w-2 landscape:h-2" />
-                <span>{t.lightTheme}</span>
-              </button>
-              
-              <button
-                id="settings-theme-dark"
-                onClick={() => setTheme("dark")}
-                className={`py-3 px-3 landscape:py-0.5 landscape:px-1 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold flex items-center justify-center gap-2 landscape:gap-0.5 transition-all cursor-pointer ${
-                  theme === "dark" 
-                    ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                    : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
-                }`}
-              >
-                <MoonIcon className="w-4 h-4 landscape:w-2 landscape:h-2" />
-                <span>{t.darkTheme}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Choose Language / భాష ఎంచుకోండి Card */}
-          <div className="neu-m3-card rounded-[2rem] landscape:rounded-xl p-5 landscape:p-1 landscape:py-0.5 space-y-4 landscape:space-y-0.5 bg-[var(--md-surface-container)] text-[var(--md-on-surface)] w-full min-w-0">
-            <div className="flex items-center gap-2 landscape:gap-1">
-              <LanguagesIcon className="w-5 h-5 landscape:w-2.5 landscape:h-2.5 text-accent" />
-              <h3 className="font-extrabold text-sm landscape:text-[9.5px] text-[var(--md-on-surface)]">{t.settingsLanguageLabel}</h3>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 landscape:gap-1 p-1 landscape:p-0.5 rounded-2xl landscape:rounded-md neu-m3-tabs-track">
-              <button
-                id="settings-lang-en"
-                onClick={() => setLang("en")}
-                className={`py-3 px-3 landscape:py-0.5 landscape:px-1 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold flex items-center justify-center gap-2 landscape:gap-0.5 transition-all cursor-pointer ${
-                  lang === "en" 
-                    ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                    : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
-                }`}
-              >
-                English
-              </button>
-              
-              <button
-                id="settings-lang-te"
-                onClick={() => setLang("te")}
-                className={`py-3 px-3 landscape:py-0.5 landscape:px-1 rounded-xl landscape:rounded-sm text-xs landscape:text-[8.5px] font-bold flex items-center justify-center gap-2 landscape:gap-0.5 transition-all cursor-pointer ${
-                  lang === "te" 
-                    ? "neu-m3-outset-sm bg-[var(--md-surface-container-high)] text-accent shadow-md font-extrabold scale-[1.02]" 
-                    : "opacity-60 hover:opacity-100 text-[var(--md-on-surface-variant)]"
-                }`}
-              >
-                తెలుగు
-              </button>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
-    )}
-  </div>
-</motion.section>
-);
+    </motion.section>
+  );
 };

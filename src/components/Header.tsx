@@ -28,6 +28,7 @@ const CreditCard = (props: any) => <Icon icon="lucide:credit-card" {...props} />
 const Settings = (props: any) => <Icon icon="lucide:settings" {...props} />;
 const UserIcon = (props: any) => <Icon icon="lucide:user" {...props} />;
 const Check = (props: any) => <Icon icon="lucide:check" {...props} />;
+const CheckCircle = (props: any) => <Icon icon="lucide:check-circle" {...props} />;
 
 const FemaleIcon = (props: any) => (
   <svg
@@ -1242,7 +1243,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Pop-up Dialog for Settings */}
       <AnimatePresence>
         {isSettingsOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 landscape:p-0.5 overflow-hidden">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden">
             {/* Backdrop Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -1261,32 +1262,48 @@ export const Header: React.FC<HeaderProps> = ({
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className={`relative bg-[var(--bg-primary)] rounded-[2rem] landscape:rounded-xl p-4 sm:p-6 md:p-8 landscape:p-1.5 landscape:py-1 w-[90vw] max-w-[90vw] ${
-                isSignedOut ? "lg:max-w-4xl landscape:max-w-[98vw]" : "lg:max-w-xl landscape:max-w-[90vw]"
-              } space-y-4 landscape:space-y-0 border border-neutral-300 dark:border-neutral-700 text-[var(--text-primary)] z-10 max-h-[90vh] landscape:max-h-[98vh] overflow-y-auto overflow-x-hidden custom-scrollbar landscape-no-scrollbar shadow-xl transition-all`}
+              transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
+              className={`relative bg-[var(--md-surface-container-high)] neu-m3-dialog rounded-[2rem] sm:rounded-[2.5rem] p-4 sm:p-6 md:p-7 w-full ${
+                isSignedOut
+                  ? "max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl"
+                  : "max-w-md sm:max-w-lg md:max-w-xl"
+              } space-y-4 text-[var(--md-on-surface)] z-10 max-h-[92vh] max-h-[92dvh] overflow-y-auto overflow-x-hidden custom-scrollbar shadow-2xl transition-all my-auto`}
             >
               {/* Header inside the popup card (hidden when signed out) */}
               {!isSignedOut && (
-                <div className="flex items-start justify-between border-b border-white/5 pb-2 landscape:pb-0.5">
-                  <div>
-                    <h3 className="text-sm landscape:text-xs font-extrabold text-[var(--text-emphasis)] tracking-tight">
-                      {t.settingsTitle}
-                    </h3>
-                    <p className="text-[10px] landscape:text-[8px] opacity-75 mt-0.5 leading-relaxed landscape:leading-none">
-                      {t.settingsSubtitle}
-                    </p>
+                <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3.5 gap-3">
+                  <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl neu-m3-inset-sm bg-accent/10 text-accent flex items-center justify-center shrink-0">
+                      <UserIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base sm:text-lg font-black text-[var(--md-on-surface)] tracking-tight truncate">
+                          {isEn ? "User Profile" : "ఖాతా ప్రొఫైల్"}
+                        </h3>
+                        <span className="text-[10px] sm:text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1 shrink-0">
+                          <CheckCircle className="w-3 h-3 text-emerald-500" />
+                          <span>{isEn ? "Active" : "యాక్టివ్"}</span>
+                        </span>
+                      </div>
+                      <p className="text-xs text-[var(--md-on-surface-variant)] opacity-75 mt-0.5 truncate">
+                        {isEn ? "Studio account details & preferences" : "స్టూడియో ఖాతా వివరాలు & సెట్టింగ్‌లు"}
+                      </p>
+                    </div>
                   </div>
                   <button
+                    id="btn-close-settings-modal"
                     onClick={() => setIsSettingsOpen(false)}
-                    className="w-7 h-7 landscape:w-5 landscape:h-5 rounded-full flex items-center justify-center nm-outset-sm hover:scale-105 active:scale-95 text-accent cursor-pointer shrink-0"
+                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl neu-m3-icon-btn flex items-center justify-center text-[var(--md-on-surface)] hover:text-accent transition-all cursor-pointer shrink-0"
+                    title={isEn ? "Close Profile" : "ప్రొఫైల్ మూసివేయండి"}
                   >
-                    <X className="w-3.5 h-3.5 landscape:w-2.5 landscape:h-2.5" />
+                    <X className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                   </button>
                 </div>
               )}
 
               {/* Settings Workspace Component */}
-              <div className="pt-2 landscape:pt-0">
+              <div className="pt-1">
                 <Suspense
                   fallback={
                     <div className="min-h-[300px] flex flex-col items-center justify-center space-y-3">
