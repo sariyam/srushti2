@@ -357,14 +357,14 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
       )}
 
       {/* Responsive Grid: 2-column grid when signed out on desktop/tablet, clean single column when signed in */}
-      <div className={isSignedOut ? "grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-stretch p-1 sm:p-1.5 w-full" : "w-full space-y-4 sm:space-y-5 p-1"}>
+      <div className={isSignedOut ? "grid grid-cols-1 md:grid-cols-2 landscape:grid-cols-2 gap-5 sm:gap-6 items-stretch p-1 sm:p-1.5 w-full" : "w-full space-y-4 sm:space-y-5 p-1"}>
         {/* Left Side: Account Profile or Sign In Card */}
-        <div className="space-y-4 sm:space-y-5 w-full min-w-0">
+        <div className={`w-full min-w-0 ${isSignedOut ? "h-full flex flex-col" : "space-y-4 sm:space-y-5"}`}>
           {isSignedOut ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="neu-m3-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full border-0"
+              className="neu-m3-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-7 space-y-4 sm:space-y-5 bg-[var(--md-surface-container-high)] text-[var(--md-on-surface)] w-full border-0 h-full flex flex-col justify-between"
             >
               {/* Header Logo above Sign In */}
               <div className="flex items-center justify-center text-center gap-3 pt-1 pb-3 border-b border-black/5 dark:border-white/5">
@@ -416,7 +416,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
 
               {/* Step 1: Phone Number Entry */}
               {otpStep === "phone" ? (
-                <form onSubmit={handleSendOtp} className="space-y-3.5 sm:space-y-4">
+                <form onSubmit={handleSendOtp} className="flex-1 flex flex-col justify-between space-y-3.5 sm:space-y-4">
                   <div className="space-y-1.5">
                     <label className="font-extrabold opacity-80 text-xs sm:text-sm block text-[var(--md-on-surface)]">
                       {isEn ? "Mobile Phone Number" : "మొబైల్ ఫోన్ నంబర్"}
@@ -454,7 +454,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                   <button
                     type="submit"
                     disabled={isSendingOtp}
-                    className={`w-full py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold neu-m3-btn-filled flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                    className={`w-full py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold neu-m3-btn-filled flex items-center justify-center gap-2 cursor-pointer transition-all mt-auto ${
                       isSendingOtp ? "opacity-70 pointer-events-none" : ""
                     }`}
                   >
@@ -476,7 +476,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                 </form>
               ) : (
                 /* Step 2: OTP Verification */
-                <form onSubmit={handleVerifyOtp} className="space-y-3.5 sm:space-y-4">
+                <form onSubmit={handleVerifyOtp} className="flex-1 flex flex-col justify-between space-y-3.5 sm:space-y-4">
                   {/* Notice Banner */}
                   {otpNotice && (
                     <div className="p-3 rounded-xl sm:rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -523,7 +523,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
                     </p>
                   )}
 
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 mt-auto">
                     <button
                       type="button"
                       disabled={resendCooldown > 0 || isSendingOtp}
@@ -750,7 +750,7 @@ export const SettingsWorkspace: React.FC<SettingsWorkspaceProps> = ({
 
         {/* Right Side: Theme / Appearance & Language Options (during Sign In to Your Account) */}
         {isSignedOut && (
-          <div className="space-y-4 sm:space-y-5 w-full min-w-0 flex flex-col justify-between">
+          <div className="space-y-4 sm:space-y-5 w-full min-w-0 flex flex-col justify-between h-full">
             {/* Show Note Card above Choose Theme during Sign In to Your Account */}
             {renderNoteCard()}
 

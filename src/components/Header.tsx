@@ -1265,7 +1265,7 @@ export const Header: React.FC<HeaderProps> = ({
               transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
               className={`relative bg-[var(--md-surface-container-high)] neu-m3-dialog rounded-[2rem] sm:rounded-[2.5rem] p-4 sm:p-6 md:p-7 w-full ${
                 isSignedOut
-                  ? "max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl"
+                  ? "max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl landscape:max-w-4xl"
                   : "max-w-md sm:max-w-lg md:max-w-xl"
               } space-y-4 text-[var(--md-on-surface)] z-10 max-h-[92vh] max-h-[92dvh] overflow-y-auto overflow-x-hidden custom-scrollbar shadow-2xl transition-all my-auto`}
             >
