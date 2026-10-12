@@ -160,95 +160,119 @@ export const PresentationModesTab: React.FC<PresentationModesTabProps> = ({ lang
         </div>
       )}
 
-      {/* Modes Grid */}
+      {/* Presentation Modes Table */}
       {isLoading ? (
         <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] flex items-center justify-center gap-2">
           <Icon icon="lucide:loader-2" className="w-5 h-5 animate-spin text-[var(--md-primary)]" />
           <span>{isEn ? "Loading presentation modes..." : "మోడ్‌లు లోడ్ అవుతున్నాయి..."}</span>
         </div>
+      ) : modes.length === 0 ? (
+        <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] m3-card">
+          <Icon icon="lucide:inbox" className="w-8 h-8 mx-auto mb-2 opacity-40" />
+          <span>{isEn ? "No presentation modes found" : "ఎలాంటి మోడ్‌లు లేవు"}</span>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {modes.map((mode) => (
-            <div key={mode.id} className="m3-card p-4 space-y-3 flex flex-col justify-between hover:shadow-md transition-all">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
-                      <Icon icon="lucide:layers" className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black text-[var(--md-on-surface)] leading-tight">
-                        {isEn ? mode.nameEn : mode.nameTe}
-                      </h4>
-                      <span className="font-mono text-[9px] text-[var(--md-outline)] block">
-                        {mode.id}
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleToggleStatus(mode)}
-                    className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer inline-flex items-center ${
-                      mode.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
-                    }`}
-                  >
-                    <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
-                  </button>
-                </div>
-
-                <p className="text-[11px] text-[var(--md-on-surface-variant)] leading-relaxed">
-                  {mode.promptDirective}
-                </p>
-              </div>
-
-              <div className="pt-2 border-t border-[var(--md-outline-variant)] flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] uppercase font-bold text-[var(--md-primary)]">
-                    {mode.workspace}
-                  </span>
-                  {mode.faceVisibilityRule === "full_face" ? (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                      <Icon icon="lucide:user" className="w-3 h-3" />
-                      {isEn ? "Full Face UI" : "పూర్తి ముఖం UI"}
-                    </span>
-                  ) : mode.faceVisibilityRule === "partial_face" ? (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center gap-1">
-                      <Icon icon="lucide:scan-face" className="w-3 h-3" />
-                      {isEn ? "Partial Face UI" : "పాక్షిక ముఖం UI"}
-                    </span>
-                  ) : (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-medium bg-neutral-500/10 text-neutral-500 border border-neutral-500/20 flex items-center gap-1">
-                      <Icon icon="lucide:user-x" className="w-3 h-3" />
-                      {isEn ? "No Face UI" : "ముఖం లేదు"}
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditingMode(mode);
-                      setIsDialogOpen(true);
-                    }}
-                    className="m3-btn-tonal p-1.5 rounded-full cursor-pointer"
-                    title="Edit Mode"
-                  >
-                    <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(mode.id)}
-                    className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
-                    title="Delete Mode"
-                  >
-                    <Icon icon="lucide:trash-2" className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="m3-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-[var(--md-surface-container)] border-b border-[var(--md-outline-variant)] text-[10px] font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                  <th className="py-3 px-4">{isEn ? "Mode & Name" : "మోడ్ & పేరు"}</th>
+                  <th className="py-3 px-3">{isEn ? "Scope & Face UI" : "వర్క్‌స్పేస్ / ఫేస్ UI"}</th>
+                  <th className="py-3 px-3">{isEn ? "Prompt Directive" : "ప్రాంప్ట్ సూచన"}</th>
+                  <th className="py-3 px-3 text-center">{isEn ? "Status" : "స్థితి"}</th>
+                  <th className="py-3 px-4 text-right">{isEn ? "Actions" : "చర్యలు"}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--md-outline-variant)]">
+                {modes.map((mode) => (
+                  <tr key={mode.id} className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
+                          <Icon icon="lucide:layers" className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="font-extrabold text-[var(--md-on-surface)] text-xs">
+                            {isEn ? mode.nameEn : mode.nameTe}
+                          </div>
+                          <div className="text-[10px] text-[var(--md-on-surface-variant)] font-medium">
+                            {isEn ? mode.nameTe : mode.nameEn}
+                          </div>
+                          <span className="font-mono text-[9px] text-[var(--md-outline)]">
+                            id: {mode.id}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-3">
+                      <div className="flex flex-col gap-1 items-start">
+                        <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-[var(--md-surface-container-high)] text-[var(--md-on-surface-variant)]">
+                          {mode.workspace}
+                        </span>
+                        {mode.faceVisibilityRule === "full_face" ? (
+                          <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                            <Icon icon="lucide:user" className="w-3 h-3" />
+                            {isEn ? "Full Face" : "పూర్తి ముఖం"}
+                          </span>
+                        ) : mode.faceVisibilityRule === "partial_face" ? (
+                          <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center gap-1">
+                            <Icon icon="lucide:scan-face" className="w-3 h-3" />
+                            {isEn ? "Partial Face" : "పాక్షిక ముఖం"}
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full text-[9px] font-medium bg-neutral-500/10 text-neutral-500 border border-neutral-500/20 flex items-center gap-1">
+                            <Icon icon="lucide:user-x" className="w-3 h-3" />
+                            {isEn ? "No Face" : "ముఖం లేదు"}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-3 px-3 max-w-md">
+                      <p className="text-[11px] text-[var(--md-on-surface-variant)] line-clamp-2 leading-relaxed">
+                        {mode.promptDirective}
+                      </p>
+                    </td>
+                    <td className="py-3 px-3 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleStatus(mode)}
+                        className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer inline-flex items-center ${
+                          mode.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
+                        }`}
+                        title={mode.isActive ? "Active (Click to deactivate)" : "Inactive (Click to activate)"}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                      </button>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingMode(mode);
+                            setIsDialogOpen(true);
+                          }}
+                          className="m3-btn-tonal px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
+                          <span>{isEn ? "Edit" : "సవరణ"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(mode.id)}
+                          className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
+                          title="Delete Mode"
+                        >
+                          <Icon icon="lucide:trash-2" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

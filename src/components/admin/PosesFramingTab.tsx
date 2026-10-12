@@ -160,77 +160,106 @@ export const PosesFramingTab: React.FC<PosesFramingTabProps> = ({ lang }) => {
         </div>
       )}
 
-      {/* Poses Grid */}
+      {/* Poses Table */}
       {isLoading ? (
         <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] flex items-center justify-center gap-2">
           <Icon icon="lucide:loader-2" className="w-5 h-5 animate-spin text-[var(--md-primary)]" />
           <span>{isEn ? "Loading poses..." : "భంగిమలు లోడ్ అవుతున్నాయి..."}</span>
         </div>
+      ) : poses.length === 0 ? (
+        <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] m3-card">
+          <Icon icon="lucide:inbox" className="w-8 h-8 mx-auto mb-2 opacity-40" />
+          <span>{isEn ? "No poses found" : "ఎలాంటి భంగిమలు లేవు"}</span>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {poses.map((pose) => (
-            <div key={pose.id} className="m3-card p-4 space-y-3 flex flex-col justify-between hover:shadow-md transition-all">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
-                      <Icon icon="lucide:camera" className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black text-[var(--md-on-surface)] leading-tight">
-                        {isEn ? pose.nameEn : pose.nameTe}
-                      </h4>
-                      <span className="font-mono text-[9px] text-[var(--md-outline)] block">
-                        {pose.id}
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleToggleStatus(pose)}
-                    className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer inline-flex items-center ${
-                      pose.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
-                    }`}
-                  >
-                    <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
-                  </button>
-                </div>
-
-                <p className="text-[11px] text-[var(--md-on-surface-variant)] leading-relaxed">
-                  {pose.promptDirective}
-                </p>
-              </div>
-
-              <div className="pt-2 border-t border-[var(--md-outline-variant)] flex items-center justify-between">
-                <span className="text-[10px] uppercase font-bold text-[var(--md-primary)]">
-                  {pose.workspace} • {pose.genderTarget}
-                </span>
-
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditingPose(pose);
-                      setIsDialogOpen(true);
-                    }}
-                    className="m3-btn-tonal p-1.5 rounded-full cursor-pointer"
-                    title="Edit Pose"
-                  >
-                    <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(pose.id)}
-                    className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
-                    title="Delete Pose"
-                  >
-                    <Icon icon="lucide:trash-2" className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="m3-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-[var(--md-surface-container)] border-b border-[var(--md-outline-variant)] text-[10px] font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                  <th className="py-3 px-4">{isEn ? "Pose & Name" : "భంగిమ & పేరు"}</th>
+                  <th className="py-3 px-3">{isEn ? "Target Scope" : "వర్క్‌స్పేస్ / జెండర్"}</th>
+                  <th className="py-3 px-3">{isEn ? "Prompt Directive" : "ప్రాంప్ట్ సూచన"}</th>
+                  <th className="py-3 px-3 text-center">{isEn ? "Status" : "స్థితి"}</th>
+                  <th className="py-3 px-4 text-right">{isEn ? "Actions" : "చర్యలు"}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--md-outline-variant)]">
+                {poses.map((pose) => (
+                  <tr key={pose.id} className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
+                          <Icon icon="lucide:camera" className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="font-extrabold text-[var(--md-on-surface)] text-xs">
+                            {isEn ? pose.nameEn : pose.nameTe}
+                          </div>
+                          <div className="text-[10px] text-[var(--md-on-surface-variant)] font-medium">
+                            {isEn ? pose.nameTe : pose.nameEn}
+                          </div>
+                          <span className="font-mono text-[9px] text-[var(--md-outline)]">
+                            id: {pose.id}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-3">
+                      <div className="flex flex-col gap-1 items-start">
+                        <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-[var(--md-surface-container-high)] text-[var(--md-on-surface-variant)]">
+                          {pose.workspace}
+                        </span>
+                        <span className="text-[10px] font-bold text-[var(--md-primary)] uppercase">
+                          {pose.genderTarget}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-3 max-w-md">
+                      <p className="text-[11px] text-[var(--md-on-surface-variant)] line-clamp-2 leading-relaxed">
+                        {pose.promptDirective}
+                      </p>
+                    </td>
+                    <td className="py-3 px-3 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleStatus(pose)}
+                        className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer inline-flex items-center ${
+                          pose.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
+                        }`}
+                        title={pose.isActive ? "Active (Click to deactivate)" : "Inactive (Click to activate)"}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                      </button>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingPose(pose);
+                            setIsDialogOpen(true);
+                          }}
+                          className="m3-btn-tonal px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
+                          <span>{isEn ? "Edit" : "సవరణ"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(pose.id)}
+                          className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
+                          title="Delete Pose"
+                        >
+                          <Icon icon="lucide:trash-2" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

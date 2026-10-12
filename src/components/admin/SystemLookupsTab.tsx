@@ -362,102 +362,104 @@ export const SystemLookupsTab: React.FC<SystemLookupsTabProps> = ({ lang }) => {
         </div>
       </div>
 
-      {/* Lookups Grid / Table */}
+      {/* Lookups Table */}
       {isLoading ? (
         <div className="p-12 text-center text-xs font-bold text-[var(--text-secondary)] flex flex-col items-center gap-2">
           <Icon icon="lucide:loader-2" className="w-6 h-6 animate-spin text-accent" />
           <span>{isEn ? "Loading system lookups..." : "లక్అప్స్ లోడ్ అవుతున్నాయి..."}</span>
         </div>
       ) : filteredLookups.length === 0 ? (
-        <div className="p-12 text-center text-xs font-bold text-[var(--text-secondary)] bg-[var(--surface-variant)]/20 rounded-2xl border border-dashed border-black/10 dark:border-white/10">
+        <div className="p-12 text-center text-xs font-bold text-[var(--text-secondary)] m3-card">
           <Icon icon="lucide:inbox" className="w-8 h-8 mx-auto mb-2 opacity-40" />
           <span>{isEn ? "No matching lookups found" : "ఎలాంటి లక్అప్స్ కనుగొనబడలేదు"}</span>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
-          {filteredLookups.map((lookup) => (
-            <div
-              key={lookup.id}
-              className={`p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
-                lookup.isActive
-                  ? "bg-[var(--surface)] border-black/5 dark:border-white/5 shadow-sm"
-                  : "bg-[var(--surface)]/50 border-black/5 dark:border-white/5 opacity-60"
-              }`}
-            >
-              <div className="space-y-2">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
-                      <Icon icon={lookup.icon || "lucide:tag"} className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <h4 className="text-sm font-black text-[var(--text-primary)]">{lookup.nameEn}</h4>
-                        <span className="text-xs font-bold text-accent font-telugu opacity-90">{lookup.nameTe}</span>
+        <div className="m3-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-[var(--md-surface-container)] border-b border-[var(--md-outline-variant)] text-[10px] font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                  <th className="py-3 px-4">{isEn ? "Item & Code" : "లక్అప్ & కోడ్"}</th>
+                  <th className="py-3 px-3">{isEn ? "Category Type" : "రకం"}</th>
+                  <th className="py-3 px-3">{isEn ? "Description" : "వివరణ"}</th>
+                  <th className="py-3 px-3 text-center">{isEn ? "Order" : "క్రమం"}</th>
+                  <th className="py-3 px-3 text-center">{isEn ? "Status" : "స్థితి"}</th>
+                  <th className="py-3 px-4 text-right">{isEn ? "Actions" : "చర్యలు"}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--md-outline-variant)]">
+                {filteredLookups.map((lookup) => (
+                  <tr key={lookup.id} className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
+                          <Icon icon={lookup.icon || "lucide:tag"} className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-extrabold text-[var(--md-on-surface)] text-xs">{lookup.nameEn}</span>
+                            <span className="text-xs font-bold text-accent font-telugu opacity-90">{lookup.nameTe}</span>
+                          </div>
+                          <div className="text-[11px] font-mono text-[var(--md-on-surface-variant)]">
+                            code: <strong className="text-[var(--md-on-surface)]">{lookup.code}</strong>
+                            <span className="opacity-60 ml-1.5 font-normal">(id: {lookup.id})</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-[11px] font-mono text-[var(--text-secondary)]">
-                        code: <span className="font-bold text-[var(--text-primary)]">{lookup.code}</span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full inline-block ${getTypeBadgeColor(lookup.type)}`}>
+                        {lookup.type.replace(/_/g, " ")}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 max-w-xs">
+                      <p className="text-xs text-[var(--md-on-surface-variant)] line-clamp-2">
+                        {lookup.description || "—"}
+                      </p>
+                    </td>
+                    <td className="py-3 px-3 text-center font-mono font-bold text-[var(--md-on-surface)]">
+                      {lookup.displayOrder}
+                    </td>
+                    <td className="py-3 px-3 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleActive(lookup)}
+                        className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer inline-flex items-center ${
+                          lookup.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
+                        }`}
+                        title={lookup.isActive ? "Active (Click to deactivate)" : "Inactive (Click to activate)"}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                      </button>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingLookup(lookup);
+                            setIsDialogOpen(true);
+                          }}
+                          className="m3-btn-tonal px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
+                          <span>{isEn ? "Edit" : "మార్చండి"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(lookup.id)}
+                          className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
+                          title="Delete Lookup"
+                        >
+                          <Icon icon="lucide:trash-2" className="w-4 h-4" />
+                        </button>
                       </div>
-                    </div>
-                  </div>
-
-                  <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full shrink-0 ${getTypeBadgeColor(lookup.type)}`}>
-                    {lookup.type.replace(/_/g, " ")}
-                  </span>
-                </div>
-
-                {lookup.description && (
-                  <p className="text-xs text-[var(--text-secondary)] line-clamp-2">
-                    {lookup.description}
-                  </p>
-                )}
-              </div>
-
-              <div className="pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2 text-[11px] text-[var(--text-secondary)]">
-                  <span>Order: <strong className="text-[var(--text-primary)]">{lookup.displayOrder}</strong></span>
-                  <span>•</span>
-                  <span className="font-mono text-[10px] opacity-70">ID: {lookup.id}</span>
-                </div>
-
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => handleToggleActive(lookup)}
-                    className={`p-1.5 rounded-lg text-xs font-bold cursor-pointer transition-all ${
-                      lookup.isActive
-                        ? "text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
-                        : "text-gray-400 hover:bg-gray-500/10"
-                    }`}
-                    title={lookup.isActive ? "Deactivate" : "Activate"}
-                  >
-                    <Icon icon={lookup.isActive ? "lucide:toggle-right" : "lucide:toggle-left"} className="w-5 h-5" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditingLookup(lookup);
-                      setIsDialogOpen(true);
-                    }}
-                    className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-accent hover:bg-accent/10 transition-all cursor-pointer"
-                    title="Edit Lookup"
-                  >
-                    <Icon icon="lucide:pencil" className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(lookup.id)}
-                    className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-500/10 transition-all cursor-pointer"
-                    title="Delete Lookup"
-                  >
-                    <Icon icon="lucide:trash-2" className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

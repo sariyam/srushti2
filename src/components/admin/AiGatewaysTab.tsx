@@ -123,116 +123,186 @@ export const AiGatewaysTab: React.FC<AiGatewaysTabProps> = ({ lang }) => {
         </div>
       ) : (
         <form onSubmit={handleSave} className="space-y-5">
-          {/* Main Gateway Card */}
-          <div className="m3-card p-5 space-y-4">
-            <div className="flex items-center gap-3 border-b border-[var(--md-outline-variant)] pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
-                <Icon icon="lucide:sparkles" className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-extrabold text-[var(--md-on-surface)]">
-                  {isEn ? "Active Production Model Configuration" : "ప్రొడక్షన్ మోడల్ కాన్ఫిగరేషన్"}
-                </h3>
-                <p className="text-[11px] text-[var(--md-on-surface-variant)]">
-                  {isEn
-                    ? "OpenAI API keys are isolated securely on the backend server. Configure routing parameters here."
-                    : "ఓపెన్ AI కీలు సర్వర్‌లో భద్రంగా ఉంటాయి. రౌటింగ్ వివరాలను ఇక్కడ మార్చండి."}
-                </p>
+          {/* Main Gateway Configuration Table */}
+          <div className="m3-card overflow-hidden">
+            <div className="p-4 border-b border-[var(--md-outline-variant)] bg-[var(--md-surface-container)] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
+                  <Icon icon="lucide:sparkles" className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                    {isEn ? "Active Production Model Configuration" : "ప్రొడక్షన్ మోడల్ కాన్ఫిగరేషన్ పట్టిక"}
+                  </h3>
+                  <p className="text-[10px] text-[var(--md-on-surface-variant)]">
+                    {isEn
+                      ? "OpenAI API keys are isolated securely on backend server. Configure routing parameters here."
+                      : "ఓపెన్ AI కీలు సర్వర్‌లో భద్రంగా ఉంటాయి. రౌటింగ్ వివరాలను ఇక్కడ మార్చండి."}
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Default Provider */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-[var(--md-on-surface)]">
-                  {isEn ? "Primary Provider" : "ప్రధాన ప్రొవైడర్"}
-                </label>
-                <select
-                  value={gatewayConfig.defaultProvider}
-                  onChange={(e) => setGatewayConfig({ ...gatewayConfig, defaultProvider: e.target.value })}
-                  className="m3-text-field w-full px-3 py-2 text-xs font-bold"
-                >
-                  <option value="openai">OpenAI (GPTImage-2 / Sunburst)</option>
-                  <option value="google">Google Gemini (Imagen 3)</option>
-                </select>
-              </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-[var(--md-surface-container)] border-b border-[var(--md-outline-variant)] text-[10px] font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                    <th className="py-3 px-4">{isEn ? "Parameter Setting" : "పరామితి"}</th>
+                    <th className="py-3 px-3">{isEn ? "Description & Impact" : "వివరణ"}</th>
+                    <th className="py-3 px-4">{isEn ? "Configured Value" : "విలువ"}</th>
+                    <th className="py-3 px-4 text-right">{isEn ? "Status" : "స్థితి"}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--md-outline-variant)]">
+                  {/* Row 1: Primary Provider */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4 font-bold text-[var(--md-on-surface)]">
+                      {isEn ? "Primary Provider" : "ప్రధాన ప్రొవైడర్"}
+                    </td>
+                    <td className="py-3 px-3 text-[var(--md-on-surface-variant)] text-[11px]">
+                      Default API gateway for image rendering
+                    </td>
+                    <td className="py-3 px-4">
+                      <select
+                        value={gatewayConfig.defaultProvider}
+                        onChange={(e) => setGatewayConfig({ ...gatewayConfig, defaultProvider: e.target.value })}
+                        className="m3-text-field w-full max-w-xs px-3 py-1.5 text-xs font-bold"
+                      >
+                        <option value="openai">OpenAI (GPTImage-2 / Sunburst)</option>
+                        <option value="google">Google Gemini (Imagen 3)</option>
+                      </select>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                        {gatewayConfig.defaultProvider}
+                      </span>
+                    </td>
+                  </tr>
 
-              {/* Default Model */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-[var(--md-on-surface)]">
-                  {isEn ? "Default AI Model" : "డిఫాల్ట్ ఏఐ మోడల్"}
-                </label>
-                <select
-                  value={gatewayConfig.defaultModel}
-                  onChange={(e) => setGatewayConfig({ ...gatewayConfig, defaultModel: e.target.value })}
-                  className="m3-text-field w-full px-3 py-2 text-xs font-mono font-bold"
-                >
-                  <option value="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst (Recommended)</option>
-                  <option value="gptimage_2">gptimage_2 (Classic)</option>
-                  <option value="gemini-2.0-flash">gemini-2.0-flash</option>
-                </select>
-              </div>
+                  {/* Row 2: Default AI Model */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4 font-bold text-[var(--md-on-surface)]">
+                      {isEn ? "Default AI Model" : "డిఫాల్ట్ ఏఐ మోడల్"}
+                    </td>
+                    <td className="py-3 px-3 text-[var(--md-on-surface-variant)] text-[11px]">
+                      Target foundational model for photorealistic generation
+                    </td>
+                    <td className="py-3 px-4">
+                      <select
+                        value={gatewayConfig.defaultModel}
+                        onChange={(e) => setGatewayConfig({ ...gatewayConfig, defaultModel: e.target.value })}
+                        className="m3-text-field w-full max-w-xs px-3 py-1.5 text-xs font-mono font-bold"
+                      >
+                        <option value="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst (Recommended)</option>
+                        <option value="gptimage_2">gptimage_2 (Classic)</option>
+                        <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+                      </select>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <span className="font-mono text-[10px] font-bold text-[var(--md-primary)]">
+                        {gatewayConfig.defaultModel}
+                      </span>
+                    </td>
+                  </tr>
 
-              {/* Default Quality Payload */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-[var(--md-on-surface)]">
-                  {isEn ? "Quality Level" : "నాణ్యత స్థాయి"}
-                </label>
-                <select
-                  value={gatewayConfig.defaultQuality}
-                  onChange={(e) => setGatewayConfig({ ...gatewayConfig, defaultQuality: e.target.value })}
-                  className="m3-text-field w-full px-3 py-2 text-xs font-bold uppercase tracking-wider"
-                >
-                  <option value="low">low (Fast & Cost-Efficient - Recommended)</option>
-                  <option value="medium">medium (Standard Studio)</option>
-                  <option value="high">high (Maximum Detail HD)</option>
-                </select>
-              </div>
+                  {/* Row 3: Quality Level */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4 font-bold text-[var(--md-on-surface)]">
+                      {isEn ? "Quality Level" : "నాణ్యత స్థాయి"}
+                    </td>
+                    <td className="py-3 px-3 text-[var(--md-on-surface-variant)] text-[11px]">
+                      Default generation resolution and token budget
+                    </td>
+                    <td className="py-3 px-4">
+                      <select
+                        value={gatewayConfig.defaultQuality}
+                        onChange={(e) => setGatewayConfig({ ...gatewayConfig, defaultQuality: e.target.value })}
+                        className="m3-text-field w-full max-w-xs px-3 py-1.5 text-xs font-bold uppercase tracking-wider"
+                      >
+                        <option value="low">low (Fast & Cost-Efficient - Recommended)</option>
+                        <option value="medium">medium (Standard Studio)</option>
+                        <option value="high">high (Maximum Detail HD)</option>
+                      </select>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                        {gatewayConfig.defaultQuality}
+                      </span>
+                    </td>
+                  </tr>
 
-              {/* Fallback Model */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-[var(--md-on-surface)]">
-                  {isEn ? "Automatic Fallback Model" : "ఆటోమేటిక్ ఫాల్‌బ్యాక్ మోడల్"}
-                </label>
-                <select
-                  value={gatewayConfig.fallbackModel}
-                  onChange={(e) => setGatewayConfig({ ...gatewayConfig, fallbackModel: e.target.value })}
-                  className="m3-text-field w-full px-3 py-2 text-xs font-mono font-bold"
-                >
-                  <option value="gptimage_2">gptimage_2</option>
-                  <option value="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst</option>
-                </select>
-              </div>
+                  {/* Row 4: Automatic Fallback Model */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4 font-bold text-[var(--md-on-surface)]">
+                      {isEn ? "Automatic Fallback Model" : "ఆటోమేటిక్ ఫాల్‌బ్యాక్ మోడల్"}
+                    </td>
+                    <td className="py-3 px-3 text-[var(--md-on-surface-variant)] text-[11px]">
+                      Triggered automatically if primary provider experiences downtime or rate limits
+                    </td>
+                    <td className="py-3 px-4">
+                      <select
+                        value={gatewayConfig.fallbackModel}
+                        onChange={(e) => setGatewayConfig({ ...gatewayConfig, fallbackModel: e.target.value })}
+                        className="m3-text-field w-full max-w-xs px-3 py-1.5 text-xs font-mono font-bold"
+                      >
+                        <option value="gptimage_2">gptimage_2</option>
+                        <option value="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst</option>
+                      </select>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <span className="font-mono text-[10px] font-bold text-[var(--md-outline)]">
+                        {gatewayConfig.fallbackModel}
+                      </span>
+                    </td>
+                  </tr>
 
-              {/* Timeout Seconds */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-[var(--md-on-surface)]">
-                  {isEn ? "Request Timeout (Seconds)" : "రిక్వెస్ట్ గడువు (సెకన్లు)"}
-                </label>
-                <input
-                  type="number"
-                  min={10}
-                  max={300}
-                  value={gatewayConfig.timeoutSeconds}
-                  onChange={(e) => setGatewayConfig({ ...gatewayConfig, timeoutSeconds: parseInt(e.target.value) || 60 })}
-                  className="m3-text-field w-full px-3 py-2 text-xs font-mono font-bold"
-                />
-              </div>
+                  {/* Row 5: Timeout Seconds */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4 font-bold text-[var(--md-on-surface)]">
+                      {isEn ? "Request Timeout (Seconds)" : "రిక్వెస్ట్ గడువు (సెకన్లు)"}
+                    </td>
+                    <td className="py-3 px-3 text-[var(--md-on-surface-variant)] text-[11px]">
+                      Maximum seconds before gateway request aborts
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        min={10}
+                        max={300}
+                        value={gatewayConfig.timeoutSeconds}
+                        onChange={(e) => setGatewayConfig({ ...gatewayConfig, timeoutSeconds: parseInt(e.target.value) || 60 })}
+                        className="m3-text-field w-32 px-3 py-1.5 text-xs font-mono font-bold"
+                      />
+                    </td>
+                    <td className="py-3 px-4 text-right font-mono font-bold text-[var(--md-on-surface)]">
+                      {gatewayConfig.timeoutSeconds}s
+                    </td>
+                  </tr>
 
-              {/* Max Retries */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-[var(--md-on-surface)]">
-                  {isEn ? "Max Retry Attempts" : "గరిష్ట రీట్రైలు"}
-                </label>
-                <input
-                  type="number"
-                  min={1}
-                  max={5}
-                  value={gatewayConfig.maxRetryAttempts}
-                  onChange={(e) => setGatewayConfig({ ...gatewayConfig, maxRetryAttempts: parseInt(e.target.value) || 3 })}
-                  className="m3-text-field w-full px-3 py-2 text-xs font-mono font-bold"
-                />
-              </div>
+                  {/* Row 6: Max Retries */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4 font-bold text-[var(--md-on-surface)]">
+                      {isEn ? "Max Retry Attempts" : "గరిష్ట రీట్రైలు"}
+                    </td>
+                    <td className="py-3 px-3 text-[var(--md-on-surface-variant)] text-[11px]">
+                      Number of exponential backoff retries upon upstream failure
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        min={1}
+                        max={5}
+                        value={gatewayConfig.maxRetryAttempts}
+                        onChange={(e) => setGatewayConfig({ ...gatewayConfig, maxRetryAttempts: parseInt(e.target.value) || 3 })}
+                        className="m3-text-field w-32 px-3 py-1.5 text-xs font-mono font-bold"
+                      />
+                    </td>
+                    <td className="py-3 px-4 text-right font-mono font-bold text-[var(--md-on-surface)]">
+                      {gatewayConfig.maxRetryAttempts} Retries
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 

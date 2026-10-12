@@ -296,91 +296,114 @@ export const ModelFacesTab: React.FC<ModelFacesTabProps> = ({ lang }) => {
         </div>
       </div>
 
-      {/* Faces Grid */}
+      {/* Model Faces Table */}
       {isLoading ? (
         <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] flex items-center justify-center gap-2">
           <Icon icon="lucide:loader-2" className="w-5 h-5 animate-spin text-[var(--md-primary)]" />
           <span>{isEn ? "Loading faces from storage..." : "ముఖాలు లోడ్ అవుతున్నాయి..."}</span>
         </div>
+      ) : filteredFaces.length === 0 ? (
+        <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] m3-card">
+          <Icon icon="lucide:inbox" className="w-8 h-8 mx-auto mb-2 opacity-40" />
+          <span>{isEn ? "No matching faces found" : "ఎలాంటి ముఖాలు కనుగొనబడలేదు"}</span>
+        </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-          {filteredFaces.map((face) => (
-            <div
-              key={face.id}
-              className="m3-card overflow-hidden group flex flex-col justify-between hover:shadow-md transition-all"
-            >
-              {/* Image Thumbnail */}
-              <div className="relative aspect-[3/4] w-full bg-[var(--md-surface-container)] overflow-hidden">
-                <img
-                  src={face.thumbnailUrl || `/faces/${face.id}.jpg`}
-                  alt={face.nameEn}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  onError={(e) => {
-                    // Fallback to local public/faces
-                    (e.target as HTMLImageElement).src = `/faces/${face.id}.jpg`;
-                  }}
-                />
-
-                {/* Gender Badge */}
-                <span
-                  className={`absolute top-2 left-2 text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                    face.genderTarget === "female"
-                      ? "bg-rose-500 text-white"
-                      : "bg-blue-500 text-white"
-                  }`}
-                >
-                  {face.genderTarget}
-                </span>
-
-                {/* Quick Replace Overlay Button */}
-                <button
-                  type="button"
-                  onClick={() => triggerReplacePhoto(face.id)}
-                  title="Replace Photo File"
-                  className="absolute bottom-2 right-2 p-1.5 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-xs transition-opacity opacity-0 group-hover:opacity-100 cursor-pointer"
-                >
-                  <Icon icon="lucide:camera" className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Face Info */}
-              <div className="p-2.5 space-y-1.5">
-                <div>
-                  <h4 className="text-xs font-black text-[var(--md-on-surface)] truncate">
-                    {isEn ? face.nameEn : face.nameTe}
-                  </h4>
-                  <span className="font-mono text-[9px] text-[var(--md-outline)] truncate block">
-                    {face.id}
-                  </span>
-                </div>
-
-                <p className="text-[10px] text-[var(--md-on-surface-variant)] line-clamp-2 leading-tight opacity-80">
-                  {face.promptDirective}
-                </p>
-
-                {/* Actions */}
-                <div className="pt-2 border-t border-[var(--md-outline-variant)] flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={() => setEditingFace(face)}
-                    className="text-[10px] text-[var(--md-primary)] font-bold hover:underline flex items-center gap-1 cursor-pointer"
-                  >
-                    <Icon icon="lucide:pencil" className="w-3 h-3" />
-                    <span>{isEn ? "Edit" : "సవరణ"}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteFace(face.id)}
-                    className="p-1 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
-                    title="Delete Face"
-                  >
-                    <Icon icon="lucide:trash-2" className="w-3 h-3" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="m3-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-[var(--md-surface-container)] border-b border-[var(--md-outline-variant)] text-[10px] font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                  <th className="py-3 px-4">{isEn ? "Photo" : "ఫోటో"}</th>
+                  <th className="py-3 px-3">{isEn ? "Model Name & ID" : "పేరు & ఐడీ"}</th>
+                  <th className="py-3 px-3">{isEn ? "Gender" : "జెండర్"}</th>
+                  <th className="py-3 px-3">{isEn ? "Prompt Directive" : "ప్రాంప్ట్ సూచన"}</th>
+                  <th className="py-3 px-4 text-right">{isEn ? "Actions" : "చర్యలు"}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--md-outline-variant)]">
+                {filteredFaces.map((face) => (
+                  <tr key={face.id} className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-2.5 px-4">
+                      <div className="relative w-12 h-14 rounded-xl overflow-hidden bg-[var(--md-surface-container)] shrink-0 group border border-[var(--md-outline-variant)]">
+                        <img
+                          src={face.thumbnailUrl || `/faces/${face.id}.jpg`}
+                          alt={face.nameEn}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = `/faces/${face.id}.jpg`;
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => triggerReplacePhoto(face.id)}
+                          title={isEn ? "Replace Photo File" : "ఫోటో మార్చండి"}
+                          className="absolute inset-0 bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                        >
+                          <Icon icon="lucide:camera" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                    <td className="py-2.5 px-3">
+                      <div className="font-extrabold text-[var(--md-on-surface)] text-xs">
+                        {isEn ? face.nameEn : face.nameTe}
+                      </div>
+                      <div className="text-[10px] text-[var(--md-on-surface-variant)] font-medium">
+                        {isEn ? face.nameTe : face.nameEn}
+                      </div>
+                      <span className="font-mono text-[9px] text-[var(--md-outline)]">
+                        id: {face.id}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3">
+                      <span
+                        className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full inline-block ${
+                          face.genderTarget === "female"
+                            ? "bg-rose-500 text-white"
+                            : "bg-blue-500 text-white"
+                        }`}
+                      >
+                        {face.genderTarget}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 max-w-md">
+                      <p className="text-[11px] text-[var(--md-on-surface-variant)] line-clamp-2 leading-relaxed">
+                        {face.promptDirective}
+                      </p>
+                    </td>
+                    <td className="py-2.5 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => triggerReplacePhoto(face.id)}
+                          className="m3-btn-outlined px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer"
+                          title="Replace Photo"
+                        >
+                          <Icon icon="lucide:camera" className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">{isEn ? "Photo" : "ఫోటో"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingFace(face)}
+                          className="m3-btn-tonal px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
+                          <span>{isEn ? "Edit" : "సవరణ"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteFace(face.id)}
+                          className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
+                          title="Delete Face"
+                        >
+                          <Icon icon="lucide:trash-2" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

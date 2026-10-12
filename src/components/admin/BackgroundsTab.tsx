@@ -160,77 +160,101 @@ export const BackgroundsTab: React.FC<BackgroundsTabProps> = ({ lang }) => {
         </div>
       )}
 
-      {/* Backgrounds Grid */}
+      {/* Backgrounds Table */}
       {isLoading ? (
         <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] flex items-center justify-center gap-2">
           <Icon icon="lucide:loader-2" className="w-5 h-5 animate-spin text-[var(--md-primary)]" />
           <span>{isEn ? "Loading backgrounds..." : "బ్యాక్‌గ్రౌండ్లు లోడ్ అవుతున్నాయి..."}</span>
         </div>
+      ) : backgrounds.length === 0 ? (
+        <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] m3-card">
+          <Icon icon="lucide:inbox" className="w-8 h-8 mx-auto mb-2 opacity-40" />
+          <span>{isEn ? "No backgrounds found" : "ఎలాంటి బ్యాక్‌గ్రౌండ్లు లేవు"}</span>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {backgrounds.map((bg) => (
-            <div key={bg.id} className="m3-card p-4 space-y-3 flex flex-col justify-between hover:shadow-md transition-all">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                      <Icon icon="lucide:image" className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black text-[var(--md-on-surface)] leading-tight">
-                        {isEn ? bg.nameEn : bg.nameTe}
-                      </h4>
-                      <span className="font-mono text-[9px] text-[var(--md-outline)] block">
-                        {bg.id}
+        <div className="m3-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-[var(--md-surface-container)] border-b border-[var(--md-outline-variant)] text-[10px] font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                  <th className="py-3 px-4">{isEn ? "Background & Name" : "బ్యాక్‌గ్రౌండ్ & పేరు"}</th>
+                  <th className="py-3 px-3">{isEn ? "Workspace" : "వర్క్‌స్పేస్"}</th>
+                  <th className="py-3 px-3">{isEn ? "Prompt Directive" : "ప్రాంప్ట్ సూచన"}</th>
+                  <th className="py-3 px-3 text-center">{isEn ? "Status" : "స్థితి"}</th>
+                  <th className="py-3 px-4 text-right">{isEn ? "Actions" : "చర్యలు"}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--md-outline-variant)]">
+                {backgrounds.map((bg) => (
+                  <tr key={bg.id} className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                          <Icon icon="lucide:image" className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="font-extrabold text-[var(--md-on-surface)] text-xs">
+                            {isEn ? bg.nameEn : bg.nameTe}
+                          </div>
+                          <div className="text-[10px] text-[var(--md-on-surface-variant)] font-medium">
+                            {isEn ? bg.nameTe : bg.nameEn}
+                          </div>
+                          <span className="font-mono text-[9px] text-[var(--md-outline)]">
+                            id: {bg.id}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-[var(--md-surface-container-high)] text-[var(--md-on-surface-variant)]">
+                        {bg.workspace}
                       </span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleToggleStatus(bg)}
-                    className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer inline-flex items-center ${
-                      bg.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
-                    }`}
-                  >
-                    <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
-                  </button>
-                </div>
-
-                <p className="text-[11px] text-[var(--md-on-surface-variant)] leading-relaxed">
-                  {bg.promptDirective}
-                </p>
-              </div>
-
-              <div className="pt-2 border-t border-[var(--md-outline-variant)] flex items-center justify-between">
-                <span className="text-[10px] uppercase font-bold text-[var(--md-primary)]">
-                  {bg.workspace}
-                </span>
-
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditingBg(bg);
-                      setIsDialogOpen(true);
-                    }}
-                    className="m3-btn-tonal p-1.5 rounded-full cursor-pointer"
-                    title="Edit Background"
-                  >
-                    <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(bg.id)}
-                    className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
-                    title="Delete Background"
-                  >
-                    <Icon icon="lucide:trash-2" className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+                    </td>
+                    <td className="py-3 px-3 max-w-md">
+                      <p className="text-[11px] text-[var(--md-on-surface-variant)] line-clamp-2 leading-relaxed">
+                        {bg.promptDirective}
+                      </p>
+                    </td>
+                    <td className="py-3 px-3 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleStatus(bg)}
+                        className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer inline-flex items-center ${
+                          bg.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
+                        }`}
+                        title={bg.isActive ? "Active (Click to deactivate)" : "Inactive (Click to activate)"}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                      </button>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingBg(bg);
+                            setIsDialogOpen(true);
+                          }}
+                          className="m3-btn-tonal px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
+                          <span>{isEn ? "Edit" : "సవరణ"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(bg.id)}
+                          className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
+                          title="Delete Background"
+                        >
+                          <Icon icon="lucide:trash-2" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

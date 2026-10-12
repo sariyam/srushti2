@@ -133,106 +133,176 @@ export const FidelitySettingsTab: React.FC<FidelitySettingsTabProps> = ({ lang }
           <span>{isEn ? "Loading directives..." : "నియమాలు లోడ్ అవుతున్నాయి..."}</span>
         </div>
       ) : (
-        <form onSubmit={handleSaveAll} className="space-y-5">
-          {/* Card 1: Jewelry Fidelity Directives */}
-          <div className="m3-card p-5 space-y-3">
-            <div className="flex items-center gap-3 border-b border-[var(--md-outline-variant)] pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-                <Icon icon="lucide:gem" className="w-5 h-5" />
+        <form onSubmit={handleSaveAll} className="space-y-4">
+          <div className="m3-card overflow-hidden">
+            <div className="p-4 border-b border-[var(--md-outline-variant)] bg-[var(--md-surface-container)] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
+                  <Icon icon="lucide:sparkles" className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                    {isEn ? "Master System Directives Matrix" : "మాస్టర్ సిస్టమ్ డైరెక్టివ్స్ పట్టిక"}
+                  </h3>
+                  <p className="text-[10px] text-[var(--md-on-surface-variant)]">
+                    {isEn
+                      ? "Fine-tune realistic rendering prompts injected across jewelry shoots, garment textures, and negative exclusions."
+                      : "నగల ప్రకాశం, వస్త్రాల నేత మరియు అవాంఛిత అంశాల తొలగింపు ప్రాంప్ట్ నియమాలు."}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-sm font-extrabold text-[var(--md-on-surface)]">
-                  {isEn ? "Jewelry Fidelity Enhancement Directives" : "నగల ఫిడిలిటీ మెరుగుదల ప్రాంప్ట్"}
-                </h3>
-                <p className="text-[11px] text-[var(--md-on-surface-variant)]">
-                  {isEn
-                    ? "Injected automatically into jewelry generation requests to enforce gem facets, hallmark clarity, and reflections."
-                    : "రత్నాల మెరుపు, హాల్‌మార్క్ స్పష్టత మరియు ప్రతిబింబాలను ఖచ్చితంగా తీసుకురావడానికి ఇది జతచేయబడుతుంది."}
-                </p>
-              </div>
+              <button
+                type="submit"
+                disabled={isSaving}
+                className="m3-btn-filled px-4 py-2 rounded-full text-xs font-black tracking-wider uppercase flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              >
+                {isSaving ? (
+                  <>
+                    <Icon icon="lucide:loader-2" className="w-3.5 h-3.5 animate-spin" />
+                    <span>{isEn ? "Saving..." : "సేవ్ చేస్తోంది..."}</span>
+                  </>
+                ) : (
+                  <>
+                    <Icon icon="lucide:save" className="w-3.5 h-3.5" />
+                    <span>{isEn ? "Save Directives" : "సేవ్ చేయండి"}</span>
+                  </>
+                )}
+              </button>
             </div>
 
-            <textarea
-              rows={4}
-              value={jewelryFidelity}
-              onChange={(e) => setJewelryFidelity(e.target.value)}
-              className="m3-text-field w-full p-3 text-xs font-mono leading-relaxed"
-              placeholder="e.g. ultra-crisp gemstone facets, 22K yellow gold hallmark shine, professional studio lighting..."
-            />
-          </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-[var(--md-surface-container)] border-b border-[var(--md-outline-variant)] text-[10px] font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                    <th className="py-3 px-4 w-72">{isEn ? "Directive Parameter" : "డైరెక్టివ్ పరామితి"}</th>
+                    <th className="py-3 px-3 w-36">{isEn ? "Domain Scope" : "పరిధి"}</th>
+                    <th className="py-3 px-4">{isEn ? "Prompt Directives & Exclusions" : "ప్రాంప్ట్ సూచనలు"}</th>
+                    <th className="py-3 px-3 text-right w-28">{isEn ? "Status" : "స్థితి"}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--md-outline-variant)]">
+                  {/* Row 1: Jewelry */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-4 px-4 align-top">
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                          <Icon icon="lucide:gem" className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="font-extrabold text-[var(--md-on-surface)] text-xs">
+                            {isEn ? "Jewelry Fidelity Enhancement" : "నగల ఫిడిలిటీ మెరుగుదల"}
+                          </div>
+                          <p className="text-[10px] text-[var(--md-on-surface-variant)] mt-0.5 leading-relaxed">
+                            {isEn
+                              ? "Injected automatically into jewelry generation requests to enforce gem facets, hallmark clarity, and reflections."
+                              : "రత్నాల మెరుపు, హాల్‌మార్క్ స్పష్టత మరియు ప్రతిబింబాలను ఖచ్చితంగా తీసుకురావడానికి జతచేయబడుతుంది."}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-4 px-3 align-top">
+                      <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-amber-500/10 text-amber-700 dark:text-amber-300">
+                        Jewelry
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 align-top">
+                      <textarea
+                        rows={3}
+                        value={jewelryFidelity}
+                        onChange={(e) => setJewelryFidelity(e.target.value)}
+                        className="m3-text-field w-full p-2.5 text-xs font-mono leading-relaxed"
+                        placeholder="e.g. ultra-crisp gemstone facets, 22K yellow gold hallmark shine, professional studio lighting..."
+                      />
+                    </td>
+                    <td className="py-4 px-3 align-top text-right">
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">
+                        Active
+                      </span>
+                    </td>
+                  </tr>
 
-          {/* Card 2: Garment Fidelity Directives */}
-          <div className="m3-card p-5 space-y-3">
-            <div className="flex items-center gap-3 border-b border-[var(--md-outline-variant)] pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-                <Icon icon="lucide:shirt" className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-extrabold text-[var(--md-on-surface)]">
-                  {isEn ? "Garment Texture & Drape Directives" : "వస్త్రాల అల్లిక & డ్రేప్ ప్రాంప్ట్"}
-                </h3>
-                <p className="text-[11px] text-[var(--md-on-surface-variant)]">
-                  {isEn
-                    ? "Injected into clothing shoots to reproduce fabric weave, embroidery zari threads, and natural gravitational drape."
-                    : "వస్త్రాల నేత, జరీ దారాల వివరాలు మరియు సహజమైన మడతలను చూపించడానికి ఈ నియమం ఉపయోగపడుతుంది."}
-                </p>
-              </div>
+                  {/* Row 2: Garment */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-4 px-4 align-top">
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+                          <Icon icon="lucide:shirt" className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="font-extrabold text-[var(--md-on-surface)] text-xs">
+                            {isEn ? "Garment Texture & Drape" : "వస్త్రాల అల్లిక & డ్రేప్"}
+                          </div>
+                          <p className="text-[10px] text-[var(--md-on-surface-variant)] mt-0.5 leading-relaxed">
+                            {isEn
+                              ? "Injected into clothing shoots to reproduce fabric weave, embroidery zari threads, and natural gravitational drape."
+                              : "వస్త్రాల నేత, జరీ దారాల వివరాలు మరియు సహజమైన మడతలను చూపించడానికి ఈ నియమం ఉపయోగపడుతుంది."}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-4 px-3 align-top">
+                      <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                        Garments
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 align-top">
+                      <textarea
+                        rows={3}
+                        value={garmentFidelity}
+                        onChange={(e) => setGarmentFidelity(e.target.value)}
+                        className="m3-text-field w-full p-2.5 text-xs font-mono leading-relaxed"
+                        placeholder="e.g. realistic fabric weave microstructure, authentic gravitational drape folds, accurate zari sheen..."
+                      />
+                    </td>
+                    <td className="py-4 px-3 align-top text-right">
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">
+                        Active
+                      </span>
+                    </td>
+                  </tr>
+
+                  {/* Row 3: Negative Exclusions */}
+                  <tr className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-4 px-4 align-top">
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+                          <Icon icon="lucide:shield-ban" className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="font-extrabold text-[var(--md-on-surface)] text-xs">
+                            {isEn ? "Negative Exclusions" : "నెగటివ్ ప్రాంప్ట్ నిషేధాలు"}
+                          </div>
+                          <p className="text-[10px] text-[var(--md-on-surface-variant)] mt-0.5 leading-relaxed">
+                            {isEn
+                              ? "Elements strictly excluded across all generations (comma-separated list)."
+                              : "చిత్రాలలో రాకూడని అంశాలు (కామాలతో విభజించిన జాబితా)."}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-4 px-3 align-top">
+                      <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-rose-500/10 text-rose-700 dark:text-rose-300">
+                        Global Filter
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 align-top">
+                      <textarea
+                        rows={3}
+                        value={negativeExclusions}
+                        onChange={(e) => setNegativeExclusions(e.target.value)}
+                        className="m3-text-field w-full p-2.5 text-xs font-mono leading-relaxed"
+                        placeholder="e.g. deformed anatomy, blurry, cartoon, 3d render, extra limbs, watermark, bad lighting..."
+                      />
+                    </td>
+                    <td className="py-4 px-3 align-top text-right">
+                      <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase">
+                        Enforced
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-
-            <textarea
-              rows={4}
-              value={garmentFidelity}
-              onChange={(e) => setGarmentFidelity(e.target.value)}
-              className="m3-text-field w-full p-3 text-xs font-mono leading-relaxed"
-              placeholder="e.g. realistic fabric weave microstructure, authentic gravitational drape folds, accurate zari sheen..."
-            />
-          </div>
-
-          {/* Card 3: Negative Exclusions */}
-          <div className="m3-card p-5 space-y-3">
-            <div className="flex items-center gap-3 border-b border-[var(--md-outline-variant)] pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-                <Icon icon="lucide:shield-ban" className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-extrabold text-[var(--md-on-surface)]">
-                  {isEn ? "Negative Exclusions (Comma Separated)" : "నెగటివ్ ప్రాంప్ట్ నిషేధాలు"}
-                </h3>
-                <p className="text-[11px] text-[var(--md-on-surface-variant)]">
-                  {isEn
-                    ? "Elements strictly excluded across all generations (e.g. plastic skin, extra fingers, cartoon style)."
-                    : "చిత్రాలలో రాకూడని అంశాలు (ఉదాహరణకు: ప్లాస్టిక్ చర్మం, అదనపు వేళ్లు, కార్టూన్ లుక్)."}
-                </p>
-              </div>
-            </div>
-
-            <textarea
-              rows={4}
-              value={negativeExclusions}
-              onChange={(e) => setNegativeExclusions(e.target.value)}
-              className="m3-text-field w-full p-3 text-xs font-mono leading-relaxed"
-              placeholder="e.g. deformed anatomy, blurry, cartoon, 3d render, extra limbs, watermark, bad lighting..."
-            />
-          </div>
-
-          <div className="flex justify-end pt-2">
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="m3-btn-filled px-6 py-2.5 rounded-full text-xs font-black tracking-wider uppercase flex items-center gap-2 cursor-pointer disabled:opacity-50"
-            >
-              {isSaving ? (
-                <>
-                  <Icon icon="lucide:loader-2" className="w-4 h-4 animate-spin" />
-                  <span>{isEn ? "Saving Settings..." : "సేవ్ చేస్తోంది..."}</span>
-                </>
-              ) : (
-                <>
-                  <Icon icon="lucide:save" className="w-4 h-4" />
-                  <span>{isEn ? "Save System Directives" : "నియమాలను సేవ్ చేయండి"}</span>
-                </>
-              )}
-            </button>
           </div>
         </form>
       )}

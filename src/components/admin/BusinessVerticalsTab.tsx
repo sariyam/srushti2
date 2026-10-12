@@ -160,97 +160,120 @@ export const BusinessVerticalsTab: React.FC<BusinessVerticalsTabProps> = ({ lang
         </div>
       )}
 
-      {/* Grid of Business Cards */}
+      {/* Business Verticals Table */}
       {isLoading ? (
         <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] flex items-center justify-center gap-2">
           <Icon icon="lucide:loader-2" className="w-5 h-5 animate-spin text-[var(--md-primary)]" />
           <span>{isEn ? "Loading business verticals..." : "కేటగిరీలు లోడ్ అవుతున్నాయి..."}</span>
         </div>
+      ) : categories.length === 0 ? (
+        <div className="p-12 text-center text-xs font-bold text-[var(--md-outline)] m3-card">
+          <Icon icon="lucide:inbox" className="w-8 h-8 mx-auto mb-2 opacity-40" />
+          <span>{isEn ? "No business verticals found" : "ఎలాంటి కేటగిరీలు లేవు"}</span>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {categories.map((cat) => (
-            <div key={cat.id} className="m3-card p-5 space-y-4 relative overflow-hidden transition-all hover:shadow-md">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
-                    <Icon
-                      icon={
-                        cat.icon
-                          ? cat.icon.startsWith("lucide:")
-                            ? cat.icon
-                            : `lucide:${cat.icon.toLowerCase()}`
-                          : cat.genderTarget === "female"
-                          ? "lucide:venus"
-                          : cat.genderTarget === "male"
-                          ? "lucide:mars"
-                          : cat.workspace === "garment"
-                          ? "lucide:shirt"
-                          : "lucide:gem"
-                      }
-                      className="w-6 h-6"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-extrabold text-[var(--md-on-surface)] leading-tight">
-                      {isEn ? cat.nameEn : cat.nameTe}
-                    </h3>
-                    <p className="text-xs text-[var(--md-on-surface-variant)] font-medium">
-                      {isEn ? cat.nameTe : cat.nameEn}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="font-mono text-[10px] px-2 py-0.5 rounded-md bg-[var(--md-surface-container-high)] text-[var(--md-on-surface-variant)] font-bold">
-                        {cat.id}
+        <div className="m3-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-[var(--md-surface-container)] border-b border-[var(--md-outline-variant)] text-[10px] font-black uppercase tracking-wider text-[var(--md-on-surface)]">
+                  <th className="py-3 px-4">{isEn ? "Vertical & Names" : "కేటగిరీ & పేర్లు"}</th>
+                  <th className="py-3 px-3">{isEn ? "Workspace" : "వర్క్‌స్పేస్"}</th>
+                  <th className="py-3 px-3">{isEn ? "Gender Target" : "జెండర్"}</th>
+                  <th className="py-3 px-3 text-center">{isEn ? "Order" : "క్రమం"}</th>
+                  <th className="py-3 px-3 text-center">{isEn ? "Status" : "స్థితి"}</th>
+                  <th className="py-3 px-4 text-right">{isEn ? "Actions" : "చర్యలు"}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--md-outline-variant)]">
+                {categories.map((cat) => (
+                  <tr key={cat.id} className="hover:bg-[var(--md-surface-variant)] transition-colors">
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-[var(--md-primary-container)] text-[var(--md-on-primary-container)] flex items-center justify-center shrink-0">
+                          <Icon
+                            icon={
+                              cat.icon
+                                ? cat.icon.startsWith("lucide:")
+                                  ? cat.icon
+                                  : `lucide:${cat.icon.toLowerCase()}`
+                                : cat.genderTarget === "female"
+                                ? "lucide:venus"
+                                : cat.genderTarget === "male"
+                                ? "lucide:mars"
+                                : cat.workspace === "garment"
+                                ? "lucide:shirt"
+                                : "lucide:gem"
+                            }
+                            className="w-5 h-5"
+                          />
+                        </div>
+                        <div>
+                          <div className="font-extrabold text-[var(--md-on-surface)] text-xs">
+                            {isEn ? cat.nameEn : cat.nameTe}
+                          </div>
+                          <div className="text-[10px] text-[var(--md-on-surface-variant)] font-medium">
+                            {isEn ? cat.nameTe : cat.nameEn}
+                          </div>
+                          <span className="font-mono text-[9px] text-[var(--md-outline)]">
+                            id: {cat.id}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="m3-badge text-[9px] px-2 py-0.5 uppercase tracking-wider font-extrabold bg-[var(--md-surface-container-high)] text-[var(--md-on-surface-variant)]">
+                        {cat.workspace}
                       </span>
+                    </td>
+                    <td className="py-3 px-3">
                       <span className="text-[10px] font-black uppercase tracking-wider text-[var(--md-primary)]">
                         {cat.genderTarget}
                       </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Active switch */}
-                <button
-                  type="button"
-                  onClick={() => handleToggleActive(cat)}
-                  className={`w-11 h-6 rounded-full p-1 transition-colors cursor-pointer flex items-center ${
-                    cat.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
-                  }`}
-                  title={cat.isActive ? "Active (Click to deactivate)" : "Inactive (Click to activate)"}
-                >
-                  <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
-                </button>
-              </div>
-
-              {/* Action buttons */}
-              <div className="pt-2 border-t border-[var(--md-outline-variant)] flex items-center justify-between text-xs">
-                <span className="text-[11px] text-[var(--md-outline)] font-medium">
-                  {isEn ? "Order:" : "క్రమం:"} <strong className="text-[var(--md-on-surface)]">{cat.displayOrder}</strong>
-                </span>
-
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditingCategory(cat);
-                      setIsDialogOpen(true);
-                    }}
-                    className="m3-btn-tonal px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer"
-                  >
-                    <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
-                    <span>{isEn ? "Edit" : "మార్చండి"}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(cat.id)}
-                    className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
-                    title="Delete Category"
-                  >
-                    <Icon icon="lucide:trash-2" className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+                    </td>
+                    <td className="py-3 px-3 text-center font-mono font-bold text-[var(--md-on-surface)]">
+                      {cat.displayOrder}
+                    </td>
+                    <td className="py-3 px-3 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleActive(cat)}
+                        className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer inline-flex items-center ${
+                          cat.isActive ? "bg-[var(--md-primary)] justify-end" : "bg-neutral-300 dark:bg-neutral-700 justify-start"
+                        }`}
+                        title={cat.isActive ? "Active (Click to deactivate)" : "Inactive (Click to activate)"}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-white shadow-xs" />
+                      </button>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingCategory(cat);
+                            setIsDialogOpen(true);
+                          }}
+                          className="m3-btn-tonal px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Icon icon="lucide:pencil" className="w-3.5 h-3.5" />
+                          <span>{isEn ? "Edit" : "మార్చండి"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(cat.id)}
+                          className="p-1.5 rounded-full text-[var(--md-error)] hover:bg-[var(--md-error-container)] transition-colors cursor-pointer"
+                          title="Delete Category"
+                        >
+                          <Icon icon="lucide:trash-2" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
