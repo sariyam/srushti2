@@ -1,12 +1,11 @@
 {
-  "name": "srushti-supabase",
+  "name": "srushti-backend",
   "version": "1.0.0",
-  "description": "Production-ready Supabase Postgres + Express + Serverless backend with Drizzle ORM, Custom OTP, Razorpay, Supabase Storage, and JWT Auth",
+  "description": "Production-ready PostgreSQL + Express backend with Drizzle ORM, Custom OTP, Razorpay, StorageBucket, and JWT Auth",
   "main": "functions/api/index.ts",
   "scripts": {
     "dev": "tsx watch functions/api/index.ts",
     "migrate": "tsx functions/api/config/migrate.ts",
-    "deploy": "npm run bundle:edge && npx -y supabase@latest functions deploy api --project-ref xfooqaqjeaqcoddihphl --no-verify-jwt",
     "seed": "tsx functions/api/config/seed.ts",
     "build": "rimraf dist && tsc",
     "start": "node dist/functions/api/index.js",
@@ -17,11 +16,11 @@
     "bundle:edge": "node functions/api/bundle.js"
   },
   "keywords": [
-    "supabase",
     "postgres",
+    "pgbouncer",
     "drizzle-orm",
     "express",
-    "serverless",
+    "storage-bucket",
     "otp",
     "razorpay",
     "jwt"
@@ -30,7 +29,6 @@
   "license": "ISC",
   "dependencies": {
     "@hono/zod-openapi": "^0.19.10",
-    "@supabase/supabase-js": "^2.49.1",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
