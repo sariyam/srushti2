@@ -2,7 +2,8 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import { env, queryClient, checkDbConnection } from "./config";
+import { env, queryClient, checkDbConnection, getDatabaseAndPoolerInfo } from "./config";
+import { StorageService } from "./services/storage.service";
 import apiRoutes from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import { requestIdMiddleware } from "./middlewares/requestId";
@@ -135,20 +136,46 @@ if (isDeno) {
   // In Node.js environment (local dev & production containers)
   const PORT = env.PORT || 4000;
   const server = app.listen(PORT, async () => {
-    console.log("==========================================");
-    console.log(`🚀 Srushti AI Backend is running!`);
+    const { dbInfo, poolerInfo } = await getDatabaseAndPoolerInfo();
+
+    console.log("================================================================================");
+    console.log(`🚀 SRUSHTI AI BACKEND IS RUNNING`);
     console.log(`📡 URL: http://localhost:${PORT}`);
     console.log(`🌱 Environment: ${env.NODE_ENV}`);
     console.log(`🩺 Health check: http://localhost:${PORT}/api/health`);
     console.log(`📚 API Docs: http://localhost:${PORT}/api/docs`);
-
-    const dbStatus = await checkDbConnection();
-    if (dbStatus.success) {
-      console.log(`✅ Supabase Database connected successfully! (DB: ${dbStatus.database})`);
+    console.log("--------------------------------------------------------------------------------");
+    console.log(`📦 [DATABASE INFO]`);
+    if (dbInfo.success) {
+      console.log(`   • Connection Status     : Connected ✅ (${dbInfo.latencyMs}ms latency)`);
+      console.log(`   • Database Name         : ${dbInfo.database}`);
+      console.log(`   • Database User         : ${dbInfo.user}`);
+      console.log(`   • Host & Port           : ${dbInfo.host}:${dbInfo.port}`);
+      console.log(`   • PostgreSQL Version    : ${dbInfo.pgVersion?.split("\n")[0]?.split(" on ")[0] || dbInfo.pgVersion}`);
+      console.log(`   • Public Tables Count   : ${dbInfo.tableCount} tables verified`);
+      console.log(`   • Server Time           : ${dbInfo.serverTime}`);
     } else {
-      console.error(`❌ Supabase Database connection failed: ${dbStatus.error}`);
+      console.log(`   • Connection Status     : Connection Failed ❌`);
+      console.log(`   • Target Host & Port    : ${dbInfo.host}:${dbInfo.port}`);
+      console.log(`   • Target Database       : ${dbInfo.database}`);
+      console.log(`   • Error Details         : ${dbInfo.error}`);
     }
-    console.log("==========================================");
+    console.log("--------------------------------------------------------------------------------");
+    console.log(`🔄 [PGBOUNCER INFO]`);
+    console.log(`   • PgBouncer Active      : ${poolerInfo.isActive ? "YES (Traffic routed via PgBouncer) ✅" : "NO (Direct PostgreSQL Connection)"}`);
+    console.log(`   • Connection Mode       : ${poolerInfo.mode}`);
+    console.log(`   • Target Endpoint       : ${poolerInfo.host}:${poolerInfo.port}`);
+    console.log(`   • Prepared Statements   : ${poolerInfo.preparedStatements ? "Enabled (Direct DB optimization)" : "Disabled (PgBouncer transaction mode compatible)"}`);
+    console.log(`   • Connection Pool Size  : ${poolerInfo.maxConnections} max connections (idle: ${poolerInfo.idleTimeoutSec}s)`);
+    console.log(`   • Local PgBouncer Daemon: ${poolerInfo.daemonListening ? `Active & Listening on port ${poolerInfo.port} ✅` : `Not detected on port ${poolerInfo.port} (Direct DB fallback in use)`}`);
+    console.log("--------------------------------------------------------------------------------");
+    console.log(`📁 [STORAGE BUCKET INFO]`);
+    const storageStats = await StorageService.getStorageStats();
+    console.log(`   • Directory Location    : ${storageStats.rootPath}`);
+    console.log(`   • Access Policy         : Protected (Online Authenticated Users Only 🔒)`);
+    console.log(`   • Managed Buckets       : avatars, model-faces, backgrounds, uploads`);
+    console.log(`   • Total Stored Files    : ${storageStats.totalFiles} files (${(storageStats.totalSizeBytes / 1024).toFixed(1)} KB)`);
+    console.log("================================================================================");
   });
 
   server.on("error", (err: any) => {
@@ -163,7 +190,7 @@ if (isDeno) {
       console.log("🔌 Closed HTTP server connections.");
       try {
         await queryClient.end();
-        console.log("📦 Supabase database connection pool closed.");
+        console.log("📦 PostgreSQL database connection pool closed.");
       } catch (err: any) {
         console.error("Error during DB shutdown:", err.message);
       }

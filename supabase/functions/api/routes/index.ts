@@ -5,7 +5,8 @@ import usageRoutes from "./usage.routes";
 import adminRoutes from "./admin.routes";
 import aiRoutes from "./ai.routes";
 import studioRoutes from "./studio.routes";
-import { checkDbConnection } from "../config";
+import storageRoutes from "./storage.routes";
+import { checkDbConnection, getDatabaseAndPoolerInfo } from "../config";
 
 const router = Router();
 
@@ -15,6 +16,7 @@ router.use("/usage", usageRoutes);
 router.use("/admin", adminRoutes);
 router.use("/ai", aiRoutes);
 router.use("/studio", studioRoutes);
+router.use("/storage", storageRoutes);
 
 import {
   getOpenApiDocument,
@@ -112,18 +114,33 @@ router.get("/", (req, res) => {
   });
 });
 
-// Health check endpoint with database connectivity check
+// Health check endpoint with database & pgbouncer connectivity check
 router.get("/health", async (req, res) => {
-  const dbStatus = await checkDbConnection();
+  const { dbInfo, poolerInfo } = await getDatabaseAndPoolerInfo();
   const uptime = typeof process?.uptime === "function" ? Math.floor(process.uptime()) : 0;
-  res.status(dbStatus.success ? 200 : 503).json({
-    status: dbStatus.success ? "healthy" : "degraded",
-    service: "supabase",
+  res.status(dbInfo.success ? 200 : 503).json({
+    status: dbInfo.success ? "healthy" : "degraded",
+    service: "srushti-api",
     database: {
-      connected: dbStatus.success,
-      ...(dbStatus.database ? { name: dbStatus.database } : {}),
-      ...(dbStatus.serverTime ? { serverTime: dbStatus.serverTime } : {}),
-      ...(dbStatus.error ? { error: dbStatus.error } : {}),
+      connected: dbInfo.success,
+      name: dbInfo.database,
+      user: dbInfo.user,
+      host: dbInfo.host,
+      port: dbInfo.port,
+      tableCount: dbInfo.tableCount,
+      latencyMs: dbInfo.latencyMs,
+      serverTime: dbInfo.serverTime,
+      version: dbInfo.pgVersion?.split("\n")[0]?.split(" on ")[0],
+      ...(dbInfo.error ? { error: dbInfo.error } : {}),
+    },
+    pgbouncer: {
+      active: poolerInfo.isActive,
+      mode: poolerInfo.mode,
+      host: poolerInfo.host,
+      port: poolerInfo.port,
+      maxConnections: poolerInfo.maxConnections,
+      preparedStatements: poolerInfo.preparedStatements,
+      daemonListening: poolerInfo.daemonListening,
     },
     timestamp: new Date().toISOString(),
     uptimeSeconds: uptime,

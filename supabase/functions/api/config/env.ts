@@ -78,13 +78,19 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   CORS_ORIGIN: z.string().default("*"),
 
-  // Database
-  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+  // Database & PgBouncer Configuration
+  DATABASE_URL: z.string().default("postgresql://postgres:postgres@localhost:5432/srushti"),
+  PGBOUNCER_URL: z.string().optional().default(""),
+  USE_PGBOUNCER: z
+    .union([z.boolean(), z.string()])
+    .transform((val) => val === true || val === "true" || val === "1")
+    .default(false),
+  PGBOUNCER_HOST: z.string().default("localhost"),
+  PGBOUNCER_PORT: z.coerce.number().default(6432),
 
-  // Supabase
-  SUPABASE_URL: z.string().optional().default(""),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().optional().default(""),
-  SUPABASE_STORAGE_BUCKET: z.string().default("avatars"),
+  // Local Storage Bucket Configuration
+  STORAGE_BUCKET_PATH: z.string().default("c:/srushti2/StorageBucket"),
+  STORAGE_BUCKET_NAME: z.string().default("StorageBucket"),
 
   // JWT
   JWT_SECRET: z.string().default("default_dev_secret_key_srushti"),

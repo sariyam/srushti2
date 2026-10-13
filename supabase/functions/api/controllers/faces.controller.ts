@@ -6,7 +6,7 @@ import { db, env } from "../config";
 import { faces } from "../config/schema";
 import { eq, and, asc, sql } from "drizzle-orm";
 import { asyncHandler, BadRequestError, NotFoundError } from "../utils";
-import { createClient } from "@supabase/supabase-js";
+import { StorageService } from "../services/storage.service";
 
 // Memory storage upload middleware for model face portraits (10MB max)
 export const faceUploadMiddleware = multer({
@@ -22,17 +22,6 @@ export const faceUploadMiddleware = multer({
 });
 
 export class FacesController {
-  /**
-   * Helper to get Supabase Client for Storage
-   */
-  private static getSupabaseStorage() {
-    if (env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY && env.SUPABASE_SERVICE_ROLE_KEY !== "your-supabase-service-role-key") {
-      return createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
-        auth: { persistSession: false },
-      });
-    }
-    return null;
-  }
 
   /**
    * GET /api/admin/faces
@@ -192,22 +181,8 @@ export class FacesController {
     const fileName = `${faceId}${ext}`;
     const storagePath = `model-faces/${fileName}`;
 
-    // 1. Upload to Supabase Storage if configured
-    let previewImageUrl = `https://xfooqaqjeaqcoddihphl.supabase.co/storage/v1/object/public/model-faces/${fileName}`;
-    const supabase = FacesController.getSupabaseStorage();
-
-    if (supabase) {
-      const { error: uploadError } = await supabase.storage
-        .from("model-faces")
-        .upload(fileName, file.buffer, {
-          contentType: file.mimetype,
-          upsert: true,
-        });
-
-      if (uploadError) {
-        console.error("Supabase Storage upload warning:", uploadError.message);
-      }
-    }
+    // 1. Upload to StorageBucket
+    const previewImageUrl = await StorageService.saveFile("model-faces", fileName, file.buffer);
 
     // 2. Also save to local public/faces directory for seamless offline/local dev support
     try {
@@ -285,18 +260,8 @@ export class FacesController {
     const ext = path.extname(file.originalname).toLowerCase() || ".jpg";
     const fileName = `${id}${ext}`;
     const storagePath = `model-faces/${fileName}`;
-    const previewImageUrl = `https://xfooqaqjeaqcoddihphl.supabase.co/storage/v1/object/public/model-faces/${fileName}?t=${Date.now()}`;
-
-    // Upload to Supabase Storage
-    const supabase = FacesController.getSupabaseStorage();
-    if (supabase) {
-      await supabase.storage
-        .from("model-faces")
-        .upload(fileName, file.buffer, {
-          contentType: file.mimetype,
-          upsert: true,
-        });
-    }
+    // Upload to StorageBucket
+    const previewImageUrl = await StorageService.saveFile("model-faces", fileName, file.buffer);
 
     // Save locally if folder exists
     try {
@@ -339,11 +304,10 @@ export class FacesController {
       throw new NotFoundError(`Model face with ID '${id}' not found.`, undefined, "FACE_NOT_FOUND");
     }
 
-    // Delete from Supabase Storage
-    const supabase = FacesController.getSupabaseStorage();
-    if (supabase && existing.storagePath) {
+    // Delete from StorageBucket
+    if (existing.storagePath) {
       const filename = path.basename(existing.storagePath);
-      await supabase.storage.from("model-faces").remove([filename]);
+      await StorageService.deleteFile("model-faces", filename);
     }
 
     // Delete DB record
